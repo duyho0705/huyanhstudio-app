@@ -1,0 +1,87 @@
+.booking {
+  margin-bottom: 118px;
+  margin-top: 118px;
+
+  &__left {
+    &-title {
+      font-size: 30px;
+      font-weight: bold;
+    }
+
+    &-desc {
+      font-size: 18px;
+      color: #515f73;
+    }
+  }
+
+  &__tick {
+    color: #43b37e;
+    margin-right: 12px;
+  }
+
+  &__right {
+    .booking__card {
+      width: 100%;
+      padding: 32px;
+      border-radius: 10px;
+      background-color: #e8e8e9;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+      &-title {
+        font-size: 25px;
+        margin-bottom: 8px;
+      }
+
+      &-desc {
+        color: #515f73;
+        margin-bottom: 20px;
+      }
+    }
+  }
+
+  &__form {
+    .booking__field {
+      margin-bottom: 13px;
+
+      .booking__label {
+        display: block;
+        margin-bottom: 4px;
+        font-weight: 500;
+        font-size: 15px;
+      }
+    }
+
+    .booking__note {
+      width: 100%;
+      min-height: 89px;
+      max-height: 153px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      resize: vertical;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__btn {
+    border: 0;
+    padding: 7px 8px;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+
+    &--delete {
+      background-color: white;
+      width: 65px;
+    }
+
+    &--request {
+      background: #71b4db;
+      color: white;
+      width: 137px;
+    }
+  }
+}

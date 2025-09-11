@@ -1,0 +1,132 @@
+.intro {
+  padding: 118px 0;
+  
+  &__tagline {
+    width: 325px;
+    background: #fff;
+    border: 1px solid #eaeaea;
+    border-radius: 20px;
+    padding: 5px 10px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    &-icon {
+      font-size: 22px;
+      color: #fea620;
+      margin-right: 6px;
+    }
+  }
+
+  &__title {
+    font-size: 53px;
+    font-weight: 900;
+    margin: 40px 0 20px;
+    line-height: 1.2;
+
+    &--highlight {
+      background: linear-gradient(90deg, #2f80ed, #9b51e0, #eb5757);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+    }
+  }
+
+  &__description {
+    font-size: 17px;
+    color: #000;
+    margin: 15px 0;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+  }
+
+  &__button {
+    border: none;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &--primary {
+      background-color: #0084d1;
+      color: #fff;
+
+      &:hover {
+        background-color: #0069a8;
+      }
+    }
+
+    &--secondary {
+      background-color: #fff;
+      border: 2px solid #c9d4e1;
+
+      &:hover {
+        background-color: #f9fafb;
+      }
+    }
+
+    &-icon {
+      margin-right: 8px;
+    }
+  }
+
+  &__features {
+    margin-top: 15px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 30px;
+  }
+
+  &__feature {
+    display: flex;
+    align-items: center;
+
+    &-icon {
+      color: #43b37e;
+      margin-right: 10px;
+    }
+  }
+
+  &__image {
+    position: relative;
+    margin-top: 30px;
+    text-align: right;
+
+    &-main {
+      width: 89%;
+      max-width: 100%;
+      height: auto;
+      border: 10px solid #fff;
+      border-radius: 17px;
+    }
+
+    &-top {
+      position: absolute;
+      top: -29px;
+      right: -31px;
+      width: 208px;
+      border-radius: 13px;
+      transform: rotate(6deg);
+    }
+
+    &-bottom {
+      position: absolute;
+      bottom: -31px;
+      left: 0;
+      width: 190px;
+      margin-left: 22px;
+      border-radius: 13px;
+      transform: rotate(-6deg);
+    }
+  }
+}

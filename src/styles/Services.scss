@@ -1,0 +1,57 @@
+.service {
+
+  .row {
+    padding: 0px;
+  }
+
+  .cover {
+    text-align: center;
+    padding: 0px;
+
+    &__title {
+      font-size: 35px;
+      font-weight: bold;
+    }
+
+    &__des {
+      font-size: 17px;
+      font-weight: 400;
+      margin-top: 16px;
+      margin-bottom: 42px;
+    }
+  }
+
+  &-box {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    // gap: 24px;
+  }
+
+  .col-xl-4 {
+    margin: 0px auto;
+  }
+
+  &-box {
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+
+    & .private {
+      margin-bottom: 0px;
+      font-size: 27px;
+      font-weight: 500;
+      margin-top: 13px;
+
+      &__more {
+        font-weight: 500;
+      }
+    }
+
+    &__item {
+      background: linear-gradient(180deg, #e8f3ff 0%, #ffffff 100%);
+      border-radius: 10px;
+      width: 50px;
+      height: auto;
+      padding: 11px;
+    }
+  }
+}
