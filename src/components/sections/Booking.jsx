@@ -8,7 +8,7 @@ const { TextArea } = Input;
 
 const Booking = () => {
   return (
-    <div className="booking container">
+    <div className="booking container" id="booking">
       <div className="row">
         {/* LEFT */}
         <div className="col-xl-6">

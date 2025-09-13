@@ -8,7 +8,7 @@ const products = [
 
 const ProductMade = () => {
   return (
-    <div className="container">
+    <div className="container" id="products">
       <section className="product">
         <div className="row">
           <div className="col-xl-12">
