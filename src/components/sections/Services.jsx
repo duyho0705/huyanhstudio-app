@@ -2,7 +2,7 @@ import "../../styles/Services.scss";
 import Modal from "./Modal";
 import { useState } from "react";
 import { FaMicrophone, FaHeadphones, FaMusic } from "react-icons/fa";
-
+import { GoArrowRight } from "react-icons/go";
 const Services = () => {
   const [openModal, setOpenModal] = useState(null);
 
@@ -39,7 +39,8 @@ const Services = () => {
             <h3>Recording</h3>
             <p>Thu âm hát, giọng đọc chất lượng cao.</p>
             <a href="#" onClick={(e) => {e.preventDefault(); setOpenModal("recording")}}>
-              Tìm hiểu thêm →
+              Tìm hiểu thêm 
+              <GoArrowRight className="icon--direction"/>
             </a>
           </div>
 
@@ -51,7 +52,8 @@ const Services = () => {
             <h3>Mixing & Mastering</h3>
             <p>Bản thu trong trẻo, chuyên nghiệp.</p>
             <a href="#" onClick={(e) => {e.preventDefault(); setOpenModal("mixing")}}>
-              Tìm hiểu thêm →
+              Tìm hiểu thêm 
+              <GoArrowRight className="icon--direction"/>
             </a>
           </div>
 
@@ -63,7 +65,8 @@ const Services = () => {
             <h3>Phối beat</h3>
             <p>Phối theo yêu cầu, nhiều thể loại nhạc.</p>
             <a href="#" onClick={(e) => {e.preventDefault(); setOpenModal("beat")}}>
-              Tìm hiểu thêm →
+              Tìm hiểu thêm 
+              <GoArrowRight className="icon--direction"/>
             </a>
           </div>
 

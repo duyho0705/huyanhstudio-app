@@ -1,12 +1,21 @@
 import { FaCheck } from "react-icons/fa";
 import "../../styles/Booking.scss";
 import { DatePicker, Select, Input } from "antd";
-
+import { useEffect, useState } from "react";
 
 const { Option } = Select;
 const { TextArea } = Input;
 
-const Booking = () => {
+const Booking = ({ selectedService }) => {
+  const [service, setService] = useState();
+
+  // Khi chọn gói bên Pricing -> update service
+  useEffect(() => {
+    if (selectedService) {
+      setService(selectedService);
+    }
+  }, [selectedService]);
+
   return (
     <div className="booking container" id="booking">
       <div className="row">
@@ -46,19 +55,22 @@ const Booking = () => {
               <form className="booking__form">
                 {/* Họ tên */}
                 <div className="booking__field">
-                  <label className="booking__label" htmlFor="fullName">Họ tên</label>
+                  <label className="booking__label" htmlFor="fullName">
+                    Họ tên
+                  </label>
                   <Input
                     id="fullName"
                     placeholder="Hồ Văn Duy"
                     size="large"
                     spellCheck={false}
-                    rules={[{ required: true, message: "Vui lòng nhập email!" }]}
                   />
                 </div>
 
                 {/* SĐT */}
                 <div className="booking__field">
-                  <label className="booking__label" htmlFor="phoneNumber">Số điện thoại</label>
+                  <label className="booking__label" htmlFor="phoneNumber">
+                    Số điện thoại
+                  </label>
                   <Input
                     id="phoneNumber"
                     placeholder="0123456789"
@@ -70,7 +82,9 @@ const Booking = () => {
 
                 {/* Ngày thu */}
                 <div className="booking__field">
-                  <label className="booking__label" htmlFor="dateToWork">Ngày thu</label>
+                  <label className="booking__label" htmlFor="dateToWork">
+                    Ngày thu
+                  </label>
                   <DatePicker
                     id="dateToWork"
                     placeholder="Chọn ngày thu"
@@ -87,16 +101,20 @@ const Booking = () => {
                     style={{ width: "100%" }}
                     size="large"
                     placeholder="Chọn dịch vụ"
+                    value={service}
+                    onChange={(val) => setService(val)}
                   >
                     <Option value="recording">Recording</Option>
-                    <Option value="mixing">Mixing Master</Option>
-                    <Option value="beat">Phối beat</Option>
+                    <Option value="mixing">Mixing</Option>
+                    <Option value="beat">Beat</Option>
                   </Select>
                 </div>
 
                 {/* Ghi chú */}
                 <div className="booking__field">
-                  <label className="booking__label" htmlFor="note">Ghi chú</label>
+                  <label className="booking__label" htmlFor="note">
+                    Ghi chú
+                  </label>
                   <TextArea
                     id="note"
                     className="booking__note"
@@ -108,10 +126,16 @@ const Booking = () => {
 
                 {/* Button actions */}
                 <div className="booking__actions">
-                  <button type="reset" className="booking__btn booking__btn--delete">
+                  <button
+                    type="reset"
+                    className="booking__btn booking__btn--delete"
+                  >
                     Xóa
                   </button>
-                  <button type="submit" className="booking__btn booking__btn--request">
+                  <button
+                    type="submit"
+                    className="booking__btn booking__btn--request"
+                  >
                     Gửi yêu cầu
                   </button>
                 </div>

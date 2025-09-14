@@ -14,7 +14,7 @@
 
   &__desc {
     margin-bottom: 3rem;
-    font-size: 1.125rem; 
+    font-size: 1.125rem;
     color: #6b7280;
 
   }
@@ -28,23 +28,14 @@
 
 .service-card {
   padding: 2rem;
-  border-radius: 1rem;
+  border-radius: 9px;
   background: #fff;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
   transition: all 0.35s ease;
   color: #111827;
-  text-align: center;
   position: relative;
   overflow: hidden;
-
-  &:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
-
-    .icon {
-      transform: scale(1.1) rotate(5deg);
-    }
-  }
+  height: auto;
 
   .icon {
     font-size: 2rem;
@@ -75,41 +66,57 @@
   a {
     font-weight: 500;
     font-size: 0.95rem;
-    color: #2563eb;
     text-decoration: none;
     transition: all 0.3s ease;
+    color: black;
+    padding: 10px 15px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px; // giữ khoảng cách chữ - icon
+
+    .icon--direction {
+      transition: transform 0.3s ease;
+      font-size: 1rem;
+    }
 
     &:hover {
-      color: #1e40af;
-      text-decoration: underline;
+      background-color: #F1F5F9;
+      border-radius: 9px;
+
+      .icon--direction {
+        transform: translateX(5px); // dịch sang phải khi hover
+      }
     }
   }
 }
 
 /* 🎨 Background nhạt + icon gradient */
 .recording {
-  background: #e6f2ff;
+  background: #ffffffb8;
 
   .icon.blue {
-    background: linear-gradient(135deg, #2563eb, #38bdf8);
+    background: linear-gradient(135deg, #d0defd, white);
     box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    color: #0084D1;
   }
 }
 
 .mixing {
-  background: #f5e6ff;
+  background: #ffffffb8;
 
   .icon.purple {
-    background: linear-gradient(135deg, #a855f7, #ec4899);
-    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+    background: linear-gradient(135deg, #d0defd, white);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    color: #ECAAF4;
   }
 }
 
 .beat {
-  background: #fff0e6;
+  background: #ffffffb8;
 
   .icon.orange {
-    background: linear-gradient(135deg, #f97316, #fbbf24);
-    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+    background: linear-gradient(135deg, #d0defd, white);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    color: #EDA965;
   }
 }

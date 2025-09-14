@@ -1,0 +1,42 @@
+.highlight {
+  &__table {
+    text-align: center;
+    background: linear-gradient(90deg, #f0faff 0%,
+        /* xanh nhạt */
+        #fff 50%,
+        /* trắng ở giữa */
+        #fff6f6 100%
+        /* hồng nhạt */
+      );
+    border-radius: 26px;
+    padding: 46px;
+
+    .button {
+      font-weight: 500;
+      font-size: 15px;
+      border-radius: 5px;
+    }
+  }
+
+  &__title {
+    font-size: 30px;
+    font-weight: bold;
+  }
+
+  &__booking {
+    border: 0;
+    padding: 8px 40px;
+    margin-right: 13px;
+    background: #0F172B;
+    color: white;
+    text-decoration: none;
+  }
+
+  &__pricing-table {
+    padding: 8px 40px;
+    background: white;
+    color: black;
+    border: 1px solid #CAD5E2;
+    text-decoration: none;
+  }
+}
