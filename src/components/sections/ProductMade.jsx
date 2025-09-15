@@ -14,7 +14,6 @@ const ProductMade = () => {
           <div className="col-xl-12">
             <div className="product__header">
               <h3 className="product__title">Sản phẩm đã thực hiện</h3>
-              <p className="product__desc">Những dự án đã làm.</p>
               <button className="product__btn">Xem tất cả</button>
             </div>
           </div>

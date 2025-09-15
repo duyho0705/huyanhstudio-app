@@ -26,10 +26,9 @@ const Services = () => {
   return (
     <section className="services" id="services">
       <div className="container">
-        <h3 className="services__title text">Dịch vụ nổi bật</h3>
-        <p className="services__desc text">
-          Chọn gói phù hợp, chúng tôi lo phần còn lại.
-        </p>
+        <div className="services__cover">
+          <h3 className="services__title">Dịch vụ nổi bật</h3>
+        </div>
         <div className="services-grid">
           {/* Recording */}
           <div className="service-card recording">
@@ -38,9 +37,15 @@ const Services = () => {
             </div>
             <h3>Recording</h3>
             <p>Thu âm hát, giọng đọc chất lượng cao.</p>
-            <a href="#" onClick={(e) => {e.preventDefault(); setOpenModal("recording")}}>
-              Tìm hiểu thêm 
-              <GoArrowRight className="icon--direction"/>
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                setOpenModal("recording");
+              }}
+            >
+              Tìm hiểu thêm
+              <GoArrowRight className="icon--direction" />
             </a>
           </div>
 
@@ -51,9 +56,15 @@ const Services = () => {
             </div>
             <h3>Mixing & Mastering</h3>
             <p>Bản thu trong trẻo, chuyên nghiệp.</p>
-            <a href="#" onClick={(e) => {e.preventDefault(); setOpenModal("mixing")}}>
-              Tìm hiểu thêm 
-              <GoArrowRight className="icon--direction"/>
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                setOpenModal("mixing");
+              }}
+            >
+              Tìm hiểu thêm
+              <GoArrowRight className="icon--direction" />
             </a>
           </div>
 
@@ -64,9 +75,15 @@ const Services = () => {
             </div>
             <h3>Phối beat</h3>
             <p>Phối theo yêu cầu, nhiều thể loại nhạc.</p>
-            <a href="#" onClick={(e) => {e.preventDefault(); setOpenModal("beat")}}>
-              Tìm hiểu thêm 
-              <GoArrowRight className="icon--direction"/>
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                setOpenModal("beat");
+              }}
+            >
+              Tìm hiểu thêm
+              <GoArrowRight className="icon--direction" />
             </a>
           </div>
 

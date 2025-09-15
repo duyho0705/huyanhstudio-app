@@ -7,6 +7,10 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 const Booking = ({ selectedService }) => {
+  const [fullName, setFullName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [note, setNote] = useState("");
+  const [date, setDate] = useState(null);
   const [service, setService] = useState();
 
   // Khi chọn gói bên Pricing -> update service
@@ -16,43 +20,38 @@ const Booking = ({ selectedService }) => {
     }
   }, [selectedService]);
 
+  const handleReset = () => {
+    setFullName("");
+    setPhone("");
+    setNote("");
+    setDate(null);
+    setService(undefined);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log({
+      fullName,
+      phone,
+      date,
+      service,
+      note,
+    });
+    // ở đây bạn có thể gọi API gửi thông tin
+  };
+
   return (
     <div className="booking container" id="booking">
       <div className="row">
-        {/* LEFT */}
-        <div className="col-xl-6">
-          <div className="booking__left">
-            <h3 className="booking__left-title">Đặt lịch thu âm</h3>
-            <p className="booking__left-desc">
-              Chọn khung giờ phù hợp, chúng tôi sẽ xác nhận trong ngày. <br />
-              Lưu ý: vui lòng để lại email/số điện thoại chính xác.
-            </p>
-
-            <p>
-              <FaCheck className="booking__tick" />
-              Miễn phí tư vấn trước buổi thu
-            </p>
-            <p>
-              <FaCheck className="booking__tick" />
-              Hỗ trợ viết lời, định hướng phong cách
-            </p>
-            <p>
-              <FaCheck className="booking__tick" />
-              Bàn giao file nhanh, rõ ràng, đúng hẹn
-            </p>
-          </div>
-        </div>
-
-        {/* RIGHT */}
         <div className="col-xl-6">
           <div className="booking__right">
             <div className="booking__card">
-              <h2 className="booking__card-title">Form đặt lịch</h2>
+              <h2 className="booking__card-title">Đặt lịch thu âm</h2>
               <p className="booking__card-desc">
                 Điền thông tin, chúng tôi sẽ liên hệ lại.
               </p>
 
-              <form className="booking__form">
+              <form className="booking__form" onReset={handleReset} onSubmit={handleSubmit}>
                 {/* Họ tên */}
                 <div className="booking__field">
                   <label className="booking__label" htmlFor="fullName">
@@ -63,6 +62,8 @@ const Booking = ({ selectedService }) => {
                     placeholder="Hồ Văn Duy"
                     size="large"
                     spellCheck={false}
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
                   />
                 </div>
 
@@ -77,6 +78,8 @@ const Booking = ({ selectedService }) => {
                     size="large"
                     spellCheck={false}
                     required
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
                   />
                 </div>
 
@@ -91,6 +94,8 @@ const Booking = ({ selectedService }) => {
                     size="large"
                     style={{ width: "100%" }}
                     format="DD/MM/YYYY"
+                    value={date}
+                    onChange={(val) => setDate(val)}
                   />
                 </div>
 
@@ -121,6 +126,8 @@ const Booking = ({ selectedService }) => {
                     placeholder="Yêu cầu thêm... (nhạc cụ, số người, thời lượng...)"
                     size="large"
                     spellCheck={false}
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
                   />
                 </div>
 

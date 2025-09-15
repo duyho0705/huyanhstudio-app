@@ -1,4 +1,5 @@
 import "../../styles/Navbar.scss";
+import logoImg from "../../assets/logo.jpg";
 
 const Navbar = () => {
   return (
@@ -7,8 +8,9 @@ const Navbar = () => {
         <div className="navbar__logo">
           <span
             className="navbar__brand"
-            onClick={() => window.location.href='/'}
+            onClick={() => (window.location.href = "/")}
           >
+            <img src={logoImg} alt="Logo" />
             HA Studio
           </span>
         </div>

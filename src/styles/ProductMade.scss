@@ -7,23 +7,27 @@
 
   &__header {
     position: relative;
+    display: flex;
   }
 
   &__title {
     font-weight: bold;
     font-size: 30px;
     margin-bottom: 13px;
+    color: white;
+    margin-right: 16px;
   }
 
   &__desc {
-    font-size: 18px;
+    font-size: 17px;
     color: #515f73;
     margin-bottom: 0;
+    padding-top: 8px;
   }
 
   &__btn {
     position: absolute;
-    right: 12px;
+    right: 0px;
     bottom: 0;
     padding: 8px 0;
     width: 127px;

@@ -2,7 +2,7 @@ import "../../styles/Highlight.scss";
 const Highlight = () => {
   return (
     <>
-      <div className="container">
+      <div className="container" style={{paddingBottom: "90px"}}>
         <div className="highlight">
           <div className="row">
             <div className="col-xl-12">

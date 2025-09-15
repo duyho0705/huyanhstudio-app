@@ -1,23 +1,5 @@
 .services {
   padding: 4rem 2rem;
-
-  .text {
-    text-align: center;
-  }
-
-  &__title {
-    font-weight: 800;
-    font-size: 43px;
-    color: #111827;
-    margin-bottom: 0.5rem;
-  }
-
-  &__desc {
-    margin-bottom: 3rem;
-    font-size: 1.125rem;
-    color: #6b7280;
-
-  }
 }
 
 .services-grid {
@@ -73,6 +55,7 @@
     display: inline-flex;
     align-items: center;
     gap: 6px; // giữ khoảng cách chữ - icon
+    cursor: pointer;
 
     .icon--direction {
       transition: transform 0.3s ease;
@@ -80,8 +63,9 @@
     }
 
     &:hover {
-      background-color: #F1F5F9;
+      background-color: #0F172B;
       border-radius: 9px;
+      color: white;
 
       .icon--direction {
         transform: translateX(5px); // dịch sang phải khi hover
@@ -119,4 +103,22 @@
     box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
     color: #EDA965;
   }
+}
+
+.services__desc {
+  margin: 0;
+  padding-top: 9px;
+  font-size: 17px;
+}
+
+.services__title {
+  color: white;
+  font-size: 30px;
+  font-weight: bold;
+  margin-right: 16px;
+}
+
+.services__cover {
+  display: flex;
+  margin-bottom: 20px;
 }

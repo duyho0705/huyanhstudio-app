@@ -33,10 +33,7 @@ const Introduction = () => {
           </div>
 
           <h1 className="intro__title">
-            Phòng thu
-            <span className="gradient"> sáng, </span>
-            <span className="gradient"> xịn </span>
-            cho mọi dự án âm nhạc
+            Thu âm chuyên nghiệp — âm thanh bắt dính cảm xúc
           </h1>
 
           <p className="intro__description">
