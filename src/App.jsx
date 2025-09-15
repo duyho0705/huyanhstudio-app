@@ -15,10 +15,10 @@ function App() {
       <NavBar />
       <Hero>
         <Introduction />
-        <Services />
         <ProductMade />
-        <Booking selectedService={selectedService}/>
+        <Services />
         <Pricing onSelectService={setSelectedService}/>
+        <Booking selectedService={selectedService}/>
         <Highlight />
         <Footer />
       </Hero>

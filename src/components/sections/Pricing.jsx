@@ -9,13 +9,13 @@ const plans = [
     value: "recording",
   },
   {
-    name: "Mixing",
+    name: "Mixing Mastering",
     price: "499k/giờ",
     features: ["Thiết bị cao cấp", "Mix cơ bản", "Không giới hạn take"],
     value: "mixing",
   },
   {
-    name: "Beat",
+    name: "Phối Beat",
     price: "799k/bài",
     features: ["Master sáng rõ", "Chuẩn streaming", "2 lần revise"],
     value: "beat",

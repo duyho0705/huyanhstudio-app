@@ -1,6 +1,6 @@
 .intro {
-  padding: 6rem 0;
-  padding-bottom: 0px;
+  padding-top: 100px;
+  padding-bottom: 83px;
 
   &__wrapper {
     display: flex;
@@ -116,8 +116,13 @@
     gap: 0.5rem;
 
     &-icon {
-      color: #22c55e;
-      font-size: 14px;
+      flex-shrink: 0;
+      font-size: 19px;
+      margin-right: 10px;
+      color: #36aa51;
+      background: #ffffff;
+      padding: 6px;
+      border-radius: 50%;
     }
   }
 
@@ -223,6 +228,88 @@
       border: none;
       border-radius: inherit;
       /* ăn theo border-radius của container */
+    }
+  }
+}
+
+/* Tablet nhỏ và mobile */
+@media (max-width: 936px) {
+  .intro {
+    padding-top: 70px;
+    padding-bottom: 60px;
+
+    &__title {
+      font-size: 36px;
+      line-height: 1.2;
+    }
+
+    &__description {
+      font-size: 0.95rem;
+    }
+
+    &__actions {
+      flex-direction: column;
+      gap: 0.8rem;
+
+      .intro__button {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    &__features {
+      grid-template-columns: 1fr;
+      font-size: 15px;
+    }
+
+    &__image-main {
+      height: auto;
+      max-height: 280px;
+    }
+
+    &__image-top {
+      top: -160px;
+      right: -20px;
+      width: 130px;
+      height: 100px;
+    }
+
+    &__image-bottom {
+      bottom: -140px;
+      left: -20px;
+      width: 40%;
+      height: auto;
+    }
+  }
+}
+
+/* Mobile rất nhỏ (<576px) */
+@media (max-width: 936px) {
+  .intro {
+    padding-top: 60px;
+    padding-bottom: 50px;
+
+    &__title {
+      font-size: 28px;
+    }
+
+    &__description {
+      font-size: 0.9rem;
+    }
+
+    &__features {
+      gap: 0.5rem;
+    }
+
+    &__image-main {
+      max-height: 220px;
+      border-width: 8px;
+    }
+
+    &__image-top,
+    &__image-bottom {
+      display: none;
+      /* ẩn bớt ảnh phụ để gọn màn hình */
     }
   }
 }

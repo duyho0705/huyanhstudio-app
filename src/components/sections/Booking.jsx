@@ -1,7 +1,7 @@
-import { FaCheck } from "react-icons/fa";
 import "../../styles/Booking.scss";
-import { DatePicker, Select, Input } from "antd";
+import { DatePicker, Select, Input, message } from "antd";
 import { useEffect, useState } from "react";
+import dayjs from "dayjs";
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -13,7 +13,11 @@ const Booking = ({ selectedService }) => {
   const [date, setDate] = useState(null);
   const [service, setService] = useState();
 
-  // Khi chọn gói bên Pricing -> update service
+  // 👇 Đây là hook của Antd v5 để show message
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const isFormValid = fullName && phone && date && service;
+
   useEffect(() => {
     if (selectedService) {
       setService(selectedService);
@@ -30,18 +34,27 @@ const Booking = ({ selectedService }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!isFormValid) return;
+
     console.log({
       fullName,
       phone,
-      date,
+      date: date ? dayjs(date).format("DD/MM/YYYY") : null,
       service,
       note,
     });
-    // ở đây bạn có thể gọi API gửi thông tin
+
+    // 🚀 Thông báo thành công
+    messageApi.success("Yêu cầu của bạn đã được gửi thành công!");
+
+    handleReset();
   };
 
   return (
     <div className="booking container" id="booking">
+      {/* 👇 BẮT BUỘC phải render contextHolder thì mới thấy message */}
+      {contextHolder}
+
       <div className="row">
         <div className="col-xl-6">
           <div className="booking__right">
@@ -51,7 +64,11 @@ const Booking = ({ selectedService }) => {
                 Điền thông tin, chúng tôi sẽ liên hệ lại.
               </p>
 
-              <form className="booking__form" onReset={handleReset} onSubmit={handleSubmit}>
+              <form
+                className="booking__form"
+                onReset={handleReset}
+                onSubmit={handleSubmit}
+              >
                 {/* Họ tên */}
                 <div className="booking__field">
                   <label className="booking__label" htmlFor="fullName">
@@ -64,6 +81,7 @@ const Booking = ({ selectedService }) => {
                     spellCheck={false}
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
+                    required
                   />
                 </div>
 
@@ -110,8 +128,8 @@ const Booking = ({ selectedService }) => {
                     onChange={(val) => setService(val)}
                   >
                     <Option value="recording">Recording</Option>
-                    <Option value="mixing">Mixing</Option>
-                    <Option value="beat">Beat</Option>
+                    <Option value="mixing">Mixing Mastering</Option>
+                    <Option value="beat">Phối Beat</Option>
                   </Select>
                 </div>
 
@@ -142,6 +160,7 @@ const Booking = ({ selectedService }) => {
                   <button
                     type="submit"
                     className="booking__btn booking__btn--request"
+                    disabled={!isFormValid}
                   >
                     Gửi yêu cầu
                   </button>

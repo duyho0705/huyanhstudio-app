@@ -40,14 +40,14 @@ const Footer = () => {
                 dịch vụ tận tâm.
               </p>
               <p className="footer__text">
-                <CiPhone className="footer__icon" /> 0901 234 567
+                <CiPhone className="footer__icon" /> 0393248014
               </p>
               <p className="footer__text">
                 <MdOutgoingMail className="footer__icon" />{" "}
                 huyanhstudio@gmail.com
               </p>
               <p className="footer__text">
-                <FaLocationDot className="footer__icon" /> Tân Bình, TP.HCM
+                <FaLocationDot className="footer__icon" /> Tân Bình, TP.HCMs
               </p>
             </div>
           </div>
@@ -75,7 +75,9 @@ const Footer = () => {
             <div className="footer__block">
               <h6 className="footer__title">Công ty</h6>
               <ul className="footer__list">
-                <li className="footer__item">Về chúng tôi</li>
+                <li className="footer__item">
+                  <a href=""></a>
+                </li>
                 <li className="footer__item">Tuyển dụng</li>
                 <li className="footer__item">Điều khoản</li>
                 <li className="footer__item">Chính sách bảo mật</li>
@@ -88,8 +90,16 @@ const Footer = () => {
             <div className="footer__block">
               <h6 className="footer__title">Theo dõi chúng tôi</h6>
               <div className="footer__social">
-                <FaTiktok className="footer__icon" />
-                <FaFacebookF className="footer__icon" />
+                <a href="https://www.tiktok.com/@huyanhproduction?is_from_webapp=1&sender_device=pc"
+                  target="_blank"
+                  rel="noopener noreferrer"><FaTiktok className="footer__icon" /></a>
+                <a
+                  href="https://www.facebook.com/HUYANHPR"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FaFacebookF className="footer__icon" />
+                </a>
                 <FaInstagram className="footer__icon" />
               </div>
             </div>
