@@ -33,7 +33,7 @@ const Footer = () => {
                     marginRight: "8px",
                   }}
                 />
-                HuyAnh Studio
+                HA Studio
               </span>
               <p className="footer__text">
                 Phòng thu âm sáng, hiện đại tại TP.HCM. Đặt lịch linh hoạt –
@@ -47,7 +47,7 @@ const Footer = () => {
                 huyanhstudio@gmail.com
               </p>
               <p className="footer__text">
-                <FaLocationDot className="footer__icon" /> Tân Bình, TP.HCMs
+                <FaLocationDot className="footer__icon" /> Tân Bình, TP.HCM
               </p>
             </div>
           </div>

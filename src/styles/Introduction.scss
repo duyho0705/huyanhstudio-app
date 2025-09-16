@@ -1,7 +1,7 @@
 .intro {
   padding-top: 100px;
   padding-bottom: 83px;
-
+  
   &__wrapper {
     display: flex;
     align-items: center;
@@ -38,7 +38,7 @@
     font-size: 60px;
     color: white;
     margin-bottom: 22px;
-    font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
+    font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif);
 
     .gradient {
       background: linear-gradient(90deg, #2f80ed, #9b51e0, #eb5757);
@@ -145,7 +145,6 @@
     position: absolute;
     right: 0;
     height: 387px;
-
   }
 
   &__image-top,
@@ -173,7 +172,7 @@
     transform: rotate(-6deg);
   }
 
-  /* RESPONSIVE */
+  /* Tablet nhỏ (≤ 992px) */
   @media (max-width: 992px) {
     &__wrapper {
       flex-direction: column;
@@ -198,43 +197,9 @@
       justify-content: center;
     }
   }
-}
 
-/* VIDEO MODAL */
-.video-modal {
-  position: fixed;
-  inset: 0;
-  /* viết gọn cho top/left/right/bottom: 0 */
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  backdrop-filter: blur(3px);
-
-  &__content {
-    position: relative;
-    width: 100%;
-    max-width: 1000px;
-    aspect-ratio: 16 / 9;
-    margin: auto;
-    border-radius: 16px;
-    overflow: hidden;
-    /* giúp iframe bo góc gọn */
-
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      border-radius: inherit;
-      /* ăn theo border-radius của container */
-    }
-  }
-}
-
-/* Tablet nhỏ và mobile */
-@media (max-width: 936px) {
-  .intro {
+  /* Tablet & mobile vừa (≤ 936px) */
+  @media (max-width: 936px) {
     padding-top: 70px;
     padding-bottom: 60px;
 
@@ -248,7 +213,6 @@
     }
 
     &__actions {
-      flex-direction: column;
       gap: 0.8rem;
 
       .intro__button {
@@ -258,7 +222,7 @@
     }
 
     &__features {
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr 1fr;
       font-size: 15px;
     }
 
@@ -281,35 +245,84 @@
       height: auto;
     }
   }
-}
 
-/* Mobile rất nhỏ (<576px) */
-@media (max-width: 936px) {
+  /* Mobile nhỏ (≤ 576px) */
+  @media (max-width: 576px) {
   .intro {
+    padding-left: 20px;
     padding-top: 60px;
     padding-bottom: 50px;
 
     &__title {
-      font-size: 28px;
+      font-size: 24px;
     }
 
     &__description {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
 
     &__features {
-      gap: 0.5rem;
+      grid-template-columns: 1fr 1fr; // 2 cột tick xanh
+      font-size: 14px;
+      gap: 0.5rem 0.8rem;
     }
 
     &__image-main {
-      max-height: 220px;
-      border-width: 8px;
+      width: 100%;
+      max-height: 220px;   // lớn hơn chút để nổi bật
+      border-width: 6px;
+      position: relative;  // thay absolute => giữ layout gọn
     }
 
-    &__image-top,
+    &__image-top {
+      display: block;
+      position: absolute;
+      top: -37px;   // đưa cao hơn main
+      right: -59px;
+      width: 140px;
+      height: 94px;
+      transform: rotate(4deg);
+    }
+
     &__image-bottom {
-      display: none;
-      /* ẩn bớt ảnh phụ để gọn màn hình */
+      display: block;
+      position: absolute;
+      bottom: -33px;
+      left: -32px;
+      width: 90px;
+      height: 75px;
+      transform: rotate(-4deg);
+    }
+  }
+}
+
+}
+
+/* VIDEO MODAL */
+.video-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(3px);
+
+  &__content {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    aspect-ratio: 16 / 9;
+    margin: auto;
+    border-radius: 16px;
+    overflow: hidden;
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: inherit;
     }
   }
 }
