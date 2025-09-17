@@ -8,6 +8,7 @@ import Pricing from "./components/sections/Pricing";
 import ProductMade from "./components/sections/ProductMade";
 import Services from "./components/sections/Services";
 import Highlight from "./components/sections/Highlight.";
+import DescriptionMusic from "./components/sections/DescriptionMusic";
 function App() {
   const [selectedService, setSelectedService] = useState(null);
   return (
@@ -15,6 +16,7 @@ function App() {
       <NavBar />
       <Hero>
         <Introduction />
+        <DescriptionMusic />
         <ProductMade />
         <Services />
         <Pricing onSelectService={setSelectedService}/>

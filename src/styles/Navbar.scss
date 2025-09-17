@@ -1,7 +1,8 @@
-
 .navbar {
   width: 100%;
-  background: #fde7f1;
+  background: rgba(255, 255, 255, 0.7); /* nền trắng trong suốt */
+  backdrop-filter: blur(8px);           /* làm mờ nội dung phía sau */
+  transition: 0.3s ease, box-shadow 0.3s ease;
   position: fixed;
   top: 0;
   left: 0;
@@ -29,7 +30,7 @@
       img {
         width: 40px;
         height: 40px;
-        border-radius: 8px;
+        border-radius: 20px;
         object-fit: cover;
       }
     }
@@ -37,16 +38,16 @@
 
   &__menu {
     display: flex;
-    gap: 25px;
+    gap: 40px;
 
     .navbar__link {
       text-decoration: none;
-      color: #333;
+      color: #4f4d4c;
       font-weight: 500;
       transition: color 0.3s;
 
       &:hover {
-        color: #dd4187;
+        color: #3362e5;
       }
     }
 

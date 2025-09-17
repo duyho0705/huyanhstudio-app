@@ -1,6 +1,5 @@
 .services {
   padding-bottom: 83px;
-  padding-top: 49px;
 }
 
 .services-grid {
@@ -19,6 +18,7 @@
   position: relative;
   overflow: hidden;
   height: auto;
+  border: 2px solid #E7EBF1;
 
   .icon {
     font-size: 2rem;
@@ -113,7 +113,7 @@
 }
 
 .services__title {
-  color: white;
+  color: black;
   font-size: 30px;
   font-weight: bold;
   margin-right: 16px;

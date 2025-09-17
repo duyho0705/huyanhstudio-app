@@ -1,6 +1,6 @@
 .intro {
-  padding-top: 100px;
-  padding-bottom: 83px;
+  padding-top: 60px;
+  padding-bottom: 60px;
   
   &__wrapper {
     display: flex;
@@ -36,7 +36,7 @@
   &__title {
     font-weight: 800;
     font-size: 60px;
-    color: white;
+    color: black;
     margin-bottom: 22px;
     font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif);
 
@@ -116,13 +116,9 @@
     gap: 0.5rem;
 
     &-icon {
-      flex-shrink: 0;
-      font-size: 19px;
-      margin-right: 10px;
+      font-size: 13px;
+      margin-right: 5px;
       color: #36aa51;
-      background: #ffffff;
-      padding: 6px;
-      border-radius: 50%;
     }
   }
 

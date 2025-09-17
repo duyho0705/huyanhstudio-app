@@ -1,5 +1,8 @@
 .product {
-  
+  &-cover {
+    padding-top: 64px;
+    padding-bottom: 64px;
+  }
   .col-xl-12 {
     position: relative;
     margin-bottom: 15px;
@@ -14,7 +17,7 @@
     font-weight: bold;
     font-size: 30px;
     margin-bottom: 13px;
-    color: white;
+    color: black;
     margin-right: 16px;
   }
 

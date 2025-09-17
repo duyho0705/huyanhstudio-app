@@ -26,7 +26,7 @@ const Pricing = ({ onSelectService }) => {
   return (
     <section className="pricing" id="pricing">
       <div className="container">
-        <h3 className="pricing__first-title">Bảng giá minh bạch</h3>
+        <h3 className="pricing__first-title">BẢNG GIÁ MINH BẠCH</h3>
         <div className="row">
           {plans.map((plan, index) => (
             <div className="col-xl-4" key={index}>

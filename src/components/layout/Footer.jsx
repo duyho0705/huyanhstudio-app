@@ -29,8 +29,9 @@ const Footer = () => {
                     height: "40px",
                     width: "auto",
                     objectFit: "contain",
-                    borderRadius: "8px",
+                    borderRadius: "20px",
                     marginRight: "8px",
+
                   }}
                 />
                 HA Studio
@@ -44,7 +45,7 @@ const Footer = () => {
               </p>
               <p className="footer__text">
                 <MdOutgoingMail className="footer__icon" />{" "}
-                huyanhstudio@gmail.com
+                hastudio@gmail.com
               </p>
               <p className="footer__text">
                 <FaLocationDot className="footer__icon" /> Tân Bình, TP.HCM
@@ -110,7 +111,7 @@ const Footer = () => {
       {/* bottom copyright */}
       <div className="footer__bottom">
         <p className="footer__copy">
-          © 2025 HuyAnh Studio. All rights reserved.
+          © 2025 HA Studio. All rights reserved.
         </p>
       </div>
     </footer>
