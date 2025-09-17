@@ -2,10 +2,10 @@ import "../../styles/Introduction.scss";
 import mainImg from "../../assets/introduction-main.jpg";
 import topImg from "../../assets/introduction-top.jpg";
 import bottomImg from "../../assets/introduction-bottom.jpg";
-import { CiStar } from "react-icons/ci";
+
 import { FaCheck, FaPlay } from "react-icons/fa";
 import { FaCalendarAlt } from "react-icons/fa";
-
+import { PiStarAndCrescentThin } from "react-icons/pi";
 import { useEffect, useState } from "react";
 
 const Introduction = () => {
@@ -28,7 +28,7 @@ const Introduction = () => {
         {/* Left - text */}
         <div className="intro__content">
           <div className="intro__tagline">
-            <CiStar className="intro__tagline-icon" />
+            <PiStarAndCrescentThin className="intro__tagline-icon" />
             Âm thanh sáng, mix/master trong trẻo
           </div>
 
