@@ -62,7 +62,7 @@ const Navbar = () => {
       {/* Menu mobile */}
 
       {/* Menu mobile */}
-      <div className="container">
+      <div className="container" style={{position: "relative"}}>
         <div className={`navbar__mobile-menu ${open ? "active" : ""}`}>
           <a href="#introduction" onClick={() => setOpen(false)}>
             Giới thiệu

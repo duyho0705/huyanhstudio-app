@@ -1,7 +1,7 @@
 .navbar {
   width: 100%;
-  background: rgba(255, 255, 255, 0.7); /* nền trắng trong suốt */
-  backdrop-filter: blur(8px);           /* làm mờ nội dung phía sau */
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
   transition: 0.3s ease, box-shadow 0.3s ease;
   position: fixed;
   top: 0;
@@ -103,49 +103,44 @@
   }
 
   &__mobile-menu {
-    width: 146px;
-    position: absolute;
-    top: 73px;
-    right: 30px;
-    flex-direction: column;
-    gap: 0; // bỏ gap để tự chia bằng border
-    background: #fde7f1;
-    border-radius: 10px;
-    padding: 0; // padding gói bên trong link
-    text-align: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    z-index: 2000;
+  width: 180px; 
+  position: absolute;
+  top: 30px;
+  right: 12px;       
+  transition: 0.3s ease;
+  flex-direction: column;
+  background: white;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  z-index: 2000;
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
 
-    // ẩn ban đầu bằng opacity + transform để có animation
-    opacity: 0;
-    transform: translateY(-10px);
-    pointer-events: none; // tránh click khi ẩn
-    transition: all 0.3s ease;
-
-    a {
-      text-decoration: none;
-      color: #333;
-      font-weight: 500;
-      display: block;
-      padding: 12px 20px;
-      transition: color 0.3s;
-
-      &:hover {
-        color: #dd4187;
-      }
-
-      // gạch ngang giữa các option
-      &:not(:last-child) {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-      }
-    }
-
-    &.active {
-      display: flex;
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
+  a {
+    text-decoration: none;
+    color: #4f4d4c;
+    font-weight: 500;
+    display: block;
+    padding: 14px 20px;
+    transition: color 0.3s;
+    &:not(:last-child) {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     }
   }
 
+  &.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+}
+
+}
+
+@media (max-width: 1200px) and (min-width: 992px) {
+  .navbar__menu {
+    gap: 20px;
+  }
 }
