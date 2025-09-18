@@ -42,3 +42,12 @@
   }
 }
 
+@media (max-width: 576px) {
+  .highlight__title {
+    font-size: 25px;
+  }
+  .highlight__table .button {
+    font-size: 14px;
+    padding: 8px 24px;
+  }
+} 

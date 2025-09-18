@@ -110,8 +110,13 @@
     color: black;
 }
 
+@media (max-width: 768px) {
+  .pricing__first-title {
+    font-size: 25px;
+  }
+}
 @media (max-width: 576px) {
   .pricing__first-title {
-    font-size: 27px;
+    font-size: 22px;
   }
 }
