@@ -3,6 +3,7 @@
     padding-top: 64px;
     padding-bottom: 64px;
   }
+
   .col-xl-12 {
     position: relative;
     margin-bottom: 15px;
@@ -34,7 +35,7 @@
     bottom: 0;
     padding: 8px 0;
     width: 127px;
-    border: 1px solid #c9d4e1;
+    border: 2px solid #dae0e8;
     border-radius: 6px;
     font-size: 15px;
     font-weight: 500;
@@ -76,5 +77,29 @@
       font-weight: 500;
       text-align: center;
     }
+  }
+}
+
+@media (max-width: 768px) {
+  .product__title {
+    font-size: 25px;
+  }
+
+  .product__btn {
+    padding: 5px 0;
+    width: 109px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 576px) {
+  .product__title {
+    font-size: 22px;
+  }
+
+  .product__btn {
+    padding: 5px 0;
+    width: 80px;
+    font-size: 13px;
   }
 }

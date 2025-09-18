@@ -123,3 +123,9 @@
   display: flex;
   margin-bottom: 20px;
 }
+
+@media (max-width: 768px) {
+  .services__title {
+    font-size: 22px;
+  }
+}

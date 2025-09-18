@@ -3,29 +3,21 @@ import mainImg from "../../assets/introduction-main.jpg";
 import topImg from "../../assets/introduction-top.jpg";
 import bottomImg from "../../assets/introduction-bottom.jpg";
 
-import { FaCheck, FaPlay } from "react-icons/fa";
-import { FaCalendarAlt } from "react-icons/fa";
+import { FaCheck, FaPlay, FaCalendarAlt } from "react-icons/fa";
 import { PiStarAndCrescentThin } from "react-icons/pi";
 import { useEffect, useState } from "react";
 
 const Introduction = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
-
   useEffect(() => {
-    if (isModalOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
+    document.body.style.overflow = isModalOpen ? "hidden" : "auto";
   }, [isModalOpen]);
 
   return (
     <section className="intro" id="introduction">
       <div className="container intro__wrapper">
-        {/* Left - text */}
+        {/* Left - Content */}
         <div className="intro__content">
           <div className="intro__tagline">
             <PiStarAndCrescentThin className="intro__tagline-icon" />
@@ -43,12 +35,12 @@ const Introduction = () => {
 
           <div className="intro__actions">
             <a href="#booking" className="intro__button intro__button--primary">
-              <FaCalendarAlt className="intro__button-icon"/>
+              <FaCalendarAlt className="intro__button-icon" />
               Đặt lịch ngay
             </a>
             <button
               className="intro__button intro__button--secondary"
-              onClick={openModal}
+              onClick={() => setIsModalOpen(true)}
             >
               <FaPlay className="intro__button-icon" />
               Xem demo
@@ -56,22 +48,20 @@ const Introduction = () => {
           </div>
 
           <div className="intro__features">
-            <div className="intro__feature">
-              <FaCheck className="intro__feature-icon" /> Cách âm chuẩn studio
-            </div>
-            <div className="intro__feature">
-              <FaCheck className="intro__feature-icon" /> Kỹ sư tận tâm
-            </div>
-            <div className="intro__feature">
-              <FaCheck className="intro__feature-icon" /> Thiết bị cao cấp
-            </div>
-            <div className="intro__feature">
-              <FaCheck className="intro__feature-icon" /> Giao file nhanh chóng
-            </div>
+            {[
+              "Cách âm chuẩn studio",
+              "Kỹ sư tận tâm",
+              "Thiết bị cao cấp",
+              "Giao file nhanh chóng",
+            ].map((feature, i) => (
+              <div key={i} className="intro__feature">
+                <FaCheck className="intro__feature-icon" /> {feature}
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Right - images */}
+        {/* Right - Images */}
         <div className="intro__images">
           <img
             src={mainImg}
@@ -79,27 +69,20 @@ const Introduction = () => {
             className="intro__image-main"
           />
           <img src={topImg} alt="Decor trên" className="intro__image-top" />
-          <img
-            src={bottomImg}
-            alt="Decor dưới"
-            className="intro__image-bottom"
-          />
+          <img src={bottomImg} alt="Decor dưới" className="intro__image-bottom" />
         </div>
       </div>
 
-      {/* Modal video */}
+      {/* Modal Video */}
       {isModalOpen && (
-        <div className="video-modal" onClick={closeModal}>
+        <div className="video-modal" onClick={() => setIsModalOpen(false)}>
           <div
             className="video-modal__content"
             onClick={(e) => e.stopPropagation()}
           >
             <iframe
-              width="1000px"
-              height="700px"
               src="https://www.youtube.com/embed/jOJr79Yz1mQ?autoplay=1&vq=highres"
               title="Demo"
-              frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             ></iframe>

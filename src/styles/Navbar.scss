@@ -12,7 +12,8 @@
   &__container {
     max-width: 1400px;
     margin: 0 auto;
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
     justify-content: space-between;
   }
@@ -70,20 +71,11 @@
       &--primary {
         background: #11162c;
         color: #fff;
-
-        &:hover {
-          background: #333a5c;
-        }
       }
 
       &--secondary {
-        background: #fff;
-        color: #111;
-
-        &:hover {
-          background: #e171a4;
-          color: #fff;
-        }
+        background: #0084d1;
+        color: white;
       }
     }
 
@@ -103,44 +95,72 @@
   }
 
   &__mobile-menu {
-  width: 180px; 
-  position: absolute;
-  top: 30px;
-  right: 12px;       
-  transition: 0.3s ease;
-  flex-direction: column;
-  background: white;
-  border-radius: 12px;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-  z-index: 2000;
-  opacity: 0;
-  transform: translateY(-10px);
-  pointer-events: none;
+    width: 180px;
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    transition: 0.3s ease;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    z-index: 2000;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
 
-  a {
-    text-decoration: none;
-    color: #4f4d4c;
-    font-weight: 500;
-    display: block;
-    padding: 14px 20px;
-    transition: color 0.3s;
-    &:not(:last-child) {
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    a {
+      text-decoration: none;
+      color: #4f4d4c;
+      font-weight: 500;
+      display: block;
+      padding: 14px 20px;
+      transition: color 0.3s;
+
+      &:not(:last-child) {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      }
+    }
+
+    &.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
     }
   }
-
-  &.active {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
 }
 
-}
-
+/* Breakpoints */
 @media (max-width: 1200px) and (min-width: 992px) {
   .navbar__menu {
     gap: 20px;
+  }
+
+  .navbar__mobile-menu {
+    width: 100px;
+  }
+}
+
+@media (max-width: 992px) {
+  .navbar__mobile-menu {
+    width: 150px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar__mobile-menu {
+    width: 120px;
+    font-size: 16px; // bạn bị thiếu "px" chỗ này
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar__mobile-menu {
+
+    a {
+      padding: 10px 10px;
+      font-size: 13px;
+    }
   }
 }

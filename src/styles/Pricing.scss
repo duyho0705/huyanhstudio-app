@@ -109,3 +109,9 @@
     margin-bottom: 20px;
     color: black;
 }
+
+@media (max-width: 576px) {
+  .pricing__first-title {
+    font-size: 27px;
+  }
+}

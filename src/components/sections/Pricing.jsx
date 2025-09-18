@@ -29,7 +29,7 @@ const Pricing = ({ onSelectService }) => {
         <h3 className="pricing__first-title">BẢNG GIÁ MINH BẠCH</h3>
         <div className="row">
           {plans.map((plan, index) => (
-            <div className="col-xl-4" key={index}>
+            <div className="col-xl-4 col-lg-4" key={index}>
               <div className="pricing__table">
                 <p className="pricing__title">{plan.name}</p>
                 <p className="pricing__price">{plan.price}</p>

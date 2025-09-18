@@ -38,7 +38,7 @@ const ProductMade = () => {
   const [showAll, setShowAll] = useState(false);
 
   // if show all = false, get 3 default videos
-  const visibleProducts = showAll ? products : products.slice(0, 3);
+  const visibleProducts = showAll ? products : products.slice(0, 4);
   return (
     <div className="product-cover">
       <div className="container" id="products">
@@ -59,7 +59,7 @@ const ProductMade = () => {
 
           <div className="row">
             {visibleProducts.map(({ id, title, video }) => (
-              <div className="col-xl-4" key={id}>
+              <div className="col-xl-4 col-lg-6 col-md-6 col-sm-6" key={id}>
                 <div className="video-card">
                   <div className="video-wrapper">
                     <iframe

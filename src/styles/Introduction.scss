@@ -1,6 +1,5 @@
 .intro {
-  padding-top: 60px;
-  padding-bottom: 60px;
+  padding: 60px 0;
 
   &__wrapper {
     display: flex;
@@ -27,6 +26,7 @@
     margin-bottom: 22px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
     border: 2px solid #f1f4f6;
+
     &-icon {
       font-size: 22px;
       color: #d88c1a;
@@ -75,8 +75,8 @@
     transition: all 0.3s ease;
 
     &--primary {
-      background-color: #0084d1;
-      color: white;
+      background: #0084d1;
+      color: #fff;
       border: none;
       text-decoration: none;
 
@@ -86,7 +86,7 @@
     }
 
     &--secondary {
-      background: white;
+      background: #fff;
       border: 2px solid #e5e7eb;
       color: #374151;
 
@@ -117,7 +117,6 @@
 
     &-icon {
       font-size: 13px;
-      margin-right: 5px;
       color: #36aa51;
     }
   }
@@ -132,15 +131,15 @@
   }
 
   &__image-main {
-    border: 12px solid white;
-    object-fit: cover;
-    width: 100%;
-    border-radius: 29px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-    z-index: 1;
     position: absolute;
     right: 0;
+    z-index: 1;
+    width: 100%;
     height: 387px;
+    object-fit: cover;
+    border: 12px solid #fff;
+    border-radius: 29px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
   }
 
   &__image-top,
@@ -156,8 +155,8 @@
     top: -246px;
     right: -46px;
     width: 186px;
-    transform: rotate(6deg);
     height: 154px;
+    transform: rotate(6deg);
   }
 
   &__image-bottom {
@@ -167,7 +166,6 @@
     height: 152px;
     transform: rotate(-6deg);
   }
-
 }
 
 /* VIDEO MODAL */
@@ -199,88 +197,46 @@
   }
 }
 
-@media (max-width: 1400px) and (min-width: 1200px) {
+/* RESPONSIVE */
+@media (max-width: 1400px) {
   .intro {
     padding-top: 20px;
   }
-  .intro__images img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-  }
 }
 
-@media (max-width: 1200px) and (min-width: 992px) {
-  .intro {
-    padding-top: 10px;
-  }
+@media (max-width: 1200px) {
   .container {
     max-width: 900px;
   }
-
   .intro__image-top,
   .intro__image-bottom {
     display: none;
   }
-
   .intro__wrapper {
     flex-direction: column;
-
     .intro__title {
       font-size: 50px;
     }
-
     .intro__images {
       width: 100%;
       margin-top: -19px;
     }
-
     .intro__image-main {
       position: relative;
     }
   }
 }
 
-@media (max-width: 992px) and (min-width: 768px) {
-  .intro {
-    padding-top: 10px;
-  }
+@media (max-width: 992px) {
   .container {
     max-width: 700px;
   }
-
-  .intro__image-top,
-  .intro__image-bottom {
-    display: none;
-  }
-
-  .intro__wrapper {
-    flex-direction: column;
-
-    .intro__title {
-      font-size: 50px;
-    }
-
-    .intro__images {
-      width: 100%;
-      margin-top: -19px;
-    }
-
-    .intro__image-main {
-      position: relative;
-    }
-  }
 }
 
-@media (max-width: 768px) and (min-width: 576px) {
-  .intro {
-    padding-top: 10px;
+@media (max-width: 768px) {
+  .container {
+    max-width: 550px;
   }
-  .intro__image-top,
-  .intro__image-bottom {
-    display: none;
-  }
-
   .intro__wrapper {
     flex-direction: column;
 
@@ -300,51 +256,67 @@
 
     .intro__actions {
       justify-content: space-between;
-      // padding: 0px 64px;
     }
 
     .intro__button {
       padding: 6px 64px;
     }
+
+    .intro__features {
+      font-size: 15px;
+    }
+
+    .intro__description {
+      font-size: 16px;
+    }
+
+    .intro__tagline {
+      font-size: 13px;
+    }
   }
 }
 
 @media (max-width: 576px) {
-  .intro {
-    padding-top: 10px;
-  }
   .container {
-    max-width: 500px;
-  }
-  .intro__image-top,
-  .intro__image-bottom {
-    display: none;
+    max-width: 400px;
   }
 
   .intro__wrapper {
     flex-direction: column;
 
     .intro__title {
-      font-size: 42px;
+      font-size: 33px;
     }
 
     .intro__images {
       width: 100%;
-      margin-top: -25px;
+      margin-top: -19px;
     }
 
     .intro__image-main {
       position: relative;
-      height: 320px;
+      height: 258px;
     }
 
     .intro__actions {
       justify-content: space-between;
-      // padding: 0px 64px;
+    }
+
+    .intro__features {
+      font-size: 14px;
+    }
+
+    .intro__description {
+      font-size: 14px;
+    }
+
+    .intro__tagline {
+      font-size: 12px;
+      padding: 5px 20px;
     }
 
     .intro__button {
-      padding: 6px 56px;
+      padding: 6px 30px;
     }
   }
 }
