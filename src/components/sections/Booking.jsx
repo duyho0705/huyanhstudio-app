@@ -10,13 +10,14 @@ const Booking = ({ selectedService }) => {
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [note, setNote] = useState("");
+  const [email, setEmail] = useState("");
   const [date, setDate] = useState(null);
   const [service, setService] = useState();
 
   // 👇 Đây là hook của Antd v5 để show message
   const [messageApi, contextHolder] = message.useMessage();
 
-  const isFormValid = fullName && phone && date && service;
+  const isFormValid = fullName && phone && date && service && email;
 
   useEffect(() => {
     if (selectedService) {
@@ -27,6 +28,7 @@ const Booking = ({ selectedService }) => {
   const handleReset = () => {
     setFullName("");
     setPhone("");
+    setEmail("");
     setNote("");
     setDate(null);
     setService(undefined);
@@ -98,6 +100,22 @@ const Booking = ({ selectedService }) => {
                     required
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
+                  />
+                </div>
+
+                {/* Gmail */}
+                <div className="booking__field">
+                  <label className="booking__label" htmlFor="email">
+                    Email
+                  </label>
+                  <Input
+                    id="email"
+                    placeholder="hovanduy123@gmail.com"
+                    size="large"
+                    spellCheck={false}
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
 

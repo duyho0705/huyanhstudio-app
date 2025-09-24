@@ -51,3 +51,9 @@
     padding: 8px 24px;
   }
 } 
+
+@media (max-width: 453px) {
+  .container {
+    max-width: 378px;
+  }
+}
