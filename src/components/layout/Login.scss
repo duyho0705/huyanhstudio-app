@@ -1,0 +1,225 @@
+.auth {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+
+  &__card {
+    width: 100%;
+    max-width: 420px;
+    background: white;
+    border-radius: 20px;
+    padding: 3rem 2.5rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    animation: fadeIn 0.5s ease;
+  }
+
+  &__brand-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2c2c2c;
+  }
+
+  &__tagline {
+    font-size: 0.9rem;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 500;
+  }
+
+  &__title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #2c2c2c;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  &__message {
+    padding: 1rem;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    animation: slideDown 0.4s ease;
+
+    &--success {
+      background: linear-gradient(135deg, #d4f4dd 0%, #b8e6c0 100%);
+      border: 2px solid #4caf50;
+      color: #2e7d32;
+    }
+
+    &--error {
+      background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+      border: 2px solid #f44336;
+      color: #c62828;
+    }
+  }
+
+  &__divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1.5rem 0;
+
+    &-line {
+      flex: 1;
+      height: 1px;
+      background: #e8e8e8;
+    }
+
+    &-text {
+      font-size: 0.8rem;
+      color: #999;
+      font-weight: 500;
+    }
+  }
+
+  &__socials {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  &__switch {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #f0f0f0;
+
+    &-text {
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    &-link {
+      background: none;
+      border: none;
+      color: #d4a574;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: #b8935f;
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.form {
+  &__group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 12px;
+  }
+
+  &__label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #2c2c2c;
+  }
+
+  &__input {
+    padding: 7px 17px;
+    border: 2px solid #f0f0f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    background: #fafafa;
+    transition: all 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #d4a574;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(212, 165, 116, 0.08);
+    }
+
+    &::placeholder {
+      color: #bbb;
+    }
+  }
+
+  &__button {
+    padding: 10px;
+    background: linear-gradient(135deg, #d4a574 0%, #b8935f 100%);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 0.5rem;
+    width: 100%;
+    box-shadow: 0 4px 16px rgba(212, 165, 116, 0.3);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212, 165, 116, 0.4);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.social {
+  &__button {
+    padding: 0.875rem;
+    border: 2px solid #f0f0f0;
+    border-radius: 12px;
+    background: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #2c2c2c;
+    transition: all 0.3s ease;
+
+    &:hover {
+      border-color: #d4a574;
+      background: #fafafa;
+      transform: translateY(-2px);
+    }
+  }
+
+  &__icon {
+    font-size: 1.25rem;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

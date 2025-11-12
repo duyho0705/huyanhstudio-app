@@ -19,8 +19,8 @@ function App() {
         <DescriptionMusic />
         <ProductMade />
         <Services />
-        <Pricing onSelectService={setSelectedService}/>
-        <Booking selectedService={selectedService}/>
+        <Pricing onSelectService={setSelectedService} />
+        <Booking selectedService={selectedService} />
         <Highlight />
         <Footer />
       </Hero>

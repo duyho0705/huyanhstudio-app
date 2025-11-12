@@ -1,9 +1,25 @@
 import "../../styles/Navbar.scss";
 import logoImg from "../../assets/logo.jpg";
+import { FaUser } from "react-icons/fa6";
+import { MdCall } from "react-icons/md";
 import { useState } from "react";
-
+import Login from "./Login";
+import LoginModal from "./LoginModal";
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+
+  const toggleForm = () => {
+    setShowForm((prev) => {
+      const newValue = !prev;
+      if (newValue) {
+        document.body.style.overflow = "hidden";
+      } else {
+        document.body.style.overflow = "auto";
+      }
+      return newValue;
+    });
+  };
 
   return (
     <header className="navbar">
@@ -33,24 +49,24 @@ const Navbar = () => {
           <a href="#pricing" className="navbar__link">
             Bảng giá
           </a>
-          <a href="#booking" className="navbar__link">
-            Đặt lịch
-          </a>
         </nav>
 
         {/* Actions */}
         <div className="navbar__actions">
-          <a href="#booking" className="navbar__btn navbar__btn--primary">
-            Book now
-          </a>
           <a
             href="https://www.facebook.com/HUYANHPR"
+            className="navbar__contact"
             target="_blank"
-            rel="noopener noreferrer"
-            className="navbar__btn navbar__btn--secondary"
           >
+            <MdCall />
             Liên hệ
           </a>
+          <a className="navbar__booking" href="#booking">
+            Đặt lịch ngay
+          </a>
+          <button className="navbar__account" onClick={toggleForm}>
+            <FaUser />
+          </button>
         </div>
 
         {/* Toggle mobile */}
@@ -62,7 +78,7 @@ const Navbar = () => {
       {/* Menu mobile */}
 
       {/* Menu mobile */}
-      <div className="container" style={{position: "relative"}}>
+      <div className="container" style={{ position: "relative" }}>
         <div className={`navbar__mobile-menu ${open ? "active" : ""}`}>
           <a href="#introduction" onClick={() => setOpen(false)}>
             Giới thiệu
@@ -81,6 +97,13 @@ const Navbar = () => {
           </a>
         </div>
       </div>
+      <LoginModal
+        isOpen={showForm}
+        onClose={() => {
+          setShowForm(false);
+          document.body.style.overflow = "auto";
+        }}
+      />
     </header>
   );
 };
