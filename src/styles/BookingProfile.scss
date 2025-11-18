@@ -1,0 +1,174 @@
+.booking-profile {
+  width: 100%;
+  padding: 25px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.06);
+  font-family: "Inter", sans-serif;
+  animation: fadeIn 0.3s ease;
+  margin-top: 150px;
+
+  &__title {
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #222;
+  }
+
+  &__table {
+    overflow-x: auto;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      thead {
+        background: #f7f9fc;
+
+        th {
+          text-align: left;
+          padding: 14px 12px;
+          color: #444;
+          font-size: 0.9rem;
+          font-weight: 600;
+        }
+      }
+
+      tbody {
+        tr {
+          border-bottom: 1px solid #eee;
+          transition: 0.2s;
+
+          &:hover {
+            background: #fdfdfd;
+          }
+
+          td {
+            padding: 12px;
+            font-size: 0.92rem;
+            color: #333;
+            vertical-align: middle;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* STATUS BADGE */
+.status {
+  padding: 6px 12px;
+  border-radius: 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-block;
+
+  &--confirmed {
+    background: rgba(52, 199, 89, 0.15);
+    color: #22a059;
+  }
+
+  &--pending {
+    background: rgba(255, 177, 41, 0.2);
+    color: #bb7a07;
+  }
+
+  &--cancelled {
+    background: rgba(255, 69, 58, 0.2);
+    color: #d6453a;
+  }
+}
+
+/* DOTS BUTTON */
+.dots-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  transition: 0.2s;
+
+  &:hover {
+    background: #eaeaea;
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+}
+
+/* MODAL */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.25s ease;
+}
+
+.modal {
+  width: 90%;
+  max-width: 420px;
+  background: #fff;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.14);
+  animation: scaleIn 0.25s ease;
+  
+  h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  p {
+    margin: 8px 0;
+    font-size: 0.95rem;
+
+    strong {
+      color: #444;
+    }
+  }
+
+  &__close {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px 0;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+
+    &:hover {
+      background: linear-gradient(135deg, #1e40af, #2563eb);
+      transform: translateY(-2px);
+    }
+  }
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

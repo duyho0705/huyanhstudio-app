@@ -2,21 +2,23 @@ import "../../styles/Navbar.scss";
 import logoImg from "../../assets/logo.jpg";
 import { FaUser } from "react-icons/fa6";
 import { MdCall } from "react-icons/md";
-import { useState } from "react";
-import Login from "./Login";
+import { useContext, useState } from "react";
 import LoginModal from "./LoginModal";
+import { AuthContext } from "../../api/AuthContext";
 const Navbar = () => {
+  const { user } = useContext(AuthContext);
+
   const [open, setOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
+
+  const handleUserClick = () => {
+    window.location.href = "/user";
+  };
 
   const toggleForm = () => {
     setShowForm((prev) => {
       const newValue = !prev;
-      if (newValue) {
-        document.body.style.overflow = "hidden";
-      } else {
-        document.body.style.overflow = "auto";
-      }
+      document.body.style.overflow = newValue ? "hidden" : "auto";
       return newValue;
     });
   };
@@ -64,7 +66,18 @@ const Navbar = () => {
           <a className="navbar__booking" href="#booking">
             Đặt lịch ngay
           </a>
-          <button className="navbar__account" onClick={toggleForm}>
+          <button
+            className="navbar__account"
+            onClick={() => {
+              if (user) {
+                // đã đăng nhập → vào trang user
+                window.location.href = "/user";
+              } else {
+                // chưa đăng nhập → mở form login
+                toggleForm();
+              }
+            }}
+          >
             <FaUser />
           </button>
         </div>

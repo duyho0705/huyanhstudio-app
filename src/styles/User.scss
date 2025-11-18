@@ -1,0 +1,85 @@
+.option {
+  background: #ffffff;
+  padding: 28px;
+  border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  position: sticky;
+  top: 100px;
+  margin-top: 150px;
+
+  &__hello {
+    font-size: 30px;
+    font-weight: 600;
+    font-family: "Inter", sans-serif;
+    margin-bottom: 24px;
+    color: #333;
+  }
+
+  &__choose {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .button {
+    width: 100%;
+    padding: 14px 18px;
+    border: none;
+    outline: none;
+    font-size: 18px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: 14px;
+    cursor: pointer;
+    background: #f8f9fa;
+    color: #444;
+    transition: 0.25s ease;
+
+    &:hover {
+      background: #eef2f3;
+      transform: translateX(3px);
+    }
+  }
+
+  &__logout-button {
+    color: #e8412f !important;
+  }
+  // ACTIVE STATE
+  .active {
+    background: #1e88e5 !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(30, 136, 229, 0.3);
+
+    .option__icon {
+      color: #fff !important;
+    }
+
+    &:hover {
+      background: #1878cc !important;
+      transform: translateX(5px);
+    }
+  }
+
+  // ICON STYLE
+  &__icon {
+    font-size: 20px;
+    color: #1e88e5;
+  }
+}
+
+
+// ------ RIGHT CONTENT AREA ------
+
+// Animation khi chuyển tab
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
