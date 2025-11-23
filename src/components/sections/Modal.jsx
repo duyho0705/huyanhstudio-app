@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import "../../styles/Modal.scss"
+import "../../styles/Modal.scss";
 
 const Modal = ({ isOpen, onClose, title, content }) => {
   // Khi modal mở, disable scroll
@@ -28,7 +28,7 @@ const Modal = ({ isOpen, onClose, title, content }) => {
           ✕
         </button>
         <h2>{title}</h2>
-        <p>{content}</p>
+        <div className="modal-detail">{content}</div>
       </div>
     </div>
   );

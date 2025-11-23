@@ -131,23 +131,31 @@
   }
 
   &__account {
-    background: none;
     border: none;
     font-size: 16px;
     color: #0f172b;
     cursor: pointer;
     display: flex;
     background: #343740;
-    padding: 16px;
+    padding: 13px 14px;
     border-radius: 30px;
     color: white;
+    transition: 0.2s ease;
+    box-shadow: #343740;
+    box-shadow: 0 6px 20px rgba(61, 67, 81, 0.3);
+
+    &:hover {
+      transform: translateY(-2px);
+    }
   }
 
   &__booking {
     display: flex;
     align-items: center;
     margin: 0;
-    background: #0084d1;
+    background: linear-gradient(135deg, #0ea5e9, #2563eb);
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+    transition: 0.2s ease;
     color: #fff;
     font-size: 1rem;
     font-weight: 600;
@@ -155,6 +163,11 @@
     padding: 8px 33px;
     cursor: pointer;
     text-decoration: none;
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+
+    &:hover {
+      transform: translateY(-2px);
+    }
   }
 
   &__contact {
@@ -169,6 +182,13 @@
     border-radius: 10px;
     padding: 5px 19px;
     color: white;
+    box-shadow: 0 6px 20px rgba(61, 67, 81, 0.3);
+    transition: 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+    }
   }
 }
 

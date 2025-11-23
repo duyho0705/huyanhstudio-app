@@ -1,7 +1,11 @@
 import "../../styles/Booking.scss";
+import bookingApi from "../../api/bookingApi.js";
+import studioRoomApi from "../../api/studioRoomApi.js";
 import { DatePicker, Select, Input, message } from "antd";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import serviceApi from "../../api/serviceApi.js";
+import { Pointer } from "lucide-react";
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -12,16 +16,37 @@ const Booking = ({ selectedService }) => {
   const [note, setNote] = useState("");
   const [email, setEmail] = useState("");
   const [date, setDate] = useState(null);
-  const [service, setService] = useState();
+  const [service, setService] = useState([]);
+  const [studio, setStudio] = useState(null);
+
+  const [serviceList, setServiceList] = useState([]);
+  const [studioList, setStudioList] = useState([]);
 
   // 👇 Đây là hook của Antd v5 để show message
   const [messageApi, contextHolder] = message.useMessage();
 
-  const isFormValid = fullName && phone && date && service && email;
+  const isFormValid = fullName && phone && date && service?.length > 0 && email && studio;
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [serviceRes, studioRes] = await Promise.all([
+          serviceApi.getAll(),
+          studioRoomApi.getAll(),
+        ]);
+
+        setServiceList(serviceRes.data || []);
+        setStudioList(studioRes.data || []);
+      } catch (err) {
+        console.error(err);
+        messageApi.error("Không thể tải dữ liệu");
+      }
+    };
+
+    fetchData();
+
     if (selectedService) {
-      setService(selectedService);
+      setService(Array.isArray(selectedService) ? selectedService : [selectedService]);
     }
   }, [selectedService]);
 
@@ -31,25 +56,34 @@ const Booking = ({ selectedService }) => {
     setEmail("");
     setNote("");
     setDate(null);
-    setService(undefined);
+    setService([]);   // reset multiple select
+    setStudio(null);  // reset select thường
   };
 
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isFormValid) return;
 
-    console.log({
-      fullName,
-      phone,
-      date: date ? dayjs(date).format("DD/MM/YYYY") : null,
-      service,
-      note,
-    });
+    try {
+      const payload = {
+        fullName,
+        phone,
+        email,
+        recordDate: date ? dayjs(date).format("YYYY-MM-DD") : null,
+        studioRoomId: studio,
+        serviceIds: service,
+        note,
+      };
 
-    // 🚀 Thông báo thành công
-    messageApi.success("Yêu cầu của bạn đã được gửi thành công!");
+      const response = await bookingApi.create(payload);
 
-    handleReset();
+      messageApi.success("Đặt lịch thành công!");
+      handleReset();
+    } catch (error) {
+      console.error(error);
+      messageApi.error("Không thể gửi yêu cầu, vui lòng thử lại!");
+    }
   };
 
   return (
@@ -143,11 +177,31 @@ const Booking = ({ selectedService }) => {
                     size="large"
                     placeholder="Chọn dịch vụ"
                     value={service}
+                    mode="multiple"
                     onChange={(val) => setService(val)}
                   >
-                    <Option value="recording">Recording</Option>
-                    <Option value="mixing">Mixing Mastering</Option>
-                    <Option value="beat">Phối Beat</Option>
+                    {serviceList.map((item) => (
+                      <Option key={item.id} value={item.id}>
+                        {item.name}
+                      </Option>
+                    ))}
+                  </Select>
+                </div>
+
+                <div className="booking__field">
+                  <label className="booking__label">Studio</label>
+                  <Select
+                    style={{ width: "100%" }}
+                    size="large"
+                    placeholder="Chọn studio"
+                    value={studio}
+                    onChange={(val) => setStudio(val)}
+                  >
+                    {studioList.map((item) => (
+                      <Option key={item.id} value={item.id}>
+                        {item.studioName}
+                      </Option>
+                    ))}
                   </Select>
                 </div>
 

@@ -2,13 +2,13 @@ import authApi from "../../../api/authApi";
 import { useState, useContext } from "react";
 import "../../../styles/ChangePassword.scss";
 import { AuthContext } from "../../../api/AuthContext";
-import LoginModal from "../../layout/LoginModal";
 
 const ChangePassword = () => {
-  const [oldPassword, setOldPassword] = useState("null");
-  const [newPassword, setNewPassword] = useState("null");
-  const [confirmedPassword, setConfirmedPassword] = useState("null");
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmedPassword, setConfirmedPassword] = useState("");
   const [message, setMessage] = useState({ type: "", text: "" });
+  const [showSuccess, setShowSuccess] = useState(false);
   const { logout } = useContext(AuthContext);
 
   const submit = async (e) => {
@@ -24,22 +24,23 @@ const ChangePassword = () => {
     if (newPassword !== confirmedPassword) {
       return setMessage({
         type: "error",
-        text: "Mật khẩu mới và xác nhân mật khẩu mới không khớp.",
+        text: "Mật khẩu mới và xác nhận mật khẩu không khớp.",
       });
     }
 
     try {
       await authApi.changePassword({ oldPassword, newPassword });
-      setMessage({
-        type: "success",
-        text: "Đổi mật khẩu thành công. Vui lòng đăng nhập lại.",
-      });
+      setShowSuccess(true);
       setTimeout(() => {
-        logout(); // yêu cầu login lại
+        setShowSuccess(false);
+        logout();
       }, 1500);
     } catch (err) {
-      const msg = err.response?.data?.message || "Đổi mật khẩu thất bại.";
-      setMessage({ type: "error", text: msg });
+      const msg = "Sai mật khẩu hiện tại.";
+      setMessage({
+        type: "error",
+        text: msg,
+      });
     }
   };
   return (
@@ -49,6 +50,7 @@ const ChangePassword = () => {
       {message.text && (
         <p className={`message ${message.type}`}>{message.text}</p>
       )}
+
       <form onSubmit={submit}>
         <div className="form-group">
           <label>Mật khẩu hiện tại</label>
@@ -56,6 +58,7 @@ const ChangePassword = () => {
             type="password"
             value={oldPassword}
             onChange={(e) => setOldPassword(e.target.value)}
+            placeholder="Nhập mật khẩu hiện tại"
           />
         </div>
 
@@ -65,6 +68,7 @@ const ChangePassword = () => {
             type="password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
+            placeholder="Nhập mật khẩu mới"
           />
         </div>
 
@@ -74,6 +78,7 @@ const ChangePassword = () => {
             type="password"
             value={confirmedPassword}
             onChange={(e) => setConfirmedPassword(e.target.value)}
+            placeholder="Nhập lại mật khẩu mới"
           />
         </div>
 
@@ -81,7 +86,18 @@ const ChangePassword = () => {
           Xác nhận thay đổi
         </button>
       </form>
+
+      {showSuccess && (
+        <div className="success-modal">
+          <div className="success-card">
+            <span className="icon">✓</span>
+            <p>Đổi mật khẩu thành công!</p>
+            <small>Vui lòng đăng nhập lại</small>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+
 export default ChangePassword;

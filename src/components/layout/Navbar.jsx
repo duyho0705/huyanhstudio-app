@@ -1,19 +1,25 @@
 import "../../styles/Navbar.scss";
-import logoImg from "../../assets/logo.jpg";
+import logoImg from "../../assets/logo2025.png";
 import { FaUser } from "react-icons/fa6";
 import { MdCall } from "react-icons/md";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import LoginModal from "./LoginModal";
 import { AuthContext } from "../../api/AuthContext";
+
 const Navbar = () => {
   const { user } = useContext(AuthContext);
-
   const [open, setOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  const handleUserClick = () => {
-    window.location.href = "/user";
-  };
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const toggleForm = () => {
     setShowForm((prev) => {
@@ -24,33 +30,22 @@ const Navbar = () => {
   };
 
   return (
-    <header className="navbar">
+    <header className={`navbar ${scrolled ? "scrolled" : ""}`}>
       <div className="container">
         {/* Logo */}
         <div className="navbar__logo">
-          <span
-            className="navbar__brand"
-            onClick={() => (window.location.href = "/")}
-          >
+          <a href="/" className="navbar__brand">
             <img src={logoImg} alt="Logo" />
-            HA Studio
-          </span>
+            <span>HA</span> Studio
+          </a>
         </div>
 
         {/* Menu desktop */}
         <nav className="navbar__menu">
-          <a href="#introduction" className="navbar__link">
-            Giới thiệu
-          </a>
-          <a href="#products" className="navbar__link">
-            Sản phẩm
-          </a>
-          <a href="#services" className="navbar__link">
-            Dịch vụ
-          </a>
-          <a href="#pricing" className="navbar__link">
-            Bảng giá
-          </a>
+          <a href="#introduction" className="navbar__link">Giới thiệu</a>
+          <a href="#products" className="navbar__link">Sản phẩm</a>
+          <a href="#services" className="navbar__link">Dịch vụ</a>
+          <a href="#pricing" className="navbar__link">Bảng giá</a>
         </nav>
 
         {/* Actions */}
@@ -59,6 +54,7 @@ const Navbar = () => {
             href="https://www.facebook.com/HUYANHPR"
             className="navbar__contact"
             target="_blank"
+            rel="noreferrer"
           >
             <MdCall />
             Liên hệ
@@ -70,10 +66,8 @@ const Navbar = () => {
             className="navbar__account"
             onClick={() => {
               if (user) {
-                // đã đăng nhập → vào trang user
                 window.location.href = "/user";
               } else {
-                // chưa đăng nhập → mở form login
                 toggleForm();
               }
             }}
@@ -89,27 +83,14 @@ const Navbar = () => {
       </div>
 
       {/* Menu mobile */}
-
-      {/* Menu mobile */}
-      <div className="container" style={{ position: "relative" }}>
-        <div className={`navbar__mobile-menu ${open ? "active" : ""}`}>
-          <a href="#introduction" onClick={() => setOpen(false)}>
-            Giới thiệu
-          </a>
-          <a href="#products" onClick={() => setOpen(false)}>
-            Sản phẩm
-          </a>
-          <a href="#services" onClick={() => setOpen(false)}>
-            Dịch vụ
-          </a>
-          <a href="#pricing" onClick={() => setOpen(false)}>
-            Bảng giá
-          </a>
-          <a href="#booking" onClick={() => setOpen(false)}>
-            Đặt lịch
-          </a>
-        </div>
+      <div className={`navbar__mobile-menu ${open ? "active" : ""}`}>
+        <a href="#introduction" onClick={() => setOpen(false)}>Giới thiệu</a>
+        <a href="#products" onClick={() => setOpen(false)}>Sản phẩm</a>
+        <a href="#services" onClick={() => setOpen(false)}>Dịch vụ</a>
+        <a href="#pricing" onClick={() => setOpen(false)}>Bảng giá</a>
+        <a href="#booking" onClick={() => setOpen(false)}>Đặt lịch</a>
       </div>
+
       <LoginModal
         isOpen={showForm}
         onClose={() => {

@@ -1,45 +1,44 @@
 import "../../../styles/BookingProfile.scss";
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { AuthContext } from "../../../api/AuthContext";
+import bookingApi from "../../../api/bookingApi";
+import Modal from "../../sections/Modal";
 const BookingProfile = () => {
+  const { user, loading } = useContext(AuthContext);
+
+  const [bookings, setBookings] = useState([]);
   const [selectedBooking, setSelectedBooking] = useState(null);
 
-  const bookings = [
-    {
-      id: "DL001",
-      date: "2025-01-05",
-      time: "14:00",
-      service: "Cắt tóc nam",
-      status: "confirmed",
-    },
-    {
-      id: "DL002",
-      date: "2025-01-10",
-      time: "09:00",
-      service: "Gội đầu thư giãn",
-      status: "pending",
-    },
-    {
-      id: "DL003",
-      date: "2025-01-20",
-      time: "16:30",
-      service: "Nhuộm tóc",
-      status: "cancelled",
-    },
-  ];
+  useEffect(() => {
+    if (loading || !user) return;
+
+    const fetchData = async () => {
+      try {
+        const res = await bookingApi.getBookingCustomer(0, 10);
+        setBookings(res.data.list);
+      } catch (err) {
+        console.error("Error fetching bookings:", err);
+      }
+    };
+
+    fetchData();
+  }, [loading, user]);
 
   const getStatus = (status) => {
     switch (status) {
-      case "confirmed":
+      case "CONFIRMED":
         return <span className="status status--confirmed">Đã xác nhận</span>;
-      case "pending":
+      case "PENDING":
         return <span className="status status--pending">Chờ xác nhận</span>;
-      case "cancelled":
+      case "CANCELLED":
         return <span className="status status--cancelled">Đã hủy</span>;
       default:
         return <span className="status">Không rõ</span>;
     }
   };
+
+  if (loading) return <p className="loading">Đang tải...</p>;
 
   return (
     <div className="booking-profile">
@@ -50,8 +49,8 @@ const BookingProfile = () => {
           <thead>
             <tr>
               <th>Mã lịch</th>
-              <th>Ngày</th>
-              <th>Giờ</th>
+              <th>Tên khách hàng</th>
+              <th>Ngày thu</th>
               <th>Dịch vụ</th>
               <th>Trạng thái</th>
               <th></th>
@@ -60,11 +59,11 @@ const BookingProfile = () => {
 
           <tbody>
             {bookings.map((b) => (
-              <tr key={b.id}>
-                <td>{b.id}</td>
-                <td>{b.date}</td>
-                <td>{b.time}</td>
-                <td>{b.service}</td>
+              <tr key={b.bookingId}>
+                <td>{b.bookingId}</td>
+                <td>{b.customerName}</td>
+                <td>{b.recordDate}</td>
+                <td>{b.services.join(", ")}</td>
                 <td>{getStatus(b.status)}</td>
                 <td>
                   <button
@@ -80,24 +79,41 @@ const BookingProfile = () => {
         </table>
       </div>
 
-      {/* ================= MODAL ================= */}
-      {selectedBooking && (
-        <div className="modal-overlay" onClick={() => setSelectedBooking(null)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h3>Chi tiết đặt lịch</h3>
-            <p><strong>Mã lịch:</strong> {selectedBooking.id}</p>
-            <p><strong>Ngày:</strong> {selectedBooking.date}</p>
-            <p><strong>Giờ:</strong> {selectedBooking.time}</p>
-            <p><strong>Dịch vụ:</strong> {selectedBooking.service}</p>
-            <p><strong>Trạng thái:</strong> {getStatus(selectedBooking.status)}</p>
-
-            <button className="modal__close" onClick={() => setSelectedBooking(null)}>
-              Đóng
-            </button>
-          </div>
-        </div>
-      )}
+      <Modal
+        isOpen={!!selectedBooking}
+        onClose={() => setSelectedBooking(null)}
+        title="Chi tiết đặt lịch"
+        content={
+          selectedBooking && (
+            <div className="modal-detail">
+              <p>
+                <strong>Mã lịch:</strong> {selectedBooking.bookingId}
+              </p>
+              <p>
+                <strong>Khách hàng:</strong> {selectedBooking.customerName}
+              </p>
+              <p>
+                <strong>Ngày thu:</strong> {selectedBooking.recordDate}
+              </p>
+              <p>
+                <strong>Dịch vụ:</strong> {selectedBooking.services.join(", ")}
+              </p>
+              <p>
+                <strong>Ghi chú:</strong>{" "}
+                {selectedBooking.note || "Không có ghi chú"}
+              </p>
+              <p>
+                <strong>Phòng:</strong> {selectedBooking.studioRoom}
+              </p>
+              <p>
+                <strong>Trạng thái:</strong> {getStatus(selectedBooking.status)}
+              </p>
+            </div>
+          )
+        }
+      />
     </div>
   );
 };
+
 export default BookingProfile;
