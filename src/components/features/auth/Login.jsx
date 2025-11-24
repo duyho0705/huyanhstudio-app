@@ -1,10 +1,10 @@
 import React, { useState, useContext } from "react";
 import { FaFacebookF } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import authApi from "../../api/authApi";
+import authApi from "../../../api/authApi";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../api/AuthContext";
-import "../../styles/Login.scss";
+import { AuthContext } from "../../../api/AuthContext";
+import "../../../styles/Login.scss";
 
 const Login = ({ onClose }) => {
   const { login: loginContext } = useContext(AuthContext);
@@ -58,7 +58,7 @@ const Login = ({ onClose }) => {
 
       setTimeout(() => {
         onClose?.();
-      }, 700);
+      }, 500);
     } catch (err) {
       const status = err.response?.status;
 
@@ -114,10 +114,10 @@ const Login = ({ onClose }) => {
       setTimeout(() => {
         onClose?.();
       }, 700);
-      
+
       navigate("/"); // Về home
     } catch (err) {
-      showError("Thông tin không hợp lệ.");
+      showError("Thông tin không hợp lệ.", err);
     } finally {
       setLoading(false);
     }

@@ -10,7 +10,7 @@
 
   &__table {
     background: #fff;
-    border-radius: 18px;
+    border-radius: 10px;
     padding: 40px 28px;
     text-align: center;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
@@ -94,7 +94,7 @@
     font-weight: 500;
     text-decoration: none;
     color: #fff;
-    background: #0F172B;
+    background: #0f172b;
     box-shadow: 0 6px 16px rgba(29, 92, 255, 0.25);
     transition: all 0.3s ease;
 
@@ -105,9 +105,9 @@
 }
 .pricing__first-title {
   font-weight: bold;
-    font-size: 30px;
-    margin-bottom: 20px;
-    color: black;
+  font-size: 30px;
+  margin-bottom: 20px;
+  color: black;
 }
 
 @media (max-width: 768px) {

@@ -1,11 +1,10 @@
-import "../../styles/Booking.scss";
-import bookingApi from "../../api/bookingApi.js";
-import studioRoomApi from "../../api/studioRoomApi.js";
+import "../../../styles/Booking.scss";
+import bookingApi from "../../../api/bookingApi.js";
+import studioRoomApi from "../../../api/studioRoomApi.js";
 import { DatePicker, Select, Input, message } from "antd";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import serviceApi from "../../api/serviceApi.js";
-import { Pointer } from "lucide-react";
+import serviceApi from "../../../api/serviceApi.js";
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -25,7 +24,8 @@ const Booking = ({ selectedService }) => {
   // 👇 Đây là hook của Antd v5 để show message
   const [messageApi, contextHolder] = message.useMessage();
 
-  const isFormValid = fullName && phone && date && service?.length > 0 && email && studio;
+  const isFormValid =
+    fullName && phone && date && service?.length > 0 && email && studio;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,7 +46,9 @@ const Booking = ({ selectedService }) => {
     fetchData();
 
     if (selectedService) {
-      setService(Array.isArray(selectedService) ? selectedService : [selectedService]);
+      setService(
+        Array.isArray(selectedService) ? selectedService : [selectedService]
+      );
     }
   }, [selectedService]);
 
@@ -56,10 +58,9 @@ const Booking = ({ selectedService }) => {
     setEmail("");
     setNote("");
     setDate(null);
-    setService([]);   // reset multiple select
-    setStudio(null);  // reset select thường
+    setService([]); // reset multiple select
+    setStudio(null); // reset select thường
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();

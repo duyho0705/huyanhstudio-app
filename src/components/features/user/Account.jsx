@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, useContext } from "react";
 import "../../../styles/Account.scss";
-import userApi from "../../../api/userApi";
+import userApi from "../../../api/userApi.js";
 import { AuthContext } from "../../../api/AuthContext.jsx";
 
 const Account = () => {
@@ -80,7 +80,11 @@ const Account = () => {
           )}
         </div>
 
-        <button type="button" className="account__avatar-btn" onClick={openFilePicker}>
+        <button
+          type="button"
+          className="account__avatar-btn"
+          onClick={openFilePicker}
+        >
           Thay đổi ảnh đại diện
         </button>
 

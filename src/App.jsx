@@ -5,7 +5,7 @@ import { AuthContext } from "./api/AuthContext";
 
 import NavBar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
-import Booking from "./components/sections/Booking";
+import Booking from "./components/features/booking/Booking";
 import Hero from "./components/sections/Hero";
 import Introduction from "./components/sections/Introduction";
 import Pricing from "./components/sections/Pricing";
@@ -13,8 +13,8 @@ import ProductMade from "./components/sections/ProductMade";
 import Services from "./components/sections/Services";
 import Highlight from "./components/sections/Highlight.";
 import DescriptionMusic from "./components/sections/DescriptionMusic";
-import User from "./components/layout/User";
-import LoginModal from "./components/layout/LoginModal";
+import User from "./components/features/user/User";
+import LoginModal from "./components/features/auth/LoginModal";
 import { useState } from "react";
 
 function HomePage() {

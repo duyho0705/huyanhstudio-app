@@ -46,7 +46,7 @@ const ProductMade = () => {
           <div className="row">
             <div className="col-xl-12">
               <div className="product__header">
-                <h3 className="product__title">SẢN PHẨM ĐÃ THỰC HIỆN</h3>
+                <h3 className="product__title">Sản phẩm đã thực hiện</h3>
                 <button
                   className="product__btn"
                   onClick={() => setShowAll(!showAll)}

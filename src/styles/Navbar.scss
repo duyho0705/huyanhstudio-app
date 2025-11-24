@@ -1,13 +1,24 @@
 .navbar {
   width: 100%;
-  background: white;
-  // backdrop-filter: blur(8px);
-  transition: 0.3s ease, box-shadow 0.3s ease;
+  background: rgba(255, 255, 255, 0.65);
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1000;
   padding: 13px;
+  backdrop-filter: none; // bỏ cái này đi
+  overflow: hidden; // để layer blur không tràn ra
+
+  /* Glass layer tách riêng */
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: -1;
+    opacity: 1;
+  }
 
   &__container {
     max-width: 1400px;
@@ -23,10 +34,12 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 30px;
+      font-size: 27px;
       font-weight: bold;
-      color: #111;
-      cursor: pointer;
+      background: linear-gradient(90deg, #36bbff, #a48aff);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
 
       img {
         width: 40px;
@@ -218,7 +231,6 @@
 
 @media (max-width: 576px) {
   .navbar__mobile-menu {
-
     a {
       padding: 10px 10px;
       font-size: 13px;

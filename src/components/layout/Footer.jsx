@@ -3,7 +3,7 @@ import { FaInstagram, FaFacebookF, FaTiktok } from "react-icons/fa";
 import { CiPhone } from "react-icons/ci";
 import { MdOutgoingMail } from "react-icons/md";
 import { FaLocationDot } from "react-icons/fa6";
-import logoImg from "../../assets/logo.jpg";
+import logoImg from "../../assets/logo.png";
 
 const Footer = () => {
   return (
@@ -31,7 +31,7 @@ const Footer = () => {
                     objectFit: "contain",
                     borderRadius: "20px",
                     marginRight: "8px",
-
+                    transform: "rotate(-1deg)",
                   }}
                 />
                 HA Studio
@@ -44,8 +44,7 @@ const Footer = () => {
                 <CiPhone className="footer__icon" /> 0393248014
               </p>
               <p className="footer__text">
-                <MdOutgoingMail className="footer__icon" />{" "}
-                hastudio@gmail.com
+                <MdOutgoingMail className="footer__icon" /> hastudio@gmail.com
               </p>
               <p className="footer__text">
                 <FaLocationDot className="footer__icon" /> Tân Bình, TP.HCM
@@ -91,9 +90,13 @@ const Footer = () => {
             <div className="footer__block">
               <h6 className="footer__title">Theo dõi chúng tôi</h6>
               <div className="footer__social">
-                <a href="https://www.tiktok.com/@huyanhproduction?is_from_webapp=1&sender_device=pc"
+                <a
+                  href="https://www.tiktok.com/@huyanhproduction?is_from_webapp=1&sender_device=pc"
                   target="_blank"
-                  rel="noopener noreferrer"><FaTiktok className="footer__icon" /></a>
+                  rel="noopener noreferrer"
+                >
+                  <FaTiktok className="footer__icon" />
+                </a>
                 <a
                   href="https://www.facebook.com/HUYANHPR"
                   target="_blank"
@@ -110,9 +113,7 @@ const Footer = () => {
 
       {/* bottom copyright */}
       <div className="footer__bottom">
-        <p className="footer__copy">
-          © 2025 HA Studio. All rights reserved.
-        </p>
+        <p className="footer__copy">© 2025 HA Studio. All rights reserved.</p>
       </div>
     </footer>
   );

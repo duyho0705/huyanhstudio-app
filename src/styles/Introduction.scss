@@ -38,7 +38,12 @@
     font-size: 60px;
     color: black;
     margin-bottom: 22px;
-    font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif);
+    font-family: var(
+      --default-font-family,
+      ui-sans-serif,
+      system-ui,
+      sans-serif
+    );
 
     .gradient {
       background: linear-gradient(90deg, #2f80ed, #9b51e0, #eb5757);
@@ -75,7 +80,7 @@
     transition: all 0.3s ease;
 
     &--primary {
-      background: #0084d1;
+      background: linear-gradient(135deg, #0ea5e9, #2563eb);
       color: #fff;
       border: none;
       text-decoration: none;

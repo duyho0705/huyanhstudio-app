@@ -1,5 +1,5 @@
 import "../../styles/Services.scss";
-import Modal from "./Modal";
+import Modal from "../layout/Modal";
 import { useState } from "react";
 import { FaMicrophone, FaHeadphones, FaMusic } from "react-icons/fa";
 import { GoArrowRight } from "react-icons/go";
@@ -27,7 +27,7 @@ const Services = () => {
     <section className="services" id="services">
       <div className="container">
         <div className="services__cover">
-          <h3 className="services__title">DỊCH VỤ NỔI BẬT</h3>
+          <h3 className="services__title">Dịch vụ nổi bật</h3>
         </div>
         <div className="services-grid">
           {/* Recording */}

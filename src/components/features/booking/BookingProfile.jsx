@@ -3,7 +3,7 @@ import { useState, useEffect, useContext } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { AuthContext } from "../../../api/AuthContext";
 import bookingApi from "../../../api/bookingApi";
-import Modal from "../../sections/Modal";
+import Modal from "../../layout/Modal";
 const BookingProfile = () => {
   const { user, loading } = useContext(AuthContext);
 

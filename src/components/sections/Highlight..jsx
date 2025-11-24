@@ -2,7 +2,7 @@ import "../../styles/Highlight.scss";
 const Highlight = () => {
   return (
     <>
-      <div className="container" style={{paddingBottom: "83px"}}>
+      <div className="container" style={{ paddingBottom: "83px" }}>
         <div className="highlight">
           <div className="row">
             <div className="col-xl-12">
@@ -13,9 +13,16 @@ const Highlight = () => {
                 <p className="highlight__desc text">
                   Đặt lịch ngay hôm nay để nhận ưu đãi 10% cho lần thu đầu tiên.
                 </p>
-                <a href="#booking" className="button highlight__booking">Đặt lịch</a>
-                <a href="#pricing" className="button highlight__pricing-table">
-                  Xem bảng giá
+                <a href="#booking" className="button highlight__booking">
+                  Đặt lịch
+                </a>
+                <a
+                  href="https://www.facebook.com/HUYANHPR"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="button highlight__pricing-table"
+                >
+                  Liên hệ
                 </a>
               </div>
             </div>
