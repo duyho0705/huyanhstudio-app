@@ -1,23 +1,14 @@
 import "../../styles/Navbar.scss";
 import logoImg from "../../assets/logo.png";
 import { FaUser } from "react-icons/fa6";
-import { MdCall } from "react-icons/md";
 import { useContext, useState } from "react";
-import LoginModal from "../features/auth/LoginModal";
 import { AuthContext } from "../../api/AuthContext";
+import { useModal } from "../../api/ModalContext";
 
 const Navbar = () => {
   const { user } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
-  const [showForm, setShowForm] = useState(false);
-
-  const toggleForm = () => {
-    setShowForm((prev) => {
-      const newValue = !prev;
-      document.body.style.overflow = newValue ? "hidden" : "auto";
-      return newValue;
-    });
-  };
+  const { openModal } = useModal();
 
   return (
     <header className="navbar">
@@ -57,7 +48,7 @@ const Navbar = () => {
               if (user) {
                 window.location.href = "/user";
               } else {
-                toggleForm();
+                openModal("login");
               }
             }}
           >
@@ -89,14 +80,6 @@ const Navbar = () => {
           Đặt lịch
         </a>
       </div>
-
-      <LoginModal
-        isOpen={showForm}
-        onClose={() => {
-          setShowForm(false);
-          document.body.style.overflow = "auto";
-        }}
-      />
     </header>
   );
 };

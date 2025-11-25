@@ -69,7 +69,11 @@ const Introduction = () => {
             className="intro__image-main"
           />
           <img src={topImg} alt="Decor trên" className="intro__image-top" />
-          <img src={bottomImg} alt="Decor dưới" className="intro__image-bottom" />
+          <img
+            src={bottomImg}
+            alt="Decor dưới"
+            className="intro__image-bottom"
+          />
         </div>
       </div>
 

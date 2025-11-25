@@ -18,6 +18,9 @@
   position: relative;
   overflow: hidden;
   height: auto;
+  &:hover {
+    transform: translateY(-10px);
+  }
 
   .icon {
     font-size: 2rem;

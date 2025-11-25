@@ -1,44 +1,56 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../../styles/ProductMade.scss";
-
-const products = [
-  {
-    id: 1,
-    title: "Video Dự án A",
-    video: "https://www.youtube.com/embed/KfjeMr3nJ4o",
-  },
-  {
-    id: 2,
-    title: "Video Dự án B",
-    video: "https://www.youtube.com/embed/tgbNymZ7vqY",
-  },
-  {
-    id: 3,
-    title: "Video Dự án C",
-    video: "https://www.youtube.com/embed/KfjeMr3nJ4o",
-  },
-  {
-    id: 4,
-    title: "Video Dự án A",
-    video: "https://www.youtube.com/embed/KfjeMr3nJ4o",
-  },
-  {
-    id: 5,
-    title: "Video Dự án B",
-    video: "https://www.youtube.com/embed/KfjeMr3nJ4o",
-  },
-  {
-    id: 6,
-    title: "Video Dự án C",
-    video: "https://www.youtube.com/embed/KfjeMr3nJ4o",
-  },
-];
+import productApi from "../../api/productApi";
+// const products = [
+//   {
+//     id: 1,
+//     title: "Video Dự án A",
+//     video: "https://www.youtube.com/embed/KfjeMr3nJ4o",
+//   },
+//   {
+//     id: 2,
+//     title: "Video Dự án B",
+//     video: "https://www.youtube.com/embed/tgbNymZ7vqY",
+//   },
+//   {
+//     id: 3,
+//     title: "Video Dự án C",
+//     video: "https://www.youtube.com/embed/KfjeMr3nJ4o",
+//   },
+//   {
+//     id: 4,
+//     title: "Video Dự án A",
+//     video: "https://www.youtube.com/embed/KfjeMr3nJ4o",
+//   },
+//   {
+//     id: 5,
+//     title: "Video Dự án B",
+//     video: "https://www.youtube.com/embed/KfjeMr3nJ4o",
+//   },
+//   {
+//     id: 6,
+//     title: "Video Dự án C",
+//     video: "https://www.youtube.com/embed/KfjeMr3nJ4o",
+//   },
+// ];
 
 const ProductMade = () => {
+  const [products, setProducts] = useState([]); // default empty
   const [showAll, setShowAll] = useState(false);
 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await productApi.getAll();
+        setProducts(response.data);
+      } catch (err) {
+        console.error("Fetch products error: ", err);
+      }
+    };
+    fetchProducts();
+  }, []);
   // if show all = false, get 3 default videos
-  const visibleProducts = showAll ? products : products.slice(0, 4);
+  const visibleProducts = showAll ? products : products.slice(0, 3);
   return (
     <div className="product-cover">
       <div className="container" id="products">
