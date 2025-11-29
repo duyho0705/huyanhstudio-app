@@ -4,22 +4,15 @@ import "../../styles/Modal.scss";
 const Modal = ({ isOpen, onClose, title, content }) => {
   // Khi modal mở, disable scroll
   useEffect(() => {
-    const body = document.body;
-
     if (isOpen) {
-      // lấy width của scrollbar
-      const scrollBarWidth =
-        window.innerWidth - document.documentElement.clientWidth;
-
-      body.style.overflow = "hidden";
-      body.style.paddingRight = `${scrollBarWidth}px`; // giữ chỗ cho scrollbar
+      document.body.style.overflow = "hidden";
     } else {
-      body.style.overflow = "auto";
-      body.style.paddingRight = "0px";
+      document.body.style.overflow = "auto";
     }
+
+    // cleanup khi component unmount
     return () => {
-      body.style.overflow = "auto";
-      body.style.paddingRight = "0px";
+      document.body.style.overflow = "auto";
     };
   }, [isOpen]);
 

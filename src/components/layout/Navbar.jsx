@@ -1,14 +1,23 @@
 import "../../styles/Navbar.scss";
 import logoImg from "../../assets/logo.png";
 import { FaUser } from "react-icons/fa6";
+import { MdCall } from "react-icons/md";
 import { useContext, useState } from "react";
+import LoginModal from "../features/auth/LoginModal";
 import { AuthContext } from "../../api/AuthContext";
-import { useModal } from "../../api/ModalContext";
 
 const Navbar = () => {
   const { user } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
-  const { openModal } = useModal();
+  const [showForm, setShowForm] = useState(false);
+
+  const toggleForm = () => {
+    setShowForm((prev) => {
+      const newValue = !prev;
+      document.body.style.overflow = newValue ? "hidden" : "auto";
+      return newValue;
+    });
+  };
 
   return (
     <header className="navbar">
@@ -23,23 +32,42 @@ const Navbar = () => {
 
         {/* Menu desktop */}
         <nav className="navbar__menu">
-          <a href="#introduction" className="navbar__link">
+          <a
+            href={
+              window.location.pathname === "/"
+                ? "#introduction"
+                : "/#introduction"
+            }
+            className="navbar__link"
+          >
             Giới thiệu
           </a>
-          <a href="#products" className="navbar__link">
+          <a
+            href={window.location.pathname === "/" ? "#products" : "/#products"}
+            className="navbar__link"
+          >
             Sản phẩm
           </a>
-          <a href="#services" className="navbar__link">
+          <a
+            href={window.location.pathname === "/" ? "#services" : "/#services"}
+            className="navbar__link"
+          >
             Dịch vụ
           </a>
-          <a href="#pricing" className="navbar__link">
+          <a
+            href={window.location.pathname === "/" ? "#pricing" : "/#pricing"}
+            className="navbar__link"
+          >
             Bảng giá
           </a>
         </nav>
 
         {/* Actions */}
         <div className="navbar__actions">
-          <a className="navbar__booking" href="#booking">
+          <a
+            className="navbar__booking"
+            href={window.location.pathname === "/" ? "#booking" : "/#booking"}
+          >
             Đặt lịch ngay
           </a>
           <button
@@ -48,7 +76,7 @@ const Navbar = () => {
               if (user) {
                 window.location.href = "/user";
               } else {
-                openModal("login");
+                toggleForm();
               }
             }}
           >
@@ -64,22 +92,49 @@ const Navbar = () => {
 
       {/* Menu mobile */}
       <div className={`navbar__mobile-menu ${open ? "active" : ""}`}>
-        <a href="#introduction" onClick={() => setOpen(false)}>
+        <a
+          href={
+            window.location.pathname === "/"
+              ? "#introduction"
+              : "/#introduction"
+          }
+          onClick={() => setOpen(false)}
+        >
           Giới thiệu
         </a>
-        <a href="#products" onClick={() => setOpen(false)}>
+        <a
+          href={window.location.pathname === "/" ? "#products" : "/#products"}
+          onClick={() => setOpen(false)}
+        >
           Sản phẩm
         </a>
-        <a href="#services" onClick={() => setOpen(false)}>
+        <a
+          href={window.location.pathname === "/" ? "#services" : "/#services"}
+          onClick={() => setOpen(false)}
+        >
           Dịch vụ
         </a>
-        <a href="#pricing" onClick={() => setOpen(false)}>
+        <a
+          href={window.location.pathname === "/" ? "#pricing" : "/#pricing"}
+          onClick={() => setOpen(false)}
+        >
           Bảng giá
         </a>
-        <a href="#booking" onClick={() => setOpen(false)}>
+        <a
+          href={window.location.pathname === "/" ? "#booking" : "/#booking"}
+          onClick={() => setOpen(false)}
+        >
           Đặt lịch
         </a>
       </div>
+
+      <LoginModal
+        isOpen={showForm}
+        onClose={() => {
+          setShowForm(false);
+          document.body.style.overflow = "auto";
+        }}
+      />
     </header>
   );
 };

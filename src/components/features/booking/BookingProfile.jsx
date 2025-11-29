@@ -38,6 +38,8 @@ const BookingProfile = () => {
     }
   };
 
+  const shortCode = (code) => code?.slice(-6);
+
   if (loading) return <p className="loading">Đang tải...</p>;
 
   return (
@@ -49,7 +51,7 @@ const BookingProfile = () => {
           <thead>
             <tr>
               <th>Mã lịch</th>
-              <th>Tên khách hàng</th>
+              <th>Khách hàng</th>
               <th>Ngày thu</th>
               <th>Dịch vụ</th>
               <th>Trạng thái</th>
@@ -59,8 +61,8 @@ const BookingProfile = () => {
 
           <tbody>
             {bookings.map((b) => (
-              <tr key={b.bookingId}>
-                <td>{b.bookingId}</td>
+              <tr key={b.bookingCode}>
+                <td>{shortCode(b.bookingCode)}</td>
                 <td>{b.customerName}</td>
                 <td>{b.recordDate}</td>
                 <td>{b.services.join(", ")}</td>
@@ -85,9 +87,10 @@ const BookingProfile = () => {
         title="Chi tiết đặt lịch"
         content={
           selectedBooking && (
-            <div className="modal-detail">
+            <div className="modal-detail" key={selectedBooking.bookingCode}>
               <p>
-                <strong>Mã lịch:</strong> {selectedBooking.bookingId}
+                <strong>Mã lịch:</strong>{" "}
+                {shortCode(selectedBooking.bookingCode)}
               </p>
               <p>
                 <strong>Khách hàng:</strong> {selectedBooking.customerName}

@@ -1,11 +1,9 @@
 import "../../styles/Hero.scss";
-const Hero = ({children}) => {
+const Hero = ({ children }) => {
   return (
     <>
-      <section className="hero">
-        {children}
-      </section>
+      <section className="hero">{children}</section>
     </>
-  )
-}
+  );
+};
 export default Hero;

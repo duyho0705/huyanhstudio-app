@@ -15,6 +15,7 @@
     "axios": "^1.13.2",
     "bootstrap": "^5.3.8",
     "framer-motion": "^12.23.12",
+    "lite-youtube-embed": "^0.3.4",
     "lucide-react": "^0.542.0",
     "rc-slider": "^11.1.9",
     "react": "^19.1.1",

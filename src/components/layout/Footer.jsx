@@ -11,7 +11,7 @@ const Footer = () => {
       <div className="container">
         <div className="footer__row row">
           {/* Studio Info */}
-          <div className="col-xl-3 col-md-6">
+          <div className="col-xl-4 col-md-6">
             <div className="footer__block">
               <span
                 className="footer__title footer__title--brand"
@@ -53,7 +53,7 @@ const Footer = () => {
           </div>
 
           {/* Services */}
-          <div className="col-xl-3 col-md-6">
+          <div className="col-xl-4 col-md-6">
             <div className="footer__block">
               <h6 className="footer__title">Dịch vụ</h6>
               <ul className="footer__list">
@@ -70,23 +70,8 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Company */}
-          <div className="col-xl-3 col-md-6">
-            <div className="footer__block">
-              <h6 className="footer__title">Công ty</h6>
-              <ul className="footer__list">
-                <li className="footer__item">
-                  <a href=""></a>
-                </li>
-                <li className="footer__item">Tuyển dụng</li>
-                <li className="footer__item">Điều khoản</li>
-                <li className="footer__item">Chính sách bảo mật</li>
-              </ul>
-            </div>
-          </div>
-
           {/* Social */}
-          <div className="col-xl-3 col-md-6">
+          <div className="col-xl-4 col-md-6">
             <div className="footer__block">
               <h6 className="footer__title">Theo dõi chúng tôi</h6>
               <div className="footer__social">
@@ -112,8 +97,10 @@ const Footer = () => {
       </div>
 
       {/* bottom copyright */}
-      <div className="footer__bottom">
-        <p className="footer__copy">© 2025 HA Studio. All rights reserved.</p>
+      <div className="container">
+        <div className="footer__bottom">
+          <p className="footer__copy">© 2025 HA Studio. All rights reserved.</p>
+        </div>
       </div>
     </footer>
   );

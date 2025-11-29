@@ -3,7 +3,6 @@ import bookingApi from "../../../api/bookingApi.js";
 import studioRoomApi from "../../../api/studioRoomApi.js";
 import { DatePicker, Select, Input, message } from "antd";
 import { useEffect, useState } from "react";
-import dayjs from "dayjs";
 import serviceApi from "../../../api/serviceApi.js";
 
 const { Option } = Select;
@@ -50,7 +49,7 @@ const Booking = ({ selectedService }) => {
         Array.isArray(selectedService) ? selectedService : [selectedService]
       );
     }
-  }, [selectedService]);
+  }, [selectedService, messageApi]);
 
   const handleReset = () => {
     setFullName("");
@@ -71,13 +70,13 @@ const Booking = ({ selectedService }) => {
         fullName,
         phone,
         email,
-        recordDate: date ? dayjs(date).format("YYYY-MM-DD") : null,
+        recordDate: date ? date.format("YYYY-MM-DD") : null,
         studioRoomId: studio,
         serviceIds: service,
         note,
       };
 
-      const response = await bookingApi.create(payload);
+      await bookingApi.create(payload);
 
       messageApi.success("Đặt lịch thành công!");
       handleReset();
@@ -106,108 +105,112 @@ const Booking = ({ selectedService }) => {
                 onReset={handleReset}
                 onSubmit={handleSubmit}
               >
-                {/* Họ tên */}
-                <div className="booking__field">
-                  <label className="booking__label" htmlFor="fullName">
-                    Họ tên
-                  </label>
-                  <Input
-                    id="fullName"
-                    placeholder="Hồ Văn Duy"
-                    size="large"
-                    spellCheck={false}
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    required
-                  />
+                {/* Row 1: Họ tên & Số điện thoại */}
+                <div className="booking__row">
+                  <div className="booking__field">
+                    <label className="booking__label" htmlFor="fullName">
+                      Họ tên
+                    </label>
+                    <Input
+                      id="fullName"
+                      placeholder="Hồ Văn Duy"
+                      size="large"
+                      spellCheck={false}
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <div className="booking__field">
+                    <label className="booking__label" htmlFor="phoneNumber">
+                      Số điện thoại
+                    </label>
+                    <Input
+                      id="phoneNumber"
+                      placeholder="0123456789"
+                      size="large"
+                      spellCheck={false}
+                      required
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                    />
+                  </div>
                 </div>
 
-                {/* SĐT */}
-                <div className="booking__field">
-                  <label className="booking__label" htmlFor="phoneNumber">
-                    Số điện thoại
-                  </label>
-                  <Input
-                    id="phoneNumber"
-                    placeholder="0123456789"
-                    size="large"
-                    spellCheck={false}
-                    required
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                  />
+                {/* Row 2: Email & Ngày thu */}
+                <div className="booking__row">
+                  <div className="booking__field">
+                    <label className="booking__label" htmlFor="email">
+                      Email
+                    </label>
+                    <Input
+                      id="email"
+                      placeholder="hovanduy123@gmail.com"
+                      size="large"
+                      spellCheck={false}
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="booking__field">
+                    <label className="booking__label" htmlFor="dateToWork">
+                      Ngày thu
+                    </label>
+                    <DatePicker
+                      id="dateToWork"
+                      placeholder="Chọn ngày thu"
+                      size="large"
+                      style={{ width: "100%" }}
+                      format="DD/MM/YYYY"
+                      value={date}
+                      onChange={(val) => setDate(val)}
+                    />
+                  </div>
                 </div>
 
-                {/* Gmail */}
-                <div className="booking__field">
-                  <label className="booking__label" htmlFor="email">
-                    Email
-                  </label>
-                  <Input
-                    id="email"
-                    placeholder="hovanduy123@gmail.com"
-                    size="large"
-                    spellCheck={false}
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
+                {/* Row 3: Dịch vụ & Studio */}
+                <div className="booking__row">
+                  <div className="booking__field">
+                    <label className="booking__label">Dịch vụ</label>
+                    <Select
+                      style={{ width: "100%" }}
+                      size="large"
+                      placeholder="Chọn dịch vụ"
+                      value={service}
+                      mode="multiple"
+                      onChange={(val) => setService(val)}
+                    >
+                      {serviceList.map((item) => (
+                        <Option key={item.id} value={item.id}>
+                          {item.name}
+                        </Option>
+                      ))}
+                    </Select>
+                  </div>
+
+                  <div className="booking__field">
+                    <label className="booking__label">Studio</label>
+                    <Select
+                      style={{ width: "100%" }}
+                      size="large"
+                      placeholder="Chọn studio"
+                      value={studio}
+                      onChange={(val) => setStudio(val)}
+                    >
+                      {studioList.map((item) => (
+                        <Option key={item.id} value={item.id}>
+                          {item.studioName}
+                        </Option>
+                      ))}
+                    </Select>
+                  </div>
                 </div>
 
-                {/* Ngày thu */}
-                <div className="booking__field">
-                  <label className="booking__label" htmlFor="dateToWork">
-                    Ngày thu
-                  </label>
-                  <DatePicker
-                    id="dateToWork"
-                    placeholder="Chọn ngày thu"
-                    size="large"
-                    style={{ width: "100%" }}
-                    format="DD/MM/YYYY"
-                    value={date}
-                    onChange={(val) => setDate(val)}
-                  />
-                </div>
-
-                {/* Dịch vụ */}
-                <div className="booking__field">
-                  <label className="booking__label">Dịch vụ</label>
-                  <Select
-                    style={{ width: "100%" }}
-                    size="large"
-                    placeholder="Chọn dịch vụ"
-                    value={service}
-                    mode="multiple"
-                    onChange={(val) => setService(val)}
-                  >
-                    {serviceList.map((item) => (
-                      <Option key={item.id} value={item.id}>
-                        {item.name}
-                      </Option>
-                    ))}
-                  </Select>
-                </div>
-
-                <div className="booking__field">
-                  <label className="booking__label">Studio</label>
-                  <Select
-                    style={{ width: "100%" }}
-                    size="large"
-                    placeholder="Chọn studio"
-                    value={studio}
-                    onChange={(val) => setStudio(val)}
-                  >
-                    {studioList.map((item) => (
-                      <Option key={item.id} value={item.id}>
-                        {item.studioName}
-                      </Option>
-                    ))}
-                  </Select>
-                </div>
-
-                {/* Ghi chú */}
-                <div className="booking__field">
+                {/* Row 4: Ghi chú (full width) */}
+                <div className="booking__field booking__field--full">
                   <label className="booking__label" htmlFor="note">
                     Ghi chú
                   </label>
