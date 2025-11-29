@@ -113,7 +113,7 @@ const Booking = ({ selectedService }) => {
                     </label>
                     <Input
                       id="fullName"
-                      placeholder="Hồ Văn Duy"
+                      placeholder="Nhập họ tên"
                       size="large"
                       spellCheck={false}
                       value={fullName}
@@ -128,7 +128,7 @@ const Booking = ({ selectedService }) => {
                     </label>
                     <Input
                       id="phoneNumber"
-                      placeholder="0123456789"
+                      placeholder="Nhập số điện thoại"
                       size="large"
                       spellCheck={false}
                       required
@@ -146,7 +146,7 @@ const Booking = ({ selectedService }) => {
                     </label>
                     <Input
                       id="email"
-                      placeholder="hovanduy123@gmail.com"
+                      placeholder="Nhập email"
                       size="large"
                       spellCheck={false}
                       required

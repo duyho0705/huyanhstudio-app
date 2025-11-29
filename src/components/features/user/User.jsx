@@ -16,7 +16,7 @@ const User = () => {
       <div className="user-page">
         <div className="container">
           <div className="row">
-            <div className="col-xl-4">
+            <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
               <div className="option">
                 <h3 className="option__hello">Xin chào bạn!</h3>
                 <div className="option__choose">
@@ -61,7 +61,7 @@ const User = () => {
                 </div>
               </div>
             </div>
-            <div className="col-xl-8">
+            <div className="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
               {activeOption === "account" && <Account />}
               {activeOption === "booking" && <BookingProfile />}
               {activeOption === "change-password" && <ChangePassword />}

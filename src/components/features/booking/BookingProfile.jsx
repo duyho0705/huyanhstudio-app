@@ -33,6 +33,8 @@ const BookingProfile = () => {
         return <span className="status status--pending">Chờ xác nhận</span>;
       case "CANCELLED":
         return <span className="status status--cancelled">Đã hủy</span>;
+      case "COMPLETED":
+        return <span className="status status--completed">Đã hoàn thành</span>;
       default:
         return <span className="status">Không rõ</span>;
     }

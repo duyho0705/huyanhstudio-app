@@ -64,8 +64,8 @@
   display: inline-block;
 
   &--confirmed {
-    background: rgba(52, 199, 89, 0.15);
-    color: #22a059;
+    background: rgba(59, 130, 246, 0.15);
+    color: #1d4ed8;
   }
 
   &--pending {
@@ -76,6 +76,11 @@
   &--cancelled {
     background: rgba(255, 69, 58, 0.2);
     color: #d6453a;
+  }
+
+  &--completed {
+    background: rgba(52, 199, 89, 0.15);
+    color: #22a059;
   }
 }
 
