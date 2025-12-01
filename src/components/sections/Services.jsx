@@ -80,9 +80,7 @@ const Services = () => {
   return (
     <section className="services" id="services">
       <div className="container">
-        <div className="services__cover">
-          <h3 className="services__title">Dịch vụ nổi bật</h3>
-        </div>
+        <h3 className="services__title">Dịch vụ nổi bật</h3>
 
         <div className="services-grid">
           {SERVICE_DATA.map((service) => (

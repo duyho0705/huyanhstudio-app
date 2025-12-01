@@ -2,33 +2,27 @@
 
 .pricing {
   font-family: "Inter", sans-serif;
-  padding-bottom: 80px;
   position: relative;
+  margin-bottom: 100px;
 
   &__first-title {
     font-weight: 700;
     font-size: 33px;
-    margin-bottom: 33px;
+    margin-bottom: 50px;
     color: #1a1a2e;
     text-align: center;
-    background: linear-gradient(135deg, #1a1a2e 0%, #3b82f6 50%, #a855f7 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
     letter-spacing: -0.5px;
     position: relative;
-    padding-bottom: 16px;
 
-    // Decorative underline
     &::after {
       content: "";
-      position: absolute;
-      bottom: 0;
+      position: absolute; /* thiếu dòng này */
+      bottom: -10px; /* cách chữ một chút */
       left: 50%;
       transform: translateX(-50%);
       width: 80px;
       height: 4px;
-      background: linear-gradient(90deg, #3b82f6 0%, #a855f7 100%);
+      background: linear-gradient(90deg, #1e293b 0%, #334155 100%);
       border-radius: 2px;
       box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
     }
@@ -41,7 +35,7 @@
 
   &__table {
     background: linear-gradient(145deg, #ffffff 0%, #fafbff 100%);
-    border-radius: 24px;
+    border-radius: 9px;
     padding: 48px 36px;
     text-align: center;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04),
@@ -184,7 +178,7 @@
     width: 100%;
     text-align: center;
     padding: 14px 0;
-    border-radius: 12px;
+    border-radius: 30px;
     font-size: 16px;
     font-weight: 600;
     text-decoration: none;
@@ -467,17 +461,16 @@
 
 @media (max-width: 455px) {
   .pricing {
-    padding-bottom: 48px;
-
+    margin-bottom: 50px;
     &__first-title {
       font-size: 24px;
-      margin-bottom: 26px;
+      margin-bottom: 34px;
       letter-spacing: -0.4px;
     }
 
     &__table {
       padding: 28px 18px;
-      border-radius: 16px;
+      border-radius: 15px;
     }
 
     &__title {
@@ -512,7 +505,7 @@
     &__btn {
       padding: 11px 0;
       font-size: 14px;
-      border-radius: 10px;
+      border-radius: 15px;
     }
 
     .row {

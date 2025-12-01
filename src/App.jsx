@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./api/AuthContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "./api/AuthContext";
 import ScrollToHash from "./api/utils/ScrollToHash";
 import NavBar from "./components/layout/Navbar";
@@ -15,14 +15,12 @@ import Highlight from "./components/sections/Highlight.";
 import DescriptionMusic from "./components/sections/DescriptionMusic";
 import User from "./components/features/user/User";
 import LoginModal from "./components/features/auth/LoginModal";
-import { useState } from "react";
 
 function HomePage() {
   const [selectedService, setSelectedService] = useState(null);
 
   return (
     <>
-      <ScrollToHash />
       <Hero>
         <Introduction />
         <DescriptionMusic />
@@ -42,6 +40,7 @@ function AppContent() {
 
   return (
     <>
+      <ScrollToHash />
       <NavBar />
       <Routes>
         <Route path="/" element={<HomePage />} />

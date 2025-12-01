@@ -1,10 +1,11 @@
 .highlight {
   margin-top: 80px;
+
   &__table {
     text-align: center;
     background: linear-gradient(135deg, #eff6ff 0%, #ffffff 50%, #fef2f2 100%);
     border-radius: 24px;
-    padding: 48px 0px;
+    padding: 48px 0;
     border: 1px solid rgba(226, 232, 240, 0.6);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.04),
       inset 0 1px 0 rgba(255, 255, 255, 0.9);
@@ -12,43 +13,51 @@
     overflow: hidden;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
-    &::before {
+    &::before,
+    &::after {
       content: "";
       position: absolute;
-      top: -50%;
-      left: -50%;
       width: 200%;
       height: 200%;
+      pointer-events: none;
+    }
+
+    &::before {
+      top: -50%;
+      left: -50%;
       background: radial-gradient(
         circle at 30% 50%,
         rgba(59, 130, 246, 0.08) 0%,
         transparent 50%
       );
-      pointer-events: none;
       animation: rotate 20s linear infinite;
     }
 
     &::after {
-      content: "";
-      position: absolute;
       bottom: -50%;
       right: -50%;
-      width: 200%;
-      height: 200%;
       background: radial-gradient(
         circle at 70% 50%,
         rgba(239, 68, 68, 0.06) 0%,
         transparent 50%
       );
-      pointer-events: none;
       animation: rotate 25s linear infinite reverse;
+    }
+
+    /* Button wrapper */
+    .btn-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
     }
 
     .button {
       font-weight: 600;
       font-size: 16px;
-      border-radius: 12px;
-      padding: 11px 38px;
+      border-radius: 5px;
+      padding: 9px 38px;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       letter-spacing: 0.3px;
       position: relative;
@@ -83,7 +92,6 @@
     background: linear-gradient(135deg, #1a1a2e 0%, #4a5568 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-clip: text;
     letter-spacing: -0.5px;
     line-height: 1.3;
     position: relative;
@@ -102,13 +110,12 @@
   &__booking {
     border: none;
     padding: 14px 48px;
-    margin-right: 16px;
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    margin-right: 0;
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
     color: white;
     text-decoration: none;
-    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4),
-      0 4px 12px rgba(59, 130, 246, 0.3);
     display: inline-block;
+    border-radius: 6px;
 
     &:active {
       transform: translateY(0);
@@ -122,6 +129,7 @@
     border: 2px solid #e2e8f0;
     text-decoration: none;
     display: inline-block;
+    border-radius: 6px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05), 0 2px 6px rgba(0, 0, 0, 0.03);
 
     &:active {
@@ -130,6 +138,7 @@
   }
 }
 
+/* Animation */
 @keyframes rotate {
   from {
     transform: rotate(0deg);
@@ -139,191 +148,167 @@
   }
 }
 
-/* Responsive design */
+/* -------------------- Responsive -------------------- */
+
+/* Desktop large */
 @media (max-width: 1400px) {
   .highlight {
     &__table {
       padding: 48px 32px;
       border-radius: 24px;
     }
-
     &__title {
       font-size: 34px;
-      margin-bottom: 15px;
-      letter-spacing: -0.5px;
     }
-
     &__desc {
       font-size: 18px;
-      margin-bottom: 30px;
-      line-height: 1.6;
+      margin-bottom: 28px;
     }
-
     &__booking,
     &__pricing-table {
       padding: 14px 44px;
       font-size: 16px;
     }
-
     &__booking {
       margin-right: 16px;
     }
   }
 }
 
+/* Laptop */
 @media (max-width: 1200px) {
   .highlight {
     &__table {
-      padding: 47px 31px;
+      padding: 46px 30px;
       border-radius: 23px;
     }
-
     &__title {
-      font-size: 33px;
-      margin-bottom: 15px;
-      letter-spacing: -0.5px;
+      font-size: 32px;
     }
-
     &__desc {
       font-size: 17px;
-      margin-bottom: 29px;
-      line-height: 1.6;
+      margin-bottom: 26px;
     }
-
     &__booking,
     &__pricing-table {
       padding: 13px 40px;
       font-size: 15px;
     }
-
-    &__booking {
-      margin-right: 15px;
-    }
-  }
-}
-
-@media (max-width: 992px) {
-  .highlight {
-    &__table {
-      padding: 46px 30px;
-      border-radius: 22px;
-    }
-
-    &__title {
-      font-size: 32px;
-      margin-bottom: 15px;
-      letter-spacing: -0.5px;
-    }
-
-    &__desc {
-      font-size: 17px;
-      margin-bottom: 28px;
-      line-height: 1.6;
-    }
-
-    &__booking,
-    &__pricing-table {
-      padding: 13px 38px;
-      font-size: 15px;
-    }
-
     &__booking {
       margin-right: 14px;
     }
   }
 }
 
-@media (max-width: 768px) {
+/* Tablet */
+@media (max-width: 992px) {
   .highlight {
     &__table {
       padding: 44px 28px;
-      border-radius: 20px;
+      border-radius: 22px;
     }
-
     &__title {
       font-size: 30px;
-      margin-bottom: 14px;
-      letter-spacing: -0.45px;
     }
-
     &__desc {
       font-size: 16px;
-      margin-bottom: 26px;
-      line-height: 1.6;
+      margin-bottom: 24px;
     }
-
     &__booking,
     &__pricing-table {
-      padding: 13px 32px;
+      padding: 13px 36px;
       font-size: 15px;
     }
-
     &__booking {
       margin-right: 12px;
     }
   }
 }
 
-@media (max-width: 576px) {
+/* Mobile large */
+@media (max-width: 768px) {
   .highlight {
     &__table {
-      padding: 36px 22px;
-      border-radius: 18px;
-
-      .button {
-        font-size: 14px;
-        padding: 12px 26px;
-        display: block;
-        width: 100%;
-        margin-bottom: 12px;
-      }
+      padding: 38px 24px;
+      border-radius: 20px;
     }
-
     &__title {
-      font-size: 26px;
-      margin-bottom: 13px;
-      letter-spacing: -0.4px;
+      font-size: 28px;
+      margin-bottom: 18px;
     }
-
     &__desc {
       font-size: 15px;
       margin-bottom: 22px;
-      line-height: 1.55;
     }
-
-    &__booking {
-      margin-right: 0;
-      margin-bottom: 12px;
-    }
-
+    &__booking,
     &__pricing-table {
-      margin-bottom: 0;
+      padding: 12px 32px;
+      font-size: 14px;
+    }
+    &__booking {
+      margin-right: 10px;
     }
   }
 }
 
+/* Mobile medium */
+@media (max-width: 576px) {
+  .highlight {
+    &__table {
+      padding: 32px 20px;
+      border-radius: 18px;
+    }
+    &__title {
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+    &__desc {
+      font-size: 14px;
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+    .button {
+      font-size: 14px;
+      padding: 10px 22px;
+      display: block;
+      width: 100%;
+      margin-bottom: 12px;
+    }
+    &__booking,
+    &__pricing-table {
+      padding: 10px 24px;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+  }
+}
+
+/* Mobile small / very small */
 @media (max-width: 455px) {
   .highlight {
     &__table {
-      padding: 28px 18px;
+      padding: 26px 16px;
       border-radius: 16px;
     }
-
     &__title {
-      font-size: 22px;
+      font-size: 20px;
       margin-bottom: 12px;
-      letter-spacing: -0.3px;
     }
-
     &__desc {
-      font-size: 14px;
-      margin-bottom: 20px;
-      line-height: 1.5;
-    }
-
-    .button {
       font-size: 13px;
-      padding: 11px 24px;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+    .button {
+      font-size: 12px;
+      padding: 8px 14px;
+      border-radius: 28px;
+    }
+    &__booking,
+    &__pricing-table {
+      padding: 8px 18px;
+      font-size: 12px;
+      margin-bottom: 10px;
     }
   }
 }

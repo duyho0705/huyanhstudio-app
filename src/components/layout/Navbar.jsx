@@ -1,11 +1,12 @@
 import "../../styles/Navbar.scss";
 import logoImg from "../../assets/logo.png";
 import { FaUser } from "react-icons/fa6";
-import { MdCall } from "react-icons/md";
 import { useContext, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import LoginModal from "../features/auth/LoginModal";
 import { AuthContext } from "../../api/AuthContext";
+
+const OFFSET = 100;
 
 const Navbar = () => {
   const { user } = useContext(AuthContext);
@@ -22,13 +23,31 @@ const Navbar = () => {
     });
   };
 
+  const smoothScrollToSection = (sectionId) => {
+    const el = document.getElementById(sectionId);
+    if (!el) return;
+
+    const top = el.getBoundingClientRect().top + window.scrollY;
+
+    window.scrollTo({
+      top: top - OFFSET,
+      behavior: "smooth",
+    });
+
+    window.history.replaceState(null, "", `#${sectionId}`);
+  };
+
   const handleNavClick = (e, sectionId) => {
     e.preventDefault();
+
+    // Nếu đang ở trang khác => quay về "/" và yêu cầu scroll
     if (location.pathname !== "/") {
-      navigate(`/#${sectionId}`);
-    } else {
-      window.location.hash = sectionId;
+      navigate("/", { state: { scrollTo: sectionId } });
+      return;
     }
+
+    // Nếu đang ở trang "/" => scroll tại chỗ
+    smoothScrollToSection(sectionId);
   };
 
   return (
@@ -38,7 +57,7 @@ const Navbar = () => {
         <div className="navbar__logo">
           <a href="/" className="navbar__brand">
             <img src={logoImg} alt="Logo" />
-            HA Studio
+            HA
           </a>
         </div>
 
@@ -105,42 +124,23 @@ const Navbar = () => {
 
       {/* Menu mobile */}
       <div className={`navbar__mobile-menu ${open ? "active" : ""}`}>
-        <a
-          href="#introduction"
-          onClick={(e) => {
-            handleNavClick(e, "introduction");
-            setOpen(false);
-          }}
-        >
-          Giới thiệu
-        </a>
-        <a
-          href="#products"
-          onClick={(e) => {
-            handleNavClick(e, "products");
-            setOpen(false);
-          }}
-        >
-          Sản phẩm
-        </a>
-        <a
-          href="#services"
-          onClick={(e) => {
-            handleNavClick(e, "services");
-            setOpen(false);
-          }}
-        >
-          Dịch vụ
-        </a>
-        <a
-          href="#pricing"
-          onClick={(e) => {
-            handleNavClick(e, "pricing");
-            setOpen(false);
-          }}
-        >
-          Bảng giá
-        </a>
+        {[
+          ["Giới thiệu", "introduction"],
+          ["Sản phẩm", "products"],
+          ["Dịch vụ", "services"],
+          ["Bảng giá", "pricing"],
+        ].map(([label, id]) => (
+          <a
+            key={id}
+            href={`#${id}`}
+            onClick={(e) => {
+              handleNavClick(e, id);
+              setOpen(false);
+            }}
+          >
+            {label}
+          </a>
+        ))}
 
         {/* Mobile actions */}
         <div className="navbar__mobile-actions">
@@ -171,6 +171,7 @@ const Navbar = () => {
         </div>
       </div>
 
+      {/* Modal */}
       <LoginModal
         isOpen={showForm}
         onClose={() => {

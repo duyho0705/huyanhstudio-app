@@ -5,11 +5,11 @@ const DescriptionMusic = () => {
       <div className="desc-music">
         <div className="container">
           <div className="desc-music__content">
-            <p className="desc-music__text">SunWave Music</p>
-            <p className="desc-music__text">Skyline Records</p>
-            <p className="desc-music__text">Aurora Beats</p>
-            <p className="desc-music__text">Neon Lab</p>
-            <p className="desc-music__text">Echo Podcast</p>
+            <p className="desc-music__text">Đam Mê</p>
+            <p className="desc-music__text">Tâm Huyết</p>
+            <p className="desc-music__text">Sáng Tạo</p>
+            <p className="desc-music__text">Chất Lượng</p>
+            <p className="desc-music__text">Chuyên Nghiệp</p>
           </div>
         </div>
       </div>

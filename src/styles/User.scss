@@ -89,3 +89,13 @@
     transform: translateY(0);
   }
 }
+
+@media (max-width: 992px) {
+  .option {
+    display: none;
+  }
+
+  .account {
+    width: 100%;
+  }
+}

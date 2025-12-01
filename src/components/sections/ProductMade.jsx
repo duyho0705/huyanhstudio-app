@@ -105,7 +105,7 @@ const ProductMade = () => {
     <div className="product-cover">
       <div className="container" id="products">
         <section className="product">
-          <h3 className="product__title">Sản phẩm đã thực hiện</h3>
+          <h3 className="product__title">Sản Phẩm Đã Thực Hiện</h3>
           <div
             className="product-slider"
             ref={sliderRef}
