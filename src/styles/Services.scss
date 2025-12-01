@@ -2,6 +2,7 @@
   padding-bottom: 80px;
   position: relative;
 
+  // Animated background gradient orbs
   &::before,
   &::after {
     content: "";
@@ -33,7 +34,7 @@
   &__cover {
     display: flex;
     align-items: center;
-    margin-bottom: 48px;
+    margin-bottom: 32px;
     justify-content: center;
     gap: 16px;
     position: relative;
@@ -44,7 +45,7 @@
     font-size: 36px;
     color: #1a1a2e;
     text-align: center;
-    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    background: linear-gradient(135deg, #1a1a2e 0%, #3b82f6 50%, #a855f7 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -369,7 +370,7 @@
     padding-bottom: 72px;
 
     &__cover {
-      margin-bottom: 44px;
+      margin-bottom: 32px;
     }
 
     &__title {
@@ -423,7 +424,7 @@
     padding-bottom: 68px;
 
     &__title {
-      font-size: 32px;
+      font-size: 31px;
     }
   }
 
