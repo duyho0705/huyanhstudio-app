@@ -177,3 +177,133 @@
     transform: scale(1);
   }
 }
+
+@media (max-width: 1400px) {
+  .booking-profile {
+    padding: 23px;
+    margin-top: 140px;
+
+    &__title {
+      font-size: 25px;
+      margin-bottom: 19px;
+    }
+
+    &__table table {
+      thead th {
+        padding: 13px 11px;
+        font-size: 0.88rem;
+      }
+
+      tbody tr td {
+        padding: 11px;
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .booking-profile {
+    padding: 22px;
+    margin-top: 150px;
+
+    &__title {
+      font-size: 24px;
+      margin-bottom: 18px;
+    }
+
+    &__table table {
+      thead th {
+        font-size: 0.86rem;
+      }
+
+      tbody tr td {
+        font-size: 0.88rem;
+
+        &__table {
+          overflow-x: auto;
+
+          table {
+            min-width: 600px;
+            font-size: 0.8rem;
+          }
+        }
+      }
+
+      .status {
+        padding: 4px 9px;
+        font-size: 0.72rem;
+      }
+
+      .modal {
+        width: 95%;
+        max-width: 320px;
+        padding: 18px;
+
+        h3 {
+          font-size: 1.05rem;
+        }
+
+        &__close {
+          padding: 11px 0;
+          font-size: 0.95rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .booking-profile {
+    margin-top: 40px;
+  }
+}
+@media (max-width: 455px) {
+  .booking-profile {
+    padding: 14px;
+    border-radius: 12px;
+    margin-top: 40px;
+    &__title {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    &__table table {
+      min-width: 550px;
+      font-size: 0.78rem;
+
+      thead th {
+        padding: 8px 6px;
+      }
+
+      tbody tr td {
+        padding: 7px 6px;
+      }
+    }
+  }
+
+  .status {
+    padding: 3px 8px;
+    font-size: 0.7rem;
+    border-radius: 10px;
+  }
+
+  .modal {
+    padding: 16px;
+
+    h3 {
+      font-size: 1rem;
+      margin-bottom: 14px;
+    }
+
+    p {
+      font-size: 0.85rem;
+      margin: 6px 0;
+    }
+
+    &__close {
+      padding: 10px 0;
+      font-size: 0.9rem;
+    }
+  }
+}

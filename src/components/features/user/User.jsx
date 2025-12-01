@@ -8,20 +8,85 @@ import Account from "./Account";
 import BookingProfile from "../booking/BookingProfile";
 import ChangePassword from "./ChangePassword";
 import "../../../styles/User.scss";
+
 const User = () => {
   const [activeOption, setActiveOption] = useState("account");
+  const [openDropdown, setOpenDropdown] = useState(false);
   const { logout } = useContext(AuthContext);
+
+  const handleSelect = (value) => {
+    if (value === "logout") {
+      logout();
+      return;
+    }
+    setActiveOption(value);
+    setOpenDropdown(false);
+  };
+
   return (
     <>
       <div className="user-page">
         <div className="container">
+          {/* ---------- DROPDOWN MOBILE ---------- */}
+          <div className="option-dropdown d-lg-none">
+            <div
+              className="option-dropdown__selected"
+              onClick={() => setOpenDropdown((prev) => !prev)}
+            >
+              {activeOption === "account" && (
+                <>
+                  <FaUser className="icon" /> Tài khoản của tôi
+                </>
+              )}
+              {activeOption === "booking" && (
+                <>
+                  <LuCalendar className="icon" /> Thông tin đặt lịch
+                </>
+              )}
+              {activeOption === "change-password" && (
+                <>
+                  <MdLockOutline className="icon" /> Đổi mật khẩu
+                </>
+              )}
+              {activeOption === "logout" && (
+                <>
+                  <TbLogout /> Đăng xuất
+                </>
+              )}
+            </div>
+
+            {openDropdown && (
+              <div className="option-dropdown__menu">
+                <div className="item" onClick={() => handleSelect("account")}>
+                  <FaUser /> Tài khoản của tôi
+                </div>
+                <div className="item" onClick={() => handleSelect("booking")}>
+                  <LuCalendar /> Thông tin đặt lịch
+                </div>
+                <div
+                  className="item"
+                  onClick={() => handleSelect("change-password")}
+                >
+                  <MdLockOutline /> Đổi mật khẩu
+                </div>
+                <div
+                  className="item logout"
+                  onClick={() => handleSelect("logout")}
+                >
+                  <TbLogout /> Đăng xuất
+                </div>
+              </div>
+            )}
+          </div>
+
           <div className="row">
-            <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+            {/* ---------- SIDEBAR DESKTOP ---------- */}
+            <div className="col-xl-4 col-lg-4 col-md-4 d-none d-lg-block">
               <div className="option">
                 <h3 className="option__hello">Xin chào bạn!</h3>
                 <div className="option__choose">
                   <button
-                    className={`button option__account-button ${
+                    className={`button ${
                       activeOption === "account" ? "active" : ""
                     }`}
                     onClick={() => setActiveOption("account")}
@@ -30,7 +95,7 @@ const User = () => {
                     Tài khoản của tôi
                   </button>
                   <button
-                    className={`button option__booking-button ${
+                    className={`button ${
                       activeOption === "booking" ? "active" : ""
                     }`}
                     onClick={() => setActiveOption("booking")}
@@ -39,7 +104,7 @@ const User = () => {
                     Thông tin đặt lịch
                   </button>
                   <button
-                    className={`button option__change-password-button ${
+                    className={`button ${
                       activeOption === "change-password" ? "active" : ""
                     }`}
                     onClick={() => setActiveOption("change-password")}
@@ -49,19 +114,17 @@ const User = () => {
                   </button>
                   <button
                     className="button option__logout-button"
-                    style={{ color: "#e8412f" }}
                     onClick={logout}
                   >
-                    <TbLogout
-                      className="option__icon"
-                      style={{ color: "#e8412f" }}
-                    />
+                    <TbLogout className="option__icon" />
                     Đăng xuất
                   </button>
                 </div>
               </div>
             </div>
-            <div className="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
+
+            {/* ---------- CONTENT AREA ---------- */}
+            <div className="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 content-area">
               {activeOption === "account" && <Account />}
               {activeOption === "booking" && <BookingProfile />}
               {activeOption === "change-password" && <ChangePassword />}
@@ -72,4 +135,5 @@ const User = () => {
     </>
   );
 };
+
 export default User;

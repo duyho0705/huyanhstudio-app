@@ -5,6 +5,7 @@
   background: linear-gradient(to bottom, #ffffff 0%, #d5eaff 40%, #cde6ff 100%);
 }
 
+/* ------- SIDEBAR DESKTOP ------- */
 .option {
   background: #ffffff;
   padding: 28px;
@@ -53,7 +54,7 @@
   &__logout-button {
     color: #e8412f !important;
   }
-  // ACTIVE STATE
+
   .active {
     background: #1e88e5 !important;
     color: #fff !important;
@@ -69,16 +70,12 @@
     }
   }
 
-  // ICON STYLE
   &__icon {
     font-size: 20px;
-    color: #1e88e5;
   }
 }
 
-// ------ RIGHT CONTENT AREA ------
-
-// Animation khi chuyển tab
+/* ------- ANIMATION ------ */
 @keyframes fadeSlide {
   from {
     opacity: 0;
@@ -90,12 +87,125 @@
   }
 }
 
-@media (max-width: 992px) {
-  .option {
-    display: none;
+/* ------- MOBILE DROPDOWN ------- */
+.option-dropdown {
+  margin-top: 125px;
+  position: relative;
+
+  &__selected {
+    width: 100%;
+    padding: 16px 20px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    border: 1px solid #d0d7de;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: 0.25s ease;
+    user-select: none;
+
+    svg {
+      font-size: 20px;
+      color: #1e293b;
+    }
+
+    &:hover {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
   }
 
-  .account {
+  &__menu {
+    margin-top: 10px;
     width: 100%;
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 12px 0;
+    box-shadow: 0 14px 40px rgba(30, 136, 229, 0.15);
+    border: 1px solid #d0d7de;
+    animation: dropdownFade 0.25s ease forwards;
+    overflow: hidden;
+
+    .item {
+      padding: 14px 22px;
+      display: flex;
+      align-items: center;
+      font-size: 17px;
+      gap: 14px;
+      cursor: pointer;
+      transition: 0.2s ease;
+
+      svg {
+        font-size: 20px;
+        color: #1e293b;
+      }
+
+      &:hover {
+        background: #f1f7ff;
+        padding-left: 26px;
+      }
+
+      &.logout {
+        color: #e8412f;
+
+        svg {
+          color: #e8412f;
+        }
+
+        &:hover {
+          background: #fff0f0;
+        }
+      }
+    }
+  }
+}
+
+/* Animation của dropdown */
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Ẩn sidebar khi mobile */
+@media (max-width: 992px) {
+  .option {
+    display: none !important;
+  }
+}
+
+@media (max-width: 992px) {
+  .option-dropdown__selected {
+    padding: 10px 20px;
+    border-radius: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .option-dropdown__selected {
+    padding: 9px 20px;
+    border-radius: 13px;
+  }
+}
+
+@media (max-width: 576px) {
+  .option-dropdown__selected {
+    padding: 8px 20px;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 455px) {
+  .option-dropdown__selected {
+    padding: 7px 20px;
+    border-radius: 12px;
   }
 }
