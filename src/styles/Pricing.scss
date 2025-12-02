@@ -177,7 +177,7 @@
     display: block;
     width: 100%;
     text-align: center;
-    padding: 14px 0;
+    padding: 9px 0;
     border-radius: 30px;
     font-size: 16px;
     font-weight: 600;
@@ -464,6 +464,7 @@
     margin-bottom: 50px;
     &__first-title {
       font-size: 24px;
+      margin-top: 100px;
       margin-bottom: 34px;
       letter-spacing: -0.4px;
     }
@@ -503,9 +504,9 @@
     }
 
     &__btn {
-      padding: 11px 0;
+      padding: 8px 0;
       font-size: 14px;
-      border-radius: 15px;
+      border-radius: 30px;
     }
 
     .row {

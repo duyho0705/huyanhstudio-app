@@ -6,71 +6,168 @@ import { AuthContext } from "../../../api/AuthContext.jsx";
 const Account = () => {
   const { user, loadProfile } = useContext(AuthContext);
 
-  const [name, setName] = useState("");
+  const [customerName, setCustomerName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
 
-  // Load dữ liệu vào form
+  const [errors, setErrors] = useState({});
+  const [notification, setNotification] = useState({
+    show: false,
+    message: "",
+    type: "",
+  });
+
+  // Load dữ liệu từ backend
   useEffect(() => {
     if (!user) return;
-    setName(user.name || "");
+
+    setCustomerName(user.name || ""); // Backend trả về "name"
     setPhone(user.phone || "");
     setEmail(user.email || "");
   }, [user]);
 
-  // Lưu thay đổi
-  const handleSave = async () => {
-    if (!user) return alert("Vui lòng đợi tải dữ liệu...");
+  // Auto-dismiss notification after 3 seconds
+  useEffect(() => {
+    if (notification.show) {
+      const timer = setTimeout(() => {
+        setNotification({ show: false, message: "", type: "" });
+      }, 700);
+      return () => clearTimeout(timer);
+    }
+  }, [notification.show]);
+
+  // Validate dữ liệu trước khi gửi
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Tên tiếng Việt
+    const nameRegex = /^[\p{L}][\p{L}\s.'-]*[\p{L}]$/u;
+    if (!customerName.trim()) {
+      newErrors.customerName = "Tên không được để trống";
+    } else if (!nameRegex.test(customerName.trim())) {
+      newErrors.customerName = "Tên chỉ được chứa chữ cái (hỗ trợ tiếng Việt)";
+    }
+
+    // Số điện thoại Việt Nam
+    const phoneRegex = /^(0[3|5|7|8|9])\d{8}$/;
+    if (!phone.trim()) {
+      newErrors.phone = "Số điện thoại không được để trống";
+    } else if (!phoneRegex.test(phone)) {
+      newErrors.phone = "Số điện thoại không hợp lệ";
+    }
+
+    // Email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email.trim()) {
+      newErrors.email = "Email không được để trống";
+    } else if (!emailRegex.test(email)) {
+      newErrors.email = "Email không hợp lệ";
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Submit cập nhật
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!user) return;
+
+    if (!validateForm()) return;
 
     try {
       await userApi.updateProfile({
-        name,
+        customerName: customerName.trim(),
         phone,
-        email,
+        email: email.trim(),
       });
 
       await loadProfile();
-
-      alert("Cập nhật thành công!");
+      setNotification({
+        show: true,
+        message: "Cập nhật thành công!",
+        type: "success",
+      });
     } catch (err) {
       console.error(err);
-      alert("Cập nhật thất bại!");
+      setNotification({
+        show: true,
+        message: "Cập nhật thất bại!",
+        type: "error",
+      });
     }
   };
 
   return (
     <div className="account">
-      <h2 className="account__title">Thông tin tài khoản</h2>
-
-      <form className="account__form">
+      <form className="account__form" onSubmit={handleSubmit}>
+        {/* CUSTOMER NAME */}
         <div className="form-group">
           <label>Tên người dùng</label>
-          <input value={name} onChange={(e) => setName(e.target.value)} />
+          <input
+            value={customerName}
+            onChange={(e) => {
+              setCustomerName(e.target.value);
+              if (errors.customerName)
+                setErrors({ ...errors, customerName: null });
+            }}
+          />
+          {errors.customerName && (
+            <p className="error-text">{errors.customerName}</p>
+          )}
         </div>
 
+        {/* PHONE */}
         <div className="form-group">
           <label>Số điện thoại</label>
-          <input value={phone} onChange={(e) => setPhone(e.target.value)} />
+          <input
+            value={phone}
+            onChange={(e) => {
+              setPhone(e.target.value);
+              if (errors.phone) setErrors({ ...errors, phone: null });
+            }}
+          />
+          {errors.phone && <p className="error-text">{errors.phone}</p>}
         </div>
 
+        {/* EMAIL */}
         <div className="form-group form-group--full">
           <label>Email</label>
           <div className="email-wrapper">
             <input
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (errors.email) setErrors({ ...errors, email: null });
+              }}
             />
             <span className="email-status">
               {user?.isVerified ? "Đã xác thực" : "Chưa xác thực"}
             </span>
           </div>
+          {errors.email && <p className="error-text">{errors.email}</p>}
+        </div>
+
+        <div className="button-container">
+          <button className="account__save-btn" type="submit">
+            Lưu thay đổi
+          </button>
+
+          {/* Notification Toast */}
+          {notification.show && (
+            <div className={`notification notification--${notification.type}`}>
+              <span className="notification__icon">
+                {notification.type === "success" ? "✓" : "✕"}
+              </span>
+              <span className="notification__message">
+                {notification.message}
+              </span>
+            </div>
+          )}
         </div>
       </form>
-
-      <button className="account__save-btn" onClick={handleSave}>
-        Lưu thay đổi
-      </button>
     </div>
   );
 };

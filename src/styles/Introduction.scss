@@ -214,6 +214,10 @@
   .container {
     max-width: 900px;
   }
+  .intro__actions {
+    justify-content: space-evenly;
+  }
+
   .intro__image-top,
   .intro__image-bottom {
     display: none;
@@ -231,8 +235,11 @@
       position: relative;
     }
     .intro__button {
+      width: calc(40% - -2rem);
       padding: 7px 30px;
       font-size: 0.95rem;
+      justify-content: center;
+      border-radius: 30px;
     }
   }
 }
@@ -241,10 +248,15 @@
   .container {
     max-width: 700px;
   }
+  .intro__actions {
+    justify-content: space-between;
+  }
   .intro__wrapper {
     .intro__button {
       padding: 7px 28px;
       font-size: 0.95rem;
+      width: calc(50% - 1rem);
+      justify-content: center;
     }
   }
 }
@@ -272,14 +284,19 @@
 
     .intro__actions {
       justify-content: space-between;
+      gap: 1rem;
     }
 
     .intro__button {
-      padding: 6px 64px;
+      width: calc(50% - 1rem);
+      padding: 7px 28px;
+      font-size: 0.9rem;
+      justify-content: center;
     }
 
     .intro__features {
       font-size: 15px;
+      gap: 0.7rem 1.5rem;
     }
 
     .intro__description {
@@ -316,10 +333,21 @@
 
     .intro__actions {
       justify-content: space-between;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .intro__button {
+      width: calc(50% - 1rem);
+      padding: 7px 24px;
+      font-size: 0.9rem;
+      justify-content: center;
     }
 
     .intro__features {
       font-size: 14px;
+      gap: 0.6rem 1.2rem;
+      justify-content: center;
     }
 
     .intro__description {
@@ -329,10 +357,6 @@
     .intro__tagline {
       font-size: 12px;
       padding: 5px 20px;
-    }
-
-    .intro__button {
-      padding: 6px 30px;
     }
   }
 }
@@ -357,19 +381,21 @@
 
     .intro__actions {
       flex-direction: row;
-      gap: 12px;
-      margin-bottom: 24px;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
     }
 
     .intro__button {
       flex: 1;
+      max-width: 180px;
       justify-content: center;
-      padding: 6px 24px;
-      font-size: 1rem;
+      padding: 8px 20px;
+      font-size: 0.9rem;
       font-weight: 600;
-      border-radius: 30px;
+      border-radius: 8px;
       &-icon {
-        font-size: 1rem;
+        font-size: 0.9rem;
       }
 
       &--primary {
@@ -396,15 +422,15 @@
 
     .intro__features {
       grid-template-columns: 1fr;
-      font-size: 14px;
-      gap: 10px;
+      font-size: 13px;
+      gap: 8px;
       text-align: center;
 
       .intro__feature {
         justify-content: center;
 
         &-icon {
-          font-size: 14px;
+          font-size: 13px;
           color: #10b981;
         }
       }

@@ -6,7 +6,7 @@ const userApi = {
   },
 
   updateProfile(data) {
-    return axiosClient.put("/user/me", data);
+    return axiosClient.patch("/user/me", data);
   },
   
 };

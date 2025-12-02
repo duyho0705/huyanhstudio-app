@@ -2,11 +2,10 @@ import { useState, useEffect, useRef } from "react";
 import "../../styles/ProductMade.scss";
 import productApi from "../../api/productApi";
 
-function convertToEmbedUrl(url) {
+// Hàm lấy videoId từ URL YouTube
+function getYouTubeId(url) {
   const match = url.match(/v=([^&]+)/);
-  const videoId = match ? match[1] : null;
-  if (!videoId) return null;
-  return `https://www.youtube.com/embed/${videoId}`;
+  return match ? match[1] : null;
 }
 
 const ProductMade = () => {
@@ -33,7 +32,13 @@ const ProductMade = () => {
         size: 6,
       });
 
-      setProducts((prev) => [...prev, ...res.data.list]);
+      // Thêm state mới: isPlaying = false
+      const newProducts = res.data.list.map((item) => ({
+        ...item,
+        isPlaying: false,
+      }));
+
+      setProducts((prev) => [...prev, ...newProducts]);
       setTotalPages(res.data.totalPages);
     } catch (err) {
       console.error(err);
@@ -101,11 +106,18 @@ const ProductMade = () => {
     checkLoadMore();
   };
 
+  // Khi click thumbnail → bật iframe
+  const handlePlay = (index) => {
+    setProducts((prev) =>
+      prev.map((item, i) => (i === index ? { ...item, isPlaying: true } : item))
+    );
+  };
+
   return (
     <div className="product-cover">
       <div className="container" id="products">
         <section className="product">
-          <h3 className="product__title">Sản Phẩm Đã Thực Hiện</h3>
+          <h3 className="product__title">Sản phẩm đã thực hiện</h3>
           <div
             className="product-slider"
             ref={sliderRef}
@@ -115,19 +127,32 @@ const ProductMade = () => {
             onMouseMove={handleMouseMove}
             onTouchMove={handleTouchMove}
           >
-            {products.map(({ id, title, videoUrl }) => {
-              const embedUrl = convertToEmbedUrl(videoUrl);
+            {products.map(({ id, title, videoUrl, isPlaying }, index) => {
+              const videoId = getYouTubeId(videoUrl);
+              const thumbnail = videoId
+                ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
+                : "";
 
               return (
                 <div className="video-slide-item" key={id}>
                   <div className="video-card">
-                    <div className="video-wrapper">
-                      <iframe
-                        src={embedUrl}
-                        title={title}
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      />
+                    <div
+                      className="video-wrapper"
+                      onClick={() => !isPlaying && handlePlay(index)}
+                    >
+                      {!isPlaying && (
+                        <div className="thumbnail-wrapper">
+                          <img src={thumbnail} alt={title} />
+                        </div>
+                      )}
+                      {isPlaying && (
+                        <iframe
+                          src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+                          title={title}
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      )}
                     </div>
                     <div className="video-title">{title}</div>
                   </div>

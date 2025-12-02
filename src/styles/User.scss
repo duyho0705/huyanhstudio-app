@@ -97,6 +97,7 @@
     padding: 16px 20px;
     background: #fff;
     border-radius: 16px;
+    font-weight: 500;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
     border: 1px solid #d0d7de;
     font-size: 18px;
@@ -197,15 +198,21 @@
 }
 
 @media (max-width: 576px) {
-  .option-dropdown__selected {
-    padding: 8px 20px;
-    border-radius: 12px;
+  .option-dropdown {
+    margin-top: 86px;
+    &__selected {
+      padding: 8px 20px;
+      border-radius: 12px;
+    }
   }
 }
 
 @media (max-width: 455px) {
-  .option-dropdown__selected {
-    padding: 7px 20px;
-    border-radius: 12px;
+  .option-dropdown {
+    margin-top: 76px;
+    &__selected {
+      padding: 7px 20px;
+      border-radius: 12px;
+    }
   }
 }

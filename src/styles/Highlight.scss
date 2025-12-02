@@ -88,7 +88,7 @@
     font-size: 36px;
     font-weight: 700;
     color: #1a1a2e;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     background: linear-gradient(135deg, #1a1a2e 0%, #4a5568 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -162,7 +162,7 @@
     }
     &__desc {
       font-size: 18px;
-      margin-bottom: 28px;
+      margin-bottom: 14px;
     }
     &__booking,
     &__pricing-table {
@@ -187,7 +187,7 @@
     }
     &__desc {
       font-size: 17px;
-      margin-bottom: 26px;
+      margin-bottom: 14px;
     }
     &__booking,
     &__pricing-table {
@@ -212,7 +212,7 @@
     }
     &__desc {
       font-size: 16px;
-      margin-bottom: 24px;
+      margin-bottom: 13px;
     }
     &__booking,
     &__pricing-table {
@@ -234,11 +234,11 @@
     }
     &__title {
       font-size: 28px;
-      margin-bottom: 18px;
+      margin-bottom: 9px;
     }
     &__desc {
       font-size: 15px;
-      margin-bottom: 22px;
+      margin-bottom: 13px;
     }
     &__booking,
     &__pricing-table {
@@ -260,19 +260,17 @@
     }
     &__title {
       font-size: 24px;
-      margin-bottom: 16px;
+      margin-bottom: 9px;
     }
     &__desc {
       font-size: 14px;
-      margin-bottom: 18px;
+      margin-bottom: 13px;
       line-height: 1.5;
     }
     .button {
       font-size: 14px;
-      padding: 10px 22px;
+      padding: 7px 22px;
       display: block;
-      width: 100%;
-      margin-bottom: 12px;
     }
     &__booking,
     &__pricing-table {
@@ -296,19 +294,16 @@
     }
     &__desc {
       font-size: 13px;
-      margin-bottom: 16px;
-      line-height: 1.4;
     }
     .button {
-      font-size: 12px;
-      padding: 8px 14px;
-      border-radius: 28px;
+      font-size: 14px;
+      padding: 8px 26px;
+      border-radius: 5px;
     }
     &__booking,
     &__pricing-table {
       padding: 8px 18px;
       font-size: 12px;
-      margin-bottom: 10px;
     }
   }
 }

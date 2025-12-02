@@ -64,7 +64,8 @@
 }
 
 .account__save-btn {
-  padding: 12px 26px;
+  width: 100%;
+  padding: 9px 26px;
   background: #1e293b;
   border: none;
   color: #fff;
@@ -73,10 +74,6 @@
   font-weight: 500;
   cursor: pointer;
   transition: 0.25s;
-
-  &:hover {
-    background: #0d5fe0;
-  }
 }
 
 .avatar-img {
@@ -85,11 +82,91 @@
   object-fit: cover;
 }
 
+.button-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  grid-column: span 2;
+}
+
+/* Notification Toast */
+.notification {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.3s ease-out, fadeOut 0.3s ease-in 0.7s forwards;
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  &__message {
+    white-space: nowrap;
+  }
+
+  &--success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #ffffff;
+
+    .notification__icon {
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+    }
+  }
+
+  &--error {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: #ffffff;
+
+    .notification__icon {
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px) scale(0.8);
+  }
+  60% {
+    transform: translateX(-5px) scale(1.05);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(30px) scale(0.8);
+  }
+}
+
 /* Responsive */
 @media (max-width: 1400px) {
   .account {
     padding: 38px;
-    margin-top: 140px;
+    margin-top: 150px;
 
     &__title {
       font-size: 25px;
@@ -104,20 +181,36 @@
 
   .form-group {
     label {
-      font-size: 13.5px;
+      font-size: 16.5px;
     }
 
     input,
     select {
       height: 43px;
       padding: 0 13px;
-      font-size: 14.5px;
+      font-size: 15.5px;
     }
   }
 
   .account__save-btn {
     padding: 11px 24px;
-    font-size: 14.5px;
+    font-size: 16.5px;
+  }
+
+  .button-container {
+    gap: 14px;
+  }
+
+  .notification {
+    font-size: 16.5px;
+    padding: 11px 16px;
+    gap: 11px;
+
+    &__icon {
+      width: 19px;
+      height: 19px;
+      font-size: 11.5px;
+    }
   }
 }
 
@@ -139,20 +232,37 @@
 
   .form-group {
     label {
-      font-size: 13px;
+      font-size: 15px;
     }
 
     input,
     select {
       height: 41px;
       padding: 0 12px;
-      font-size: 14px;
+      font-size: 16px;
     }
   }
 
   .account__save-btn {
     padding: 10px 22px;
-    font-size: 14px;
+    font-size: 16px;
+    width: 100%;
+  }
+
+  .button-container {
+    gap: 12px;
+  }
+
+  .notification {
+    font-size: 16px;
+    padding: 10px 15px;
+    gap: 8px;
+
+    &__icon {
+      width: 18px;
+      height: 18px;
+      font-size: 11px;
+    }
   }
 }
 
@@ -174,20 +284,37 @@
 
   .form-group {
     label {
-      font-size: 13px;
+      font-size: 16px;
     }
 
     input,
     select {
       height: 39px;
       padding: 0 11px;
-      font-size: 13.5px;
+      font-size: 15.5px;
     }
   }
 
   .account__save-btn {
     padding: 9px 20px;
-    font-size: 13.5px;
+    font-size: 15.5px;
+    width: 100%;
+  }
+
+  .button-container {
+    gap: 10px;
+  }
+
+  .notification {
+    font-size: 15.5px;
+    padding: 9px 14px;
+    gap: 7px;
+
+    &__icon {
+      width: 17px;
+      height: 17px;
+      font-size: 10.5px;
+    }
   }
 }
 
@@ -198,7 +325,8 @@
 
     &__title {
       font-size: 20px;
-      margin-bottom: 20px;
+      margin-bottom: 27px;
+      text-align: center;
     }
 
     &__form {
@@ -210,14 +338,14 @@
 
   .form-group {
     label {
-      font-size: 12.5px;
+      font-size: 15.5px;
     }
 
     input,
     select {
       height: 37px;
       padding: 0 10px;
-      font-size: 13px;
+      font-size: 14px;
     }
 
     &--full {
@@ -227,8 +355,27 @@
 
   .account__save-btn {
     padding: 8px 18px;
-    font-size: 13px;
+    font-size: 16px;
     width: 100%;
+  }
+
+  .button-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    grid-column: 1 / span 1;
+  }
+
+  .notification {
+    font-size: 14px;
+    padding: 10px 14px;
+    gap: 8px;
+
+    &__icon {
+      width: 18px;
+      height: 18px;
+      font-size: 11px;
+    }
   }
 
   .account__avatar-section {
@@ -243,8 +390,9 @@
     margin-top: 40px;
 
     &__title {
-      font-size: 18px;
-      margin-bottom: 18px;
+      font-size: 20px;
+      margin-bottom: 22px;
+      text-align: center;
     }
 
     &__form {
@@ -255,27 +403,44 @@
 
   .form-group {
     label {
-      font-size: 12px;
-      margin-bottom: 4px;
+      font-size: 14.5px;
+      margin-bottom: 3px;
     }
 
     input,
     select {
       height: 35px;
       padding: 0 9px;
-      font-size: 12.5px;
+      font-size: 14px;
       border-radius: 8px;
     }
   }
 
   .account__save-btn {
-    padding: 7px 16px;
-    font-size: 12.5px;
+    padding: 9px 16px;
+    font-size: 14.5px;
     border-radius: 8px;
   }
 
+  .button-container {
+    gap: 8px;
+  }
+
+  .notification {
+    font-size: 13.5px;
+    padding: 8px 12px;
+    gap: 6px;
+    border-radius: 6px;
+
+    &__icon {
+      width: 16px;
+      height: 16px;
+      font-size: 9.5px;
+    }
+  }
+
   .email-status {
-    font-size: 11px;
+    font-size: 14px;
     padding: 2px 8px;
   }
 }
@@ -287,8 +452,9 @@
     border-radius: 12px;
 
     &__title {
-      font-size: 17px;
-      margin-bottom: 16px;
+      font-size: 19px;
+      margin-bottom: 22px;
+      text-align: center;
     }
 
     &__form {
@@ -299,7 +465,7 @@
 
   .form-group {
     label {
-      font-size: 11.5px;
+      font-size: 14.5px;
       margin-bottom: 3px;
     }
 
@@ -307,16 +473,33 @@
     select {
       height: 33px;
       padding: 0 8px;
-      font-size: 12px;
+      font-size: 14px;
       border-radius: 8px;
     }
   }
 
   .account__save-btn {
     padding: 7px 14px;
-    font-size: 12px;
+    font-size: 15px;
     border-radius: 8px;
     width: 100%;
+  }
+
+  .button-container {
+    gap: 8px;
+  }
+
+  .notification {
+    font-size: 13px;
+    padding: 8px 10px;
+    gap: 5px;
+    border-radius: 6px;
+
+    &__icon {
+      width: 15px;
+      height: 15px;
+      font-size: 9px;
+    }
   }
 
   .email-status {

@@ -34,7 +34,7 @@ const ChangePassword = () => {
       setTimeout(() => {
         setShowSuccess(false);
         logout();
-      }, 1500);
+      }, 1000);
     } catch (err) {
       const msg = "Sai mật khẩu hiện tại.";
       setMessage({
@@ -45,8 +45,6 @@ const ChangePassword = () => {
   };
   return (
     <div className="change-password">
-      <h2>Đổi mật khẩu</h2>
-
       {message.text && (
         <p className={`message ${message.type}`}>{message.text}</p>
       )}

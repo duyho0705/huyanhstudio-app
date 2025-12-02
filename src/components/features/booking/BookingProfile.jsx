@@ -9,21 +9,23 @@ const BookingProfile = () => {
 
   const [bookings, setBookings] = useState([]);
   const [selectedBooking, setSelectedBooking] = useState(null);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const fetchData = async (pageNum) => {
+    try {
+      const res = await bookingApi.getBookingCustomer(pageNum, 10);
+      setBookings(res.data.list);
+      setTotalPages(res.data.totalPages);
+    } catch (err) {
+      console.error("Error fetching bookings:", err);
+    }
+  };
 
   useEffect(() => {
     if (loading || !user) return;
-
-    const fetchData = async () => {
-      try {
-        const res = await bookingApi.getBookingCustomer(0, 10);
-        setBookings(res.data.list);
-      } catch (err) {
-        console.error("Error fetching bookings:", err);
-      }
-    };
-
-    fetchData();
-  }, [loading, user]);
+    fetchData(page);
+  }, [loading, user, page]);
 
   const getStatus = (status) => {
     switch (status) {
@@ -46,8 +48,6 @@ const BookingProfile = () => {
 
   return (
     <div className="booking-profile">
-      <h2 className="booking-profile__title">Thông tin đặt lịch</h2>
-
       <div className="booking-profile__table">
         <table>
           <thead>
@@ -81,6 +81,29 @@ const BookingProfile = () => {
             ))}
           </tbody>
         </table>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="pagination">
+            <button
+              className="pagination__btn"
+              onClick={() => setPage((p) => Math.max(0, p - 1))}
+              disabled={page === 0}
+            >
+              Trước
+            </button>
+            <span className="pagination__info">
+              Trang {page + 1} / {totalPages}
+            </span>
+            <button
+              className="pagination__btn"
+              onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+              disabled={page === totalPages - 1}
+            >
+              Sau
+            </button>
+          </div>
+        )}
       </div>
 
       <Modal

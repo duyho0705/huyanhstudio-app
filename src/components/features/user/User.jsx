@@ -2,7 +2,7 @@ import { TbLogout } from "react-icons/tb";
 import { MdLockOutline } from "react-icons/md";
 import { LuCalendar } from "react-icons/lu";
 import { FaUser } from "react-icons/fa6";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../../api/AuthContext";
 import Account from "./Account";
 import BookingProfile from "../booking/BookingProfile";
@@ -13,6 +13,11 @@ const User = () => {
   const [activeOption, setActiveOption] = useState("account");
   const [openDropdown, setOpenDropdown] = useState(false);
   const { logout } = useContext(AuthContext);
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleSelect = (value) => {
     if (value === "logout") {
@@ -125,9 +130,23 @@ const User = () => {
 
             {/* ---------- CONTENT AREA ---------- */}
             <div className="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 content-area">
-              {activeOption === "account" && <Account />}
-              {activeOption === "booking" && <BookingProfile />}
-              {activeOption === "change-password" && <ChangePassword />}
+              <div
+                className={activeOption === "account" ? "d-block" : "d-none"}
+              >
+                <Account />
+              </div>
+              <div
+                className={activeOption === "booking" ? "d-block" : "d-none"}
+              >
+                <BookingProfile />
+              </div>
+              <div
+                className={
+                  activeOption === "change-password" ? "d-block" : "d-none"
+                }
+              >
+                <ChangePassword />
+              </div>
             </div>
           </div>
         </div>
