@@ -1,8 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import "../../styles/ProductMade.scss";
 import productApi from "../../api/productApi";
 
-// Hàm lấy videoId từ URL YouTube
 function getYouTubeId(url) {
   const match = url.match(/v=([^&]+)/);
   return match ? match[1] : null;
@@ -12,137 +10,89 @@ const ProductMade = () => {
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
-
   const sliderRef = useRef(null);
   const isFetching = useRef(false);
-
-  // Drag variables
   const isDown = useRef(false);
   const startX = useRef(0);
   const scrollLeft = useRef(0);
 
-  // Fetch API + append
   const fetchProducts = async (p) => {
     if (isFetching.current) return;
     isFetching.current = true;
-
     try {
-      const res = await productApi.getAll({
-        page: p,
-        size: 6,
-      });
-
-      // Thêm state mới: isPlaying = false
-      const newProducts = res.data.list.map((item) => ({
-        ...item,
-        isPlaying: false,
-      }));
-
+      const res = await productApi.getAll({ page: p, size: 6 });
+      const newProducts = res.data.list.map((item) => ({ ...item, isPlaying: false }));
       setProducts((prev) => [...prev, ...newProducts]);
       setTotalPages(res.data.totalPages);
     } catch (err) {
       console.error(err);
     }
-
     isFetching.current = false;
   };
 
-  // Load first page
-  useEffect(() => {
-    fetchProducts(0);
-  }, []);
+  useEffect(() => { fetchProducts(0); }, []);
 
-  // Infinite scroll
   const checkLoadMore = () => {
     const slider = sliderRef.current;
     if (!slider) return;
-
-    const nearEnd =
-      slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 200;
-
+    const nearEnd = slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 200;
     if (nearEnd && page + 1 < totalPages) {
-      setPage((prev) => {
-        const next = prev + 1;
-        fetchProducts(next);
-        return next;
-      });
+      setPage((prev) => { const next = prev + 1; fetchProducts(next); return next; });
     }
   };
 
-  // DRAG with mouse
   const handleMouseDown = (e) => {
-    const slider = sliderRef.current;
     isDown.current = true;
-    slider.classList.add("active");
-
-    startX.current = e.pageX - slider.offsetLeft;
-    scrollLeft.current = slider.scrollLeft;
+    startX.current = e.pageX - sliderRef.current.offsetLeft;
+    scrollLeft.current = sliderRef.current.scrollLeft;
   };
-
-  const handleMouseLeave = () => {
-    isDown.current = false;
-    sliderRef.current.classList.remove("active");
-  };
-
-  const handleMouseUp = () => {
-    isDown.current = false;
-    sliderRef.current.classList.remove("active");
-  };
-
+  const handleMouseLeave = () => { isDown.current = false; };
+  const handleMouseUp = () => { isDown.current = false; };
   const handleMouseMove = (e) => {
     if (!isDown.current) return;
     e.preventDefault();
-
-    const slider = sliderRef.current;
-    const x = e.pageX - slider.offsetLeft;
-    const walk = (x - startX.current) * 1.2;
-
-    slider.scrollLeft = scrollLeft.current - walk;
+    const x = e.pageX - sliderRef.current.offsetLeft;
+    sliderRef.current.scrollLeft = scrollLeft.current - (x - startX.current) * 1.2;
     checkLoadMore();
   };
 
-  // TOUCH
-  const handleTouchMove = () => {
-    checkLoadMore();
-  };
-
-  // Khi click thumbnail → bật iframe
   const handlePlay = (index) => {
-    setProducts((prev) =>
-      prev.map((item, i) => (i === index ? { ...item, isPlaying: true } : item))
-    );
+    setProducts((prev) => prev.map((item, i) => (i === index ? { ...item, isPlaying: true } : item)));
   };
 
   return (
-    <div className="product-cover">
-      <div className="container" id="products">
-        <section className="product">
-          <h3 className="product__title">Sản phẩm đã thực hiện</h3>
+    <div className="bg-gray-50 py-12">
+      <div className="container-app" id="products">
+        <section>
+          <h3 className="text-2xl font-bold text-gray-900 mb-8">Sản phẩm đã thực hiện</h3>
           <div
-            className="product-slider"
+            className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide cursor-grab active:cursor-grabbing select-none"
             ref={sliderRef}
             onMouseDown={handleMouseDown}
             onMouseLeave={handleMouseLeave}
             onMouseUp={handleMouseUp}
             onMouseMove={handleMouseMove}
-            onTouchMove={handleTouchMove}
+            onTouchMove={checkLoadMore}
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {products.map(({ id, title, videoUrl, isPlaying }, index) => {
               const videoId = getYouTubeId(videoUrl);
-              const thumbnail = videoId
-                ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
-                : "";
-
+              const thumbnail = videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : "";
               return (
-                <div className="video-slide-item" key={id}>
-                  <div className="video-card">
+                <div key={id} className="flex-shrink-0 w-72">
+                  <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow">
                     <div
-                      className="video-wrapper"
+                      className="relative aspect-video cursor-pointer"
                       onClick={() => !isPlaying && handlePlay(index)}
                     >
                       {!isPlaying && (
-                        <div className="thumbnail-wrapper">
-                          <img src={thumbnail} alt={title} />
+                        <div className="relative w-full h-full">
+                          <img src={thumbnail} alt={title} className="w-full h-full object-cover" />
+                          <div className="absolute inset-0 flex items-center justify-center bg-black/20 hover:bg-black/30 transition-colors">
+                            <div className="w-12 h-12 flex items-center justify-center rounded-full bg-white/90 shadow-lg">
+                              <span className="text-blue-600 text-lg ml-0.5">▶</span>
+                            </div>
+                          </div>
                         </div>
                       )}
                       {isPlaying && (
@@ -151,10 +101,11 @@ const ProductMade = () => {
                           title={title}
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                           allowFullScreen
+                          className="w-full h-full border-none"
                         />
                       )}
                     </div>
-                    <div className="video-title">{title}</div>
+                    <div className="px-4 py-3 text-sm font-medium text-gray-800 truncate">{title}</div>
                   </div>
                 </div>
               );

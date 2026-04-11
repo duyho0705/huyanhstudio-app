@@ -1,4 +1,3 @@
-import "../../styles/Navbar.scss";
 import logoImg from "../../assets/logo.png";
 import { FaUser } from "react-icons/fa6";
 import { useContext, useState } from "react";
@@ -26,84 +25,61 @@ const Navbar = () => {
   const smoothScrollToSection = (sectionId) => {
     const el = document.getElementById(sectionId);
     if (!el) return;
-
     const top = el.getBoundingClientRect().top + window.scrollY;
-
-    window.scrollTo({
-      top: top - OFFSET,
-      behavior: "smooth",
-    });
-
+    window.scrollTo({ top: top - OFFSET, behavior: "smooth" });
     window.history.replaceState(null, "", `#${sectionId}`);
   };
 
   const handleNavClick = (e, sectionId) => {
     e.preventDefault();
-
-    // Nếu đang ở trang khác => quay về "/" và yêu cầu scroll
     if (location.pathname !== "/") {
       navigate("/", { state: { scrollTo: sectionId } });
       return;
     }
-
-    // Nếu đang ở trang "/" => scroll tại chỗ
     smoothScrollToSection(sectionId);
   };
 
   return (
-    <header className="navbar">
-      <div className="container">
+    <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
+      <div className="container-app flex items-center justify-between h-16">
         {/* Logo */}
-        <div className="navbar__logo">
-          <a href="/" className="navbar__brand">
-            <img src={logoImg} alt="Logo" />
+        <div className="flex-shrink-0">
+          <a href="/" className="flex items-center gap-2 text-xl font-bold text-gray-900 no-underline">
+            <img src={logoImg} alt="Logo" className="h-9 w-auto rounded-xl object-contain" />
             HA
           </a>
         </div>
 
         {/* Menu desktop */}
-        <nav className="navbar__menu">
-          <a
-            href="#introduction"
-            onClick={(e) => handleNavClick(e, "introduction")}
-            className="navbar__link"
-          >
-            Giới thiệu
-          </a>
-          <a
-            href="#products"
-            onClick={(e) => handleNavClick(e, "products")}
-            className="navbar__link"
-          >
-            Sản phẩm
-          </a>
-          <a
-            href="#services"
-            onClick={(e) => handleNavClick(e, "services")}
-            className="navbar__link"
-          >
-            Dịch vụ
-          </a>
-          <a
-            href="#pricing"
-            onClick={(e) => handleNavClick(e, "pricing")}
-            className="navbar__link"
-          >
-            Bảng giá
-          </a>
+        <nav className="hidden md:flex items-center gap-8">
+          {[
+            ["Giới thiệu", "introduction"],
+            ["Sản phẩm", "products"],
+            ["Dịch vụ", "services"],
+            ["Bảng giá", "pricing"],
+          ].map(([label, id]) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              onClick={(e) => handleNavClick(e, id)}
+              className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors no-underline"
+            >
+              {label}
+            </a>
+          ))}
         </nav>
 
         {/* Actions */}
-        <div className="navbar__actions">
+        <div className="hidden md:flex items-center gap-3">
           <a
-            className="navbar__booking"
+            className="px-5 py-2 text-sm font-semibold text-white bg-gradient-to-r from-sky-400 to-blue-600 rounded-full hover:opacity-90 transition-all no-underline shadow-md shadow-blue-200"
             href="#booking"
             onClick={(e) => handleNavClick(e, "booking")}
           >
             Đặt lịch ngay
           </a>
           <button
-            className="navbar__account"
+            className="w-9 h-9 flex items-center justify-center rounded-full border-2 border-gray-200 text-gray-500 hover:border-blue-400 hover:text-blue-600 transition-all bg-white"
             onClick={() => {
               if (user) {
                 window.location.href = "/user";
@@ -112,62 +88,72 @@ const Navbar = () => {
               }
             }}
           >
-            <FaUser />
+            <FaUser className="text-sm" />
           </button>
         </div>
 
         {/* Toggle mobile */}
-        <div className="navbar__toggle" onClick={() => setOpen(!open)}>
+        <div
+          className="md:hidden text-2xl cursor-pointer text-gray-600 hover:text-gray-900 p-2"
+          onClick={() => setOpen(!open)}
+        >
           ☰
         </div>
       </div>
 
       {/* Menu mobile */}
-      <div className={`navbar__mobile-menu ${open ? "active" : ""}`}>
-        {[
-          ["Giới thiệu", "introduction"],
-          ["Sản phẩm", "products"],
-          ["Dịch vụ", "services"],
-          ["Bảng giá", "pricing"],
-        ].map(([label, id]) => (
-          <a
-            key={id}
-            href={`#${id}`}
-            onClick={(e) => {
-              handleNavClick(e, id);
-              setOpen(false);
-            }}
-          >
-            {label}
-          </a>
-        ))}
+      <div
+        className={`md:hidden absolute top-full left-0 w-full bg-white border-t border-gray-100 shadow-lg transition-all duration-300 ${
+          open ? "max-h-96 opacity-100" : "max-h-0 opacity-0 overflow-hidden"
+        }`}
+      >
+        <div className="flex flex-col py-4 px-6 gap-1">
+          {[
+            ["Giới thiệu", "introduction"],
+            ["Sản phẩm", "products"],
+            ["Dịch vụ", "services"],
+            ["Bảng giá", "pricing"],
+          ].map(([label, id]) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              onClick={(e) => {
+                handleNavClick(e, id);
+                setOpen(false);
+              }}
+              className="py-3 text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors no-underline border-b border-gray-50"
+            >
+              {label}
+            </a>
+          ))}
 
-        {/* Mobile actions */}
-        <div className="navbar__mobile-actions">
-          <a
-            className="navbar__booking"
-            href="#booking"
-            onClick={(e) => {
-              handleNavClick(e, "booking");
-              setOpen(false);
-            }}
-          >
-            Đặt lịch ngay
-          </a>
-          <button
-            className="navbar__account"
-            onClick={() => {
-              setOpen(false);
-              if (user) {
-                window.location.href = "/user";
-              } else {
-                toggleForm();
-              }
-            }}
-          >
-            <FaUser />
-            <span>{user ? "Tài khoản" : "Đăng nhập"}</span>
-          </button>
+          {/* Mobile actions */}
+          <div className="flex items-center gap-3 pt-4">
+            <a
+              className="flex-1 text-center px-4 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-sky-400 to-blue-600 rounded-full no-underline"
+              href="#booking"
+              onClick={(e) => {
+                handleNavClick(e, "booking");
+                setOpen(false);
+              }}
+            >
+              Đặt lịch ngay
+            </a>
+            <button
+              className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-600 border border-gray-200 rounded-full hover:border-blue-400 bg-white"
+              onClick={() => {
+                setOpen(false);
+                if (user) {
+                  window.location.href = "/user";
+                } else {
+                  toggleForm();
+                }
+              }}
+            >
+              <FaUser />
+              <span>{user ? "Tài khoản" : "Đăng nhập"}</span>
+            </button>
+          </div>
         </div>
       </div>
 

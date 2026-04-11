@@ -1,0 +1,55 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,400&family=DM+Serif+Display:ital@0;1&family=Syne:wght@400..800&family=Satisfy&family=Roboto:wght@400;500;700;900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 150px;
+    scrollbar-gutter: stable;
+    font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  }
+
+  @media (max-width: 576px) {
+    html {
+      scroll-padding-top: 100px;
+    }
+  }
+
+  body {
+    @apply m-0 p-0 text-gray-800 antialiased;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+}
+
+@layer components {
+  .container-app {
+    @apply w-full max-w-container mx-auto px-6;
+  }
+
+  @media (max-width: 1200px) {
+    .container-app {
+      @apply max-w-container-sm;
+    }
+  }
+  @media (max-width: 992px) {
+    .container-app {
+      @apply max-w-container-md;
+    }
+  }
+  @media (max-width: 768px) {
+    .container-app {
+      @apply max-w-[550px];
+    }
+  }
+  @media (max-width: 455px) {
+    .container-app {
+      @apply max-w-full px-5;
+    }
+  }
+}

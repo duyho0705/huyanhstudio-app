@@ -1,9 +1,8 @@
-import "../../styles/Hero.scss";
 const Hero = ({ children }) => {
   return (
-    <>
-      <section className="hero">{children}</section>
-    </>
+    <section className="bg-gradient-to-b from-gray-50 to-white min-h-screen">
+      {children}
+    </section>
   );
 };
 export default Hero;

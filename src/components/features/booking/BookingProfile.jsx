@@ -1,12 +1,11 @@
-import "../../../styles/BookingProfile.scss";
 import { useState, useEffect, useContext } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { AuthContext } from "../../../api/AuthContext";
 import bookingApi from "../../../api/bookingApi";
 import Modal from "../../layout/Modal";
+
 const BookingProfile = () => {
   const { user, loading } = useContext(AuthContext);
-
   const [bookings, setBookings] = useState([]);
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [page, setPage] = useState(0);
@@ -17,9 +16,7 @@ const BookingProfile = () => {
       const res = await bookingApi.getBookingCustomer(pageNum, 10);
       setBookings(res.data.list);
       setTotalPages(res.data.totalPages);
-    } catch (err) {
-      console.error("Error fetching bookings:", err);
-    }
+    } catch (err) { console.error("Error fetching bookings:", err); }
   };
 
   useEffect(() => {
@@ -27,53 +24,46 @@ const BookingProfile = () => {
     fetchData(page);
   }, [loading, user, page]);
 
+  const statusMap = {
+    CONFIRMED: { label: "Đã xác nhận", class: "bg-green-100 text-green-700" },
+    PENDING: { label: "Chờ xác nhận", class: "bg-yellow-100 text-yellow-700" },
+    CANCELLED: { label: "Đã hủy", class: "bg-red-100 text-red-700" },
+    COMPLETED: { label: "Đã hoàn thành", class: "bg-blue-100 text-blue-700" },
+  };
+
   const getStatus = (status) => {
-    switch (status) {
-      case "CONFIRMED":
-        return <span className="status status--confirmed">Đã xác nhận</span>;
-      case "PENDING":
-        return <span className="status status--pending">Chờ xác nhận</span>;
-      case "CANCELLED":
-        return <span className="status status--cancelled">Đã hủy</span>;
-      case "COMPLETED":
-        return <span className="status status--completed">Đã hoàn thành</span>;
-      default:
-        return <span className="status">Không rõ</span>;
-    }
+    const s = statusMap[status] || { label: "Không rõ", class: "bg-gray-100 text-gray-600" };
+    return <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${s.class}`}>{s.label}</span>;
   };
 
   const shortCode = (code) => code?.slice(-6);
 
-  if (loading) return <p className="loading">Đang tải...</p>;
+  if (loading) return <p className="text-center text-gray-400 py-8">Đang tải...</p>;
 
   return (
-    <div className="booking-profile">
-      <div className="booking-profile__table">
-        <table>
+    <div>
+      <div className="overflow-x-auto rounded-xl border border-gray-100">
+        <table className="w-full text-sm">
           <thead>
-            <tr>
-              <th>Mã lịch</th>
-              <th>Khách hàng</th>
-              <th>Ngày thu</th>
-              <th>Dịch vụ</th>
-              <th>Trạng thái</th>
-              <th></th>
+            <tr className="bg-gray-50 border-b border-gray-100">
+              <th className="text-left py-3 px-4 font-semibold text-gray-600">Mã lịch</th>
+              <th className="text-left py-3 px-4 font-semibold text-gray-600">Khách hàng</th>
+              <th className="text-left py-3 px-4 font-semibold text-gray-600">Ngày thu</th>
+              <th className="text-left py-3 px-4 font-semibold text-gray-600">Dịch vụ</th>
+              <th className="text-left py-3 px-4 font-semibold text-gray-600">Trạng thái</th>
+              <th className="py-3 px-4"></th>
             </tr>
           </thead>
-
           <tbody>
             {bookings.map((b) => (
-              <tr key={b.bookingCode}>
-                <td>{shortCode(b.bookingCode)}</td>
-                <td>{b.customerName}</td>
-                <td>{b.recordDate}</td>
-                <td>{b.services.join(", ")}</td>
-                <td>{getStatus(b.status)}</td>
-                <td>
-                  <button
-                    className="dots-btn"
-                    onClick={() => setSelectedBooking(b)}
-                  >
+              <tr key={b.bookingCode} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                <td className="py-3 px-4 font-mono text-xs text-gray-500">{shortCode(b.bookingCode)}</td>
+                <td className="py-3 px-4 font-medium text-gray-800">{b.customerName}</td>
+                <td className="py-3 px-4 text-gray-600">{b.recordDate}</td>
+                <td className="py-3 px-4 text-gray-600">{b.services.join(", ")}</td>
+                <td className="py-3 px-4">{getStatus(b.status)}</td>
+                <td className="py-3 px-4">
+                  <button className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors text-gray-400 hover:text-gray-700" onClick={() => setSelectedBooking(b)}>
                     <BsThreeDotsVertical size={18} />
                   </button>
                 </td>
@@ -82,26 +72,11 @@ const BookingProfile = () => {
           </tbody>
         </table>
 
-        {/* Pagination */}
         {totalPages > 1 && (
-          <div className="pagination">
-            <button
-              className="pagination__btn"
-              onClick={() => setPage((p) => Math.max(0, p - 1))}
-              disabled={page === 0}
-            >
-              Trước
-            </button>
-            <span className="pagination__info">
-              Trang {page + 1} / {totalPages}
-            </span>
-            <button
-              className="pagination__btn"
-              onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
-              disabled={page === totalPages - 1}
-            >
-              Sau
-            </button>
+          <div className="flex items-center justify-center gap-3 py-4 border-t border-gray-100">
+            <button className="px-4 py-1.5 text-sm font-medium rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors disabled:opacity-50" onClick={() => setPage((p) => Math.max(0, p - 1))} disabled={page === 0}>Trước</button>
+            <span className="text-sm text-gray-500">Trang {page + 1} / {totalPages}</span>
+            <button className="px-4 py-1.5 text-sm font-medium rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors disabled:opacity-50" onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))} disabled={page === totalPages - 1}>Sau</button>
           </div>
         )}
       </div>
@@ -110,35 +85,21 @@ const BookingProfile = () => {
         isOpen={!!selectedBooking}
         onClose={() => setSelectedBooking(null)}
         title="Chi tiết đặt lịch"
-        content={
-          selectedBooking && (
-            <div className="modal-detail" key={selectedBooking.bookingCode}>
-              <p>
-                <strong>Mã lịch:</strong>{" "}
-                {shortCode(selectedBooking.bookingCode)}
-              </p>
-              <p>
-                <strong>Khách hàng:</strong> {selectedBooking.customerName}
-              </p>
-              <p>
-                <strong>Ngày thu:</strong> {selectedBooking.recordDate}
-              </p>
-              <p>
-                <strong>Dịch vụ:</strong> {selectedBooking.services.join(", ")}
-              </p>
-              <p>
-                <strong>Ghi chú:</strong>{" "}
-                {selectedBooking.note || "Không có ghi chú"}
-              </p>
-              <p>
-                <strong>Phòng:</strong> {selectedBooking.studioRoom}
-              </p>
-              <p>
-                <strong>Trạng thái:</strong> {getStatus(selectedBooking.status)}
-              </p>
-            </div>
-          )
-        }
+        content={selectedBooking && (
+          <div className="flex flex-col gap-3" key={selectedBooking.bookingCode}>
+            {[
+              ["Mã lịch", shortCode(selectedBooking.bookingCode)],
+              ["Khách hàng", selectedBooking.customerName],
+              ["Ngày thu", selectedBooking.recordDate],
+              ["Dịch vụ", selectedBooking.services.join(", ")],
+              ["Ghi chú", selectedBooking.note || "Không có ghi chú"],
+              ["Phòng", selectedBooking.studioRoom],
+            ].map(([label, val]) => (
+              <p key={label} className="text-sm"><strong className="text-gray-800">{label}:</strong> <span className="text-gray-600">{val}</span></p>
+            ))}
+            <p className="text-sm"><strong className="text-gray-800">Trạng thái:</strong> {getStatus(selectedBooking.status)}</p>
+          </div>
+        )}
       />
     </div>
   );

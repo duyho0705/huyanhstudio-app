@@ -1,26 +1,20 @@
 import React, { useEffect } from "react";
-import "../../../styles/LoginModal.scss";
 import Login from "./Login";
 
 const LoginModal = ({ isOpen, onClose }) => {
-  // khóa scroll khi mở modal
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-
-    return () => {
-      document.body.style.overflow = "auto"; // cleanup khi unmount
-    };
+    document.body.style.overflow = isOpen ? "hidden" : "auto";
+    return () => { document.body.style.overflow = "auto"; };
   }, [isOpen]);
 
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div onClick={(e) => e.stopPropagation()}>
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in"
+      onClick={onClose}
+    >
+      <div onClick={(e) => e.stopPropagation()} className="animate-slide-up">
         <Login onClose={onClose} />
       </div>
     </div>

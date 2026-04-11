@@ -7,151 +7,97 @@ import { AuthContext } from "../../../api/AuthContext";
 import Account from "./Account";
 import BookingProfile from "../booking/BookingProfile";
 import ChangePassword from "./ChangePassword";
-import "../../../styles/User.scss";
+
+const menuItems = [
+  { key: "account", label: "Tài khoản của tôi", icon: FaUser },
+  { key: "booking", label: "Thông tin đặt lịch", icon: LuCalendar },
+  { key: "change-password", label: "Đổi mật khẩu", icon: MdLockOutline },
+];
 
 const User = () => {
   const [activeOption, setActiveOption] = useState("account");
   const [openDropdown, setOpenDropdown] = useState(false);
   const { logout } = useContext(AuthContext);
 
-  // Scroll to top when component mounts
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const handleSelect = (value) => {
-    if (value === "logout") {
-      logout();
-      return;
-    }
-    setActiveOption(value);
-    setOpenDropdown(false);
+    if (value === "logout") { logout(); return; }
+    setActiveOption(value); setOpenDropdown(false);
   };
 
-  return (
-    <>
-      <div className="user-page">
-        <div className="container">
-          {/* ---------- DROPDOWN MOBILE ---------- */}
-          <div className="option-dropdown d-lg-none">
-            <div
-              className="option-dropdown__selected"
-              onClick={() => setOpenDropdown((prev) => !prev)}
-            >
-              {activeOption === "account" && (
-                <>
-                  <FaUser className="icon" /> Tài khoản của tôi
-                </>
-              )}
-              {activeOption === "booking" && (
-                <>
-                  <LuCalendar className="icon" /> Thông tin đặt lịch
-                </>
-              )}
-              {activeOption === "change-password" && (
-                <>
-                  <MdLockOutline className="icon" /> Đổi mật khẩu
-                </>
-              )}
-              {activeOption === "logout" && (
-                <>
-                  <TbLogout /> Đăng xuất
-                </>
-              )}
-            </div>
+  const activeItem = menuItems.find((m) => m.key === activeOption);
+  const ActiveIcon = activeItem?.icon;
 
-            {openDropdown && (
-              <div className="option-dropdown__menu">
-                <div className="item" onClick={() => handleSelect("account")}>
-                  <FaUser /> Tài khoản của tôi
+  return (
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="container-app">
+        {/* Mobile Dropdown */}
+        <div className="lg:hidden relative mb-6">
+          <div
+            className="flex items-center gap-2 px-4 py-3 bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer"
+            onClick={() => setOpenDropdown((p) => !p)}
+          >
+            {ActiveIcon && <ActiveIcon className="text-blue-600" />}
+            <span className="text-sm font-medium text-gray-800">{activeItem?.label}</span>
+            <span className="ml-auto text-gray-400 text-xs">▼</span>
+          </div>
+          {openDropdown && (
+            <div className="absolute top-full left-0 w-full mt-1 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden z-50 animate-slide-down">
+              {menuItems.map(({ key, label, icon: Icon }) => (
+                <div key={key} className="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 cursor-pointer" onClick={() => handleSelect(key)}>
+                  <Icon className="text-gray-400" /> {label}
                 </div>
-                <div className="item" onClick={() => handleSelect("booking")}>
-                  <LuCalendar /> Thông tin đặt lịch
-                </div>
-                <div
-                  className="item"
-                  onClick={() => handleSelect("change-password")}
-                >
-                  <MdLockOutline /> Đổi mật khẩu
-                </div>
-                <div
-                  className="item logout"
-                  onClick={() => handleSelect("logout")}
-                >
-                  <TbLogout /> Đăng xuất
-                </div>
+              ))}
+              <div className="flex items-center gap-2 px-4 py-3 text-sm text-red-500 hover:bg-red-50 cursor-pointer border-t border-gray-100" onClick={() => handleSelect("logout")}>
+                <TbLogout /> Đăng xuất
               </div>
-            )}
+            </div>
+          )}
+        </div>
+
+        <div className="flex gap-8">
+          {/* Sidebar Desktop */}
+          <div className="hidden lg:block w-72 flex-shrink-0">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+              <h3 className="text-lg font-bold text-gray-900 mb-6">Xin chào bạn!</h3>
+              <div className="flex flex-col gap-1">
+                {menuItems.map(({ key, label, icon: Icon }) => (
+                  <button
+                    key={key}
+                    className={`flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-medium transition-all text-left ${
+                      activeOption === key
+                        ? "bg-blue-50 text-blue-600"
+                        : "text-gray-600 hover:bg-gray-50"
+                    }`}
+                    onClick={() => setActiveOption(key)}
+                  >
+                    <Icon className={activeOption === key ? "text-blue-600" : "text-gray-400"} />
+                    {label}
+                  </button>
+                ))}
+                <button
+                  className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 transition-all text-left mt-2"
+                  onClick={logout}
+                >
+                  <TbLogout className="text-red-400" />
+                  Đăng xuất
+                </button>
+              </div>
+            </div>
           </div>
 
-          <div className="row">
-            {/* ---------- SIDEBAR DESKTOP ---------- */}
-            <div className="col-xl-4 col-lg-4 col-md-4 d-none d-lg-block">
-              <div className="option">
-                <h3 className="option__hello">Xin chào bạn!</h3>
-                <div className="option__choose">
-                  <button
-                    className={`button ${
-                      activeOption === "account" ? "active" : ""
-                    }`}
-                    onClick={() => setActiveOption("account")}
-                  >
-                    <FaUser className="option__icon" />
-                    Tài khoản của tôi
-                  </button>
-                  <button
-                    className={`button ${
-                      activeOption === "booking" ? "active" : ""
-                    }`}
-                    onClick={() => setActiveOption("booking")}
-                  >
-                    <LuCalendar className="option__icon" />
-                    Thông tin đặt lịch
-                  </button>
-                  <button
-                    className={`button ${
-                      activeOption === "change-password" ? "active" : ""
-                    }`}
-                    onClick={() => setActiveOption("change-password")}
-                  >
-                    <MdLockOutline className="option__icon" />
-                    Đổi mật khẩu
-                  </button>
-                  <button
-                    className="button option__logout-button"
-                    onClick={logout}
-                  >
-                    <TbLogout className="option__icon" />
-                    Đăng xuất
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* ---------- CONTENT AREA ---------- */}
-            <div className="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 content-area">
-              <div
-                className={activeOption === "account" ? "d-block" : "d-none"}
-              >
-                <Account />
-              </div>
-              <div
-                className={activeOption === "booking" ? "d-block" : "d-none"}
-              >
-                <BookingProfile />
-              </div>
-              <div
-                className={
-                  activeOption === "change-password" ? "d-block" : "d-none"
-                }
-              >
-                <ChangePassword />
-              </div>
+          {/* Content Area */}
+          <div className="flex-1 min-w-0">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+              {activeOption === "account" && <Account />}
+              {activeOption === "booking" && <BookingProfile />}
+              {activeOption === "change-password" && <ChangePassword />}
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
