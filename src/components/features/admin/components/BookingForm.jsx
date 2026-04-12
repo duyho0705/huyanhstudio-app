@@ -12,6 +12,7 @@ const BookingForm = ({
   initialValues,
 
   services,
+  studios,
 }) => {
   const [form] = Form.useForm();
 
@@ -61,7 +62,7 @@ const BookingForm = ({
           recordDate: initialValues.recordDate
             ? dayjs(initialValues.recordDate)
             : null,
-
+          studioRoomId: initialValues.studioRoomId || (initialValues.studioRoom?.id) || null,
           serviceIds,
           note: initialValues.note,
         });
@@ -154,6 +155,20 @@ const BookingForm = ({
             style={{ width: "100%" }}
             size="large"
           />
+        </Form.Item>
+ 
+        <Form.Item
+          name="studioRoomId"
+          label="Studio Room"
+          rules={[{ required: true, message: "Vui lòng chọn phòng studio!" }]}
+        >
+          <Select placeholder="Chọn phòng studio" size="large">
+            {studios?.map((studio) => (
+              <Option key={studio.id} value={studio.id}>
+                {studio.studioName}
+              </Option>
+            ))}
+          </Select>
         </Form.Item>
 
         <Form.Item

@@ -56,7 +56,7 @@ const StudioBackground = ({ children }) => {
                 THE SLIDING LAYER: 
                 This container holds the animated content.
             */}
-            <div className="relative z-10 w-full pt-[130px] pb-20">
+            <div className="relative z-10 w-full pt-[130px]">
                 {children}
             </div>
         </div>

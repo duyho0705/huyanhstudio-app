@@ -152,7 +152,7 @@ const NewLandingPage = () => {
       </section>
 
       {/* --- SECTION 1: IN ACTION --- */}
-      <section className="py-24 px-6 bg-white relative overflow-hidden mt-[120px]">
+      <section className="py-24 px-6 bg-white relative mt-[120px]">
         <div className="max-w-[1400px] mx-auto text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -332,7 +332,7 @@ const NewLandingPage = () => {
       </section>
 
       {/* --- SECTION 3: STYLES SHOWCASE --- */}
-      <section className="pt-20 pb-0 px-6 bg-white overflow-hidden">
+      <section className="pt-20 pb-0 px-6 bg-white relative">
         <div className="max-w-[1200px] mx-auto relative min-h-[600px] flex flex-col items-center justify-center">
 
           {/* 1. TOP-LEFT: Illustration image */}

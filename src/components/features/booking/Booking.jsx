@@ -46,7 +46,15 @@ const Booking = ({ selectedService }) => {
     e.preventDefault();
     if (!isFormValid) return;
     try {
-      await bookingApi.create({ fullName, phone, email, recordDate: date?.format("YYYY-MM-DD"), studioRoomId: studio, serviceIds: service, note });
+      await bookingApi.create({ 
+        customerName: fullName, 
+        phone: phone.replace(/\D/g, ""), // Sanitize phone to digits only
+        email, 
+        recordDate: date?.format("YYYY-MM-DD"), 
+        studioRoomId: studio, 
+        serviceIds: service, 
+        note 
+      });
       messageApi.success("Đặt lịch thành công!");
       handleReset();
     } catch (error) {

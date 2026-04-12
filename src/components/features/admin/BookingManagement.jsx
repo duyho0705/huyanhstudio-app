@@ -39,6 +39,7 @@ import {
   Filter,
   ArrowRight,
   CalendarDays,
+  CalendarCheck,
   CheckCircle2,
   AlertCircle
 } from "lucide-react";
@@ -48,6 +49,7 @@ import dayjs from "dayjs";
 import bookingApi from "../../../api/bookingApi";
 import userApi from "../../../api/userApi";
 import serviceApi from "../../../api/serviceApi";
+import studioRoomApi from "../../../api/studioRoomApi";
 
 import BookingForm from "./components/BookingForm";
 import BookingFilters from "./components/BookingFilters";
@@ -83,6 +85,7 @@ const BookingManagement = () => {
 
   const [services, setServices] = useState([]);
   const [staffList, setStaffList] = useState([]);
+  const [studios, setStudios] = useState([]);
 
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -102,9 +105,10 @@ const BookingManagement = () => {
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        const [servicesRes, staffRes] = await Promise.all([
+        const [servicesRes, staffRes, studiosRes] = await Promise.all([
           serviceApi.admin.getAll({ page: 0, size: 100 }),
           userApi.admin.getStaff().catch(() => ({ data: [] })),
+          studioRoomApi.getAll().catch(() => ({ data: [] })),
         ]);
 
         const getList = (res) => {
@@ -122,6 +126,7 @@ const BookingManagement = () => {
 
         setServices(getList(servicesRes));
         setStaffList(uniqueStaff);
+        setStudios(getList(studiosRes));
       } catch (error) {
         console.error("Error fetching initial data:", error);
       }
@@ -540,6 +545,7 @@ const BookingManagement = () => {
         onSubmit={handleFormSubmit}
         initialValues={selectedBooking}
         services={services}
+        studios={studios}
       />
 
       <Modal

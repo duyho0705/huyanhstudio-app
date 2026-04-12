@@ -10,7 +10,7 @@ import {
   Space,
 } from "antd";
 import { useEffect, useState } from "react";
-import { Plus, Trash2, Briefcase, FileText, DollarSign, Activity, ListChecks, AlertCircle } from "lucide-react";
+import { Plus, Trash2, Briefcase, FileText, DollarSign, Activity, ListChecks, AlertCircle, Info } from "lucide-react";
 const { TextArea } = Input;
 const { Option } = Select;
 
