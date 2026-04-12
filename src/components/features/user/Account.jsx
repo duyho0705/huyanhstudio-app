@@ -58,9 +58,8 @@ const Account = () => {
       <input
         value={value}
         onChange={onChange}
-        className={`w-full px-4 py-2.5 border rounded-xl text-sm outline-none transition-all bg-gray-50 focus:bg-white ${
-          error ? "border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-100" : "border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-        }`}
+        className={`w-full px-4 py-2.5 border rounded-xl text-sm outline-none transition-all bg-gray-50 focus:bg-white ${error ? "border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-100" : "border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+          }`}
         {...props}
       />
       {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
@@ -82,13 +81,11 @@ const Account = () => {
               type="email"
               value={email}
               onChange={(e) => { setEmail(e.target.value); if (errors.email) setErrors({ ...errors, email: null }); }}
-              className={`flex-1 px-4 py-2.5 border rounded-xl text-sm outline-none transition-all bg-gray-50 focus:bg-white ${
-                errors.email ? "border-red-300 focus:border-red-500" : "border-gray-200 focus:border-blue-500"
-              }`}
+              className={`flex-1 px-4 py-2.5 border rounded-xl text-sm outline-none transition-all bg-gray-50 focus:bg-white ${errors.email ? "border-red-300 focus:border-red-500" : "border-gray-200 focus:border-blue-500"
+                }`}
             />
-            <span className={`text-xs font-medium px-3 py-1.5 rounded-full ${
-              user?.isVerified ? "bg-green-100 text-green-600" : "bg-yellow-100 text-yellow-600"
-            }`}>
+            <span className={`text-xs font-medium px-3 py-1.5 rounded-full ${user?.isVerified ? "bg-green-100 text-green-600" : "bg-yellow-100 text-yellow-600"
+              }`}>
               {user?.isVerified ? "Đã xác thực" : "Chưa xác thực"}
             </span>
           </div>
@@ -101,9 +98,8 @@ const Account = () => {
           </button>
 
           {notification.show && (
-            <div className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium animate-fade-in ${
-              notification.type === "success" ? "bg-green-50 text-green-600" : "bg-red-50 text-red-600"
-            }`}>
+            <div className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium animate-fade-in ${notification.type === "success" ? "bg-green-50 text-green-600" : "bg-red-50 text-red-600"
+              }`}>
               <span>{notification.type === "success" ? "✓" : "✕"}</span>
               <span>{notification.message}</span>
             </div>

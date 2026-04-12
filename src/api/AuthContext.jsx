@@ -14,6 +14,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [modalMode, setModalMode] = useState("login");
   const navigate = useNavigate();
 
   // Lấy profile từ server
@@ -30,7 +31,6 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       console.log("Load profile failed:", err);
       localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
       setUser(null);
     } finally {
       setLoading(false);
@@ -43,12 +43,20 @@ export const AuthProvider = ({ children }) => {
   }, [loadProfile]);
 
   // Login
-  const login = async ({ accessToken, refreshToken }) => {
+  const login = async ({ accessToken }) => {
     localStorage.setItem("accessToken", accessToken);
-    localStorage.setItem("refreshToken", refreshToken);
 
     // Lấy profile sau khi login
-    await loadProfile();
+    try {
+      const res = await userApi.getProfile();
+      setUser(res.data);
+      return res.data;
+    } catch (err) {
+      console.error("Login profile fetch failed:", err);
+      setUser(null);
+      localStorage.removeItem("accessToken");
+      throw err;
+    }
   };
 
   // Logout
@@ -58,7 +66,6 @@ export const AuthProvider = ({ children }) => {
     } catch (_) {}
 
     localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
     setUser(null);
 
     navigate("/");
@@ -78,7 +85,12 @@ export const AuthProvider = ({ children }) => {
         logout,
         loadProfile,
         showLoginModal,
-        setShowLoginModal,
+        setShowLoginModal: (val, mode = "login") => {
+          setShowLoginModal(val);
+          if (val) setModalMode(mode);
+        },
+        modalMode,
+        setModalMode,
       }}
     >
       {children}

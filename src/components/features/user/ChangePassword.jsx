@@ -44,9 +44,8 @@ const ChangePassword = () => {
   return (
     <div className="max-w-md">
       {message.text && (
-        <p className={`mb-4 px-4 py-3 rounded-xl text-sm font-medium animate-fade-in ${
-          message.type === "error" ? "bg-red-50 text-red-600 border border-red-100" : "bg-green-50 text-green-600 border border-green-100"
-        }`}>
+        <p className={`mb-4 px-4 py-3 rounded-xl text-sm font-medium animate-fade-in ${message.type === "error" ? "bg-red-50 text-red-600 border border-red-100" : "bg-green-50 text-green-600 border border-green-100"
+          }`}>
           {message.text}
         </p>
       )}

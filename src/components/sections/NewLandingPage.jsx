@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { FiSearch, FiArrowRight, FiSend, FiMessageCircle, FiX, FiMinus, FiImage, FiCode, FiMusic } from "react-icons/fi";
+import { FiSearch, FiArrowRight, FiSend, FiMessageCircle, FiX, FiMinus, FiImage, FiCode, FiMusic, FiUser, FiLogOut, FiGrid } from "react-icons/fi";
 import { FaPlay, FaMicrophone, FaReact } from "react-icons/fa";
+import { AuthContext } from "../../api/AuthContext";
 import phongthuImg from "../../assets/phongthu.png";
 import section3_anh1 from "../../assets/section3_anh1.webp";
 import section3_anh2 from "../../assets/section3_anh2.avif";
@@ -18,6 +19,7 @@ const decor4 = "https://images.unsplash.com/photo-1511379938547-c1f69419868d?aut
 const decor5 = "https://images.unsplash.com/photo-1507838153414-b4b713384a76?auto=format&fit=crop&q=100&w=1200";
 
 const NewLandingPage = () => {
+  const { user, logout, setShowLoginModal } = useContext(AuthContext);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatMessage, setChatMessage] = useState("");
   const [scrolled, setScrolled] = useState(false);
@@ -25,54 +27,8 @@ const NewLandingPage = () => {
     { id: 1, text: "Chào bạn! Tôi có thể giúp gì cho bạn hôm nay?", sender: "bot", time: "18:09" },
   ]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
     <div className="min-h-screen bg-white font-sans text-[#35104C] selection:bg-sky/30 relative overflow-x-hidden">
-      {/* --- NAVIGATION --- */}
-      <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 px-8 py-3.5 ${scrolled ? "bg-white/90 backdrop-blur-lg shadow-md border-b border-gray-100" : "bg-transparent"
-        }`}>
-        <div className="grid grid-cols-3 items-center max-w-[1400px] mx-auto">
-          {/* Left Column */}
-          <div className="flex items-center gap-10">
-            <div className="hidden lg:flex items-center gap-8 text-[17px] font-medium text-[#35104C]">
-              <a href="#" className="transition-colors">Illustrations</a>
-              <a href="#" className="transition-colors">Pricing</a>
-              <FiSearch className="text-xl cursor-pointer transition-colors" />
-            </div>
-          </div>
-
-          {/* Logo (Center Column) */}
-          <div className="flex justify-center translate-y-1">
-            <div className="flex items-center gap-2 group">
-              <div className="relative w-8 h-8">
-                <div className="absolute inset-0 bg-brand-orange rounded-sm rotate-12 transition-transform"></div>
-                <div className="absolute inset-0 bg-sky rounded-sm -rotate-6 transition-transform"></div>
-                <div className="absolute inset-0 bg-plum rounded-sm flex items-center justify-center text-white text-[10px] font-bold">HA</div>
-              </div>
-              <span className="text-[40px] font-bold tracking-normal text-[#35104C] leading-none" style={{ fontFamily: '"Satisfy", cursive' }}>hastudio</span>
-            </div>
-          </div>
-
-          {/* Right Column */}
-          <div className="flex items-center justify-end gap-8">
-            <div className="hidden lg:flex items-center gap-8 text-[17px] font-medium text-[#35104C]">
-              <a href="#" className="transition-colors">About Us</a>
-              <a href="#" className="transition-colors">Sign in</a>
-            </div>
-            <button className="px-6 py-2.5 bg-[#6CD1FD] text-white rounded-[15px] text-[17px] font-bold transition-all transform shadow-sm hover:shadow-md">
-              Sign up
-            </button>
-          </div>
-        </div>
-      </nav>
-
       {/* --- HERO SECTION (BEIGE) --- */}
       <section className="bg-[#E9DCD6] relative pt-10 pb-0">
         {/* Multiple Winding Ribbon Layers */}
@@ -120,12 +76,12 @@ const NewLandingPage = () => {
           </motion.svg>
         </div>
 
-        <div className="px-6 pt-10 pb-2 flex flex-col items-center text-center relative z-10">
+        <div className="px-6 pt-2 pb-2 flex flex-col items-center text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="max-w-[1200px] mx-auto mt-[100px] mb-10"
+            className="max-w-[1200px] mx-auto mt-[50px] mb-10"
           >
             <h1 className="text-5xl md:text-[88px] font-bold leading-[1.02] tracking-tighter text-[#35104C] mb-8">
               Create <span className="relative inline-block">
@@ -146,6 +102,7 @@ const NewLandingPage = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={() => setShowLoginModal(true, "signup")}
               className="px-12 py-5 bg-[#6CD1FD] text-white rounded-[20px] text-[20px] font-bold transition-all transform mb-10 shadow-xl shadow-sky/10 active:scale-95"
             >
               Find the perfect illustration
@@ -365,6 +322,7 @@ const NewLandingPage = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={() => setShowLoginModal(true, "signup")}
               className="px-10 py-4 bg-[#6CD1FD] text-[#35104C] rounded-[18px] font-bold transition-all shadow-lg"
             >
               Try tools for free
@@ -672,7 +630,7 @@ const NewLandingPage = () => {
                 <h4 className="font-bold text-[#35104C] text-[17px] mb-6">Hastudio</h4>
                 <ul className="space-y-3 text-[17px] text-[#35104C]">
                   <li className="cursor-pointer">Pricing</li>
-                  <li className="cursor-pointer">Sign up</li>
+                  <li className="cursor-pointer" onClick={() => setShowLoginModal(true, "signup")}>Sign up</li>
                 </ul>
               </div>
               <div>

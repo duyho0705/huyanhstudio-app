@@ -4,6 +4,7 @@ import axios from "axios";
 const axiosClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 10000,
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
@@ -13,6 +14,7 @@ const axiosClient = axios.create({
 const refreshClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 10000,
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
@@ -83,9 +85,7 @@ axiosClient.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const resp = await refreshClient.post("/auth/refresh", {
-          refreshToken,
-        });
+        const resp = await refreshClient.post("/auth/refresh");
         const data = resp.data || resp;
         const newAccessToken = data.accessToken;
         localStorage.setItem("accessToken", newAccessToken);
