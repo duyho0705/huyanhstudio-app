@@ -94,7 +94,16 @@ const Booking = ({ selectedService }) => {
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Ngày thu</label>
-                <DatePicker id="dateToWork" placeholder="Chọn ngày thu" size="large" style={{ width: "100%" }} format="DD/MM/YYYY" value={date} onChange={(val) => setDate(val)} />
+                <DatePicker 
+                  id="dateToWork" 
+                  placeholder="Chọn ngày thu" 
+                  size="large" 
+                  style={{ width: "100%" }} 
+                  format="DD/MM/YYYY" 
+                  value={date} 
+                  onChange={(val) => setDate(val)}
+                  disabledDate={(current) => current && current <= dayjs().startOf('day')}
+                />
               </div>
             </div>
 

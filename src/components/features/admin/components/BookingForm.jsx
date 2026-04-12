@@ -154,6 +154,7 @@ const BookingForm = ({
             format="DD/MM/YYYY"
             style={{ width: "100%" }}
             size="large"
+            disabledDate={(current) => current && current <= dayjs().startOf('day')}
           />
         </Form.Item>
  
