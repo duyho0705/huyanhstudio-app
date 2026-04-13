@@ -53,3 +53,22 @@
     }
   }
 }
+
+/* Fix Autofill background color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 40px #fff inset !important;
+  -webkit-text-fill-color: #334155 !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Ant Design Input active/filled state - Chỉ áp dụng khi KHÔNG có lỗi */
+.ant-input:not(.ant-input-status-error), 
+.ant-input-affix-wrapper:not(.ant-input-affix-wrapper-status-error),
+.ant-picker:not(.ant-picker-status-error),
+.ant-select-show-search .ant-select-selector,
+.ant-select-selector {
+  background-color: white !important;
+}

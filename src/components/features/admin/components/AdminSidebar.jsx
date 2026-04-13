@@ -28,7 +28,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
     {
       path: "/admin/bookings",
       icon: <CalendarDays size={20} />,
-      label: "Lịch đặt phòng",
+      label: "Lịch thu âm",
     },
     {
       path: "/admin/products",
@@ -40,11 +40,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
       icon: <Layers size={20} />,
       label: "Gói dịch vụ",
     },
-    {
-      path: "/admin/demos",
-      icon: <MonitorPlay size={20} />,
-      label: "Thư viện Demo",
-    },
+
     {
       path: "/admin/users",
       icon: <Users size={20} />,
@@ -65,8 +61,8 @@ const AdminSidebar = ({ isOpen, onClose }) => {
             <img src={logoImg} alt="Logo" className="w-11 h-11 object-contain relative z-10 brightness-110" />
           </div>
           <div className="flex flex-col relative z-10">
-            <span className="text-xl font-black text-white tracking-widest uppercase italic">HUY ANH</span>
-            <span className="text-[10px] font-bold text-blue-500 uppercase tracking-[0.3em] -mt-1">STUDIO ADMIN</span>
+            <span className="text-xl font-semibold text-white tracking-widest italic">Huy Anh</span>
+            <span className="text-[10px] font-semibold text-blue-500 tracking-[0.3em] -mt-1">Studio Admin</span>
           </div>
         </div>
       </div>
@@ -93,7 +89,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
                   <span className={`transition-transform duration-500 group-hover:scale-110`}>
                     {item.icon}
                   </span>
-                  <span className="text-[13px] font-black tracking-tight uppercase">{item.label}</span>
+                  <span className="text-[15px] font-semibold tracking-tight">{item.label}</span>
                 </div>
                 {isActive && (
                   <div className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_12px_rgba(255,255,255,0.8)]"></div>

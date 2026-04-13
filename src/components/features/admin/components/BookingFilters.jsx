@@ -56,9 +56,9 @@ const BookingFilters = ({
             placeholder="Lọc trạng thái"
             value={filters.status}
             onChange={(val) => onFilterChange("status", val)}
-            className="w-[200px] h-12 flex items-center select-custom-xl rounded-xl"
+            className="w-[220px] h-12 [&_.ant-select-selector]:!rounded-[40px] [&_.ant-select-selector]:!border-2 [&_.ant-select-selector]:!border-slate-200 [&_.ant-select-selection-placeholder]:!text-slate-700 [&_.ant-select-selection-placeholder]:!font-semibold [&_.ant-select-selection-placeholder]:!text-center [&_.ant-select-selection-item]:!font-semibold [&_.ant-select-selection-item]:!text-slate-700 [&_.ant-select-selection-item]:!text-center"
             allowClear
-            variant="filled"
+            variant="outlined"
           >
             {bookingStatuses.map((s) => (
               <Option key={s.value} value={s.value}>
@@ -69,7 +69,7 @@ const BookingFilters = ({
               </Option>
             ))}
           </Select>
-
+ 
           <RangePicker
             format="DD/MM/YYYY"
             value={
@@ -80,13 +80,13 @@ const BookingFilters = ({
             onChange={onDateRangeChange}
             separator={<div className="text-slate-300 mx-1">—</div>}
             placeholder={["Từ ngày", "Đến ngày"]}
-            className="h-12 border-slate-100 bg-slate-50/50 rounded-xl px-4 hover:border-blue-300 focus:border-blue-400 focus:ring-4 focus:ring-blue-100 transition-all font-medium"
-            suffixIcon={<CalendarDays size={16} className="text-slate-400" />}
+            className="h-12 bg-white px-2 font-semibold !rounded-[40px] border-2 border-slate-200 [&_.ant-picker-input_input::placeholder]:!text-slate-700 [&_.ant-picker-input_input]:!font-semibold [&_.ant-picker-input_input]:!text-slate-700 [&_.ant-picker-input_input]:!text-center"
+            suffixIcon={<CalendarDays size={20} className="text-slate-500" />}
           />
 
           <button 
             onClick={onClear}
-            className="h-12 px-6 flex items-center gap-2 text-slate-500 hover:text-slate-900 font-black uppercase tracking-widest text-[10px] bg-white border border-slate-100 rounded-xl transition-all active:scale-95"
+            className="h-12 px-8 flex items-center gap-2 text-slate-700 font-semibold text-[15px] bg-white border-2 border-slate-200 rounded-[30px] transition-all"
           >
             <FilterX size={14} />
             Xóa bộ lọc
@@ -95,7 +95,7 @@ const BookingFilters = ({
           {selectedRowKeys.length > 0 && (
             <button 
               onClick={onBulkDelete}
-              className="h-12 px-6 flex items-center gap-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white font-black uppercase tracking-widest text-[10px] border border-red-100 rounded-xl transition-all active:scale-95 animate-in zoom-in-95 duration-200"
+              className="h-12 px-6 flex items-center gap-2 bg-red-50 text-red-600 font-semibold text-[15px] border border-red-100 rounded-[30px] animate-in zoom-in-95 duration-200"
             >
               <Trash2 size={14} />
               Xóa đã chọn ({selectedRowKeys.length})

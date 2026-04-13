@@ -48,7 +48,7 @@ const BookingForm = ({
               return (
                 srvName === serviceName ||
                 String(srvName).trim().toLowerCase() ===
-                  String(serviceName).trim().toLowerCase()
+                String(serviceName).trim().toLowerCase()
               );
             });
             return matched ? matched.id : null;
@@ -83,8 +83,8 @@ const BookingForm = ({
         onSubmit(formattedValues);
         form.resetFields();
       })
-      .catch((info) => {
-        console.log("Validate Failed:", info);
+      .catch(() => {
+        // Validation handled by UI
       });
   };
 
@@ -157,7 +157,7 @@ const BookingForm = ({
             disabledDate={(current) => current && current <= dayjs().startOf('day')}
           />
         </Form.Item>
- 
+
         <Form.Item
           name="studioRoomId"
           label="Studio Room"

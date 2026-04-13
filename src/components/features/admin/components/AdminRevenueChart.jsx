@@ -22,31 +22,31 @@ const data = [
 const AdminRevenueChart = () => {
   return (
     <div className="w-full">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center">
-            <BarChart3 size={24} />
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+            <BarChart3 size={20} />
           </div>
           <div>
-            <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">Kinh doanh & Doanh thu</h3>
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-0.5">Thống kê lưu lượng giao dịch tiền tệ</p>
+            <h3 className="text-[17px] font-semibold text-slate-900 leading-tight">Doanh thu & Kinh doanh</h3>
+            <p className="text-[13px] font-medium text-slate-500 mt-0.5">Thống kê lưu lượng giao dịch tiền tệ</p>
           </div>
         </div>
         
         <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-green-50 rounded-xl text-green-600 text-[10px] font-black uppercase tracking-widest border border-green-100">
-                <TrendingUp size={12} />
-                +14.5% So với tháng trước
+            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-green-50 rounded-lg text-green-600 text-[13px] font-semibold">
+                <TrendingUp size={16} />
+                +14.5% Tháng trước
             </div>
-            <select className="px-5 py-3.5 bg-slate-50 border-none rounded-xl text-xs font-black text-slate-900 uppercase tracking-widest focus:ring-4 focus:ring-slate-100 transition-all cursor-pointer shadow-inner">
+            <select className="h-9 px-3 bg-white border border-slate-200 rounded-lg text-[13px] font-medium text-slate-700 focus:ring-0 focus:border-blue-500 transition-all cursor-pointer outline-none">
               <option>7 ngày gần nhất</option>
               <option>Tháng hiện tại</option>
-              <option>Báo cáo năm nay</option>
+              <option>Năm nay</option>
             </select>
         </div>
       </div>
 
-      <div className="h-[350px] w-full mt-4">
+      <div className="h-[300px] w-full mt-4">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={data}
@@ -61,40 +61,36 @@ const AdminRevenueChart = () => {
             <XAxis
               dataKey="name"
               stroke="#94a3b8"
-              fontSize={10}
-              fontWeight={900}
+              fontSize={12}
+              fontWeight={500}
               tickLine={false}
               axisLine={false}
-              dy={15}
-              textAnchor="middle"
-              className="uppercase tracking-widest font-black"
+              dy={10}
             />
             <YAxis
               stroke="#94a3b8"
-              fontSize={10}
-              fontWeight={900}
+              fontSize={12}
+              fontWeight={500}
               tickLine={false}
               axisLine={false}
               tickFormatter={(value) => `${value}`}
-              className="font-black"
             />
             <CartesianGrid
-              strokeDasharray="0"
+              strokeDasharray="3 3"
               vertical={false}
               stroke="#f1f5f9"
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "rgba(255, 255, 255, 0.95)",
-                backdropFilter: "blur(12px)",
-                borderRadius: "24px",
-                border: "1px solid #f1f5f9",
-                boxShadow: "0 20px 25px -5px rgba(0,0,0,0.05)",
-                padding: "16px",
+                backgroundColor: "rgba(255, 255, 255, 0.98)",
+                borderRadius: "12px",
+                border: "1px solid #e2e8f0",
+                boxShadow: "0 10px 15px -3px rgba(0,0,0,0.1)",
+                padding: "12px",
               }}
-              itemStyle={{ color: "#0f172a", fontWeight: "900", fontSize: "14px", textTransform: "uppercase" }}
-              labelStyle={{ color: "#94a3b8", fontWeight: "900", marginBottom: "8px", textTransform: "uppercase" }}
-              cursor={{ stroke: '#2563eb', strokeWidth: 2, strokeDasharray: '4 4' }}
+              itemStyle={{ color: "#0f172a", fontWeight: "600", fontSize: "14px" }}
+              labelStyle={{ color: "#64748b", fontWeight: "500", marginBottom: "4px" }}
+              cursor={{ stroke: '#cbd5e1', strokeWidth: 1, strokeDasharray: '4 4' }}
             />
             <Area
               type="monotone"
@@ -102,9 +98,8 @@ const AdminRevenueChart = () => {
               stroke="#2563eb"
               fillOpacity={1}
               fill="url(#colorIncome)"
-              strokeWidth={4}
-              animationDuration={2000}
-              activeDot={{ r: 8, strokeWidth: 4, stroke: '#fff', fill: '#2563eb', shadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}
+              strokeWidth={3}
+              activeDot={{ r: 6, strokeWidth: 0, fill: '#2563eb' }}
             />
           </AreaChart>
         </ResponsiveContainer>

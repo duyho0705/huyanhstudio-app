@@ -1,5 +1,6 @@
 import { Modal, Form, Input, Select } from "antd";
 import { useEffect } from "react";
+import { User } from "lucide-react";
 
 const { Option } = Select;
 
@@ -9,7 +10,6 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
   useEffect(() => {
     if (open) {
       if (initialValues) {
-        // Filter out null/undefined values to prevent form issues
         const cleanValues = Object.entries(initialValues).reduce(
           (acc, [key, value]) => {
             if (value !== null && value !== undefined) {
@@ -32,63 +32,72 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
       .then(async (values) => {
         await onSubmit(values);
       })
-      .catch(() => {
-        // Validation failed, silent catch or handle specific logic if needed
-      });
+      .catch(() => {});
   };
 
   return (
     <Modal
-      title={<span className="text-xl font-bold text-slate-900">{initialValues ? "Cập nhật người dùng" : "Thêm người dùng mới"}</span>}
+      title={
+        <div className="flex items-center gap-3 py-2">
+            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                <User size={20} />
+            </div>
+            <div>
+                <h3 className="text-[18px] font-semibold text-slate-900 leading-tight">
+                    {initialValues ? "Cập nhật người dùng" : "Thêm người dùng mới"}
+                </h3>
+                <p className="text-[13px] font-medium text-slate-500 mt-0.5">Quản lý hồ sơ, phân quyền và dữ liệu liên hệ</p>
+            </div>
+        </div>
+      }
       open={open}
       onOk={handleSubmit}
       onCancel={onCancel}
-      okText={initialValues ? "Cập nhật" : "Tạo"}
+      okText={initialValues ? "Cập nhật" : "Tạo tài khoản"}
       cancelText="Hủy"
       width={600}
       centered
-      className="custom-admin-modal"
       okButtonProps={{
-        className: "bg-blue-600 hover:bg-blue-700 font-bold px-8 h-10 rounded-xl border-none shadow-lg shadow-blue-100 transition-all",
+        className: "h-10 px-6 rounded-xl bg-slate-900 border-none font-semibold text-[14px] text-white hover:bg-slate-800 transition-all shadow-sm"
       }}
       cancelButtonProps={{
-        className: "bg-slate-100 hover:bg-slate-200 text-slate-700 border-none font-bold h-10 px-8 rounded-xl transition-all",
+        className: "h-10 px-6 rounded-xl font-medium text-[14px] text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all"
       }}
     >
-      <Form form={form} layout="vertical" className="mt-8 space-y-4">
+      <Form form={form} layout="vertical" className="pt-6 space-y-4">
         <Form.Item
           name="customerName"
-          label={<span className="text-sm font-bold text-slate-700">Họ tên</span>}
+          label={<span className="text-[13px] font-semibold text-slate-700">Họ tên</span>}
           rules={[{ required: true, message: "Vui lòng nhập họ tên!" }]}
         >
-          <Input placeholder="Nhập họ tên" className="h-11 rounded-xl bg-slate-50 border-slate-200 focus:bg-white transition-all px-4" />
+          <Input placeholder="Nhập họ tên" className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-medium text-[14px]" />
         </Form.Item>
 
         {!initialValues && (
           <Form.Item
             name="username"
-            label={<span className="text-sm font-bold text-slate-700">Tên người dùng</span>}
+            label={<span className="text-[13px] font-semibold text-slate-700">Tên đăng nhập</span>}
             rules={[
               { required: true, message: "Vui lòng nhập tên người dùng!" },
               { min: 3, message: "Tên người dùng phải có ít nhất 3 ký tự!" },
             ]}
           >
-            <Input placeholder="Nhập tên người dùng" className="h-11 rounded-xl bg-slate-50 border-slate-200 focus:bg-white transition-all px-4" />
+            <Input placeholder="Nhập tên đăng nhập" className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-medium text-[14px]" />
           </Form.Item>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Form.Item
             name="email"
-            label={<span className="text-sm font-bold text-slate-700">Email</span>}
+            label={<span className="text-[13px] font-semibold text-slate-700">Email</span>}
             rules={[{ type: "email", message: "Email không hợp lệ!" }]}
           >
-            <Input placeholder="Nhập email" className="h-11 rounded-xl bg-slate-50 border-slate-200 focus:bg-white transition-all px-4" />
+            <Input placeholder="Nhập email liên hệ" className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-medium text-[14px]" />
           </Form.Item>
 
           <Form.Item
             name="phone"
-            label={<span className="text-sm font-bold text-slate-700">Số điện thoại</span>}
+            label={<span className="text-[13px] font-semibold text-slate-700">Số điện thoại</span>}
             rules={[
               { required: true, message: "Vui lòng nhập số điện thoại!" },
               {
@@ -97,20 +106,20 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
               },
             ]}
           >
-            <Input placeholder="Nhập số điện thoại" className="h-11 rounded-xl bg-slate-50 border-slate-200 focus:bg-white transition-all px-4" />
+            <Input placeholder="Nhập số điện thoại" className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-medium text-[14px]" />
           </Form.Item>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Form.Item
             name="role"
-            label={<span className="text-sm font-bold text-slate-700">Vai trò</span>}
+            label={<span className="text-[13px] font-semibold text-slate-700">Vai trò / Cấp bậc</span>}
             rules={[{ required: true, message: "Vui lòng chọn vai trò!" }]}
           >
-            <Select placeholder="Chọn vai trò" className="h-11" variant="filled" dropdownStyle={{ borderRadius: '12px' }}>
+            <Select placeholder="Chọn vai trò hệ thống" className="h-10 text-[14px] font-medium" variant="filled">
               {roles?.map((role) => (
                 <Option key={role.value} value={role.value}>
-                  {role.label}
+                  <span className="text-[14px]">{role.label}</span>
                 </Option>
               ))}
             </Select>
@@ -118,12 +127,12 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
 
           <Form.Item
             name="active"
-            label={<span className="text-sm font-bold text-slate-700">Trạng thái</span>}
+            label={<span className="text-[13px] font-semibold text-slate-700">Trạng thái</span>}
             rules={[{ required: true, message: "Vui lòng chọn trạng thái!" }]}
           >
-            <Select placeholder="Chọn trạng thái" className="h-11" variant="filled" dropdownStyle={{ borderRadius: '12px' }}>
-              <Option value={true}>Hoạt động</Option>
-              <Option value={false}>Vô hiệu hóa</Option>
+            <Select placeholder="Trạng thái tài khoản" className="h-10 text-[14px] font-medium" variant="filled">
+              <Option value={true}><span className="text-[14px] text-green-600">Khôi phục / Hoạt động</span></Option>
+              <Option value={false}><span className="text-[14px] text-red-600">Vô hiệu hóa</span></Option>
             </Select>
           </Form.Item>
         </div>
@@ -131,13 +140,13 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
         {!initialValues && (
           <Form.Item
             name="password"
-            label={<span className="text-sm font-bold text-slate-700">Mật khẩu</span>}
+            label={<span className="text-[13px] font-semibold text-slate-700">Mật khẩu khởi tạo</span>}
             rules={[
               { required: true, message: "Vui lòng nhập mật khẩu!" },
               { min: 6, message: "Mật khẩu phải có ít nhất 6 ký tự!" },
             ]}
           >
-            <Input.Password placeholder="Nhập mật khẩu" className="h-11 rounded-xl bg-slate-50 border-slate-200 focus:bg-white transition-all px-4" />
+            <Input.Password placeholder="Tạo mật khẩu cho người dùng" className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all" />
           </Form.Item>
         )}
       </Form>

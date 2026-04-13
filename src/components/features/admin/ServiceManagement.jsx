@@ -138,91 +138,83 @@ const ServiceManagement = () => {
 
   const columns = [
     {
-      title: "Thông tin dịch vụ",
+      title: <span className="text-[13px] font-semibold text-slate-600">Tên dịch vụ</span>,
       dataIndex: "name",
       key: "name",
-      width: 280,
+      width: 200,
       render: (name) => (
-        <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-700 flex items-center justify-center shrink-0 shadow-lg shadow-slate-200">
-                <Gem size={22} className="text-white" />
-            </div>
-            <div className="flex flex-col">
-                <strong className="text-slate-900 font-black text-sm uppercase tracking-tight leading-none mb-1.5">{name}</strong>
-                <div className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Enterprise Package</span>
-                </div>
-            </div>
-        </div>
+        <span className="text-slate-900 font-semibold text-[14px] leading-none mb-1">{name}</span>
       ),
     },
     {
-      title: "Định mức giá",
+      title: <span className="text-[13px] font-semibold text-slate-600">Đơn giá (VNĐ)</span>,
       dataIndex: "price",
       key: "price",
-      width: 180,
+      width: 150,
       render: (price) => (
-        <div className="flex flex-col">
-            <div className="text-slate-900 font-black text-base flex items-center gap-1.5">
-                {price?.toLocaleString("vi-VN")}
-                <span className="text-[10px] font-black uppercase text-slate-400">VNĐ</span>
-            </div>
-            <span className="text-[10px] font-bold text-green-600 uppercase tracking-widest mt-0.5">Giá niêm yết</span>
-        </div>
+        <span className="text-slate-600 font-semibold text-[14px]">{price?.toLocaleString("vi-VN")}</span>
       ),
     },
     {
-      title: "Hạng mục đặc quyền",
+      title: <span className="text-[13px] font-semibold text-slate-600">Quyền lợi đi kèm</span>,
       dataIndex: "benefitsList",
       key: "benefitsList",
-      width: 320,
+      width: 300,
       render: (benefitsList) => (
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-1">
           {Array.isArray(benefitsList) && benefitsList.length > 0 ? (
             benefitsList.map((benefit, index) => (
-              <Tag key={index} className="!m-0 bg-slate-50 border-slate-100 text-slate-700 px-3 py-1 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-sm">
-                {benefit}
-              </Tag>
+               <span key={index} className="text-slate-600 text-[13px] mr-2">• {benefit}</span>
             ))
           ) : (
-            <span className="text-slate-300 text-[10px] font-black uppercase tracking-[0.2em] italic">Chưa cấu hình đặc quyền</span>
+            <span className="text-slate-400 italic text-[13px]">---</span>
           )}
         </div>
       ),
     },
     {
-      title: "Tiêu chuẩn vận hành",
+      title: <span className="text-[13px] font-semibold text-slate-600">Trạng thái</span>,
       dataIndex: "active",
       key: "active",
-      width: 180,
+      width: 150,
       render: (active, record) => (
-        <div className={`inline-flex items-center gap-3 px-4 py-2 rounded-2xl border ${active ? "bg-green-50 border-green-100" : "bg-slate-50 border-slate-200"}`}>
+        <div className="flex items-center gap-2">
             <Switch
               checked={active}
               onChange={(checked) => handleStatusToggle(record.id, checked)}
-              className={active ? "!bg-green-500 shadow-lg shadow-green-200" : "!bg-slate-300"}
               size="small"
             />
-            <span className={`text-[10px] font-black uppercase tracking-[0.15em] ${active ? "text-green-600" : "text-slate-400"}`}>
-                {active ? "Đang mở bán" : "Tạm ngưng"}
+            <span className={`text-[13px] font-semibold ${active ? "text-green-600" : "text-slate-400"}`}>
+                {active ? "Hoạt động" : "Tạm khóa"}
             </span>
         </div>
       ),
     },
     {
-      title: "Thao tác",
+      title: <span className="text-[13px] font-semibold text-slate-600">Thao tác</span>,
       key: "actions",
-      width: 100,
+      width: 140,
       fixed: "right",
       align: "center",
       render: (_, record) => (
-        <Button
-            type="text"
-            icon={<Edit size={20} />}
-            onClick={() => handleEdit(record)}
-            className="w-12 h-12 rounded-2xl bg-white border border-slate-100 text-slate-400 hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all shadow-sm flex items-center justify-center p-0 mx-auto"
-        />
+          <div className="flex items-center justify-center gap-2">
+            <Button 
+              type="text" 
+              onClick={() => handleEdit(record)}
+              className="w-9 h-9 rounded-xl flex items-center justify-center text-amber-500 hover:bg-amber-50 transition-all p-0"
+              title="Chỉnh sửa"
+            >
+              <Edit size={18} strokeWidth={2.5} />
+            </Button>
+            <Button 
+              type="text" 
+              onClick={() => messageApi.warning("Tính năng xóa dịch vụ đang bảo trì")}
+              className="w-9 h-9 rounded-xl flex items-center justify-center text-red-500 hover:bg-red-50 transition-all p-0"
+              title="Gỡ bỏ"
+            >
+              <Trash2 size={18} strokeWidth={2.5} />
+            </Button>
+          </div>
       ),
     },
   ];
@@ -238,39 +230,35 @@ const ServiceManagement = () => {
             { icon: <Zap size={24} />, label: "Đang mở bán", value: services.filter(s => s.active).length, config: "bg-green-50 text-green-600" },
             { icon: <Star size={24} />, label: "Tổng dịch vụ", value: pagination.total, config: "bg-purple-50 text-purple-600" }
         ].map((item, i) => (
-            <div key={i} className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm flex items-center gap-6 transition-all hover:shadow-xl hover:shadow-slate-200/50 group">
-                <div className={`w-16 h-16 rounded-[1.5rem] ${item.config} flex items-center justify-center transition-transform group-hover:scale-110 shadow-inner`}>
+            <div key={i} className="bg-white p-6 rounded-[1.5rem] border border-slate-100 shadow-sm flex items-center gap-5 transition-all hover:shadow-xl hover:shadow-slate-200/50 group">
+                <div className={`w-14 h-14 rounded-[1rem] ${item.config} flex items-center justify-center transition-transform group-hover:scale-110 shadow-sm`}>
                     {item.icon}
                 </div>
                 <div>
-                   <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">{item.label}</h4>
-                   <p className="text-3xl font-black text-slate-900 tracking-tight">{item.value}</p>
+                   <h4 className="text-[14px] font-semibold text-slate-500 mb-1">{item.label}</h4>
+                   <p className="text-2xl font-bold text-slate-900 tracking-tight">{item.value}</p>
                 </div>
             </div>
         ))}
       </div>
 
-      <div className="bg-white p-10 rounded-[3.5rem] border border-slate-100 shadow-sm space-y-10">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 pb-10 border-b border-slate-50">
-           <div className="flex items-center gap-6">
-              <div className="w-1.5 h-14 bg-slate-900 rounded-full"></div>
-              <div>
-                  <h2 className="text-3xl font-black text-slate-900 uppercase tracking-tight">Danh mục dịch vụ</h2>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] mt-1">Hệ thống quản trị hạ tầng gói chụp & quay phim</p>
-              </div>
+      <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm space-y-6">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-50">
+           <div>
+               <h2 className="text-[18px] font-semibold text-slate-900 leading-tight">Danh sách dịch vụ</h2>
+               <p className="text-[13px] font-medium text-slate-500 mt-1">Hệ thống quản lý định mức và cấu hình gói</p>
            </div>
-           
            <Button
             type="primary"
             onClick={handleCreate}
-            className="h-16 px-10 bg-slate-900 hover:bg-slate-800 rounded-2xl border-none font-black uppercase tracking-widest text-xs shadow-2xl shadow-slate-200 flex items-center gap-4 transition-all active:scale-95 whitespace-nowrap"
+            className="h-10 px-4 bg-slate-900 hover:bg-slate-800 rounded-xl border-none font-semibold text-[14px] shadow-sm flex items-center gap-2 transition-all whitespace-nowrap"
           >
-            <Plus size={22} strokeWidth={3} />
-            Kiến tạo dịch vụ mới
+            <Plus size={16} strokeWidth={2.5} />
+            Kiến tạo dịch vụ
           </Button>
         </div>
 
-        <div className="rounded-[3rem] border border-slate-100 overflow-hidden bg-white shadow-inner">
+        <div className="border border-slate-100 overflow-hidden bg-white shadow-sm rounded-xl">
             <Table
               columns={columns}
               dataSource={Array.isArray(services) ? services : []}
@@ -289,34 +277,25 @@ const ServiceManagement = () => {
             />
 
             {pagination.total > 0 && (
-              <div className="p-10 bg-slate-50/30 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-8">
-                <div className="px-8 py-3.5 bg-white border border-slate-100 rounded-[1.5rem] text-[11px] font-black text-slate-400 uppercase tracking-widest shadow-sm">
-                    Tài bản ghi số 
-                    <span className="text-slate-900 mx-2">{Math.min(pagination.total, (pagination.current - 1) * pagination.pageSize + 1)} — {Math.min(pagination.current * pagination.pageSize, pagination.total)}</span>
-                    của {pagination.total} Dữ liệu
+              <div className="p-6 bg-slate-50/30 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-6">
+                <div className="px-5 py-2.5 bg-white border border-slate-100 rounded-2xl text-[11px] font-black text-slate-600 uppercase tracking-widest shadow-sm flex items-center gap-2">
+                  <span>{Math.min(pagination.total, (pagination.current - 1) * pagination.pageSize + 1)} — {Math.min(pagination.current * pagination.pageSize, pagination.total)}</span>
+                  <span className="text-slate-200">/</span>
+                  <span className="text-slate-500">{pagination.total} Dịch vụ</span>
                 </div>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
                     <Button
-                        className="h-14 w-14 flex items-center justify-center rounded-2xl bg-white border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-600 transition-all shadow-sm group"
+                        className="h-10 w-10 flex items-center justify-center rounded-xl bg-white border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-600 transition-all shadow-sm p-0"
                         disabled={pagination.current === 1}
                         onClick={() => handleTableChange({ current: pagination.current - 1, pageSize: pagination.pageSize })}
-                        icon={<ChevronLeft size={24} className="group-hover:-translate-x-0.5 transition-transform" />}
+                        icon={<ChevronLeft size={20} />}
                     />
-                    <div className="flex items-center bg-white border border-slate-100 rounded-[1.5rem] p-1 shadow-sm font-black text-xs h-14">
-                        <span className="w-12 h-12 flex items-center justify-center bg-slate-900 text-white rounded-2xl shadow-xl shadow-slate-200">
-                             {pagination.current}
-                        </span>
-                        <span className="px-6 text-[10px] uppercase tracking-[0.2em] text-slate-300">Phân trang</span>
-                        <span className="w-12 h-12 flex items-center justify-center bg-slate-50 text-slate-500 rounded-2xl">
-                            {Math.ceil(pagination.total / pagination.pageSize) || 1}
-                        </span>
-                    </div>
                     <Button
-                        className="h-14 w-14 flex items-center justify-center rounded-2xl bg-white border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-600 transition-all shadow-sm group"
+                        className="h-10 w-10 flex items-center justify-center rounded-xl bg-white border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-600 transition-all shadow-sm p-0"
                         disabled={pagination.current >= Math.ceil(pagination.total / pagination.pageSize)}
                         onClick={() => handleTableChange({ current: pagination.current + 1, pageSize: pagination.pageSize })}
-                        icon={<ChevronRight size={24} className="group-hover:translate-x-0.5 transition-transform" />}
+                        icon={<ChevronRight size={20} />}
                     />
                 </div>
               </div>

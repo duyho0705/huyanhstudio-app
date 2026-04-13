@@ -164,33 +164,30 @@ const ProductManagement = () => {
     <div className="space-y-10 animate-in fade-in duration-500">
       {contextHolder}
 
-      <div className="bg-white p-8 rounded-[3rem] border border-slate-100 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-        <div className="flex items-center gap-6">
-            <div className="w-1.5 h-12 bg-slate-900 rounded-full"></div>
-            <div>
-                <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Thư viện sản phẩm</h2>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-0.5">Hệ thống lưu trữ & phân phối nội dung video</p>
-            </div>
+      <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div>
+            <h2 className="text-[18px] font-semibold text-slate-900 leading-tight">Thư viện sản phẩm</h2>
+            <p className="text-[13px] font-medium text-slate-500 mt-1">Hệ thống lưu trữ & phân phối nội dung video</p>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center gap-4 flex-1 lg:max-w-2xl">
-          <div className="relative w-full">
-            <Search size={20} className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400" />
+        <div className="flex flex-col sm:flex-row items-center gap-3 flex-1 lg:max-w-xl lg:justify-end">
+          <div className="relative w-full sm:w-72">
             <Input
               placeholder="Truy vấn dữ liệu sản phẩm..."
-              className="w-full h-16 pl-14 pr-6 bg-slate-50 border-none rounded-2xl font-bold focus:bg-white focus:ring-4 focus:ring-slate-100 transition-all shadow-inner"
+              className="h-10 pl-10 pr-4 bg-slate-50 border-none rounded-xl text-[14px] focus:bg-white focus:ring-2 focus:ring-slate-100 transition-all"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
               allowClear
             />
+            <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
           </div>
           <Button
             type="primary"
             onClick={handleCreate}
-            className="h-16 px-8 bg-slate-900 hover:bg-slate-800 rounded-2xl border-none font-black uppercase tracking-widest text-xs shadow-xl shadow-slate-200 flex items-center gap-3 transition-all active:scale-95 whitespace-nowrap"
+            className="h-10 px-4 bg-slate-900 hover:bg-slate-800 rounded-xl border-none font-semibold text-[14px] shadow-sm flex items-center gap-2 transition-all whitespace-nowrap"
           >
-            <Plus size={20} strokeWidth={3} />
-            Đăng sản phẩm mới
+            <Plus size={16} strokeWidth={2.5} />
+            Đăng sản phẩm
           </Button>
         </div>
       </div>
@@ -246,26 +243,29 @@ const ProductManagement = () => {
                 </div>
               </div>
 
-              <div className="p-6 flex-1 flex flex-col">
-                <div className="flex flex-col mb-6">
-                    <span className="text-[10px] font-black text-blue-500 uppercase tracking-widest mb-1.5">Sản phẩm hệ thống</span>
-                    <h3 className="font-black text-slate-900 leading-tight line-clamp-2 min-h-[2.5rem] group-hover:text-blue-600 transition-colors uppercase text-sm tracking-tight">{p.title}</h3>
+              <div className="p-5 flex-1 flex flex-col justify-between">
+                <div className="flex flex-col mb-4">
+                    <span className="text-[12px] font-medium text-slate-500 mb-1">Sản phẩm hệ thống</span>
+                    <h3 className="font-semibold text-slate-900 text-[14px] leading-snug line-clamp-2">{p.title}</h3>
                 </div>
 
-                <div className="flex items-center justify-between pt-6 border-t border-slate-50 mt-auto">
-                   <button
-                        onClick={() => handleEdit(p)}
-                        className="flex-1 h-12 rounded-2xl bg-slate-50 text-slate-900 hover:bg-slate-900 hover:text-white transition-all flex items-center justify-center gap-2 font-black uppercase tracking-widest text-[10px] border border-transparent shadow-sm"
-                    >
-                        <Edit size={14} />
-                        Cập nhật
-                    </button>
-                    <button
-                        onClick={() => handleDelete(p)}
-                        className="w-12 h-12 ml-3 rounded-2xl bg-white text-slate-300 hover:text-red-500 hover:bg-red-50 transition-all flex items-center justify-center border border-slate-100"
-                    >
-                        <Trash2 size={18} />
-                    </button>
+                <div className="flex items-center justify-end pt-4 border-t border-slate-100 gap-2">
+                   <Button 
+                     type="text"
+                     onClick={() => handleEdit(p)}
+                     className="w-9 h-9 rounded-xl flex items-center justify-center text-amber-500 hover:bg-amber-50 transition-all p-0"
+                     title="Chỉnh sửa"
+                   >
+                     <Edit size={18} strokeWidth={2.5} />
+                   </Button>
+                   <Button 
+                     type="text"
+                     onClick={() => handleDelete(p)}
+                     className="w-9 h-9 rounded-xl flex items-center justify-center text-red-500 hover:bg-red-50 transition-all p-0"
+                     title="Gỡ bỏ"
+                   >
+                     <Trash2 size={18} strokeWidth={2.5} />
+                   </Button>
                 </div>
               </div>
             </div>
@@ -274,35 +274,25 @@ const ProductManagement = () => {
       </div>
 
       {pagination.total > 0 && (
-        <div className="bg-white p-8 rounded-[3rem] border border-slate-100 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-8">
-          <div className="px-8 py-3.5 bg-slate-50 rounded-[1.5rem] text-[11px] font-black text-slate-400 uppercase tracking-widest shadow-inner">
-            Dữ liệu sản phẩm 
-            <span className="text-slate-900 mx-3">{Math.min(pagination.total, (pagination.current - 1) * pagination.pageSize + 1)} — {Math.min(pagination.current * pagination.pageSize, pagination.total)}</span>
-            <span className="mx-2 text-slate-200">/</span>
-            {pagination.total} Bản ghi
+        <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div className="px-5 py-2.5 bg-slate-50 border border-slate-100 rounded-2xl text-[11px] font-black text-slate-600 uppercase tracking-widest shadow-sm flex items-center gap-2">
+             <span>{Math.min(pagination.total, (pagination.current - 1) * pagination.pageSize + 1)} — {Math.min(pagination.current * pagination.pageSize, pagination.total)}</span>
+             <span className="text-slate-200">/</span>
+             <span className="text-slate-500">{pagination.total} Bản ghi</span>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <Button
-              className="h-14 w-14 flex items-center justify-center rounded-2xl bg-white border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-600 transition-all shadow-sm"
+              className="h-10 w-10 flex items-center justify-center rounded-xl bg-white border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-600 transition-all shadow-sm p-0"
               disabled={pagination.current === 1}
               onClick={() => handlePageChange(pagination.current - 1)}
-              icon={<ChevronLeft size={24} />}
+              icon={<ChevronLeft size={20} />}
             />
-            <div className="flex items-center bg-white border border-slate-100 rounded-[1.5rem] p-1 shadow-sm font-black text-xs h-14">
-              <span className="w-12 h-12 flex items-center justify-center bg-slate-900 text-white rounded-2xl shadow-xl shadow-slate-200">
-                {pagination.current}
-              </span>
-              <span className="px-6 text-[10px] uppercase tracking-[0.2em] text-slate-300">Của</span>
-              <span className="w-12 h-12 flex items-center justify-center bg-slate-50 text-slate-500 rounded-2xl">
-                {Math.ceil(pagination.total / pagination.pageSize) || 1}
-              </span>
-            </div>
             <Button
-              className="h-14 w-14 flex items-center justify-center rounded-2xl bg-white border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-600 transition-all shadow-sm"
+              className="h-10 w-10 flex items-center justify-center rounded-xl bg-white border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-600 transition-all shadow-sm p-0"
               disabled={pagination.current >= Math.ceil(pagination.total / pagination.pageSize)}
               onClick={() => handlePageChange(pagination.current + 1)}
-              icon={<ChevronRight size={24} />}
+              icon={<ChevronRight size={20} />}
             />
           </div>
         </div>

@@ -14,7 +14,7 @@ const getStatusBadge = (status) => {
   const style = styles[normalizedStatus] || styles.PENDING;
 
   return (
-    <span className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border ${style.bg} ${style.text} ${style.border}`}>
+    <span className={`px-2.5 py-1 rounded-lg text-[12px] font-medium border ${style.bg} ${style.text} ${style.border}`}>
       {style.label}
     </span>
   );
@@ -49,69 +49,68 @@ const AdminRecentBookings = () => {
   };
 
   if (loading) return (
-     <div className="p-8 space-y-6">
-        {[1,2,3,4].map(i => <div key={i} className="h-24 bg-slate-50 rounded-3xl animate-pulse"></div>)}
+     <div className="p-6 space-y-4">
+        {[1,2,3,4].map(i => <div key={i} className="h-20 bg-slate-50 rounded-2xl animate-pulse"></div>)}
      </div>
   );
 
   return (
-    <div className="p-2 md:p-4">
-      <div className="flex items-center justify-between mb-10 px-4">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
-            <History size={24} />
+    <div className="p-6">
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+            <History size={20} />
           </div>
           <div>
-              <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">Giao dịch gần đây</h3>
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-0.5">Thời gian thực các yêu cầu đặt lịch</p>
+              <h3 className="text-[17px] font-semibold text-slate-900 leading-tight">Giao dịch gần đây</h3>
+              <p className="text-[13px] font-medium text-slate-500 mt-0.5">Thời gian thực các yêu cầu đặt lịch</p>
           </div>
         </div>
-        <Link to="/admin/bookings" className="h-12 px-6 flex items-center gap-3 bg-slate-50 hover:bg-slate-900 text-slate-600 hover:text-white rounded-2xl transition-all duration-300 group font-black uppercase text-[10px] tracking-widest">
-          Toàn bộ lịch sử <ChevronRight size={14} className="transition-transform group-hover:translate-x-1" />
+        <Link to="/admin/bookings" className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 hover:bg-slate-100 text-[13px] font-medium text-slate-700 rounded-lg transition-all group">
+          Tất cả <ChevronRight size={16} className="text-slate-400 group-hover:text-slate-600 transition-colors" />
         </Link>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
         {bookings.length > 0 ? (
           bookings.map((booking) => (
-            <div key={booking.id} className="flex flex-col xl:flex-row xl:items-center justify-between p-6 rounded-[2.5rem] bg-slate-50 border border-transparent hover:border-slate-100 hover:bg-white hover:shadow-2xl hover:shadow-slate-200/50 transition-all duration-500 gap-6 group">
-              <div className="flex items-center gap-6">
+            <div key={booking.id} className="flex flex-col xl:flex-row xl:items-center justify-between p-4 rounded-2xl bg-white border border-slate-100 hover:border-slate-200 hover:shadow-sm transition-all duration-300 gap-4 group">
+              <div className="flex items-center gap-4">
                 <div className="relative">
                     <img
-                      className="w-16 h-16 rounded-[1.5rem] object-cover ring-4 ring-white shadow-xl transition-transform group-hover:scale-95 duration-500"
+                      className="w-12 h-12 rounded-full object-cover ring-2 ring-slate-50 shadow-sm"
                       src={
                         booking.user?.avatar ||
                         `https://ui-avatars.com/api/?name=${
                           booking.user?.fullName || "User"
-                        }&background=0f172a&color=fff&bold=true`
+                        }&background=f8fafc&color=334155`
                       }
                       alt={booking.user?.fullName}
                     />
-                    <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 border-4 border-white rounded-full"></div>
+                    <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[10px] font-black text-blue-500 uppercase tracking-widest mb-1">Customer Record</span>
-                  <h4 className="font-black text-slate-900 uppercase text-sm tracking-tight group-hover:text-blue-600 transition-colors">{booking.user?.fullName || "Khách vãng lai"}</h4>
-                  <p className="text-[11px] font-bold text-slate-400 mt-1">{booking.service?.name || "Dịch vụ thường"}</p>
+                  <h4 className="font-semibold text-slate-900 text-[14px] leading-tight group-hover:text-blue-600 transition-colors">{booking.user?.fullName || "Khách vãng lai"}</h4>
+                  <p className="text-[13px] font-medium text-slate-500 mt-0.5">{booking.service?.name || "Dịch vụ thường"}</p>
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center gap-x-12 gap-y-4">
-                <div className="flex flex-col gap-1.5">
-                  <div className="flex items-center gap-2.5 text-[10px] font-black text-slate-900 uppercase tracking-widest">
-                    <Calendar size={14} className="text-slate-400" />
+              <div className="flex flex-wrap items-center xl:w-[500px] justify-between gap-4">
+                <div className="flex flex-col gap-1 w-[180px]">
+                  <div className="flex items-center gap-2 text-[13px] font-medium text-slate-700">
+                    <Calendar size={16} className="text-slate-400" />
                     <span>{booking.bookingDate || "N/A"}</span>
                   </div>
-                  <div className="flex items-center gap-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                    <Clock size={14} className="text-slate-400" />
+                  <div className="flex items-center gap-2 text-[13px] font-medium text-slate-500">
+                    <Clock size={16} className="text-slate-400" />
                     <span>
                       {booking.startTime} - {booking.endTime}
                     </span>
                   </div>
                 </div>
 
-                <div className="flex flex-col items-end gap-2.5 min-w-[140px]">
-                  <span className="text-lg font-black text-slate-900 tracking-tight">
+                <div className="flex flex-col items-end gap-1.5 min-w-[120px]">
+                  <span className="text-[15px] font-semibold text-slate-900">
                     {new Intl.NumberFormat("vi-VN", {
                       style: "currency",
                       currency: "VND",
@@ -120,18 +119,18 @@ const AdminRecentBookings = () => {
                   {getStatusBadge(booking.status)}
                 </div>
                 
-                <button className="w-12 h-12 rounded-2xl bg-white border border-slate-100 flex items-center justify-center text-slate-300 hover:text-slate-900 transition-all opacity-0 group-hover:opacity-100">
-                    <MoreHorizontal size={20} />
-                </button>
+                <Link to="/admin/bookings" className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 hidden xl:flex items-center justify-center text-slate-400 hover:text-blue-600 hover:bg-blue-50 hover:border-blue-100 transition-all">
+                    <ChevronRight size={18} />
+                </Link>
               </div>
             </div>
           ))
         ) : (
-          <div className="flex flex-col items-center justify-center py-20 text-slate-400 bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-100">
-            <div className="w-20 h-20 rounded-[2rem] bg-white shadow-sm flex items-center justify-center mb-6">
-                <Calendar size={32} strokeWidth={1} className="opacity-20" />
+          <div className="flex flex-col items-center justify-center py-12 text-slate-400 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+            <div className="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center mb-4">
+                <Calendar size={24} strokeWidth={1.5} className="text-slate-300" />
             </div>
-            <p className="text-[10px] font-black uppercase tracking-[0.2em]">Hiện chưa có bản ghi đặt lịch mới</p>
+            <p className="text-[13px] font-medium">Hiện chưa có bản ghi đặt lịch mới</p>
           </div>
         )}
       </div>

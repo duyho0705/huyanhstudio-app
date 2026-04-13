@@ -160,22 +160,22 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
+    <div className="space-y-6 animate-in fade-in duration-500">
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {cards.map((card, index) => (
           <Link
             key={index}
             to={card.link}
-            className={`p-6 rounded-2xl border transition-all hover:shadow-lg group ${getColorClasses(card.color)} bg-white`}
+            className={`p-4 rounded-xl border border-slate-200 transition-all hover:border-slate-300 hover:shadow-sm group bg-white`}
           >
             <div className="flex items-center gap-4">
-              <div className={`p-4 rounded-xl transition-transform group-hover:scale-110 ${getIconBg(card.color)}`}>
+              <div className={`w-12 h-12 flex items-center justify-center rounded-lg transition-transform ${getColorClasses(card.color)}`}>
                 {card.icon}
               </div>
               <div className="flex flex-col">
-                <span className="text-sm font-semibold text-slate-500 group-hover:text-slate-900 transition-colors uppercase tracking-wider">{card.title}</span>
-                <span className="text-3xl font-black text-slate-900">{card.value}</span>
+                <span className="text-[13px] font-medium text-slate-500 group-hover:text-slate-600 transition-colors">{card.title}</span>
+                <span className="text-2xl font-semibold text-slate-900 leading-tight">{card.value}</span>
               </div>
             </div>
           </Link>
@@ -183,40 +183,40 @@ const AdminDashboard = () => {
       </div>
 
       {/* Quick Actions */}
-      <section className="bg-white p-6 md:p-8 rounded-3xl border border-slate-100 shadow-sm">
-        <div className="flex items-center gap-2 mb-6">
-          <div className="w-1.5 h-6 bg-blue-500 rounded-full"></div>
-          <h2 className="text-xl font-bold text-slate-900">Thao tác nhanh</h2>
+      <section className="bg-white p-5 md:p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <div className="flex items-center gap-2 mb-4">
+          <div className="w-1 h-5 bg-blue-500 rounded-full"></div>
+          <h2 className="text-[16px] font-semibold text-slate-900">Thao tác nhanh</h2>
         </div>
-        
+
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {quickActions.map((action, index) => (
             <Link
               key={index}
               to={action.link}
-              className={`flex flex-col items-center gap-3 p-6 rounded-2xl border border-transparent transition-all hover:shadow-md group ${getColorClasses(action.color)}`}
+              className={`flex flex-col items-center gap-2 p-4 rounded-xl border border-slate-100 transition-all hover:bg-slate-50 group hover:border-slate-200`}
             >
-              <div className={`p-3 rounded-xl transition-all group-hover:bg-white group-hover:shadow-sm ${getIconBg(action.color)}`}>
+              <div className={`p-2 rounded-lg transition-all ${getColorClasses(action.color)}`}>
                 {action.icon}
               </div>
-              <span className="text-sm font-bold">{action.title}</span>
+              <span className="text-[14px] font-medium text-slate-700">{action.title}</span>
             </Link>
           ))}
         </div>
       </section>
 
       {/* Analytics & Popular Services Grid */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-        <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
           <AdminRevenueChart />
         </div>
-        <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
           <AdminPopularServices />
         </div>
       </div>
 
       {/* Recent Bookings */}
-      <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         <AdminRecentBookings />
       </div>
     </div>

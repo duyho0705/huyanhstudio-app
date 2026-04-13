@@ -47,19 +47,13 @@ export const useBookingManagement = () => {
       // Combine for API call
       const searchQuery = { ...paginationParams, ...filterBody };
 
-      console.log("👉 Fetching page:", pagination.current, "| Query:", searchQuery);
-
       // Call API
       const response = await bookingApi.admin.getAll(searchQuery);
-
-      console.log("📦 API Response:", response);
 
       // Parse response
       const responseData = response.data || response;
       const bookingsList = responseData.list || responseData.content || [];
       const totalElements = responseData.totalElements || responseData.totalItems || 0;
-
-      console.log("✅ Got", bookingsList.length, "bookings, total:", totalElements);
 
       // Remove duplicates and update state
       const uniqueBookings = Array.isArray(bookingsList)
@@ -100,8 +94,6 @@ export const useBookingManagement = () => {
   const handleDateRangeChange = (dates) => {
     const fromDate = dates ? dates[0].format("YYYY-MM-DD") : null;
     const toDate = dates ? dates[1].format("YYYY-MM-DD") : null;
-    
-    console.log("Date range changed:", { fromDate, toDate });
     
     setFilters((prev) => ({
       ...prev,

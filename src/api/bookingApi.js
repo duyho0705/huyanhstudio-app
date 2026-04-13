@@ -9,10 +9,13 @@ const bookingApi = {
   },
 
   admin: {
-    getAll: (params) => axiosClient.post("/bookings/search", params, {
-      params: { page: params.pageNumber, size: params.pageSize }
-    }),
-    create: (data) => axiosClient.post("/bookings", data),
+    getAll: (params) => {
+      const { pageNumber, pageSize, ...filterBody } = params;
+      return axiosClient.post("/bookings/search", filterBody, {
+        params: { page: pageNumber, size: pageSize }
+      });
+    },
+    create: (data) => axiosClient.post("/bookings/admin-create", data),
     update: (id, data) => axiosClient.put(`/bookings/${id}`, data),
     delete: (ids) => axiosClient.delete(`/bookings/${ids}`),
     updateStatus: (id, status) => axiosClient.put("/bookings/status", {

@@ -46,51 +46,50 @@ const ProductForm = ({ open, onCancel, onSubmit, initialValues }) => {
             <Video size={20} />
           </div>
           <div>
-            <h3 className="text-lg font-black text-slate-900 uppercase tracking-tight">
+            <h3 className="text-[18px] font-semibold text-slate-900 leading-tight">
               {initialValues ? "Cập nhật sản phẩm" : "Thêm sản phẩm mới"}
             </h3>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Quản lý kho nội dung Video</p>
+            <p className="text-[13px] font-medium text-slate-500 mt-0.5">Quản lý kho nội dung video</p>
           </div>
         </div>
       }
       open={open}
       onOk={handleSubmit}
       onCancel={onCancel}
-      okText={initialValues ? "Cập nhật ngay" : "Tạo sản phẩm"}
-      cancelText="Hủy bỏ"
+      okText={initialValues ? "Cập nhật" : "Tạo mới"}
+      cancelText="Hủy"
       width={600}
       okButtonProps={{
-        className: "h-12 px-8 rounded-xl bg-slate-900 border-none font-black uppercase tracking-widest text-xs hover:bg-slate-800 transition-all"
+        className: "h-10 px-6 rounded-xl bg-slate-900 border-none font-semibold text-[14px] text-white hover:bg-slate-800 transition-all shadow-sm"
       }}
       cancelButtonProps={{
-        className: "h-12 px-8 rounded-xl font-bold text-xs"
+        className: "h-10 px-6 rounded-xl font-medium text-[14px] text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all"
       }}
       centered
-      className="custom-admin-modal"
     >
       <Form form={form} layout="vertical" className="pt-6 space-y-4">
         <Form.Item
           name="title"
-          label={<span className="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Tiêu đề sản phẩm</span>}
+          label={<span className="text-[13px] font-semibold text-slate-700">Tiêu đề sản phẩm</span>}
           rules={[{ required: true, message: "Vui lòng nhập tiêu đề!" }]}
         >
           <Input
             placeholder="Ví dụ: Clip Highlight Đám Cưới Huy & Anh"
-            className="h-12 px-5 bg-slate-50 border-slate-200 rounded-xl focus:bg-white focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all font-medium"
+            className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-medium text-[14px]"
           />
         </Form.Item>
 
         <Form.Item
           name="videoUrl"
-          label={<span className="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Đường dẫn Youtube</span>}
+          label={<span className="text-[13px] font-semibold text-slate-700">Đường dẫn Youtube</span>}
           rules={[
             { required: true, message: "Vui lòng nhập đường dẫn video!" },
           ]}
         >
           <Input
-            prefix={<Youtube size={18} className="text-red-500 mr-2" />}
+            prefix={<Youtube size={16} className="text-red-500 mr-1" />}
             placeholder="youtube.com/watch?v=..."
-            className="h-12 px-5 bg-slate-50 border-slate-200 rounded-xl focus:bg-white focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all font-medium"
+            className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-medium text-[14px]"
           />
         </Form.Item>
 
@@ -104,15 +103,15 @@ const ProductForm = ({ open, onCancel, onSubmit, initialValues }) => {
             const videoId = getVideoId(url);
 
             return videoId ? (
-              <div className="mt-4 p-5 bg-slate-50 rounded-2xl border border-slate-200 animate-in fade-in slide-in-from-top-4 duration-500">
-                <div className="flex items-center justify-between mb-4 px-1">
-                  <div className="flex items-center gap-2 text-[10px] font-black text-green-600 uppercase tracking-widest">
-                    <CheckCircle size={14} />
+              <div className="mt-2 p-5 bg-slate-50 rounded-2xl border border-slate-100 animate-in fade-in slide-in-from-top-4 duration-500">
+                <div className="flex items-center justify-between mb-3 px-1">
+                  <div className="flex items-center gap-2 text-[13px] font-semibold text-green-600">
+                    <CheckCircle size={16} />
                     Link hợp lệ
                   </div>
-                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">ID: {videoId}</div>
+                  <div className="text-[13px] font-medium text-slate-400 cursor-copy" title="Video ID">{videoId}</div>
                 </div>
-                <div className="relative aspect-video rounded-xl overflow-hidden shadow-2xl shadow-blue-900/10 border-4 border-white">
+                <div className="relative aspect-video rounded-xl overflow-hidden border border-slate-200 shadow-sm">
                   <img
                     src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
                     alt="Preview"
@@ -126,9 +125,9 @@ const ProductForm = ({ open, onCancel, onSubmit, initialValues }) => {
                 </div>
               </div>
             ) : url ? (
-              <div className="mt-4 p-4 bg-red-50 rounded-2xl border border-red-100 flex items-center gap-3 text-red-600 animate-in fade-in duration-300">
-                <AlertCircle size={18} />
-                <span className="text-[11px] font-bold uppercase tracking-wider">Đường dẫn không hợp lệ hoặc không được hỗ trợ</span>
+              <div className="mt-2 p-4 bg-red-50 rounded-xl border border-red-100 flex items-center gap-2 text-red-600 animate-in fade-in duration-300">
+                <AlertCircle size={16} />
+                <span className="text-[13px] font-medium">Đường dẫn không hợp lệ hoặc không được hỗ trợ</span>
               </div>
             ) : null;
           }}
