@@ -290,7 +290,7 @@ const BookingManagement = () => {
               </span>
             )}
           </div>
-        )
+        ),
       },
       {
         title: <span className="text-[15px] font-semibold text-slate-600">Số điện thoại</span>,
@@ -301,7 +301,7 @@ const BookingManagement = () => {
           <span className="text-slate-600 text-[15px] font-semibold">
             {phone}
           </span>
-        )
+        ),
       },
       {
         title: <span className="text-[15px] font-semibold text-slate-600">Ngày thu</span>,
@@ -341,7 +341,6 @@ const BookingManagement = () => {
         key: "status",
         width: 180,
         render: (status, record) => {
-          const statusConfig = bookingStatuses.find(s => s.value === status);
           return (
             <Select
               value={status}
@@ -361,7 +360,6 @@ const BookingManagement = () => {
           );
         },
       },
-
       {
         title: <span className="text-[15px] font-semibold text-slate-600">Thao tác</span>,
         key: "actions",
@@ -402,7 +400,7 @@ const BookingManagement = () => {
   );
 
   return (
-    <div className="space-y-8 animate-in ftransition-all duration-500">
+    <div className="space-y-8 animate-in transition-all duration-500">
       {messageContext}
 
       {/* Stats Section */}
