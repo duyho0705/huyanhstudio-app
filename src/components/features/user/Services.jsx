@@ -63,8 +63,8 @@ const Services = () => {
               }`}
           >
             {service.isPremium && (
-              <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-[#6CD1FD] text-[#35104C] px-6 py-2 rounded-full text-sm font-black uppercase tracking-tighter shadow-lg">
-                Recommended
+              <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-[#6CD1FD] text-[#35104C] px-6 py-2 rounded-full text-[15px] font-bold shadow-lg">
+                Gợi ý
               </div>
             )}
 

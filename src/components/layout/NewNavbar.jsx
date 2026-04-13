@@ -25,8 +25,8 @@ const NewNavbar = () => {
                 {/* Left Column */}
                 <div className="flex items-center gap-10">
                     <div className="hidden lg:flex items-center gap-8 text-[17px] font-semibold text-[#35104C]">
-                        <Link to="/products" className="transition-colors hover:text-[#6CD1FD]">Product</Link>
-                        <Link to="/services" className="transition-colors hover:text-[#6CD1FD]">Price and services</Link>
+                        <Link to="/products" className="transition-colors hover:text-[#6CD1FD]">Sản phẩm</Link>
+                        <Link to="/services" className="transition-colors hover:text-[#6CD1FD]">Dịch vụ & Bảng giá</Link>
                         <FiSearch className="text-xl cursor-pointer transition-colors hover:text-[#6CD1FD]" />
                     </div>
                 </div>
@@ -46,7 +46,7 @@ const NewNavbar = () => {
                 {/* Right Column */}
                 <div className="flex items-center justify-end gap-8">
                     <div className="hidden lg:flex items-center gap-8 text-[17px] font-semibold text-[#35104C]">
-                        <a href="#" className="transition-colors hover:text-[#6CD1FD]">About Us</a>
+                        <Link to="/about" className="transition-colors hover:text-[#6CD1FD]">Về chúng tôi</Link>
                         {!user ? (
                             <button
                                 onClick={() => setShowLoginModal(true, "login")}

@@ -12,7 +12,7 @@ const Account = () => {
 
   useEffect(() => {
     if (!user) return;
-    setCustomerName(user.name || "");
+    setCustomerName(user.customerName || "");
     setPhone(user.phone || "");
     setEmail(user.email || "");
   }, [user]);
