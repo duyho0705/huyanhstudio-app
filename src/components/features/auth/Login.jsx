@@ -320,27 +320,33 @@ const Login = ({ onClose, initialMode = "login" }) => {
           <div className="flex-1 h-[1px] bg-gray-100"></div>
         </div>
 
-        {/* Social Logins */}
-        <div className="flex gap-4">
+        {/* Social Logins - Premium Styled */}
+        <div className="flex flex-col sm:flex-row gap-3">
           <button
             type="button"
             onClick={() => {
-              const baseUrl = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') || 'http://localhost:8080';
+              const baseUrl = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") || "http://localhost:8080";
               window.location.href = `${baseUrl}/oauth2/authorization/google`;
             }}
-            className="flex-1 flex items-center justify-center gap-3 py-3.5 rounded-full border border-gray-200 text-[14px] font-bold text-[#35104C] hover:bg-gray-50 transition-all active:scale-95"
+            className="flex-1 flex items-center justify-center gap-3 py-3.5 rounded-[18px] border border-slate-100 text-[14px] font-bold text-[#35104C] bg-white hover:bg-slate-50 hover:border-slate-200 hover:shadow-lg hover:shadow-slate-100 transition-all active:scale-[0.98]"
           >
-            <FcGoogle size={20} /> Google
+            <div className="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center">
+              <FcGoogle size={18} />
+            </div>
+            <span>Tiếp tục với Google</span>
           </button>
           <button
             type="button"
             onClick={() => {
-              const baseUrl = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') || 'http://localhost:8080';
+              const baseUrl = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") || "http://localhost:8080";
               window.location.href = `${baseUrl}/oauth2/authorization/facebook`;
             }}
-            className="flex-1 flex items-center justify-center gap-3 py-3.5 rounded-full border border-gray-200 text-[14px] font-bold text-[#35104C] hover:bg-gray-50 transition-all active:scale-95"
+            className="flex-1 flex items-center justify-center gap-3 py-3.5 rounded-[18px] border border-blue-50 text-[14px] font-bold text-white bg-[#1877F2] hover:bg-[#166fe5] hover:shadow-lg hover:shadow-blue-200 transition-all active:scale-[0.98]"
           >
-            <FaFacebookF className="text-blue-600" size={18} /> Facebook
+            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+              <FaFacebookF size={16} />
+            </div>
+            <span>Tiếp tục với Facebook</span>
           </button>
         </div>
 
