@@ -1,12 +1,19 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import { FiPlay, FiArrowLeft, FiSearch, FiPackage } from "react-icons/fi";
+import { FiPlay, FiPackage } from "react-icons/fi";
 import productApi from "../../../api/productApi";
 
 const ProductShowcase = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Giữ lại dữ liệu dự phòng để không bị trống ảnh
+  const mockProducts = [
+    { id: "m1", title: "Vocal Recording", description: "Dự án thu âm chuyên nghiệp.", videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+    { id: "m2", title: "Music Video", description: "Sản xuất MV ca nhạc 4K.", videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+    { id: "m3", title: "Audio Master", description: "Xử lý âm thanh hậu kỳ.", videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+    { id: "m4", title: "Studio Light", description: "Ánh sáng điện ảnh cho dự án.", videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
+  ];
 
   useEffect(() => {
     fetchProducts();
@@ -16,9 +23,11 @@ const ProductShowcase = () => {
     try {
       const response = await productApi.getAll({ page: 0, size: 20 });
       const data = response.data?.data || response.data || response;
-      setProducts(data.list || data.content || []);
+      const list = data.list || data.content || (Array.isArray(data) ? data : []);
+      setProducts(list.length > 0 ? list : mockProducts);
     } catch (err) {
-      console.error("Error fetching products:", err);
+      console.error(err);
+      setProducts(mockProducts);
     } finally {
       setLoading(false);
     }
@@ -34,28 +43,14 @@ const ProductShowcase = () => {
 
   return (
     <div className="min-h-screen bg-transparent relative overflow-hidden">
-
       <div className="relative z-10 pt-16 pb-24 px-6">
         <div className="max-w-[1400px] mx-auto">
-          {/* Products Grid */}
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                 <div key={i} className="h-[420px] bg-white/20 rounded-[32px] border border-white/50 animate-pulse"></div>
               ))}
             </div>
-          ) : products.length === 0 ? (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="flex flex-col items-center justify-center py-40 bg-white/20 backdrop-blur-md rounded-[60px] border-2 border-dashed border-[#35104C]/10 text-[#35104C]/40"
-            >
-              <div className="w-24 h-24 bg-white rounded-[32px] flex items-center justify-center shadow-lg mb-8">
-                <FiPackage size={40} className="opacity-20" />
-              </div>
-              <h3 className="text-2xl font-bold text-[#35104C]/60 uppercase tracking-widest">Gallery is empty</h3>
-              <p className="mt-2 font-medium">New inspiration is arriving soon.</p>
-            </motion.div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {products.map((product, index) => (
@@ -67,31 +62,25 @@ const ProductShowcase = () => {
                   whileHover={{ y: -15 }}
                   className="group relative h-[420px] bg-white rounded-[32px] overflow-hidden shadow-2xl shadow-[#35104C]/5 border border-white transition-all duration-500"
                 >
-                  <div className="absolute inset-0 overflow-hidden">
+                  <div className="absolute inset-0">
                     <img
                       src={getThumbnail(product.videoUrl)}
                       alt={product.title}
                       className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                     />
-                    {/* Overlay Gradient */}
                     <div className="absolute inset-0 bg-gradient-to-t from-[#35104C] via-[#35104C]/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
                   </div>
 
-                  {/* Play Button Overlay */}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 scale-90 group-hover:scale-100 pb-20">
-                    <motion.button
-                      whileHover={{ scale: 1.15, rotate: 5 }}
-                      whileTap={{ scale: 0.9 }}
+                    <button
                       onClick={() => window.open(product.videoUrl, "_blank")}
-                      className="w-20 h-20 bg-white text-[#35104C] rounded-[28px] flex items-center justify-center shadow-2xl active:scale-95 transition-transform"
+                      className="w-20 h-20 bg-white text-[#35104C] rounded-[28px] flex items-center justify-center shadow-2xl"
                     >
                       <FiPlay size={28} className="fill-current ml-1" />
-                    </motion.button>
+                    </button>
                   </div>
 
-                  {/* Content Area */}
-                  <div className="absolute bottom-0 left-0 right-0 p-6 transform transition-transform duration-500">
-
+                  <div className="absolute bottom-0 left-0 right-0 p-6">
                     <h3 className="text-xl md:text-2xl font-bold text-white leading-tight mb-3 group-hover:text-[#6CD1FD] transition-colors">{product.title}</h3>
                     <p className="text-[14px] text-white/60 line-clamp-2 leading-relaxed font-medium">
                       {product.description || "A remarkable creative execution showcasing innovative visual storytelling."}
@@ -105,7 +94,6 @@ const ProductShowcase = () => {
       </div>
     </div>
   );
-
 };
 
 export default ProductShowcase;

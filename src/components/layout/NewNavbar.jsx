@@ -16,7 +16,8 @@ const NewNavbar = () => {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    const isLandingPage = location.pathname === "/";
+    const navLinkClass = "relative py-1 group transition-all duration-300";
+    const underlineClass = "absolute -bottom-0.5 left-0 w-0 h-0.5 bg-[#35104C] transition-all duration-300 group-hover:w-full rounded-full";
 
     return (
         <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 px-8 py-3.5 ${scrolled ? "bg-white/90 backdrop-blur-lg shadow-md border-b border-gray-100" : "bg-transparent"
@@ -25,8 +26,18 @@ const NewNavbar = () => {
                 {/* Left Column */}
                 <div className="flex items-center gap-10">
                     <div className="hidden lg:flex items-center gap-8 text-[17px] font-semibold text-[#35104C]">
-                        <Link to="/products" className="transition-colors hover:text-[#6CD1FD]">Sản phẩm</Link>
-                        <Link to="/services" className="transition-colors hover:text-[#6CD1FD]">Dịch vụ & Bảng giá</Link>
+                        <Link to="/products" className={navLinkClass}>
+                            Sản phẩm
+                            <span className={underlineClass}></span>
+                        </Link>
+                        <Link to="/services" className={navLinkClass}>
+                            Dịch vụ & Bảng giá
+                            <span className={underlineClass}></span>
+                        </Link>
+                        <Link to="/booking" className={navLinkClass}>
+                            Đặt lịch
+                            <span className={underlineClass}></span>
+                        </Link>
                         <FiSearch className="text-xl cursor-pointer transition-colors hover:text-[#6CD1FD]" />
                     </div>
                 </div>
@@ -46,13 +57,17 @@ const NewNavbar = () => {
                 {/* Right Column */}
                 <div className="flex items-center justify-end gap-8">
                     <div className="hidden lg:flex items-center gap-8 text-[17px] font-semibold text-[#35104C]">
-                        <Link to="/about" className="transition-colors hover:text-[#6CD1FD]">Về chúng tôi</Link>
+                        <Link to="/about" className={navLinkClass}>
+                            Về chúng tôi
+                            <span className={underlineClass}></span>
+                        </Link>
                         {!user ? (
                             <button
                                 onClick={() => setShowLoginModal(true, "login")}
-                                className="transition-colors font-bold hover:text-[#6CD1FD]"
+                                className={`${navLinkClass} font-bold`}
                             >
                                 Đăng nhập
+                                <span className={underlineClass}></span>
                             </button>
                         ) : (
                             <div className="flex items-center gap-4 flex-nowrap">
@@ -68,14 +83,6 @@ const NewNavbar = () => {
                             </div>
                         )}
                     </div>
-                    {!user && (
-                        <button
-                            onClick={() => setShowLoginModal(true, "signup")}
-                            className="px-6 py-2.5 bg-[#6CD1FD] text-white rounded-[15px] text-[17px] font-bold transition-all transform shadow-sm hover:shadow-md active:scale-95"
-                        >
-                            Đăng ký
-                        </button>
-                    )}
                 </div>
             </div>
         </nav>

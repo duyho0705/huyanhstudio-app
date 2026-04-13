@@ -19,6 +19,7 @@ import DemoManagement from "./components/features/admin/DemoManagement";
 import ProductShowcase from "./components/features/user/ProductShowcase";
 import Services from "./components/features/user/Services";
 import AboutUs from "./components/features/user/AboutUs";
+import Booking from "./components/features/user/Booking";
 import OAuth2Callback from "./components/features/auth/OAuth2Callback";
 import LoginModal from "./components/features/auth/LoginModal";
 import { AnimatePresence, motion } from "framer-motion";
@@ -143,6 +144,21 @@ function AppContent() {
                     className="w-full"
                   >
                     <ProductShowcase />
+                  </motion.div>
+                }
+              />
+              <Route
+                path="/booking"
+                element={
+                  <motion.div
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    variants={pageVariants}
+                    transition={pageTransition}
+                    className="w-full"
+                  >
+                    <Booking />
                   </motion.div>
                 }
               />

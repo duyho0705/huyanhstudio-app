@@ -57,7 +57,7 @@ const Services = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 + 0.3 }}
             whileHover={{ y: -10 }}
-            className={`relative p-10 rounded-[48px] bg-white transition-all duration-300 flex flex-col ${service.isPremium
+            className={`relative p-10 rounded-[24px] bg-white transition-all duration-300 flex flex-col ${service.isPremium
               ? 'ring-4 ring-[#6CD1FD] shadow-2xl shadow-[#6CD1FD]/20 scale-105 z-10'
               : 'border border-gray-100 shadow-xl shadow-gray-200/50'
               }`}
