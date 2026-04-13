@@ -281,8 +281,15 @@ const BookingManagement = () => {
         dataIndex: "customerName",
         key: "customerName",
         width: 200,
-        render: (name) => (
-          <span className="text-slate-900 font-semibold text-[15px] tracking-tight leading-none mb-1">{name}</span>
+        render: (name, record) => (
+          <div className="flex flex-col">
+            <span className="text-slate-900 font-semibold text-[15px] tracking-tight leading-none mb-1">{name}</span>
+            {record.needConsultation && (
+              <span className="text-[10px] font-bold text-amber-500 flex items-center gap-1 uppercase tracking-wider">
+                <AlertCircle size={10} /> Cần tư vấn
+              </span>
+            )}
+          </div>
         )
       },
       {
@@ -613,12 +620,14 @@ const BookingManagement = () => {
                 </div>
                 <div>
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-[10px] font-black uppercase tracking-[0.2em] border border-blue-100">
-                      {selectedDetailBooking.bookingCode}
-                    </span>
                     <span className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-[0.2em] border ${bookingStatuses.find(s => s.value === selectedDetailBooking.status)?.classes}`}>
                       {bookingStatuses.find(s => s.value === selectedDetailBooking.status)?.label}
                     </span>
+                    {selectedDetailBooking.needConsultation && (
+                      <span className="px-3 py-1 bg-amber-50 text-amber-600 rounded-lg text-[10px] font-black uppercase tracking-[0.2em] border border-amber-100 flex items-center gap-1">
+                        <Phone size={10} /> Cần tư vấn
+                      </span>
+                    )}
                   </div>
                   <h2 className="text-3xl font-black text-slate-900 tracking-tight uppercase">{selectedDetailBooking.customerName}</h2>
                   <p className="text-slate-400 text-xs font-bold uppercase tracking-widest flex items-center gap-2 mt-1">

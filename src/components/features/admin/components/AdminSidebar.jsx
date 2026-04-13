@@ -6,7 +6,9 @@ import {
   Layers,
   Users,
   MonitorPlay,
-  ArrowRightCircle,
+  MessageCircle,
+  Music2,
+  Settings,
   ShieldCheck,
   ChevronRight,
   LogOut
@@ -26,6 +28,11 @@ const AdminSidebar = ({ isOpen, onClose }) => {
       end: true,
     },
     {
+      path: "/admin/chat",
+      icon: <MessageCircle size={20} />,
+      label: "Tin nhắn",
+    },
+    {
       path: "/admin/bookings",
       icon: <CalendarDays size={20} />,
       label: "Lịch thu âm",
@@ -40,11 +47,15 @@ const AdminSidebar = ({ isOpen, onClose }) => {
       icon: <Layers size={20} />,
       label: "Gói dịch vụ",
     },
-
+    {
+      path: "/admin/demos",
+      icon: <Music2 size={20} />,
+      label: "Quản lý Demo",
+    },
     {
       path: "/admin/users",
       icon: <Users size={20} />,
-      label: "Quản lý người dùng",
+      label: "Người dùng",
     },
   ];
 

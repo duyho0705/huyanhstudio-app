@@ -16,12 +16,14 @@ import ServiceManagement from "./components/features/admin/ServiceManagement";
 import StudioManagement from "./components/features/admin/StudioManagement";
 import UserManagement from "./components/features/admin/UserManagement";
 import DemoManagement from "./components/features/admin/DemoManagement";
+import ChatManagement from "./components/features/admin/ChatManagement";
 import ProductShowcase from "./components/features/user/ProductShowcase";
 import Services from "./components/features/user/Services";
 import AboutUs from "./components/features/user/AboutUs";
 import Booking from "./components/features/user/Booking";
 import OAuth2Callback from "./components/features/auth/OAuth2Callback";
 import LoginModal from "./components/features/auth/LoginModal";
+import ChatBox from "./components/features/chat/ChatBox";
 import { AnimatePresence, motion } from "framer-motion";
 
 const pageVariants = {
@@ -64,6 +66,7 @@ function AppContent() {
               <Route path="demos" element={<DemoManagement />} />
               <Route path="studios" element={<StudioManagement />} />
               <Route path="users" element={<UserManagement />} />
+              <Route path="chat" element={<ChatManagement />} />
             </Route>
             <Route path="/oauth2/redirect" element={<OAuth2Callback />} />
           </Routes>
@@ -172,6 +175,7 @@ function AppContent() {
         isOpen={showLoginModal}
         onClose={() => setShowLoginModal(false)}
       />
+      {!isAdminRoute && <ChatBox />}
     </>
   );
 }

@@ -23,6 +23,7 @@ const Booking = () => {
         customerName: "",
         phoneNumber: "",
         email: "",
+        needConsultation: false,
         note: ""
     });
 
@@ -102,6 +103,7 @@ const Booking = () => {
                 recordDate: formData.bookingDate.format("YYYY-MM-DD"),
                 studioRoomId: Number(formData.studioRoomId),
                 serviceIds: formData.serviceIds,
+                needConsultation: formData.needConsultation,
                 note: formData.note
             };
 
@@ -382,6 +384,32 @@ const Booking = () => {
                                     value={formData.note}
                                     onChange={(e) => setFormData({ ...formData, note: e.target.value })}
                                 ></textarea>
+                            </div>
+
+                            {/* consultation request */}
+                            <div className="flex items-center gap-3 px-2 py-2">
+                                <label className="flex items-center gap-3 cursor-pointer group">
+                                    <div className="relative">
+                                        <input
+                                            type="checkbox"
+                                            className="sr-only"
+                                            checked={formData.needConsultation}
+                                            onChange={(e) => setFormData({ ...formData, needConsultation: e.target.checked })}
+                                        />
+                                        <div className={`w-6 h-6 rounded-lg border-2 transition-all flex items-center justify-center ${
+                                            formData.needConsultation 
+                                            ? "bg-[#6CD1FD] border-[#6CD1FD] shadow-lg shadow-[#6CD1FD]/20" 
+                                            : "border-slate-200 bg-white group-hover:border-slate-300"
+                                        }`}>
+                                            {formData.needConsultation && (
+                                                <FiCheckCircle className="text-white" size={14} />
+                                            )}
+                                        </div>
+                                    </div>
+                                    <span className="text-[15px] font-semibold text-slate-600 transition-colors group-hover:text-slate-900">
+                                        Yêu cầu tư vấn qua điện thoại
+                                    </span>
+                                </label>
                             </div>
 
                             <motion.button
