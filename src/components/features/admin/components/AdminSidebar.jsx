@@ -44,7 +44,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
     {
       path: "/admin/users",
       icon: <Users size={20} />,
-      label: "Khách hàng",
+      label: "Quản lý người dùng",
     },
   ];
 
@@ -77,7 +77,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
             end={item.end}
             onClick={onClose}
             className={({ isActive }) =>
-              `flex items-center justify-between px-5 py-4 rounded-2xl transition-all duration-300 group leading-none ${isActive
+              `flex items-center justify-between px-5 py-4 rounded-none transition-all duration-300 group leading-none ${isActive
                 ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-500/20"
                 : "text-slate-500 hover:bg-white/5 hover:text-slate-100"
               }`
@@ -86,7 +86,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
             {({ isActive }) => (
               <>
                 <div className="flex items-center gap-4">
-                  <span className={`transition-transform duration-500 group-hover:scale-110`}>
+                  <span className={``}>
                     {item.icon}
                   </span>
                   <span className="text-[15px] font-semibold tracking-tight">{item.label}</span>

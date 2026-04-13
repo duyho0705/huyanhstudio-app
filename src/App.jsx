@@ -16,6 +16,8 @@ import ServiceManagement from "./components/features/admin/ServiceManagement";
 import StudioManagement from "./components/features/admin/StudioManagement";
 import UserManagement from "./components/features/admin/UserManagement";
 import DemoManagement from "./components/features/admin/DemoManagement";
+import ProductShowcase from "./components/features/user/ProductShowcase";
+import Services from "./components/features/user/Services";
 import OAuth2Callback from "./components/features/auth/OAuth2Callback";
 import LoginModal from "./components/features/auth/LoginModal";
 import { AnimatePresence, motion } from "framer-motion";
@@ -42,64 +44,97 @@ function AppContent() {
       <ScrollToHash />
       {!isAdminRoute && <NewNavbar />}
 
-      <AnimatePresence mode="wait">
-        <Routes location={location} key={location.pathname}>
-          <Route
-            path="/"
-            element={
-              <StudioBackground>
-                <motion.div
-                  initial="initial"
-                  animate="animate"
-                  exit="exit"
-                  variants={pageVariants}
-                  transition={pageTransition}
-                  className="w-full"
-                >
-                  <NewLandingPage />
-                </motion.div>
-              </StudioBackground>
-            }
-          />
-          <Route
-            path="/user"
-            element={
-              <StudioBackground>
-                <motion.div
-                  initial="initial"
-                  animate="animate"
-                  exit="exit"
-                  variants={pageVariants}
-                  transition={pageTransition}
-                  className="w-full"
-                >
-                  <User />
-                </motion.div>
-              </StudioBackground>
-            }
-          />
-
-          <Route path="/oauth2/redirect" element={<OAuth2Callback />} />
-
-          {/* Admin Routes */}
-          <Route
-            path="/admin"
-            element={
-              <AdminRoute>
-                <AdminLayout />
-              </AdminRoute>
-            }
-          >
-            <Route index element={<AdminDashboard />} />
-            <Route path="bookings" element={<BookingManagement />} />
-            <Route path="products" element={<ProductManagement />} />
-            <Route path="services" element={<ServiceManagement />} />
-            <Route path="demos" element={<DemoManagement />} />
-            <Route path="studios" element={<StudioManagement />} />
-            <Route path="users" element={<UserManagement />} />
-          </Route>
-        </Routes>
-      </AnimatePresence>
+      {isAdminRoute ? (
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            <Route
+              path="/admin"
+              element={
+                <AdminRoute>
+                  <AdminLayout />
+                </AdminRoute>
+              }
+            >
+              <Route index element={<AdminDashboard />} />
+              <Route path="bookings" element={<BookingManagement />} />
+              <Route path="products" element={<ProductManagement />} />
+              <Route path="services" element={<ServiceManagement />} />
+              <Route path="demos" element={<DemoManagement />} />
+              <Route path="studios" element={<StudioManagement />} />
+              <Route path="users" element={<UserManagement />} />
+            </Route>
+            <Route path="/oauth2/redirect" element={<OAuth2Callback />} />
+          </Routes>
+        </AnimatePresence>
+      ) : (
+        <StudioBackground>
+          <AnimatePresence mode="wait">
+            <Routes location={location} key={location.pathname}>
+              <Route
+                path="/"
+                element={
+                  <motion.div
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    variants={pageVariants}
+                    transition={pageTransition}
+                    className="w-full"
+                  >
+                    <NewLandingPage />
+                  </motion.div>
+                }
+              />
+              <Route
+                path="/user"
+                element={
+                  <motion.div
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    variants={pageVariants}
+                    transition={pageTransition}
+                    className="w-full"
+                  >
+                    <User />
+                  </motion.div>
+                }
+              />
+              <Route
+                path="/services"
+                element={
+                  <motion.div
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    variants={pageVariants}
+                    transition={pageTransition}
+                    className="w-full"
+                  >
+                    <Services />
+                  </motion.div>
+                }
+              />
+              <Route
+                path="/products"
+                element={
+                  <motion.div
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    variants={pageVariants}
+                    transition={pageTransition}
+                    className="w-full"
+                  >
+                    <ProductShowcase />
+                  </motion.div>
+                }
+              />
+              <Route path="/oauth2/redirect" element={<OAuth2Callback />} />
+            </Routes>
+          </AnimatePresence>
+        </StudioBackground>
+      )}
 
       <LoginModal
         isOpen={showLoginModal}

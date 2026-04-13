@@ -112,7 +112,7 @@ const AdminAccount = ({ onClose, isOpen }) => {
           </div>
           <div className="flex flex-col">
             <span className="text-sm font-bold text-slate-900">{notification.type === "error" ? "Lỗi cập nhật" : "Thành công"}</span>
-            <span className="text-xs text-slate-500 font-medium">{notification.message}</span>
+            <span className="text-xs text-slate-500 font-semibold">{notification.message}</span>
           </div>
         </div>
       )}

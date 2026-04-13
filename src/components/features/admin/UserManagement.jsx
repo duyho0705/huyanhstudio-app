@@ -315,24 +315,24 @@ const UserManagement = () => {
         align: "center",
         render: (_, record) => (
           <div className="flex items-center justify-center gap-2">
-            <Button 
-              type="text" 
+            <Button
+              type="text"
               onClick={() => handleViewDetails(record)}
               className="w-9 h-9 rounded-xl flex items-center justify-center text-blue-500 hover:bg-blue-50 transition-all p-0"
               title="Xem chi tiết"
             >
               <Search size={18} strokeWidth={2.5} />
             </Button>
-            <Button 
-              type="text" 
+            <Button
+              type="text"
               onClick={() => handleEdit(record)}
               className="w-9 h-9 rounded-xl flex items-center justify-center text-amber-500 hover:bg-amber-50 transition-all p-0"
               title="Chỉnh sửa"
             >
               <Edit size={18} strokeWidth={2.5} />
             </Button>
-            <Button 
-              type="text" 
+            <Button
+              type="text"
               onClick={() => messageApi.warning("Tính năng xóa tài khoản đang bảo trì")}
               className="w-9 h-9 rounded-xl flex items-center justify-center text-red-500 hover:bg-red-50 transition-all p-0"
               title="Xóa tài khoản"
@@ -358,7 +358,7 @@ const UserManagement = () => {
           { icon: <XCircle size={24} className="text-red-500" />, label: "Số tài khoản khóa", value: stats.inactive, config: "bg-red-50" },
           { icon: <ShieldAlert size={24} className="text-orange-500" />, label: "Quản trị viên", value: `${stats.admin}`, config: "bg-orange-50" }
         ].map((item, i) => (
-          <div key={i} className="bg-white p-7 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-5 transition-all hover:shadow-xl hover:shadow-slate-200/50 group">
+          <div key={i} className="bg-white p-7 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-5 transition-all hover:shadow-xl hover:shadow-slate-200/50 group">
             <div className={`w-14 h-14 rounded-2xl ${item.config} flex items-center justify-center transition-transform group-hover:scale-110`}>
               {item.icon}
             </div>
@@ -370,7 +370,7 @@ const UserManagement = () => {
         ))}
       </div>
 
-      <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm space-y-6">
+      <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-6">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-50">
           <div>
             <h2 className="text-[18px] font-semibold text-slate-900">Danh sách người dùng</h2>
@@ -379,13 +379,13 @@ const UserManagement = () => {
           <div className="flex flex-col sm:flex-row items-center gap-3">
             <div className="relative w-full sm:w-72">
               <Input
-                placeholder="Tìm kiếm danh tính, SĐT..."
-                className="h-10 pl-10 pr-4 bg-slate-50 border-none rounded-xl text-[14px] focus:bg-white focus:ring-2 focus:ring-slate-100 transition-all"
+                placeholder="Tìm theo tên hoặc điện thoại"
+                prefix={<Search size={18} className="text-slate-400" />}
+                className="h-11 border border-slate-300 rounded-xl text-[14px] font-semibold text-slate-900"
                 value={filters.search}
                 onChange={(e) => handleFilterChange("search", e.target.value)}
                 allowClear
               />
-              <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
             </div>
             <Button
               type="primary"
@@ -393,19 +393,18 @@ const UserManagement = () => {
               className="h-10 px-4 bg-slate-900 hover:bg-slate-800 rounded-xl border-none font-semibold text-[14px] shadow-sm flex items-center gap-2 transition-all"
             >
               <Plus size={16} strokeWidth={2.5} />
-              Thêm thành viên
+              Thêm người dùng
             </Button>
           </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
           <Select
-            placeholder="Vai trò hệ thống"
+            placeholder={<span className="font-semibold text-slate-600">Vai trò hệ thống</span>}
             value={filters.role}
             onChange={(val) => handleFilterChange("role", val)}
-            className="w-[180px] h-10 select-custom-xl rounded-xl"
+            className="w-[180px] h-10 rounded-xl"
             allowClear
-            variant="filled"
           >
             {roles.map((role) => (
               <Option key={role.value} value={role.value}>
@@ -415,12 +414,11 @@ const UserManagement = () => {
           </Select>
 
           <Select
-            placeholder="Trạng thái"
+            placeholder={<span className="font-semibold text-slate-600">Trạng thái</span>}
             value={filters.status}
             onChange={(val) => handleFilterChange("status", val)}
-            className="w-[180px] h-10 select-custom-xl rounded-xl"
+            className="w-[180px] h-10 rounded-xl"
             allowClear
-            variant="filled"
           >
             {statusOptions.map((status) => (
               <Option key={status.value.toString()} value={status.value}>
@@ -440,7 +438,7 @@ const UserManagement = () => {
           )}
         </div>
 
-        <div className="rounded-[2.5rem] border border-slate-100 overflow-hidden bg-white shadow-inner">
+        <div className="rounded-2xl border border-slate-100 overflow-hidden bg-white shadow-inner">
           <Table
             columns={columns}
             dataSource={users}
@@ -454,7 +452,7 @@ const UserManagement = () => {
               emptyText: (
                 <div className="py-24 flex flex-col items-center opacity-30">
                   <Users size={64} strokeWidth={1} className="mb-4" />
-                  <span className="text-sm font-black uppercase tracking-[0.2em]">Không có thành viên được tìm thấy</span>
+                  <span className="text-sm font-black uppercase tracking-[0.2em]">Không có người dùng được tìm thấy</span>
                 </div>
               )
             }}
@@ -489,13 +487,13 @@ const UserManagement = () => {
       </div>
 
       {notification.show && (
-        <div className="fixed bottom-10 right-10 z-[2000] px-8 py-5 bg-white rounded-3xl shadow-2xl border border-slate-100 flex items-center gap-5 animate-in slide-in-from-right duration-500">
+        <div className="fixed bottom-10 right-10 z-[2000] px-8 py-5 bg-white rounded-2xl shadow-2xl border border-slate-100 flex items-center gap-5 animate-in slide-in-from-right duration-500">
           <div className={`p-3 rounded-2xl ${notification.type === "success" ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"}`}>
             {notification.type === "success" ? <CheckCircle size={24} /> : <XCircle size={24} />}
           </div>
           <div>
             <h5 className="font-black text-slate-900 tracking-tight uppercase text-xs mb-0.5">{notification.type === "success" ? "HOÀN TẤT THAO TÁC" : "PHÁT HIỆN LỖI"}</h5>
-            <p className="text-xs text-slate-500 font-medium">{notification.message}</p>
+            <p className="text-xs text-slate-500 font-semibold">{notification.message}</p>
           </div>
         </div>
       )}
@@ -521,7 +519,7 @@ const UserManagement = () => {
           <div className="p-4 lg:p-12 space-y-12">
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 border-b border-slate-100 pb-12">
               <div className="flex items-center gap-8">
-                <div className="w-24 h-24 rounded-[2.5rem] bg-slate-900 border border-slate-700 flex items-center justify-center text-white shadow-2xl shadow-slate-300">
+                <div className="w-24 h-24 rounded-2xl bg-slate-900 border border-slate-700 flex items-center justify-center text-white shadow-2xl shadow-slate-300">
                   <User size={44} strokeWidth={1} />
                 </div>
                 <div>
@@ -536,7 +534,7 @@ const UserManagement = () => {
                   <h2 className="text-4xl font-black text-slate-900 tracking-tight uppercase leading-none">{selectedDetailUser.customerName}</h2>
                   <p className="text-slate-400 text-xs font-bold uppercase tracking-[0.2em] mt-3 flex items-center gap-2">
                     <Calendar size={14} className="text-blue-500" />
-                    Thành viên từ: {dayjs(selectedDetailUser.createdAt).format("DD/MM/YYYY")}
+                    Người dùng từ: {dayjs(selectedDetailUser.createdAt).format("DD/MM/YYYY")}
                   </p>
                 </div>
               </div>
@@ -602,7 +600,7 @@ const UserManagement = () => {
                   <h4 className="text-sm font-black text-slate-900 uppercase tracking-widest">Kênh liên lạc</h4>
                 </div>
 
-                <div className="bg-slate-50 p-8 rounded-[2rem] border border-slate-100 space-y-8 relative overflow-hidden">
+                <div className="bg-slate-50 p-8 rounded-2xl border border-slate-100 space-y-8 relative overflow-hidden">
                   <div className="flex items-center gap-4 relative z-10">
                     <div className="w-12 h-12 rounded-2xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-blue-500">
                       <Mail size={20} />

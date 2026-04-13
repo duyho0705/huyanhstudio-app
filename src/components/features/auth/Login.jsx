@@ -322,10 +322,24 @@ const Login = ({ onClose, initialMode = "login" }) => {
 
         {/* Social Logins */}
         <div className="flex gap-4">
-          <button className="flex-1 flex items-center justify-center gap-3 py-3.5 rounded-full border border-gray-200 text-[14px] font-bold text-[#35104C] hover:bg-gray-50 transition-all active:scale-95">
+          <button 
+            type="button"
+            onClick={() => {
+              const baseUrl = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') || 'http://localhost:8080';
+              window.location.href = `${baseUrl}/oauth2/authorization/google`;
+            }}
+            className="flex-1 flex items-center justify-center gap-3 py-3.5 rounded-full border border-gray-200 text-[14px] font-bold text-[#35104C] hover:bg-gray-50 transition-all active:scale-95"
+          >
             <FcGoogle size={20} /> Google
           </button>
-          <button className="flex-1 flex items-center justify-center gap-3 py-3.5 rounded-full border border-gray-200 text-[14px] font-bold text-[#35104C] hover:bg-gray-50 transition-all active:scale-95">
+          <button 
+            type="button"
+            onClick={() => {
+              const baseUrl = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') || 'http://localhost:8080';
+              window.location.href = `${baseUrl}/oauth2/authorization/facebook`;
+            }}
+            className="flex-1 flex items-center justify-center gap-3 py-3.5 rounded-full border border-gray-200 text-[14px] font-bold text-[#35104C] hover:bg-gray-50 transition-all active:scale-95"
+          >
             <FaFacebookF className="text-blue-600" size={18} /> Facebook
           </button>
         </div>

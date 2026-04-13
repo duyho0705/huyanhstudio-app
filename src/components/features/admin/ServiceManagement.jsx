@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import { message, Table, Button, Tag, Switch, Tooltip } from "antd";
-import { 
-  Edit, 
-  Trash2, 
-  Plus, 
-  ChevronLeft, 
-  ChevronRight, 
-  Briefcase, 
+import {
+  Edit,
+  Trash2,
+  Plus,
+  ChevronLeft,
+  ChevronRight,
+  Briefcase,
   Gem,
   Zap,
   Star
@@ -164,7 +164,7 @@ const ServiceManagement = () => {
         <div className="flex flex-wrap gap-1">
           {Array.isArray(benefitsList) && benefitsList.length > 0 ? (
             benefitsList.map((benefit, index) => (
-               <span key={index} className="text-slate-600 text-[13px] mr-2">• {benefit}</span>
+              <span key={index} className="text-slate-600 text-[13px] mr-2">• {benefit}</span>
             ))
           ) : (
             <span className="text-slate-400 italic text-[13px]">---</span>
@@ -179,14 +179,14 @@ const ServiceManagement = () => {
       width: 150,
       render: (active, record) => (
         <div className="flex items-center gap-2">
-            <Switch
-              checked={active}
-              onChange={(checked) => handleStatusToggle(record.id, checked)}
-              size="small"
-            />
-            <span className={`text-[13px] font-semibold ${active ? "text-green-600" : "text-slate-400"}`}>
-                {active ? "Hoạt động" : "Tạm khóa"}
-            </span>
+          <Switch
+            checked={active}
+            onChange={(checked) => handleStatusToggle(record.id, checked)}
+            size="small"
+          />
+          <span className={`text-[13px] font-semibold ${active ? "text-green-600" : "text-slate-400"}`}>
+            {active ? "Hoạt động" : "Tạm khóa"}
+          </span>
         </div>
       ),
     },
@@ -197,24 +197,24 @@ const ServiceManagement = () => {
       fixed: "right",
       align: "center",
       render: (_, record) => (
-          <div className="flex items-center justify-center gap-2">
-            <Button 
-              type="text" 
-              onClick={() => handleEdit(record)}
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-amber-500 hover:bg-amber-50 transition-all p-0"
-              title="Chỉnh sửa"
-            >
-              <Edit size={18} strokeWidth={2.5} />
-            </Button>
-            <Button 
-              type="text" 
-              onClick={() => messageApi.warning("Tính năng xóa dịch vụ đang bảo trì")}
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-red-500 hover:bg-red-50 transition-all p-0"
-              title="Gỡ bỏ"
-            >
-              <Trash2 size={18} strokeWidth={2.5} />
-            </Button>
-          </div>
+        <div className="flex items-center justify-center gap-2">
+          <Button
+            type="text"
+            onClick={() => handleEdit(record)}
+            className="w-9 h-9 rounded-xl flex items-center justify-center text-amber-500 hover:bg-amber-50 transition-all p-0"
+            title="Chỉnh sửa"
+          >
+            <Edit size={18} strokeWidth={2.5} />
+          </Button>
+          <Button
+            type="text"
+            onClick={() => messageApi.warning("Tính năng xóa dịch vụ đang bảo trì")}
+            className="w-9 h-9 rounded-xl flex items-center justify-center text-red-500 hover:bg-red-50 transition-all p-0"
+            title="Gỡ bỏ"
+          >
+            <Trash2 size={18} strokeWidth={2.5} />
+          </Button>
+        </div>
       ),
     },
   ];
@@ -226,29 +226,29 @@ const ServiceManagement = () => {
       {/* Stats Summary Panel */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {[
-            { icon: <Gem size={24} />, label: "Gói cao cấp", value: services.filter(s => (s.price || 0) > 10000000).length, config: "bg-blue-50 text-blue-600" },
-            { icon: <Zap size={24} />, label: "Đang mở bán", value: services.filter(s => s.active).length, config: "bg-green-50 text-green-600" },
-            { icon: <Star size={24} />, label: "Tổng dịch vụ", value: pagination.total, config: "bg-purple-50 text-purple-600" }
+          { icon: <Gem size={24} />, label: "Gói cao cấp", value: services.filter(s => (s.price || 0) > 10000000).length, config: "bg-blue-50 text-blue-600" },
+          { icon: <Zap size={24} />, label: "Đang mở bán", value: services.filter(s => s.active).length, config: "bg-green-50 text-green-600" },
+          { icon: <Star size={24} />, label: "Tổng dịch vụ", value: pagination.total, config: "bg-purple-50 text-purple-600" }
         ].map((item, i) => (
-            <div key={i} className="bg-white p-6 rounded-[1.5rem] border border-slate-100 shadow-sm flex items-center gap-5 transition-all hover:shadow-xl hover:shadow-slate-200/50 group">
-                <div className={`w-14 h-14 rounded-[1rem] ${item.config} flex items-center justify-center transition-transform group-hover:scale-110 shadow-sm`}>
-                    {item.icon}
-                </div>
-                <div>
-                   <h4 className="text-[14px] font-semibold text-slate-500 mb-1">{item.label}</h4>
-                   <p className="text-2xl font-bold text-slate-900 tracking-tight">{item.value}</p>
-                </div>
+          <div key={i} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-5 transition-all hover:shadow-xl hover:shadow-slate-200/50 group">
+            <div className={`w-14 h-14 rounded-xl ${item.config} flex items-center justify-center transition-transform group-hover:scale-110 shadow-sm`}>
+              {item.icon}
             </div>
+            <div>
+              <h4 className="text-[14px] font-semibold text-slate-500 mb-1">{item.label}</h4>
+              <p className="text-2xl font-bold text-slate-900 tracking-tight">{item.value}</p>
+            </div>
+          </div>
         ))}
       </div>
 
-      <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm space-y-6">
+      <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-6">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-50">
-           <div>
-               <h2 className="text-[18px] font-semibold text-slate-900 leading-tight">Danh sách dịch vụ</h2>
-               <p className="text-[13px] font-medium text-slate-500 mt-1">Hệ thống quản lý định mức và cấu hình gói</p>
-           </div>
-           <Button
+          <div>
+            <h2 className="text-[18px] font-semibold text-slate-900 leading-tight">Danh sách dịch vụ</h2>
+            <p className="text-[13px] font-medium text-slate-500 mt-1">Hệ thống quản lý định mức và cấu hình gói</p>
+          </div>
+          <Button
             type="primary"
             onClick={handleCreate}
             className="h-10 px-4 bg-slate-900 hover:bg-slate-800 rounded-xl border-none font-semibold text-[14px] shadow-sm flex items-center gap-2 transition-all whitespace-nowrap"
@@ -259,47 +259,49 @@ const ServiceManagement = () => {
         </div>
 
         <div className="border border-slate-100 overflow-hidden bg-white shadow-sm rounded-xl">
-            <Table
-              columns={columns}
-              dataSource={Array.isArray(services) ? services : []}
-              rowKey="id"
-              loading={loading}
-              pagination={false}
-              onChange={handleTableChange}
-              scroll={{ x: 1100 }}
-              className="ant-table-custom"
-              locale={{ emptyText: (
+          <Table
+            columns={columns}
+            dataSource={Array.isArray(services) ? services : []}
+            rowKey="id"
+            loading={loading}
+            pagination={false}
+            onChange={handleTableChange}
+            scroll={{ x: 1100 }}
+            className="ant-table-custom"
+            locale={{
+              emptyText: (
                 <div className="py-24 flex flex-col items-center opacity-30">
-                    <Briefcase size={64} strokeWidth={1} className="mb-4" />
-                    <span className="text-sm font-black uppercase tracking-[0.2em]">Cơ sở dữ liệu dịch vụ trống</span>
+                  <Briefcase size={64} strokeWidth={1} className="mb-4" />
+                  <span className="text-sm font-black uppercase tracking-[0.2em]">Cơ sở dữ liệu dịch vụ trống</span>
                 </div>
-              )}}
-            />
+              )
+            }}
+          />
 
-            {pagination.total > 0 && (
-              <div className="p-6 bg-slate-50/30 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-6">
-                <div className="px-5 py-2.5 bg-white border border-slate-100 rounded-2xl text-[11px] font-black text-slate-600 uppercase tracking-widest shadow-sm flex items-center gap-2">
-                  <span>{Math.min(pagination.total, (pagination.current - 1) * pagination.pageSize + 1)} — {Math.min(pagination.current * pagination.pageSize, pagination.total)}</span>
-                  <span className="text-slate-200">/</span>
-                  <span className="text-slate-500">{pagination.total} Dịch vụ</span>
-                </div>
-
-                <div className="flex items-center gap-3">
-                    <Button
-                        className="h-10 w-10 flex items-center justify-center rounded-xl bg-white border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-600 transition-all shadow-sm p-0"
-                        disabled={pagination.current === 1}
-                        onClick={() => handleTableChange({ current: pagination.current - 1, pageSize: pagination.pageSize })}
-                        icon={<ChevronLeft size={20} />}
-                    />
-                    <Button
-                        className="h-10 w-10 flex items-center justify-center rounded-xl bg-white border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-600 transition-all shadow-sm p-0"
-                        disabled={pagination.current >= Math.ceil(pagination.total / pagination.pageSize)}
-                        onClick={() => handleTableChange({ current: pagination.current + 1, pageSize: pagination.pageSize })}
-                        icon={<ChevronRight size={20} />}
-                    />
-                </div>
+          {pagination.total > 0 && (
+            <div className="p-6 bg-slate-50/30 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-6">
+              <div className="px-5 py-2.5 bg-white border border-slate-100 rounded-2xl text-[11px] font-black text-slate-600 uppercase tracking-widest shadow-sm flex items-center gap-2">
+                <span>{Math.min(pagination.total, (pagination.current - 1) * pagination.pageSize + 1)} — {Math.min(pagination.current * pagination.pageSize, pagination.total)}</span>
+                <span className="text-slate-200">/</span>
+                <span className="text-slate-500">{pagination.total} Dịch vụ</span>
               </div>
-            )}
+
+              <div className="flex items-center gap-3">
+                <Button
+                  className="h-10 w-10 flex items-center justify-center rounded-xl bg-white border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-600 transition-all shadow-sm p-0"
+                  disabled={pagination.current === 1}
+                  onClick={() => handleTableChange({ current: pagination.current - 1, pageSize: pagination.pageSize })}
+                  icon={<ChevronLeft size={20} />}
+                />
+                <Button
+                  className="h-10 w-10 flex items-center justify-center rounded-xl bg-white border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-600 transition-all shadow-sm p-0"
+                  disabled={pagination.current >= Math.ceil(pagination.total / pagination.pageSize)}
+                  onClick={() => handleTableChange({ current: pagination.current + 1, pageSize: pagination.pageSize })}
+                  icon={<ChevronRight size={20} />}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

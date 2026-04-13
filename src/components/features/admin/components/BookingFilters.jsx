@@ -56,7 +56,7 @@ const BookingFilters = ({
             placeholder="Lọc trạng thái"
             value={filters.status}
             onChange={(val) => onFilterChange("status", val)}
-            className="w-[220px] h-12 [&_.ant-select-selector]:!rounded-[40px] [&_.ant-select-selector]:!border-2 [&_.ant-select-selector]:!border-slate-200 [&_.ant-select-selection-placeholder]:!text-slate-700 [&_.ant-select-selection-placeholder]:!font-semibold [&_.ant-select-selection-placeholder]:!text-center [&_.ant-select-selection-item]:!font-semibold [&_.ant-select-selection-item]:!text-slate-700 [&_.ant-select-selection-item]:!text-center"
+            className="w-[220px] h-12 [&_.ant-select-selector]:!rounded-xl [&_.ant-select-selector]:!border-2 [&_.ant-select-selector]:!border-slate-200 [&_.ant-select-selection-placeholder]:!text-slate-700 [&_.ant-select-selection-placeholder]:!font-semibold [&_.ant-select-selection-placeholder]:!text-center [&_.ant-select-selection-item]:!font-semibold [&_.ant-select-selection-item]:!text-slate-700 [&_.ant-select-selection-item]:!text-center"
             allowClear
             variant="outlined"
           >
@@ -80,13 +80,13 @@ const BookingFilters = ({
             onChange={onDateRangeChange}
             separator={<div className="text-slate-300 mx-1">—</div>}
             placeholder={["Từ ngày", "Đến ngày"]}
-            className="h-12 bg-white px-2 font-semibold !rounded-[40px] border-2 border-slate-200 [&_.ant-picker-input_input::placeholder]:!text-slate-700 [&_.ant-picker-input_input]:!font-semibold [&_.ant-picker-input_input]:!text-slate-700 [&_.ant-picker-input_input]:!text-center"
+            className="h-12 bg-white px-2 font-semibold !rounded-xl border-2 border-slate-200 [&_.ant-picker-input_input::placeholder]:!text-slate-700 [&_.ant-picker-input_input]:!font-semibold [&_.ant-picker-input_input]:!text-slate-700 [&_.ant-picker-input_input]:!text-center"
             suffixIcon={<CalendarDays size={20} className="text-slate-500" />}
           />
 
           <button 
             onClick={onClear}
-            className="h-12 px-8 flex items-center gap-2 text-slate-700 font-semibold text-[15px] bg-white border-2 border-slate-200 rounded-[30px] transition-all"
+            className="h-12 px-8 flex items-center gap-2 text-slate-700 font-semibold text-[15px] bg-white border-2 border-slate-200 rounded-xl transition-all"
           >
             <FilterX size={14} />
             Xóa bộ lọc
