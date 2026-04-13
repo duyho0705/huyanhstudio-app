@@ -62,13 +62,21 @@ const NewNavbar = () => {
                             <span className={underlineClass}></span>
                         </Link>
                         {!user ? (
-                            <button
-                                onClick={() => setShowLoginModal(true, "login")}
-                                className={`${navLinkClass} font-bold`}
-                            >
-                                Đăng nhập
-                                <span className={underlineClass}></span>
-                            </button>
+                            <div className="flex items-center gap-8">
+                                <button
+                                    onClick={() => setShowLoginModal(true, "login")}
+                                    className={`${navLinkClass} font-bold`}
+                                >
+                                    Đăng nhập
+                                    <span className={underlineClass}></span>
+                                </button>
+                                <button
+                                    onClick={() => setShowLoginModal(true, "register")}
+                                    className="bg-[#6CD1FD] text-white px-8 py-2.5 rounded-full font-bold shadow-lg shadow-[#6CD1FD]/20 hover:shadow-xl hover:shadow-[#6CD1FD]/40 active:scale-95 transition-all"
+                                >
+                                    Đăng ký
+                                </button>
+                            </div>
                         ) : (
                             <div className="flex items-center gap-4 flex-nowrap">
                                 <span className="text-[16px] font-medium text-[#35104C]/70 whitespace-nowrap">
