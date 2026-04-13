@@ -50,7 +50,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
 
   return (
     <aside
-      className={`fixed left-0 top-0 z-[1000] h-screen w-[280px] bg-slate-950 border-r border-slate-900 flex flex-col transition-all duration-500 transform lg:translate-x-0 ${isOpen ? "translate-x-0 shadow-2xl ring-1 ring-white/10" : "-translate-x-full"
+      className={`fixed left-0 top-0 z-[1000] h-screen w-[280px] bg-white border-r border-slate-100 flex flex-col transition-all duration-500 transform lg:translate-x-0 ${isOpen ? "translate-x-0 shadow-2xl ring-1 ring-black/5" : "-translate-x-full"
         }`}
     >
       {/* LOGO SECTION */}
@@ -58,11 +58,19 @@ const AdminSidebar = ({ isOpen, onClose }) => {
         <div className="flex items-center gap-4 group cursor-pointer">
           <div className="relative">
             <div className="absolute inset-0 bg-blue-600 blur-xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
-            <img src={logoImg} alt="Logo" className="w-11 h-11 object-contain relative z-10 brightness-110" />
+            <div className="relative w-10 h-10 group-hover:scale-105 transition-transform duration-500">
+                <div className="absolute inset-0 bg-brand-orange rounded-md rotate-12 transition-transform shadow-lg shadow-brand-orange/20"></div>
+                <div className="absolute inset-0 bg-[#6CD1FD] rounded-md -rotate-6 transition-transform shadow-lg shadow-[#6CD1FD]/20"></div>
+                <div className="absolute inset-0 bg-[#35104C] rounded-md flex items-center justify-center text-white text-[11px] font-black shadow-xl shadow-black/20">HA</div>
+            </div>
           </div>
-          <div className="flex flex-col relative z-10">
-            <span className="text-xl font-semibold text-white tracking-widest italic">Huy Anh</span>
-            <span className="text-[10px] font-semibold text-blue-500 tracking-[0.3em] -mt-1">Studio Admin</span>
+          <div className="flex flex-col relative z-10 -translate-y-0.5">
+            <span 
+              className="text-3xl font-bold text-[#35104C] leading-none hover:text-[#6CD1FD] transition-colors" 
+              style={{ fontFamily: '"Satisfy", cursive' }}
+            >
+              hastudio
+            </span>
           </div>
         </div>
       </div>
@@ -78,8 +86,8 @@ const AdminSidebar = ({ isOpen, onClose }) => {
             onClick={onClose}
             className={({ isActive }) =>
               `flex items-center justify-between px-5 py-4 rounded-2xl transition-all duration-300 group leading-none ${isActive
-                ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-500/20"
-                : "text-slate-500 hover:bg-white/5 hover:text-slate-100"
+                ? "bg-blue-600 text-white shadow-lg shadow-blue-500/20"
+                : "text-slate-600 hover:bg-slate-50 hover:text-blue-600"
               }`
             }
           >

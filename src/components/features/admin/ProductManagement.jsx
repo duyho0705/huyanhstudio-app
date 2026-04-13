@@ -233,12 +233,6 @@ const ProductManagement = () => {
                     <Play size={24} fill="currentColor" strokeWidth={0} />
                   </button>
                 </div>
-                <div className="absolute top-4 left-4">
-                  <div className="px-3 py-1 bg-white/90 backdrop-blur-md rounded-lg text-[9px] font-black uppercase tracking-widest text-slate-900 border border-white shadow-sm flex items-center gap-1.5">
-                    <Film size={10} />
-                    RAW Content
-                  </div>
-                </div>
               </div>
 
               <div className="p-5 flex-1 flex flex-col justify-between">

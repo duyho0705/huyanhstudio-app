@@ -9,7 +9,14 @@ import {
   Rocket,
   Layers,
   Edit,
-  Trash2
+  Trash2,
+  Mic,
+  Music,
+  Star,
+  Camera,
+  Video,
+  Zap,
+  Heart
 } from "lucide-react";
 import serviceApi from "../../../api/serviceApi";
 import ServiceForm from "./components/ServiceForm";
@@ -141,18 +148,42 @@ const ServiceManagement = () => {
       title: <span className="text-[13px] font-semibold text-slate-600">Tên dịch vụ</span>,
       dataIndex: "name",
       key: "name",
-      width: 200,
-      render: (name) => (
-        <span className="text-slate-900 font-semibold text-[14px] leading-none mb-1">{name}</span>
-      ),
+      width: 250,
+      render: (name, record) => {
+        const IconComponent = {
+          Mic, Music, Star, Camera, Video, Zap, Heart
+        }[record.icon] || Briefcase;
+
+        return (
+          <div className="flex items-center gap-3">
+             <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${record.featured ? "bg-amber-100 text-amber-600" : "bg-blue-50 text-blue-600"}`}>
+                <IconComponent size={18} />
+             </div>
+             <div className="flex flex-col">
+              <span className="text-slate-900 font-semibold text-[14px] leading-tight flex items-center gap-1.5">
+                {name}
+                {record.featured && (
+                  <Tooltip title="Gói nổi bật">
+                    <Star size={12} fill="currentColor" className="text-amber-500" />
+                  </Tooltip>
+                )}
+              </span>
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-tighter mt-0.5">{record.buttonText || "Đăng ký ngay"}</span>
+             </div>
+          </div>
+        )
+      },
     },
     {
       title: <span className="text-[13px] font-semibold text-slate-600">Đơn giá (VNĐ)</span>,
       dataIndex: "price",
       key: "price",
-      width: 150,
-      render: (price) => (
-        <span className="text-slate-600 font-semibold text-[14px]">{price?.toLocaleString("vi-VN")}</span>
+      width: 180,
+      render: (price, record) => (
+        <div className="flex items-baseline gap-1.5">
+          <span className="text-slate-900 font-bold text-[15px]">{price?.toLocaleString("vi-VN")}</span>
+          <span className="text-slate-400 font-medium text-[12px]">{record.unit}</span>
+        </div>
       ),
     },
     {

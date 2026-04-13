@@ -38,7 +38,14 @@ const ServiceForm = ({
     }
 
     if (open && !initialValues) {
-      form.resetFields();
+      form.setFieldsValue({
+        active: true,
+        icon: "Mic",
+        unit: "/ gói",
+        buttonText: "Đăng ký ngay",
+        featured: false,
+        benefitsList: []
+      });
       setIsChanged(true);
     }
   }, [open, initialValues, form]);
@@ -173,10 +180,9 @@ const ServiceForm = ({
                   <Form.Item 
                     name="icon" 
                     label={<span className="text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2 font-sans italic text-slate-400">Biểu tượng hiển thị</span>}
-                    initialValue="Mic"
                     className="!mb-0"
                   >
-                    <Select className="h-10 select-custom-xl rounded-xl" variant="filled">
+                    <Select className="h-10 select-custom-xl rounded-xl" variant="filled" placeholder="Chọn icon">
                       <Option value="Mic"><div className="flex items-center gap-2 font-medium"><Mic size={14} /> Micro</div></Option>
                       <Option value="Music"><div className="flex items-center gap-2 font-medium"><Music size={14} /> Nốt nhạc</div></Option>
                       <Option value="Star"><div className="flex items-center gap-2 font-medium"><Star size={14} /> Ngôi sao</div></Option>
@@ -188,16 +194,15 @@ const ServiceForm = ({
                   </Form.Item>
 
                   <Form.Item 
-                    name="featured" 
                     label={<span className="text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2">Gói nổi bật</span>}
-                    valuePropName="checked"
-                    initialValue={false}
                     className="!mb-0"
                   >
-                    <div className="h-10 px-4 bg-blue-50/50 border border-blue-100 rounded-xl flex items-center justify-between">
-                      <span className="text-[13px] font-bold text-blue-600 uppercase tracking-wider">Gợi ý chọn</span>
-                      <Switch size="small" />
-                    </div>
+                      <div className="h-10 px-4 bg-blue-50/50 border border-blue-100 rounded-xl flex items-center justify-between">
+                        <span className="text-[13px] font-bold text-blue-600 uppercase tracking-wider text-blue-600">Gợi ý chọn</span>
+                        <Form.Item name="featured" valuePropName="checked" noStyle>
+                            <Switch size="small" />
+                        </Form.Item>
+                      </div>
                   </Form.Item>
                 </div>
 
@@ -205,12 +210,11 @@ const ServiceForm = ({
                    <Form.Item 
                     name="buttonText" 
                     label={<span className="text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><MousePointer2 size={14} className="text-blue-500" /> Chữ trên nút</span>}
-                    initialValue="Đăng ký ngay"
                     className="!mb-0"
                   >
                     <Input 
                       className="h-10 px-4 bg-white border border-slate-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-medium text-[14px]" 
-                      placeholder="VD: Đăng ký, Bắt đầu ngay..." 
+                      placeholder="VD: Đăng ký ngay, Bắt đầu..." 
                     />
                   </Form.Item>
                 </div>
