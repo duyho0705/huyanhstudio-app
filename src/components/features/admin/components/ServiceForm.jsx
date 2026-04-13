@@ -10,7 +10,8 @@ import {
   Space,
 } from "antd";
 import { useEffect, useState } from "react";
-import { Plus, Trash2, Briefcase, FileText, DollarSign, Activity, ListChecks, AlertCircle, Info } from "lucide-react";
+import { Plus, Trash2, Briefcase, FileText, DollarSign, Activity, ListChecks, AlertCircle, Info, Star, Music, Camera, Video, Zap, Heart, Mic, Tag, MousePointer2 } from "lucide-react";
+import { Switch } from "antd";
 const { TextArea } = Input;
 const { Option } = Select;
 
@@ -64,6 +65,9 @@ const ServiceForm = ({
       "moreInfo",
       "benefitsList",
       "icon",
+      "unit",
+      "featured",
+      "buttonText",
     ];
 
     const hasChanges = fields.some(
@@ -136,7 +140,7 @@ const ServiceForm = ({
                 <div className="grid grid-cols-2 gap-4">
                   <Form.Item
                     name="price"
-                    label={<span className="text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><DollarSign size={14} className="text-blue-500" /> Giá (VNĐ)</span>}
+                    label={<span className="text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><DollarSign size={14} className="text-blue-500" /> Giá trị</span>}
                     rules={[{ required: true, message: "Vui lòng nhập giá!" }]}
                     className="!mb-0"
                   >
@@ -145,26 +149,89 @@ const ServiceForm = ({
                       min={0}
                       formatter={(v) => `${v}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                       parser={(v) => v.replace(/,/g, "")}
+                      placeholder="Giá tiền"
                     />
                   </Form.Item>
 
                   <Form.Item 
-                    name="active" 
-                    label={<span className="text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><Activity size={14} className="text-blue-500" /> Trạng thái</span>} 
-                    initialValue={true}
+                    name="unit" 
+                    label={<span className="text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><Tag size={14} className="text-blue-500" /> Đơn vị</span>}
+                    initialValue="/ gói"
                     className="!mb-0"
                   >
                     <Select className="h-10 select-custom-xl rounded-xl" variant="filled">
-                      <Option value={true}><span className="text-[14px] font-medium">Hoạt động</span></Option>
-                      <Option value={false}><span className="text-[14px] font-medium">Tạm ngưng</span></Option>
+                      <Option value="/ gói">/ gói</Option>
+                      <Option value="/ bài">/ bài</Option>
+                      <Option value="/ giờ">/ giờ</Option>
+                      <Option value="/ người">/ người</Option>
+                      <Option value="">Không có</Option>
                     </Select>
+                  </Form.Item>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 pt-2">
+                  <Form.Item 
+                    name="icon" 
+                    label={<span className="text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2 font-sans italic text-slate-400">Biểu tượng hiển thị</span>}
+                    initialValue="Mic"
+                    className="!mb-0"
+                  >
+                    <Select className="h-10 select-custom-xl rounded-xl" variant="filled">
+                      <Option value="Mic"><div className="flex items-center gap-2 font-medium"><Mic size={14} /> Micro</div></Option>
+                      <Option value="Music"><div className="flex items-center gap-2 font-medium"><Music size={14} /> Nốt nhạc</div></Option>
+                      <Option value="Star"><div className="flex items-center gap-2 font-medium"><Star size={14} /> Ngôi sao</div></Option>
+                      <Option value="Camera"><div className="flex items-center gap-2 font-medium"><Camera size={14} /> Camera</div></Option>
+                      <Option value="Video"><div className="flex items-center gap-2 font-medium"><Video size={14} /> Video</div></Option>
+                      <Option value="Zap"><div className="flex items-center gap-2 font-medium"><Zap size={14} /> Tia sét</div></Option>
+                      <Option value="Heart"><div className="flex items-center gap-2 font-medium"><Heart size={14} /> Trái tim</div></Option>
+                    </Select>
+                  </Form.Item>
+
+                  <Form.Item 
+                    name="featured" 
+                    label={<span className="text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2">Gói nổi bật</span>}
+                    valuePropName="checked"
+                    initialValue={false}
+                    className="!mb-0"
+                  >
+                    <div className="h-10 px-4 bg-blue-50/50 border border-blue-100 rounded-xl flex items-center justify-between">
+                      <span className="text-[13px] font-bold text-blue-600 uppercase tracking-wider">Gợi ý chọn</span>
+                      <Switch size="small" />
+                    </div>
+                  </Form.Item>
+                </div>
+
+                <div className="grid grid-cols-1 pt-2">
+                   <Form.Item 
+                    name="buttonText" 
+                    label={<span className="text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><MousePointer2 size={14} className="text-blue-500" /> Chữ trên nút</span>}
+                    initialValue="Đăng ký ngay"
+                    className="!mb-0"
+                  >
+                    <Input 
+                      className="h-10 px-4 bg-white border border-slate-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-medium text-[14px]" 
+                      placeholder="VD: Đăng ký, Bắt đầu ngay..." 
+                    />
                   </Form.Item>
                 </div>
             </div>
 
+            <div className="grid grid-cols-1">
+              <Form.Item 
+                name="active" 
+                label={<span className="text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2 text-slate-400">Trạng thái mở bán</span>} 
+                initialValue={true}
+              >
+                <Select className="h-10 select-custom-xl rounded-xl" variant="filled">
+                  <Option value={true}><span className="text-[14px] font-medium">Đang kinh doanh</span></Option>
+                  <Option value={false}><span className="text-[14px] font-medium">Tạm khóa/Bảo trì</span></Option>
+                </Select>
+              </Form.Item>
+            </div>
+
             <Form.Item 
                 name="moreInfo" 
-                label={<span className="text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><Info size={14} className="text-blue-500" /> Thông tin bổ sung</span>}
+                label={<span className="text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><Info size={14} className="text-blue-500" /> Ghi chú chân trang</span>}
             >
               <TextArea
                 className="p-3 bg-white border border-slate-200 hover:border-slate-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-medium min-h-[120px] text-[14px]"

@@ -113,7 +113,7 @@ const Login = ({ onClose, initialMode = "login" }) => {
       const data = await authApi.login({ username: formData.username, password: formData.password });
       const { accessToken } = data;
       const userData = await loginContext({ accessToken });
-      
+
       onClose?.();
 
       // Kiểm tra role để chuyển hướng
@@ -242,7 +242,7 @@ const Login = ({ onClose, initialMode = "login" }) => {
                   disabled={loading}
                   className="w-full py-3 bg-[#6CD1FD] text-white font-black rounded-full shadow-xl shadow-[#6CD1FD]/20 hover:shadow-[#6CD1FD]/30 transition-all flex items-center justify-center gap-2 group active:scale-[0.98] disabled:opacity-70"
                 >
-                  {loading ? "Đang xác thực..." : "Đăng nhập"}
+                  {loading ? "Đang đăng nhập" : "Đăng nhập"}
                 </button>
               </motion.form>
             ) : (
@@ -254,50 +254,50 @@ const Login = ({ onClose, initialMode = "login" }) => {
                 transition={{ duration: 0.3 }}
                 onSubmit={handleSignup}
               >
-                <InputField 
-                  label="Tên người dùng" 
-                  name="fullName" 
-                  placeholder="Nhập tên người dùng" 
-                  icon={FiUser} 
-                  error={errors.fullName} 
+                <InputField
+                  label="Tên người dùng"
+                  name="fullName"
+                  placeholder="Nhập tên người dùng"
+                  icon={FiUser}
+                  error={errors.fullName}
                   value={formData.fullName}
                   onChange={handleInputChange}
                 />
-                <InputField 
-                  label="Số điện thoại" 
-                  name="phone" 
-                  placeholder="Nhập số điện thoại" 
-                  icon={FiPhone} 
-                  error={errors.phone} 
+                <InputField
+                  label="Số điện thoại"
+                  name="phone"
+                  placeholder="Nhập số điện thoại"
+                  icon={FiPhone}
+                  error={errors.phone}
                   value={formData.phone}
                   onChange={handleInputChange}
                 />
-                <InputField 
-                  label="Tên tài khoản" 
-                  name="username" 
-                  placeholder="Nhập tên tài khoản" 
-                  icon={FiMail} 
-                  error={errors.username} 
+                <InputField
+                  label="Tên tài khoản"
+                  name="username"
+                  placeholder="Nhập tên tài khoản"
+                  icon={FiMail}
+                  error={errors.username}
                   value={formData.username}
                   onChange={handleInputChange}
                 />
-                <InputField 
-                  label="Mật khẩu" 
-                  name="password" 
-                  type="password" 
-                  placeholder="Nhập mật khẩu" 
-                  icon={FiLock} 
-                  error={errors.password} 
+                <InputField
+                  label="Mật khẩu"
+                  name="password"
+                  type="password"
+                  placeholder="Nhập mật khẩu"
+                  icon={FiLock}
+                  error={errors.password}
                   value={formData.password}
                   onChange={handleInputChange}
                 />
-                <InputField 
-                  label="Xác nhận mật khẩu" 
-                  name="confirmPassword" 
-                  type="password" 
-                  placeholder="Nhập lại mật khẩu" 
-                  icon={FiKey} 
-                  error={errors.confirmPassword} 
+                <InputField
+                  label="Xác nhận mật khẩu"
+                  name="confirmPassword"
+                  type="password"
+                  placeholder="Nhập lại mật khẩu"
+                  icon={FiKey}
+                  error={errors.confirmPassword}
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
                 />
@@ -306,7 +306,7 @@ const Login = ({ onClose, initialMode = "login" }) => {
                   disabled={loading}
                   className="w-full py-3 bg-[#35104C] text-white font-semibold rounded-full shadow-xl shadow-[#35104C]/20 hover:shadow-[#35104C]/30 transition-all flex items-center justify-center gap-2 group active:scale-[0.98] disabled:opacity-70"
                 >
-                  {loading ? "Creating account..." : "Đăng ký ngay"}
+                  {loading ? "Đang tạo tài khoản..." : "Đăng ký ngay"}
                 </button>
               </motion.form>
             )}
@@ -322,7 +322,7 @@ const Login = ({ onClose, initialMode = "login" }) => {
 
         {/* Social Logins */}
         <div className="flex gap-4">
-          <button 
+          <button
             type="button"
             onClick={() => {
               const baseUrl = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') || 'http://localhost:8080';
@@ -332,7 +332,7 @@ const Login = ({ onClose, initialMode = "login" }) => {
           >
             <FcGoogle size={20} /> Google
           </button>
-          <button 
+          <button
             type="button"
             onClick={() => {
               const baseUrl = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') || 'http://localhost:8080';

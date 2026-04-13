@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { LuCalendar } from "react-icons/lu";
 import { AuthContext } from "../../../api/AuthContext";
 import bookingApi from "../../../api/bookingApi";
 import Modal from "../../layout/Modal";
@@ -55,20 +56,33 @@ const BookingProfile = () => {
             </tr>
           </thead>
           <tbody>
-            {bookings.map((b) => (
-              <tr key={b.bookingCode} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
-                <td className="py-3 px-4 font-mono text-xs text-gray-500">{shortCode(b.bookingCode)}</td>
-                <td className="py-3 px-4 font-medium text-gray-800">{b.customerName}</td>
-                <td className="py-3 px-4 text-gray-600">{b.recordDate}</td>
-                <td className="py-3 px-4 text-gray-600">{b.services.join(", ")}</td>
-                <td className="py-3 px-4">{getStatus(b.status)}</td>
-                <td className="py-3 px-4">
-                  <button className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors text-gray-400 hover:text-gray-700" onClick={() => setSelectedBooking(b)}>
-                    <BsThreeDotsVertical size={18} />
-                  </button>
+            {bookings.length > 0 ? (
+              bookings.map((b) => (
+                <tr key={b.bookingCode} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                  <td className="py-3 px-4 font-mono text-xs text-gray-500">{shortCode(b.bookingCode)}</td>
+                  <td className="py-3 px-4 font-medium text-gray-800">{b.customerName}</td>
+                  <td className="py-3 px-4 text-gray-600">{b.recordDate}</td>
+                  <td className="py-3 px-4 text-gray-600">{b.services?.join(", ") || "N/A"}</td>
+                  <td className="py-3 px-4">{getStatus(b.status)}</td>
+                  <td className="py-3 px-4">
+                    <button className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors text-gray-400 hover:text-gray-700" onClick={() => setSelectedBooking(b)}>
+                      <BsThreeDotsVertical size={18} />
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6" className="py-12 text-center">
+                  <div className="flex flex-col items-center justify-center gap-2">
+                    <div className="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-300">
+                      <LuCalendar size={24} />
+                    </div>
+                    <p className="text-gray-400 font-medium">Bạn chưa từng đặt lịch thu âm</p>
+                  </div>
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
 

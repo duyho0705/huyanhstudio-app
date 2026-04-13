@@ -48,16 +48,16 @@ const AdminPopularServices = () => {
             <Star size={20} />
           </div>
           <div>
-              <h3 className="text-[17px] font-semibold text-slate-900 leading-tight">Dịch vụ nổi bật</h3>
-              <p className="text-[13px] font-medium text-slate-500 mt-0.5">Top hạng mục có tỷ lệ chuyển đổi cao</p>
+            <h3 className="text-[17px] font-semibold text-slate-900 leading-tight">Dịch vụ nổi bật</h3>
+            <p className="text-[13px] font-medium text-slate-500 mt-0.5">Top hạng mục có tỷ lệ chuyển đổi cao</p>
           </div>
         </div>
-        
+
         <div className="hidden sm:block">
-            <button className="text-[13px] font-semibold text-blue-600 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 rounded-lg transition-all">Chi tiết dữ liệu</button>
+          <button className="text-[13px] font-semibold text-blue-600 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 rounded-lg transition-all">Chi tiết dữ liệu</button>
         </div>
       </div>
-      
+
       <div className="space-y-4">
         {services.map((service) => (
           <div key={service.id} className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 hover:bg-white border border-transparent hover:border-slate-100 hover:shadow-sm transition-all group">
@@ -68,25 +68,24 @@ const AdminPopularServices = () => {
               <div className="flex flex-col">
                 <h4 className="font-semibold text-slate-900 text-[14px] leading-tight mb-1">{service.name}</h4>
                 <div className="flex items-center gap-2">
-                    <span className="text-[13px] font-medium text-slate-500">{service.bookings} lượt tính</span>
-                    <div className="w-1 h-1 rounded-full bg-slate-300"></div>
-                    <span className="text-[13px] font-medium text-slate-900">Premium</span>
+                  <span className="text-[13px] font-medium text-slate-500">{service.bookings} lượt tính</span>
+                  <div className="w-1 h-1 rounded-full bg-slate-300"></div>
+                  <span className="text-[13px] font-medium text-slate-900">Premium</span>
                 </div>
               </div>
             </div>
-            
+
             <div className="flex flex-col items-end gap-1">
-                <div
-                  className={`px-2.5 py-1 rounded-lg text-[13px] font-semibold flex items-center gap-1.5 ${
-                    service.growth.startsWith("+") 
-                      ? "bg-green-50 text-green-600 border border-green-100" 
-                      : "bg-red-50 text-red-600 border border-red-100"
+              <div
+                className={`px-2.5 py-1 rounded-lg text-[13px] font-semibold flex items-center gap-1.5 ${service.growth.startsWith("+")
+                    ? "bg-green-50 text-green-600 border border-green-100"
+                    : "bg-red-50 text-red-600 border border-red-100"
                   }`}
-                >
-                  {service.growth.startsWith("+") ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
-                  {service.growth}
-                </div>
-                <span className="text-[12px] font-medium text-slate-400">{service.growth.startsWith("+") ? "Thịnh hành" : "Sụt giảm"}</span>
+              >
+                {service.growth.startsWith("+") ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
+                {service.growth}
+              </div>
+              <span className="text-[12px] font-medium text-slate-400">{service.growth.startsWith("+") ? "Thịnh hành" : "Sụt giảm"}</span>
             </div>
           </div>
         ))}

@@ -26,6 +26,8 @@ const Booking = () => {
         note: ""
     });
 
+    const [errors, setErrors] = useState({});
+
     useEffect(() => {
         if (user) {
             setFormData(prev => ({
@@ -48,8 +50,10 @@ const Booking = () => {
                 studioRoomApi.getAll()
             ]);
 
-            const serviceData = serviceRes.data?.data || serviceRes.data || [];
-            const studioData = studioRes.data?.data || studioRes.data || [];
+            // Backend returns ApiResponse<PageResponse<T>>
+            // List is in res.data.data.list
+            const serviceData = serviceRes.data?.data?.list || (Array.isArray(serviceRes.data) ? serviceRes.data : []);
+            const studioData = studioRes.data?.data?.list || (Array.isArray(studioRes.data) ? studioRes.data : []);
 
             const validServices = Array.isArray(serviceData) ? serviceData : [];
             const validStudios = Array.isArray(studioData) ? studioData : [];
@@ -69,18 +73,23 @@ const Booking = () => {
         }
     };
 
+    const validateForm = () => {
+        const newErrors = {};
+        if (!formData.customerName?.trim()) newErrors.customerName = true;
+        if (!formData.phoneNumber?.trim()) newErrors.phoneNumber = true;
+        if (!formData.email?.trim()) newErrors.email = true;
+        if (!formData.serviceIds || formData.serviceIds.length === 0) newErrors.serviceIds = true;
+        if (!formData.studioRoomId) newErrors.studioRoomId = true;
+        if (!formData.bookingDate) newErrors.bookingDate = true;
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!formData.serviceIds || formData.serviceIds.length === 0) {
-            alert("Vui lòng chọn ít nhất một dịch vụ!");
-            return;
-        }
-        if (!formData.studioRoomId) {
-            alert("Vui lòng chọn studio phòng thu!");
-            return;
-        }
-        if (!formData.bookingDate) {
-            alert("Vui lòng chọn ngày thu âm!");
+
+        if (!validateForm()) {
             return;
         }
 
@@ -154,12 +163,17 @@ const Booking = () => {
                         <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#6CD1FD]/10 rounded-full -ml-16 -mb-16 blur-2xl"></div>
 
                         <div className="relative z-10">
-                            <h2 className="text-[32px] font-black text-white leading-[1.1] mb-6 decoration-sky-400">
-                                Thông tin<br />Hỗ trợ
-                            </h2>
-                            <p className="text-white/60 text-[15px] font-medium leading-relaxed mb-14 max-w-[240px]">
-                                Huy Anh Studio luôn lắng nghe và sẵn sàng hỗ trợ mọi nghệ sĩ. Đừng ngần ngại để lại câu hỏi!
-                            </p>
+                            <div className="text-white/60 text-[15px] font-medium leading-relaxed mb-14 max-w-[240px]">
+                                hastudio luôn lắng nghe quý khách hàng, luôn sẵn sàng hỗ trợ mọi yêu cầu của quý khách hàng! <br />Kính chúc quý khách hàng sẽ có những trải nghiệm tuyệt vời tại hastudio!
+                                <br />
+                                <br />
+                                Những lưu ý khi đặt lịch:
+                                <ul className="mt-2 space-y-1 list-disc pl-5">
+                                    <li>Quý khách vui lòng điền đầy đủ thông tin</li>
+                                    <li>Quý khách vui lòng chọn ngày và giờ phù hợp</li>
+                                    <li>Quý khách vui lòng chọn dịch vụ phù hợp</li>
+                                </ul>
+                            </div>
 
                             <div className="space-y-10">
                                 <div className="flex items-center gap-4">
@@ -167,8 +181,8 @@ const Booking = () => {
                                         <FiPhone size={20} />
                                     </div>
                                     <div>
-                                        <div className="text-[10px] uppercase font-bold text-white/40 tracking-[0.15em] mb-1">Hotline</div>
-                                        <div className="text-[17px] font-bold text-white">0359.891.654</div>
+                                        <div className="text-[15px] font-semibold text-white/40 mb-1">Liên hệ</div>
+                                        <div className="text-[17px] font-bold text-white">0359891654</div>
                                     </div>
                                 </div>
 
@@ -177,7 +191,7 @@ const Booking = () => {
                                         <FiMusic size={20} />
                                     </div>
                                     <div>
-                                        <div className="text-[10px] uppercase font-bold text-white/40 tracking-[0.15em] mb-1">Giờ mở cửa</div>
+                                        <div className="text-[15px] font-semibold text-white/40 mb-1">Giờ mở cửa</div>
                                         <div className="text-[17px] font-bold text-white">08:00 - 22:00</div>
                                     </div>
                                 </div>
@@ -186,10 +200,10 @@ const Booking = () => {
 
                         <div className="relative z-10 mt-12">
                             <div className="p-6 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10">
-                                <div className="text-[10px] uppercase font-bold text-white/40 tracking-[0.15em] mb-2 flex items-center gap-2">
+                                <div className="text-[15px]  font-semibold text-white/40 mb-2 flex items-center gap-2">
                                     <FiMapPin className="text-[#6CD1FD]" /> Địa điểm
                                 </div>
-                                <div className="text-sm font-semibold text-white/90">Bình Thạnh, TP. Hồ Chí Minh</div>
+                                <div className="text-sm font-semibold text-white/90">79 Võ Thị Sáu, Phú Đông, Phú Yên, Đắk Lắk, Việt Nam</div>
                             </div>
                         </div>
                     </div>
@@ -208,9 +222,12 @@ const Booking = () => {
                                         required
                                         type="text"
                                         placeholder="Nhập họ tên"
-                                        className="w-full h-[48px] pl-13 pr-6 bg-[#F8FAFC] border border-[#E2E8F0] rounded-full focus:bg-white focus:border-[#6CD1FD] focus:shadow-[0_0_0_4px_rgba(108,209,253,0.1)] outline-none font-bold text-[#311142] placeholder:text-gray-400/60 placeholder:font-medium transition-all text-sm"
+                                        className={`w-full h-[48px] pl-13 pr-6 bg-white border ${errors.customerName ? "border-red-500" : "border-[#E2E8F0]"} rounded-full focus:bg-white focus:border-[#6CD1FD] focus:shadow-[0_0_0_4px_rgba(108,209,253,0.1)] outline-none font-medium text-slate-600 placeholder:text-gray-400/50 placeholder:font-medium placeholder:text-[15px] transition-all text-sm`}
                                         value={formData.customerName}
-                                        onChange={(e) => setFormData({ ...formData, customerName: e.target.value })}
+                                        onChange={(e) => {
+                                            setFormData({ ...formData, customerName: e.target.value });
+                                            if (errors.customerName) setErrors({ ...errors, customerName: false });
+                                        }}
                                     />
                                 </div>
                             </div>
@@ -227,9 +244,12 @@ const Booking = () => {
                                             required
                                             type="tel"
                                             placeholder="Nhập số điện thoại"
-                                            className="w-full h-[48px] pl-13 pr-6 bg-[#F8FAFC] border border-[#E2E8F0] rounded-full focus:bg-white focus:border-[#6CD1FD] focus:shadow-[0_0_0_4px_rgba(108,209,253,0.1)] outline-none font-bold text-[#311142] placeholder:text-gray-400/60 placeholder:font-medium transition-all text-sm"
+                                            className={`w-full h-[48px] pl-13 pr-6 bg-white border ${errors.phoneNumber ? "border-red-500" : "border-[#E2E8F0]"} rounded-full focus:bg-white focus:border-[#6CD1FD] focus:shadow-[0_0_0_4px_rgba(108,209,253,0.1)] outline-none font-medium text-slate-600 placeholder:text-gray-400/50 placeholder:font-medium placeholder:text-[15px] transition-all text-sm`}
                                             value={formData.phoneNumber}
-                                            onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+                                            onChange={(e) => {
+                                                setFormData({ ...formData, phoneNumber: e.target.value });
+                                                if (errors.phoneNumber) setErrors({ ...errors, phoneNumber: false });
+                                            }}
                                         />
                                     </div>
                                 </div>
@@ -244,9 +264,12 @@ const Booking = () => {
                                             required
                                             type="email"
                                             placeholder="Nhập email"
-                                            className="w-full h-[48px] pl-13 pr-6 bg-[#F8FAFC] border border-[#E2E8F0] rounded-full focus:bg-white focus:border-[#6CD1FD] focus:shadow-[0_0_0_4px_rgba(108,209,253,0.1)] outline-none font-bold text-[#311142] placeholder:text-gray-400/60 placeholder:font-medium transition-all text-sm"
+                                            className={`w-full h-[48px] pl-13 pr-6 bg-white border ${errors.email ? "border-red-500" : "border-[#E2E8F0]"} rounded-full focus:bg-white focus:border-[#6CD1FD] focus:shadow-[0_0_0_4px_rgba(108,209,253,0.1)] outline-none font-medium text-slate-600 placeholder:text-gray-400/50 placeholder:font-medium placeholder:text-[15px] transition-all text-sm`}
                                             value={formData.email}
-                                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                            onChange={(e) => {
+                                                setFormData({ ...formData, email: e.target.value });
+                                                if (errors.email) setErrors({ ...errors, email: false });
+                                            }}
                                         />
                                     </div>
                                 </div>
@@ -259,13 +282,13 @@ const Booking = () => {
                                         borderRadius: 9999,
                                         controlHeightLG: 48,
                                         colorBorder: '#E2E8F0',
-                                        colorBgContainer: '#F8FAFC',
-                                        colorText: '#311142',
+                                        colorBgContainer: '#ffffff',
+                                        colorText: '#475569',
                                         fontFamily: 'inherit',
                                     },
                                     components: {
                                         Select: {
-                                            selectorBg: '#F8FAFC',
+                                            selectorBg: '#ffffff',
                                             hoverBorderColor: '#E2E8F0',
                                             activeBorderColor: '#6CD1FD',
                                             activeOutlineColor: 'transparent',
@@ -282,13 +305,20 @@ const Booking = () => {
                                     <div className="space-y-1.5">
                                         <label className="text-[15px] font-semibold text-slate-600 px-1">Dịch vụ <span className="text-red-400">*</span></label>
                                         <div className="relative group">
+                                            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#6CD1FD] transition-colors pointer-events-none z-10">
+                                                <FiMusic size={18} />
+                                            </div>
                                             <Select
                                                 mode="multiple"
                                                 size="large"
+                                                status={errors.serviceIds ? "error" : ""}
                                                 placeholder="Chọn dịch vụ"
-                                                className="w-full custom-antd-select font-bold text-sm min-h-[48px]"
+                                                className="w-full custom-antd-select-with-icon font-medium text-sm min-h-[48px]"
                                                 value={formData.serviceIds}
-                                                onChange={(val) => setFormData({ ...formData, serviceIds: val })}
+                                                onChange={(val) => {
+                                                    setFormData({ ...formData, serviceIds: val });
+                                                    if (errors.serviceIds) setErrors({ ...errors, serviceIds: false });
+                                                }}
                                                 options={services.map(s => ({ value: s.id, label: s.name }))}
                                                 maxTagCount="responsive"
                                             />
@@ -296,17 +326,21 @@ const Booking = () => {
                                     </div>
 
                                     <div className="space-y-1.5">
-                                        <label className="text-[15px] font-semibold text-slate-600 px-1">Studio Room <span className="text-red-400">*</span></label>
+                                        <label className="text-[15px] font-semibold text-slate-600 px-1">Phòng thu <span className="text-red-400">*</span></label>
                                         <div className="relative group">
                                             <div className="absolute left-5 top-[24px] -translate-y-1/2 text-gray-300 group-focus-within:text-[#6CD1FD] transition-colors pointer-events-none z-10">
                                                 <FiLayout size={18} />
                                             </div>
                                             <Select
                                                 size="large"
+                                                status={errors.studioRoomId ? "error" : ""}
                                                 placeholder="Chọn phòng"
-                                                className="w-full custom-antd-select-with-icon font-bold text-sm h-[48px]"
+                                                className="w-full custom-antd-select-with-icon font-medium text-sm h-[48px]"
                                                 value={formData.studioRoomId}
-                                                onChange={(val) => setFormData({ ...formData, studioRoomId: val })}
+                                                onChange={(val) => {
+                                                    setFormData({ ...formData, studioRoomId: val });
+                                                    if (errors.studioRoomId) setErrors({ ...errors, studioRoomId: false });
+                                                }}
                                                 options={studios.map(s => ({ value: s.id, label: s.studioName }))}
                                             />
                                         </div>
@@ -317,13 +351,21 @@ const Booking = () => {
                                 <div className="space-y-1.5 mt-4">
                                     <label className="text-[15px] font-semibold text-slate-600 px-1">Ngày thu <span className="text-red-400">*</span></label>
                                     <div className="relative group">
+                                        <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#6CD1FD] transition-colors pointer-events-none z-10">
+                                            <FiCalendar size={18} />
+                                        </div>
                                         <DatePicker
                                             format="DD/MM/YYYY"
                                             size="large"
+                                            status={errors.bookingDate ? "error" : ""}
                                             placeholder="Chọn ngày thu"
-                                            className="w-full custom-antd-datepicker font-bold text-sm h-[48px]"
+                                            suffixIcon={null}
+                                            className="w-full custom-antd-datepicker-with-icon font-medium text-sm h-[48px]"
                                             value={formData.bookingDate}
-                                            onChange={(val) => setFormData({ ...formData, bookingDate: val })}
+                                            onChange={(val) => {
+                                                setFormData({ ...formData, bookingDate: val });
+                                                if (errors.bookingDate) setErrors({ ...errors, bookingDate: false });
+                                            }}
                                             disabledDate={(current) => current && current <= dayjs().startOf('day')}
                                         />
                                     </div>
@@ -336,7 +378,7 @@ const Booking = () => {
                                 <textarea
                                     rows="3"
                                     placeholder="Nhập ghi chú"
-                                    className="w-full px-6 py-3 bg-[#F8FAFC] border border-[#E2E8F0] rounded-[24px] focus:bg-white focus:border-[#6CD1FD] focus:shadow-[0_0_0_4px_rgba(108,209,253,0.1)] outline-none font-medium text-[#311142] transition-all resize-none text-sm placeholder:text-gray-400"
+                                    className="w-full px-6 py-3.5 bg-white border border-[#E2E8F0] rounded-[24px] focus:bg-white focus:border-[#6CD1FD] focus:shadow-[0_0_0_4px_rgba(108,209,253,0.1)] outline-none font-medium text-slate-600 transition-all resize-none text-sm placeholder:text-gray-400/50 placeholder:font-medium placeholder:text-[15px]"
                                     value={formData.note}
                                     onChange={(e) => setFormData({ ...formData, note: e.target.value })}
                                 ></textarea>
@@ -368,7 +410,7 @@ const Booking = () => {
                 input:-webkit-autofill:hover, 
                 input:-webkit-autofill:focus, 
                 input:-webkit-autofill:active{
-                    -webkit-box-shadow: 0 0 0 30px #F8FAFC inset !important;
+                    -webkit-box-shadow: 0 0 0 30px #ffffff inset !important;
                     -webkit-text-fill-color: #311142 !important;
                     transition: background-color 5000s ease-in-out 0s;
                 }
@@ -389,7 +431,8 @@ const Booking = () => {
                 /* Custom Ant Design overrides to match our UI */
                 .custom-antd-select .ant-select-selector,
                 .custom-antd-select-with-icon .ant-select-selector,
-                .custom-antd-datepicker {
+                .custom-antd-datepicker,
+                .custom-antd-datepicker-with-icon {
                     transition: all 0.3s;
                 }
                 .custom-antd-select.ant-select-focused .ant-select-selector,
@@ -399,16 +442,19 @@ const Booking = () => {
                     box-shadow: 0 0 0 4px rgba(108, 209, 253, 0.1) !important;
                     border-color: #6CD1FD !important;
                 }
-                .custom-antd-select-with-icon .ant-select-selector {
-                    padding-left: 2.75rem !important;
+                .custom-antd-select-with-icon .ant-select-selector,
+                .custom-antd-datepicker-with-icon {
+                    padding-left: 3.25rem !important;
                 }
                 .custom-antd-datepicker .ant-picker-input > input {
-                    font-weight: 700;
-                    color: #311142;
+                    font-weight: 500;
+                    color: #475569;
                 }
                 .custom-antd-select .ant-select-selection-placeholder,
                 .custom-antd-datepicker .ant-picker-input > input::placeholder {
                     font-weight: 500 !important;
+                    font-size: 15px !important;
+                    color: rgba(156, 163, 175, 0.5) !important;
                 }
 
                 @keyframes shine {

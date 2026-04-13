@@ -1,15 +1,15 @@
 import { useState, useEffect, useCallback } from "react";
 import { message, Table, Button, Tag, Switch, Tooltip } from "antd";
 import {
-  Edit,
-  Trash2,
   Plus,
   ChevronLeft,
   ChevronRight,
   Briefcase,
-  Gem,
-  Zap,
-  Star
+  Crown,
+  Rocket,
+  Layers,
+  Edit,
+  Trash2
 } from "lucide-react";
 import serviceApi from "../../../api/serviceApi";
 import ServiceForm from "./components/ServiceForm";
@@ -226,12 +226,12 @@ const ServiceManagement = () => {
       {/* Stats Summary Panel */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {[
-          { icon: <Gem size={24} />, label: "Gói cao cấp", value: services.filter(s => (s.price || 0) > 10000000).length, config: "bg-blue-50 text-blue-600" },
-          { icon: <Zap size={24} />, label: "Đang mở bán", value: services.filter(s => s.active).length, config: "bg-green-50 text-green-600" },
-          { icon: <Star size={24} />, label: "Tổng dịch vụ", value: pagination.total, config: "bg-purple-50 text-purple-600" }
+          { icon: <Crown size={22} />, label: "Gói cao cấp", value: services.filter(s => (s.price || 0) > 10000000).length, config: "bg-amber-50 text-amber-600 border-amber-100" },
+          { icon: <Rocket size={22} />, label: "Đang mở bán", value: services.filter(s => s.active).length, config: "bg-indigo-50 text-indigo-600 border-indigo-100" },
+          { icon: <Layers size={22} />, label: "Tổng dịch vụ", value: pagination.total, config: "bg-slate-50 text-slate-600 border-slate-100" }
         ].map((item, i) => (
-          <div key={i} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-5 transition-all hover:shadow-xl hover:shadow-slate-200/50 group">
-            <div className={`w-14 h-14 rounded-xl ${item.config} flex items-center justify-center transition-transform group-hover:scale-110 shadow-sm`}>
+          <div key={i} className="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm flex items-center gap-5 transition-all hover:bg-slate-50 group">
+            <div className={`w-14 h-14 rounded-xl border ${item.config} flex items-center justify-center transition-all group-hover:bg-white shadow-sm`}>
               {item.icon}
             </div>
             <div>
@@ -242,7 +242,7 @@ const ServiceManagement = () => {
         ))}
       </div>
 
-      <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-6">
+      <div className="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm space-y-6">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-50">
           <div>
             <h2 className="text-[18px] font-semibold text-slate-900 leading-tight">Danh sách dịch vụ</h2>
@@ -251,14 +251,14 @@ const ServiceManagement = () => {
           <Button
             type="primary"
             onClick={handleCreate}
-            className="h-10 px-4 bg-slate-900 hover:bg-slate-800 rounded-xl border-none font-semibold text-[14px] shadow-sm flex items-center gap-2 transition-all whitespace-nowrap"
+            className="h-10 px-4 bg-slate-900 hover:bg-slate-800 rounded-2xl border-none font-semibold text-[14px] shadow-sm flex items-center gap-2 transition-all whitespace-nowrap"
           >
             <Plus size={16} strokeWidth={2.5} />
             Kiến tạo dịch vụ
           </Button>
         </div>
 
-        <div className="border border-slate-100 overflow-hidden bg-white shadow-sm rounded-xl">
+        <div className="border border-slate-100 overflow-hidden bg-white shadow-sm rounded-2xl">
           <Table
             columns={columns}
             dataSource={Array.isArray(services) ? services : []}

@@ -9,6 +9,9 @@ import {
 } from "recharts";
 import { TrendingUp, BarChart3 } from "lucide-react";
 
+import { useEffect, useState } from "react";
+import AdminDropdown from "./AdminDropdown";
+
 const data = [
   { name: "Mon", income: 4000 },
   { name: "Tue", income: 3000 },
@@ -19,7 +22,15 @@ const data = [
   { name: "Sun", income: 3490 },
 ];
 
+const timeframeOptions = [
+  { value: "7days", label: "7 ngày gần nhất" },
+  { value: "month", label: "Tháng hiện tại" },
+  { value: "year", label: "Năm nay" },
+];
+
 const AdminRevenueChart = () => {
+  const [timeframe, setTimeframe] = useState("7days");
+
   return (
     <div className="w-full">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
@@ -38,11 +49,11 @@ const AdminRevenueChart = () => {
                 <TrendingUp size={16} />
                 +14.5% Tháng trước
             </div>
-            <select className="h-9 px-3 bg-white border border-slate-200 rounded-lg text-[13px] font-medium text-slate-700 focus:ring-0 focus:border-blue-500 transition-all cursor-pointer outline-none">
-              <option>7 ngày gần nhất</option>
-              <option>Tháng hiện tại</option>
-              <option>Năm nay</option>
-            </select>
+            <AdminDropdown 
+              options={timeframeOptions} 
+              value={timeframe} 
+              onChange={setTimeframe} 
+            />
         </div>
       </div>
 

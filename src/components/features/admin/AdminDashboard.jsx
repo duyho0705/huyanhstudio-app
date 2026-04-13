@@ -10,7 +10,10 @@ import {
   CheckCircle2,
   XCircle,
   BarChart3,
-  PlusCircle,
+  CalendarPlus,
+  Headset,
+  ShoppingBag,
+  UserPlus,
   Music2,
 } from "lucide-react";
 import bookingApi from "../../../api/bookingApi";
@@ -103,26 +106,26 @@ const AdminDashboard = () => {
   const quickActions = [
     {
       title: "Đặt lịch mới",
-      icon: <PlusCircle size={24} />,
+      icon: <CalendarPlus size={26} />,
       link: "/admin/bookings?action=create",
       color: "blue",
     },
     {
       title: "Quản lý dịch vụ",
-      icon: <Mic2 size={24} />,
+      icon: <Headset size={26} />,
       link: "/admin/services",
       color: "purple",
     },
     {
       title: "Quản lý sản phẩm",
-      icon: <Package size={24} />,
+      icon: <ShoppingBag size={26} />,
       link: "/admin/products",
       color: "green",
     },
 
     {
       title: "Quản lý người dùng",
-      icon: <Users size={24} />,
+      icon: <UserPlus size={26} />,
       link: "/admin/users",
       color: "orange",
     },
@@ -167,7 +170,7 @@ const AdminDashboard = () => {
           <Link
             key={index}
             to={card.link}
-            className={`p-4 rounded-xl border border-slate-200 transition-all hover:border-slate-300 hover:shadow-sm group bg-white`}
+            className={`p-4 rounded-2xl border border-slate-200 transition-all hover:border-slate-300 hover:shadow-sm group bg-white`}
           >
             <div className="flex items-center gap-4">
               <div className={`w-12 h-12 flex items-center justify-center rounded-lg transition-transform ${getColorClasses(card.color)}`}>
@@ -183,40 +186,46 @@ const AdminDashboard = () => {
       </div>
 
       {/* Quick Actions */}
-      <section className="bg-white p-5 md:p-6 rounded-2xl border border-slate-200 shadow-sm">
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-1 h-5 bg-blue-500 rounded-full"></div>
-          <h2 className="text-[16px] font-semibold text-slate-900">Thao tác nhanh</h2>
-        </div>
+      <section className="bg-white p-5 md:p-6 rounded-[28px] border border-slate-200 shadow-sm relative overflow-hidden">
+        {/* Decorative Backgrounds */}
+        <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-50/40 rounded-full blur-[80px] -z-0"></div>
+        <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-purple-50/40 rounded-full blur-[80px] -z-0"></div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {quickActions.map((action, index) => (
-            <Link
-              key={index}
-              to={action.link}
-              className={`flex flex-col items-center gap-2 p-4 rounded-xl border border-slate-100 transition-all hover:bg-slate-50 group hover:border-slate-200`}
-            >
-              <div className={`p-2 rounded-lg transition-all ${getColorClasses(action.color)}`}>
-                {action.icon}
-              </div>
-              <span className="text-[14px] font-medium text-slate-700">{action.title}</span>
-            </Link>
-          ))}
+        <div className="relative z-10">
+          <div className="flex items-center gap-2 mb-5">
+            <div className="w-1.5 h-6 bg-blue-500 rounded-full"></div>
+            <h2 className="text-[17px] font-bold text-slate-900 tracking-tight">Thao tác nhanh</h2>
+          </div>
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {quickActions.map((action, index) => (
+              <Link
+                key={index}
+                to={action.link}
+                className={`flex flex-col items-center gap-3 p-6 rounded-2xl border border-slate-100 bg-white/50 backdrop-blur-sm transition-all hover:bg-white hover:shadow-xl hover:shadow-slate-200/50 group hover:-translate-y-1 hover:border-blue-100`}
+              >
+                <div className={`w-14 h-14 flex items-center justify-center rounded-2xl transition-all group-hover:scale-110 shadow-sm ${getColorClasses(action.color)}`}>
+                  {action.icon}
+                </div>
+                <span className="text-[14px] font-semibold text-slate-700 group-hover:text-blue-600 transition-colors uppercase tracking-wider text-center">{action.title}</span>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Analytics & Popular Services Grid */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="bg-white p-6 rounded-[28px] border border-slate-200 shadow-sm overflow-hidden">
           <AdminRevenueChart />
         </div>
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="bg-white p-6 rounded-[28px] border border-slate-200 shadow-sm overflow-hidden">
           <AdminPopularServices />
         </div>
       </div>
 
       {/* Recent Bookings */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-[28px] border border-slate-200 shadow-sm overflow-hidden">
         <AdminRecentBookings />
       </div>
     </div>

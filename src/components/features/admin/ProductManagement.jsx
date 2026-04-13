@@ -162,7 +162,7 @@ const ProductManagement = () => {
     <div className="space-y-10 animate-in fade-in duration-500">
       {contextHolder}
 
-      <div className="bg-white p-6 rounded-none border border-slate-100 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+      <div className="bg-white p-6 rounded-[28px] border border-slate-100 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
           <h2 className="text-[18px] font-semibold text-slate-900 leading-tight">Thư viện sản phẩm</h2>
           <p className="text-[13px] font-medium text-slate-500 mt-1">Hệ thống lưu trữ & phân phối nội dung video</p>
@@ -172,7 +172,7 @@ const ProductManagement = () => {
           <div className="relative w-full sm:w-72">
             <Input
               placeholder="Truy vấn dữ liệu sản phẩm..."
-              className="h-10 pl-10 pr-4 bg-slate-50 border-none rounded-none text-[14px] focus:bg-white focus:ring-2 focus:ring-slate-100 transition-all"
+              className="h-10 pl-10 pr-4 bg-slate-50 border-none rounded-xl text-[14px] focus:bg-white focus:ring-2 focus:ring-slate-100 transition-all"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
               allowClear
@@ -182,7 +182,7 @@ const ProductManagement = () => {
           <Button
             type="primary"
             onClick={handleCreate}
-            className="h-10 px-4 bg-slate-900 hover:bg-slate-800 rounded-none border-none font-semibold text-[14px] shadow-sm flex items-center gap-2 transition-all whitespace-nowrap"
+            className="h-10 px-4 bg-slate-900 hover:bg-slate-800 rounded-xl border-none font-semibold text-[14px] shadow-sm flex items-center gap-2 transition-all whitespace-nowrap"
           >
             <Plus size={16} strokeWidth={2.5} />
             Đăng sản phẩm
@@ -193,18 +193,18 @@ const ProductManagement = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
         {loading ? (
           Array.from({ length: 10 }).map((_, i) => (
-            <div key={i} className="bg-white rounded-none border border-slate-100 p-5 space-y-5 animate-pulse">
+            <div key={i} className="bg-white rounded-3xl border border-slate-100 p-5 space-y-5 animate-pulse">
               <div className="aspect-video bg-slate-50 rounded-2xl"></div>
               <div className="h-4 bg-slate-50 rounded-full w-3/4"></div>
               <div className="flex justify-between">
-                <div className="h-10 bg-slate-50 rounded-none w-24"></div>
-                <div className="h-10 bg-slate-50 rounded-none w-10"></div>
+                <div className="h-10 bg-slate-50 rounded-xl w-24"></div>
+                <div className="h-10 bg-slate-50 rounded-xl w-10"></div>
               </div>
             </div>
           ))
         ) : products.length === 0 ? (
-          <div className="col-span-full flex flex-col items-center justify-center py-40 text-slate-400 bg-slate-50/50 rounded-none border-2 border-dashed border-slate-200">
-            <div className="w-24 h-24 rounded-none bg-white shadow-xl shadow-slate-200 flex items-center justify-center text-slate-200 mb-8">
+          <div className="col-span-full flex flex-col items-center justify-center py-40 text-slate-400 bg-slate-50/50 rounded-[32px] border-2 border-dashed border-slate-200">
+            <div className="w-24 h-24 rounded-3xl bg-white shadow-xl shadow-slate-200 flex items-center justify-center text-slate-200 mb-8">
               <Package size={48} strokeWidth={1} />
             </div>
             <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight mb-2">
@@ -218,7 +218,7 @@ const ProductManagement = () => {
           </div>
         ) : (
           products.map((p) => (
-            <div key={p.id} className="group bg-white rounded-none border border-slate-100 hover:border-slate-900 transition-all duration-500 shadow-sm hover:shadow-2xl hover:shadow-slate-200 overflow-hidden flex flex-col">
+            <div key={p.id} className="group bg-white rounded-[24px] border border-slate-100 hover:border-slate-900 transition-all duration-500 shadow-sm hover:shadow-2xl hover:shadow-slate-200 overflow-hidden flex flex-col">
               <div className="relative aspect-video overflow-hidden">
                 <img
                   src={getThumbnail(p.videoUrl)}
@@ -228,13 +228,13 @@ const ProductManagement = () => {
                 <div className="absolute inset-0 bg-slate-950/60 opacity-0 group-hover:opacity-100 transition-all duration-500 backdrop-blur-[2px] flex items-center justify-center">
                   <button
                     onClick={() => window.open(p.videoUrl, "_blank", "noopener,noreferrer")}
-                    className="w-16 h-16 rounded-none bg-white text-slate-950 flex items-center justify-center shadow-2xl transform translate-y-8 group-hover:translate-y-0 transition-all duration-700 hover:scale-110 active:scale-90"
+                    className="w-16 h-16 rounded-2xl bg-white text-slate-950 flex items-center justify-center shadow-2xl transform translate-y-8 group-hover:translate-y-0 transition-all duration-700 hover:scale-110 active:scale-90"
                   >
                     <Play size={24} fill="currentColor" strokeWidth={0} />
                   </button>
                 </div>
                 <div className="absolute top-4 left-4">
-                  <div className="px-3 py-1 bg-white/90 backdrop-blur-md rounded-none text-[9px] font-black uppercase tracking-widest text-slate-900 border border-white shadow-sm flex items-center gap-1.5">
+                  <div className="px-3 py-1 bg-white/90 backdrop-blur-md rounded-lg text-[9px] font-black uppercase tracking-widest text-slate-900 border border-white shadow-sm flex items-center gap-1.5">
                     <Film size={10} />
                     RAW Content
                   </div>
@@ -243,7 +243,7 @@ const ProductManagement = () => {
 
               <div className="p-5 flex-1 flex flex-col justify-between">
                 <div className="flex flex-col mb-4">
-                  <span className="text-[12px] font-medium text-slate-500 mb-1">Sản phẩm hệ thống</span>
+                  <span className="text-[12px] font-medium text-slate-500 mb-1">Tác giả: {p.author || "N/A"}</span>
                   <h3 className="font-semibold text-slate-900 text-[14px] leading-snug line-clamp-2">{p.title}</h3>
                 </div>
 
@@ -251,7 +251,7 @@ const ProductManagement = () => {
                   <Button
                     type="text"
                     onClick={() => handleEdit(p)}
-                    className="w-9 h-9 rounded-none flex items-center justify-center text-amber-500 hover:bg-amber-50 transition-all p-0"
+                    className="w-9 h-9 rounded-xl flex items-center justify-center text-amber-500 hover:bg-amber-50 transition-all p-0"
                     title="Chỉnh sửa"
                   >
                     <Edit size={18} strokeWidth={2.5} />
@@ -259,7 +259,7 @@ const ProductManagement = () => {
                   <Button
                     type="text"
                     onClick={() => handleDelete(p)}
-                    className="w-9 h-9 rounded-none flex items-center justify-center text-red-500 hover:bg-red-50 transition-all p-0"
+                    className="w-9 h-9 rounded-xl flex items-center justify-center text-red-500 hover:bg-red-50 transition-all p-0"
                     title="Gỡ bỏ"
                   >
                     <Trash2 size={18} strokeWidth={2.5} />

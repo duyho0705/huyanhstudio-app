@@ -9,10 +9,10 @@ const ProductShowcase = () => {
 
   // Giữ lại dữ liệu dự phòng để không bị trống ảnh
   const mockProducts = [
-    { id: "m1", title: "Vocal Recording", description: "Dự án thu âm chuyên nghiệp.", videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-    { id: "m2", title: "Music Video", description: "Sản xuất MV ca nhạc 4K.", videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-    { id: "m3", title: "Audio Master", description: "Xử lý âm thanh hậu kỳ.", videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-    { id: "m4", title: "Studio Light", description: "Ánh sáng điện ảnh cho dự án.", videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
+    { id: "m1", title: "Vocal Recording", author: "Huy Anh Team", videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+    { id: "m2", title: "Music Video", author: "Huy Anh Team", videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+    { id: "m3", title: "Audio Master", author: "Huy Anh Team", videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+    { id: "m4", title: "Studio Light", author: "Huy Anh Team", videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
   ];
 
   useEffect(() => {
@@ -35,6 +35,12 @@ const ProductShowcase = () => {
 
   const getThumbnail = (url) => {
     if (!url) return "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?q=80&w=2070&auto=format&fit=crop";
+
+    // Cloudinary Support: Replace video extension with .jpg for auto-thumbnail
+    if (url.includes("cloudinary.com")) {
+      return url.replace(/\.[^/.]+$/, ".jpg");
+    }
+
     const v = url.match(/[?&]v=([^&]+)/);
     if (v) return `https://img.youtube.com/vi/${v[1]}/maxresdefault.jpg`;
     if (url.includes("youtu.be/")) return `https://img.youtube.com/vi/${url.split("youtu.be/")[1]}/maxresdefault.jpg`;
@@ -82,8 +88,8 @@ const ProductShowcase = () => {
 
                   <div className="absolute bottom-0 left-0 right-0 p-6">
                     <h3 className="text-xl md:text-2xl font-bold text-white leading-tight mb-3 group-hover:text-[#6CD1FD] transition-colors">{product.title}</h3>
-                    <p className="text-[14px] text-white/60 line-clamp-2 leading-relaxed font-medium">
-                      {product.description || "A remarkable creative execution showcasing innovative visual storytelling."}
+                    <p className="text-[14px] text-white/60 line-clamp-1 leading-relaxed font-bold uppercase tracking-wider">
+                      Tác giả: {product.author || "Huy Anh Studio"}
                     </p>
                   </div>
                 </motion.div>

@@ -41,16 +41,10 @@ const ProductForm = ({ open, onCancel, onSubmit, initialValues }) => {
   return (
     <Modal
       title={
-        <div className="flex items-center gap-3 py-2">
-          <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
-            <Video size={20} />
-          </div>
-          <div>
-            <h3 className="text-[18px] font-semibold text-slate-900 leading-tight">
-              {initialValues ? "Cập nhật sản phẩm" : "Thêm sản phẩm mới"}
-            </h3>
-            <p className="text-[13px] font-medium text-slate-500 mt-0.5">Quản lý kho nội dung video</p>
-          </div>
+        <div className="py-2">
+          <h3 className="text-[20px] font-bold text-slate-900 leading-tight">
+            {initialValues ? "Cập nhật sản phẩm" : "Thêm sản phẩm mới"}
+          </h3>
         </div>
       }
       open={open}
@@ -74,22 +68,33 @@ const ProductForm = ({ open, onCancel, onSubmit, initialValues }) => {
           rules={[{ required: true, message: "Vui lòng nhập tiêu đề!" }]}
         >
           <Input
-            placeholder="Ví dụ: Clip Highlight Đám Cưới Huy & Anh"
+            placeholder="Nhập tiêu đề"
+            className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-medium text-[14px]"
+          />
+        </Form.Item>
+
+        <Form.Item
+          name="author"
+          label={<span className="text-[13px] font-semibold text-slate-700">Tên tác giả</span>}
+          rules={[{ required: true, message: "Vui lòng nhập tên tác giả!" }]}
+        >
+          <Input
+            placeholder="Nhập tên tác giả"
             className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-medium text-[14px]"
           />
         </Form.Item>
 
         <Form.Item
           name="videoUrl"
-          label={<span className="text-[13px] font-semibold text-slate-700">Đường dẫn Youtube</span>}
+          label={<span className="text-[14px] font-bold text-slate-800">Đường dẫn Youtube</span>}
           rules={[
             { required: true, message: "Vui lòng nhập đường dẫn video!" },
           ]}
         >
           <Input
-            prefix={<Youtube size={16} className="text-red-500 mr-1" />}
-            placeholder="youtube.com/watch?v=..."
-            className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-medium text-[14px]"
+            prefix={<Youtube size={18} className="text-red-500 mr-2" />}
+            placeholder="Nhập đường dẫn"
+            className="h-12 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-semibold text-[15px]"
           />
         </Form.Item>
 
@@ -99,29 +104,28 @@ const ProductForm = ({ open, onCancel, onSubmit, initialValues }) => {
           }
         >
           {({ getFieldValue }) => {
-            const url = getFieldValue("videoUrl");
+            const url = getFieldValue("videoUrl") || "";
             const videoId = getVideoId(url);
 
             return videoId ? (
               <div className="mt-2 p-5 bg-slate-50 rounded-2xl border border-slate-100 animate-in fade-in slide-in-from-top-4 duration-500">
                 <div className="flex items-center justify-between mb-3 px-1">
-                  <div className="flex items-center gap-2 text-[13px] font-semibold text-green-600">
+                  <div className="flex items-center gap-2 text-[13px] font-bold text-emerald-600">
                     <CheckCircle size={16} />
                     Link hợp lệ
                   </div>
-                  <div className="text-[13px] font-medium text-slate-400 cursor-copy" title="Video ID">{videoId}</div>
                 </div>
-                <div className="relative aspect-video rounded-xl overflow-hidden border border-slate-200 shadow-sm">
-                  <img
-                    src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
-                    alt="Preview"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                    <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-white">
-                      <Youtube size={24} fill="currentColor" />
+                <div className="relative aspect-video rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-black">
+                    <img
+                        src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
+                        alt="Preview"
+                        className="w-full h-full object-cover opacity-80"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-white">
+                        <Youtube size={28} fill="currentColor" />
+                        </div>
                     </div>
-                  </div>
                 </div>
               </div>
             ) : url ? (

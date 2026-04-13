@@ -271,7 +271,7 @@ const BookingManagement = () => {
         key: "shortCode",
         width: 120,
         render: (code, record) => (
-          <div className="px-3 py-1 bg-slate-100 text-slate-700 rounded-none text-[13px] font-semibold tracking-wider border border-slate-200 inline-block shadow-sm">
+          <div className="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-[13px] font-semibold tracking-wider border border-slate-200 inline-block shadow-sm">
             {code || record.bookingCode?.slice(0, 8)}
           </div>
         ),
@@ -366,7 +366,7 @@ const BookingManagement = () => {
             <Button
               type="text"
               onClick={() => handleViewDetails(record)}
-              className="w-9 h-9 rounded-none flex items-center justify-center text-blue-500 hover:bg-blue-50 transition-all p-0"
+              className="w-9 h-9 rounded-xl flex items-center justify-center text-blue-500 hover:bg-blue-50 transition-all p-0"
               title="Xem chi tiết"
             >
               <Search size={18} strokeWidth={2.5} />
@@ -374,7 +374,7 @@ const BookingManagement = () => {
             <Button
               type="text"
               onClick={() => handleEdit(record)}
-              className="w-9 h-9 rounded-none flex items-center justify-center text-amber-500 hover:bg-amber-50 transition-all p-0"
+              className="w-9 h-9 rounded-xl flex items-center justify-center text-amber-500 hover:bg-amber-50 transition-all p-0"
               title="Chỉnh sửa"
             >
               <Edit size={18} strokeWidth={2.5} />
@@ -382,7 +382,7 @@ const BookingManagement = () => {
             <Button
               type="text"
               onClick={() => openDeleteModal(record)}
-              className="w-9 h-9 rounded-none flex items-center justify-center text-red-500 hover:bg-red-50 transition-all p-0"
+              className="w-9 h-9 rounded-xl flex items-center justify-center text-red-500 hover:bg-red-50 transition-all p-0"
               title="Gỡ bỏ"
             >
               <Trash2 size={18} strokeWidth={2.5} />
@@ -406,8 +406,8 @@ const BookingManagement = () => {
           { icon: <CheckCircle className="text-green-600" />, label: "Hoàn thành", value: bookings.filter((b) => b.status === "COMPLETED").length, color: "green" },
           { icon: <XCircle className="text-red-600" />, label: "Đã hủy", value: bookings.filter((b) => b.status === "CANCELLED").length, color: "red" },
         ].map((stat, i) => (
-          <div key={i} className="bg-white p-6 rounded-none border border-slate-200 shadow-sm flex items-center gap-5 group">
-            <div className={`w-14 h-14 rounded-none bg-${stat.color}-50 flex items-center justify-center`}>
+          <div key={i} className="bg-white p-6 rounded-[24px] border border-slate-200 shadow-sm flex items-center gap-5 group">
+            <div className={`w-14 h-14 rounded-2xl bg-${stat.color}-50 flex items-center justify-center`}>
               {React.cloneElement(stat.icon, { size: 24 })}
             </div>
             <div>
@@ -418,10 +418,10 @@ const BookingManagement = () => {
         ))}
       </div>
 
-      <div className="bg-white p-8 rounded-none border border-slate-200 shadow-sm space-y-6">
+      <div className="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm space-y-6">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-50">
           <div className="flex items-center gap-4">
-            <div className="w-1.5 h-10 bg-slate-900 rounded-none"></div>
+            <div className="w-1.5 h-10 bg-slate-900 rounded-full"></div>
             <div>
               <h2 className="text-[23px] font-semibold text-slate-900 tracking-tight">Danh sách lịch thu âm</h2>
             </div>
@@ -446,13 +446,13 @@ const BookingManagement = () => {
                 placeholder="Mã đơn, tên khách hàng..."
                 value={filters.search}
                 onChange={(e) => handleFilterChange("search", e.target.value)}
-                className="h-12 pl-12 pr-6 bg-white border-2 border-slate-200 rounded-none font-semibold text-[16px] text-slate-700 placeholder:text-slate-700 placeholder:font-semibold focus:border-slate-900 focus:ring-0 transition-all shadow-sm"
+                className="h-12 pl-12 pr-6 bg-white border-2 border-slate-200 rounded-2xl font-semibold text-[16px] text-slate-700 placeholder:text-slate-700 placeholder:font-semibold focus:border-slate-900 focus:ring-0 transition-all shadow-sm"
               />
               <Search size={20} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500" />
             </div>
             <Button
               onClick={handleCreate}
-              className="h-12 px-8 bg-slate-900 border-none font-semibold text-[16px] shadow-xl shadow-slate-200 flex items-center gap-3 whitespace-nowrap !text-white hover:!bg-slate-900 rounded-none"
+              className="h-12 px-8 bg-slate-900 border-none font-semibold text-[16px] shadow-xl shadow-slate-200 flex items-center gap-3 whitespace-nowrap !text-white hover:!bg-slate-900 rounded-2xl"
             >
               <Plus size={18} strokeWidth={3} />
               Tạo lịch thu âm
@@ -461,7 +461,7 @@ const BookingManagement = () => {
         </div>
 
 
-        <div className="rounded-none border-2 border-slate-200 overflow-hidden bg-white shadow-inner">
+        <div className="rounded-[28px] border-2 border-slate-200 overflow-hidden bg-white shadow-inner">
           <Table
             rowSelection={rowSelection}
             columns={columns}
@@ -484,20 +484,20 @@ const BookingManagement = () => {
 
           {pagination.total > 0 && (
             <div className="p-6 bg-slate-50/30 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-6">
-              <div className="px-5 py-2.5 bg-white border border-slate-100 rounded-none text-[11px] font-black text-slate-600 uppercase tracking-widest shadow-sm flex items-center gap-2">
+              <div className="px-5 py-2.5 bg-white border border-slate-100 rounded-xl text-[11px] font-black text-slate-600 uppercase tracking-widest shadow-sm flex items-center gap-2">
                 <span>{Math.min(pagination.total, (pagination.current - 1) * pagination.pageSize + 1)} — {Math.min(pagination.current * pagination.pageSize, pagination.total)}</span>
               </div>
 
               <div className="flex items-center gap-2">
                 <Button
-                  className="h-12 w-12 flex items-center justify-center rounded-none bg-white border-slate-100 text-slate-600 shadow-sm"
+                  className="h-12 w-12 flex items-center justify-center rounded-xl bg-white border-slate-100 text-slate-600 shadow-sm"
                   disabled={pagination.current === 1}
                   onClick={() => handleTableChange({ current: pagination.current - 1, pageSize: pagination.pageSize })}
                   icon={<ChevronLeft size={20} />}
                 />
 
                 <Button
-                  className="h-12 w-12 flex items-center justify-center rounded-none bg-white border-slate-100 text-slate-600 shadow-sm"
+                  className="h-12 w-12 flex items-center justify-center rounded-xl bg-white border-slate-100 text-slate-600 shadow-sm"
                   disabled={pagination.current >= Math.ceil(pagination.total / pagination.pageSize)}
                   onClick={() => handleTableChange({ current: pagination.current + 1, pageSize: pagination.pageSize })}
                   icon={<ChevronRight size={20} />}
@@ -529,14 +529,14 @@ const BookingManagement = () => {
         className="delete-confirmation-modal"
       >
         <div className="p-4 text-center">
-          <div className="w-16 h-16 bg-red-50 text-red-500 rounded-none flex items-center justify-center mx-auto mb-6">
+          <div className="w-16 h-16 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
             <Trash2 size={32} />
           </div>
           <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight mb-2">Gỡ bỏ đơn hàng?</h3>
           <p className="text-slate-500 text-sm font-medium mb-8">Thao tác này sẽ xóa hồ sơ đơn hàng vĩnh viễn và không thể khôi phục.</p>
 
           {selectedBooking && (
-            <div className="bg-slate-50 p-4 rounded-none border border-slate-100 mb-8 text-left space-y-2">
+            <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 mb-8 text-left space-y-2">
               <div className="flex justify-between">
                 <span className="text-[10px] font-black text-slate-400">Mã đơn</span>
                 <span className="text-xs font-black text-slate-700">{selectedBooking.bookingCode}</span>
@@ -608,15 +608,15 @@ const BookingManagement = () => {
             {/* Header Detail */}
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 border-b border-slate-100 pb-10">
               <div className="flex items-center gap-6">
-                <div className="w-20 h-20 rounded-none bg-slate-900 flex items-center justify-center text-white shadow-2xl shadow-slate-200">
+                <div className="w-20 h-20 rounded-3xl bg-slate-900 flex items-center justify-center text-white shadow-2xl shadow-slate-200">
                   <Calendar size={36} strokeWidth={1.5} />
                 </div>
                 <div>
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-none text-[10px] font-black uppercase tracking-[0.2em] border border-blue-100">
+                    <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-[10px] font-black uppercase tracking-[0.2em] border border-blue-100">
                       {selectedDetailBooking.bookingCode}
                     </span>
-                    <span className={`px-3 py-1 rounded-none text-[10px] font-black uppercase tracking-[0.2em] border ${bookingStatuses.find(s => s.value === selectedDetailBooking.status)?.classes}`}>
+                    <span className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-[0.2em] border ${bookingStatuses.find(s => s.value === selectedDetailBooking.status)?.classes}`}>
                       {bookingStatuses.find(s => s.value === selectedDetailBooking.status)?.label}
                     </span>
                   </div>
@@ -634,14 +634,14 @@ const BookingManagement = () => {
                     setIsDetailModalOpen(false);
                     handleEdit(selectedDetailBooking);
                   }}
-                  className="h-14 px-8 rounded-none font-black uppercase tracking-widest text-[10px] border-slate-200"
+                  className="h-14 px-8 rounded-2xl font-black uppercase tracking-widest text-[10px] border-slate-200"
                 >
                   Chỉnh sửa
                 </Button>
                 <Button
                   type="primary"
                   onClick={() => setIsDetailModalOpen(false)}
-                  className="h-14 px-8 rounded-none bg-slate-900 border-none font-black uppercase tracking-widest text-[10px] shadow-xl shadow-slate-200"
+                  className="h-14 px-8 rounded-2xl bg-slate-900 border-none font-black uppercase tracking-widest text-[10px] shadow-xl shadow-slate-200"
                 >
                   Đóng cửa sổ
                 </Button>
@@ -653,13 +653,13 @@ const BookingManagement = () => {
               <div className="space-y-10">
                 <section className="space-y-6">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-none bg-blue-50 text-blue-600 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
                       <FileText size={18} />
                     </div>
                     <h4 className="text-sm font-black text-slate-900 uppercase tracking-widest">Chi tiết đặt lịch</h4>
                   </div>
 
-                  <div className="bg-slate-50 rounded-none border border-slate-100 p-8 space-y-5">
+                  <div className="bg-slate-50 rounded-[24px] border border-slate-100 p-8 space-y-5">
                     <div className="grid grid-cols-2 gap-6">
                       <div>
                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Ngày thu hình</p>
@@ -694,7 +694,7 @@ const BookingManagement = () => {
                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-2">
                         <FileText size={12} /> Ghi chú nội bộ
                       </p>
-                      <div className="p-4 bg-white rounded-none border border-slate-100 text-sm font-medium text-slate-500 italic leading-relaxed">
+                      <div className="p-4 bg-white rounded-2xl border border-slate-100 text-sm font-medium text-slate-500 italic leading-relaxed">
                         {selectedDetailBooking.note || "Không có ghi chú đặc biệt cho đơn hàng này."}
                       </div>
                     </div>
