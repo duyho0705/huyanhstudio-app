@@ -136,7 +136,7 @@ const AdminDashboard = () => {
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin"></div>
-          <p className="text-slate-500 font-medium">Đang tải dữ liệu...</p>
+          <p className="text-slate-500 font-medium tracking-normal">Đang tải dữ liệu...</p>
         </div>
       </div>
     );
@@ -207,7 +207,9 @@ const AdminDashboard = () => {
                 <div className={`w-14 h-14 flex items-center justify-center rounded-2xl transition-all group-hover:scale-110 shadow-sm ${getColorClasses(action.color)}`}>
                   {action.icon}
                 </div>
-                <span className="text-[14px] font-semibold text-slate-700 group-hover:text-blue-600 transition-colors uppercase tracking-wider text-center">{action.title}</span>
+                <span className="text-[14px] font-semibold text-slate-700 group-hover:text-blue-600 transition-colors text-center tracking-normal">
+                  {action.title}
+                </span>
               </Link>
             ))}
           </div>

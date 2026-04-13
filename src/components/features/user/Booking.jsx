@@ -119,7 +119,7 @@ const Booking = () => {
         return (
             <div className="flex flex-col items-center justify-center py-40 min-h-[60vh]">
                 <FiLoader className="text-4xl text-[#35104C] animate-spin mb-4" />
-                <p className="font-bold text-[#35104C]/50 uppercase tracking-widest text-sm">Đang tải...</p>
+                <p className="text-[#35104C]/50 text-sm tracking-normal">Đang tải...</p>
             </div>
         );
     }

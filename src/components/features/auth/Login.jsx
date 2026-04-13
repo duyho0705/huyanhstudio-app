@@ -240,9 +240,9 @@ const Login = ({ onClose, initialMode = "login" }) => {
 
                 <button
                   disabled={loading}
-                  className="w-full py-3 bg-[#6CD1FD] text-white font-black rounded-full shadow-xl shadow-[#6CD1FD]/20 hover:shadow-[#6CD1FD]/30 transition-all flex items-center justify-center gap-2 group active:scale-[0.98] disabled:opacity-70"
+                  className="w-full py-3.5 bg-[#6CD1FD] text-white font-bold rounded-full shadow-lg shadow-[#6CD1FD]/20 hover:shadow-[#6CD1FD]/30 transition-all flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-70 normal-case tracking-normal"
                 >
-                  {loading ? "Đang đăng nhập" : "Đăng nhập"}
+                  {loading ? "Đang đăng nhập..." : "Đăng nhập"}
                 </button>
               </motion.form>
             ) : (
@@ -304,7 +304,7 @@ const Login = ({ onClose, initialMode = "login" }) => {
 
                 <button
                   disabled={loading}
-                  className="w-full py-3 bg-[#35104C] text-white font-semibold rounded-full shadow-xl shadow-[#35104C]/20 hover:shadow-[#35104C]/30 transition-all flex items-center justify-center gap-2 group active:scale-[0.98] disabled:opacity-70"
+                  className="w-full py-3.5 bg-[#35104C] text-white font-bold rounded-full shadow-lg shadow-[#35104C]/20 hover:shadow-[#35104C]/30 transition-all flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-70 normal-case tracking-normal"
                 >
                   {loading ? "Đang tạo tài khoản..." : "Đăng ký ngay"}
                 </button>
