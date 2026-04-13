@@ -52,7 +52,7 @@ const NewNavbar = () => {
                                 onClick={() => setShowLoginModal(true, "login")}
                                 className="transition-colors font-bold hover:text-[#6CD1FD]"
                             >
-                                Sign in
+                                Đăng nhập
                             </button>
                         ) : (
                             <div className="flex items-center gap-4 flex-nowrap">
@@ -73,7 +73,7 @@ const NewNavbar = () => {
                             onClick={() => setShowLoginModal(true, "signup")}
                             className="px-6 py-2.5 bg-[#6CD1FD] text-white rounded-[15px] text-[17px] font-bold transition-all transform shadow-sm hover:shadow-md active:scale-95"
                         >
-                            Sign up
+                            Đăng ký
                         </button>
                     )}
                 </div>
