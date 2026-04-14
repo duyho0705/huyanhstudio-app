@@ -9,6 +9,7 @@ const serviceApi = {
     updateStatus: (id, active) => axiosClient.put(`/services/${id}/active`, null, {
       params: { active }
     }),
+    delete: (id) => axiosClient.delete(`/services/${id}`),
   }
 };
 
