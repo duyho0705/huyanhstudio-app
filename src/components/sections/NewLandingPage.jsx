@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, memo } from "react";
+import React, { useState, useEffect, useContext, memo, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { FiSearch, FiArrowRight, FiSend, FiMessageCircle, FiX, FiMinus, FiImage, FiCode, FiMusic, FiUser, FiLogOut, FiGrid } from "react-icons/fi";
@@ -123,6 +123,67 @@ const FloatingMusicElements = () => {
   );
 };
 
+// --- EFFECT 3: MINI MUSIC PLAYER (YouTube version) ---
+const MiniMusicPlayer = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  // Video ID từ link của bạn: e5Td3zrVdX4
+  const videoId = "e5Td3zrVdX4";
+
+  const togglePlay = () => {
+    setIsPlaying(!isPlaying);
+  };
+
+  return (
+    <div className="absolute top-[180px] left-[5%] z-50 flex items-center gap-4 bg-white/20 backdrop-blur-md p-3 px-5 rounded-full border border-white/30 shadow-2xl group hover:bg-white/30 transition-all cursor-pointer" onClick={togglePlay}>
+      {/* Hidden YouTube Player */}
+      <div className="hidden">
+        {isPlaying && (
+          <iframe
+            width="1"
+            height="1"
+            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}&controls=0`}
+            allow="autoplay"
+          ></iframe>
+        )}
+      </div>
+
+      <div className="relative w-10 h-10 flex items-center justify-center">
+        <motion.div
+          animate={{ rotate: isPlaying ? 360 : 0 }}
+          transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+          className={`w-full h-full rounded-full bg-[#35104C] flex items-center justify-center border-2 border-[#6CD1FD]/50 ${isPlaying ? 'shadow-[0_0_15px_rgba(108,209,253,0.5)]' : ''}`}
+        >
+          <div className="w-3 h-3 bg-[#6CD1FD] rounded-full"></div>
+        </motion.div>
+        <div className="absolute inset-0 flex items-center justify-center text-white pointer-events-none">
+          {isPlaying ? <FiX size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" /> : <FaPlay size={12} className="ml-0.5" />}
+        </div>
+      </div>
+
+      <div className="flex flex-col">
+        <p className="text-[15px] font-semibold text-[#35104C] leading-none mb-1">Mốc nè anh Huy</p>
+        <div className="flex items-center gap-1 h-3">
+          {[...Array(5)].map((_, i) => (
+            <motion.div
+              key={i}
+              animate={{
+                height: isPlaying ? [4, 12, 4] : 4,
+                backgroundColor: isPlaying ? "#6CD1FD" : "#35104C/40"
+              }}
+              transition={{
+                duration: 0.5 + (i * 0.1),
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="w-1 rounded-full bg-[#35104C]"
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const NewLandingPage = () => {
   const { user, logout, setShowLoginModal } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -162,6 +223,7 @@ const NewLandingPage = () => {
       {/* --- HERO SECTION (BEIGE) --- */}
       <section className="bg-[#E9DCD6] relative pt-20 pb-32">
         <BackgroundRibbons />
+        <MiniMusicPlayer />
 
         <div className="px-6 pt-2 pb-2 flex flex-col items-center text-center relative z-10">
           <motion.div
