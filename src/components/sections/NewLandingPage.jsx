@@ -61,12 +61,7 @@ const decor5 = "https://images.unsplash.com/photo-1507838153414-b4b713384a76?aut
 
 const NewLandingPage = () => {
   const { user, logout, setShowLoginModal } = useContext(AuthContext);
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const [chatMessage, setChatMessage] = useState("");
   const [scrolled, setScrolled] = useState(false);
-  const [messages, setMessages] = useState([
-    { id: 1, text: "Chào bạn! Tôi có thể giúp gì cho bạn hôm nay?", sender: "bot", time: "18:09" },
-  ]);
 
   return (
     <div className="min-h-screen bg-white font-sans text-[#35104C] selection:bg-sky/30 relative overflow-x-hidden">
@@ -662,109 +657,6 @@ const NewLandingPage = () => {
         </div>
       </footer>
 
-      {/* --- FLOATING CHAT BOX --- */}
-      <div className="fixed bottom-8 right-8 z-[100] flex flex-col items-end">
-        {/* Chat Window */}
-        <AnimatePresence>
-          {isChatOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: 50, scale: 0.8, filter: "blur(10px)" }}
-              animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
-              exit={{ opacity: 0, y: 50, scale: 0.8, filter: "blur(10px)" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="mb-4 w-[380px] h-[550px] bg-white rounded-[32px] shadow-[0_20px_60px_rgba(0,0,0,0.15)] border border-gray-100 flex flex-col overflow-hidden"
-            >
-              {/* Header */}
-              <div className="p-6 bg-[#6CD1FD] text-[#35104C] flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <motion.div
-                    initial={{ rotate: -10 }}
-                    animate={{ rotate: 10 }}
-                    transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
-                    className="w-11 h-11 bg-white rounded-2xl flex items-center justify-center text-xl shadow-sm"
-                  >
-                    🎧
-                  </motion.div>
-                  <div>
-                    <h4 className="font-bold text-[17px] leading-tight">Hastudio Support</h4>
-                    <div className="flex items-center gap-1.5">
-                      <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
-                      <span className="text-[12px] font-medium opacity-80">Online</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex gap-2">
-                  <button onClick={() => setIsChatOpen(false)} className="p-2 hover:bg-black/5 rounded-xl transition-colors">
-                    <FiMinus className="text-xl" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Messages Area */}
-              <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-[#fcf9f6]">
-                {messages.map((msg, idx) => (
-                  <motion.div
-                    key={msg.id}
-                    initial={{ opacity: 0, x: msg.sender === 'user' ? 20 : -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: idx * 0.1 }}
-                    className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-                  >
-                    <div className={`max-w-[80%] p-4 rounded-2xl text-[14px] leading-relaxed ${msg.sender === 'user'
-                      ? 'bg-[#6CD1FD] text-[#35104C] rounded-tr-none'
-                      : 'bg-white text-[#35104C] shadow-sm rounded-tl-none border border-gray-100'
-                      }`}>
-                      {msg.text}
-                      <p className={`text-[10px] mt-1.5 opacity-50 ${msg.sender === 'user' ? 'text-right' : ''}`}>{msg.time}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* Input Area */}
-              <div className="p-5 bg-white border-t border-gray-100">
-                <div className="flex items-center gap-2 bg-[#f3f3f5] p-2 rounded-2xl border border-transparent focus-within:border-[#6CD1FD]/30 focus-within:bg-white transition-all">
-                  <input
-                    type="text"
-                    value={chatMessage}
-                    onChange={(e) => setChatMessage(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && setChatMessage("")}
-                    placeholder="Nhập tin nhắn..."
-                    className="flex-1 bg-transparent px-3 py-2 outline-none text-[14px] text-[#35104C]"
-                  />
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    className="w-10 h-10 bg-[#6CD1FD] text-[#35104C] rounded-xl flex items-center justify-center transition-transform shadow-lg shadow-sky/20"
-                  >
-                    <FiSend className="text-lg" />
-                  </motion.button>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Floating Button */}
-        <motion.button
-          onClick={() => setIsChatOpen(!isChatOpen)}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          className={`w-16 h-16 rounded-[24px] shadow-2xl flex items-center justify-center text-2xl transition-all duration-500 transform ${isChatOpen ? 'bg-white text-[#35104C] rotate-180 scale-90' : 'bg-[#6CD1FD] text-[#35104C]'
-            }`}
-        >
-          {isChatOpen ? <FiX className="text-3xl" /> : <FaReact className="text-3xl animate-[spin_5s_linear_infinite]" />}
-
-          {/* Notification dot */}
-          {!isChatOpen && (
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              className="absolute top-0 right-0 w-5 h-5 bg-[#e8762b] border-4 border-white rounded-full"
-            ></motion.div>
-          )}
-        </motion.button>
-      </div>
     </div>
   );
 };

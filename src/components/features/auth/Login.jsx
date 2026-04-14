@@ -7,6 +7,8 @@ import authApi from "../../../api/authApi";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../api/AuthContext";
 import userApi from "../../../api/userApi";
+import { auth, googleProvider, facebookProvider } from "../../../api/firebase";
+import { signInWithPopup } from "firebase/auth";
 
 const InputField = ({ label, name, type = "text", icon: Icon, error, value, onChange, ...props }) => {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -158,6 +160,30 @@ const Login = ({ onClose, initialMode = "login" }) => {
       const errorMsg = err.response?.data?.message || "Thông tin đã tồn tại hoặc không hợp lệ.";
       showError(errorMsg);
     } finally { setLoading(false); }
+  };
+
+  const handleSocialLogin = async (provider) => {
+    setLoading(true);
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const idToken = await result.user.getIdToken();
+      
+      const data = await authApi.loginWithFirebase(idToken);
+      const { accessToken } = data;
+      const userData = await loginContext({ accessToken });
+
+      onClose?.();
+
+      const roles = Array.isArray(userData?.roles) ? userData.roles : [];
+      if (roles.includes("ROLE_ADMIN") || roles.includes("ROLE_STAFF")) {
+        navigate("/admin");
+      }
+    } catch (err) {
+      console.error("Social login error:", err);
+      showError("Đăng nhập mạng xã hội thất bại.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -324,10 +350,7 @@ const Login = ({ onClose, initialMode = "login" }) => {
         <div className="flex justify-center gap-6">
           <button
             type="button"
-            onClick={() => {
-              const baseUrl = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") || "http://localhost:8080";
-              window.location.href = `${baseUrl}/oauth2/authorization/google`;
-            }}
+            onClick={() => handleSocialLogin(googleProvider)}
             className="w-14 h-14 flex items-center justify-center rounded-2xl border border-slate-100 bg-white hover:bg-slate-50 hover:border-slate-200 hover:shadow-xl hover:shadow-slate-200 transition-all active:scale-90"
             title="Đăng nhập Google"
           >
@@ -335,10 +358,7 @@ const Login = ({ onClose, initialMode = "login" }) => {
           </button>
           <button
             type="button"
-            onClick={() => {
-              const baseUrl = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") || "http://localhost:8080";
-              window.location.href = `${baseUrl}/oauth2/authorization/facebook`;
-            }}
+            onClick={() => handleSocialLogin(facebookProvider)}
             className="w-14 h-14 flex items-center justify-center rounded-2xl bg-[#1877F2] text-white hover:bg-[#166fe5] hover:shadow-xl hover:shadow-blue-200 transition-all active:scale-90"
             title="Đăng nhập Facebook"
           >

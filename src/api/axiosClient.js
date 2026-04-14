@@ -38,6 +38,7 @@ axiosClient.interceptors.request.use(
     const isAuthApi =
       config.url?.includes("/auth/login") ||
       config.url?.includes("/auth/register") ||
+      config.url?.includes("/auth/firebase") ||
       config.url?.includes("/auth/refresh");
 
     if (token && !isAuthApi) {

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { FiSearch, FiSend, FiUser, FiMessageSquare, FiClock } from "react-icons/fi";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
-import axios from "axios";
+import axiosClient from "../../../api/axiosClient";
 import { motion, AnimatePresence } from "framer-motion";
 
 const ChatManagement = () => {
@@ -39,8 +39,8 @@ const ChatManagement = () => {
 
     const fetchUsers = async () => {
         try {
-            const res = await axios.get(`${API_BASE_URL}/api/chat/users`);
-            setUsers(res.data.filter(u => u !== 'admin'));
+            const res = await axiosClient.get(`/api/chat/users`);
+            setUsers((res.data || res).filter(u => u !== 'admin'));
         } catch (err) {
             console.error("Error fetching chat users:", err);
         }
@@ -48,10 +48,10 @@ const ChatManagement = () => {
 
     const fetchHistory = async (userId) => {
         try {
-            const res = await axios.get(`${API_BASE_URL}/api/chat/history`, {
+            const res = await axiosClient.get(`/api/chat/history`, {
                 params: { userId1: 'admin', userId2: userId }
             });
-            setMessages(res.data);
+            setMessages(res.data || res);
         } catch (err) {
             console.error("Error fetching chat history:", err);
         }

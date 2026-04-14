@@ -4,7 +4,7 @@ import { FiMessageCircle, FiX, FiSend, FiUser, FiPhone } from 'react-icons/fi';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import { AuthContext } from '../../../api/AuthContext';
-import axios from 'axios';
+import axiosClient from '../../../api/axiosClient';
 
 const ChatBox = () => {
   const { user } = useContext(AuthContext);
@@ -35,10 +35,10 @@ const ChatBox = () => {
 
   const fetchHistory = async () => {
     try {
-      const res = await axios.get(`${API_BASE_URL}/api/chat/history`, {
+      const res = await axiosClient.get(`${API_BASE_URL}/api/chat/history`, {
         params: { userId1: user.email, userId2: 'admin' }
       });
-      setMessages(res.data);
+      setMessages(res); 
     } catch (err) {
       console.error('Error fetching chat history:', err);
     }
