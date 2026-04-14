@@ -23,38 +23,38 @@ const AdminSidebar = ({ isOpen, onClose }) => {
   const menuItems = [
     {
       path: "/admin",
-      icon: <LayoutDashboard size={20} />,
+      icon: <LayoutDashboard size={22} />,
       label: "Bảng điều khiển",
       end: true,
     },
     {
       path: "/admin/chat",
-      icon: <MessageCircle size={20} />,
+      icon: <MessageCircle size={22} />,
       label: "Tin nhắn",
     },
     {
       path: "/admin/bookings",
-      icon: <CalendarDays size={20} />,
+      icon: <CalendarDays size={22} />,
       label: "Lịch thu âm",
     },
     {
       path: "/admin/products",
-      icon: <Package size={20} />,
+      icon: <Package size={22} />,
       label: "Kho sản phẩm",
     },
     {
       path: "/admin/services",
-      icon: <Layers size={20} />,
+      icon: <Layers size={22} />,
       label: "Gói dịch vụ",
     },
     {
       path: "/admin/demos",
-      icon: <Music2 size={20} />,
+      icon: <Music2 size={22} />,
       label: "Quản lý Demo",
     },
     {
       path: "/admin/users",
-      icon: <Users size={20} />,
+      icon: <Users size={22} />,
       label: "Người dùng",
     },
   ];
@@ -108,7 +108,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
                   <span className={``}>
                     {item.icon}
                   </span>
-                  <span className="text-[15px] font-semibold tracking-tight">{item.label}</span>
+                  <span className="text-[17px] font-medium tracking-tight">{item.label}</span>
                 </div>
                 {isActive && (
                   <div className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_12px_rgba(255,255,255,0.8)]"></div>

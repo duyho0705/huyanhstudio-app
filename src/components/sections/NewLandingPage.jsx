@@ -59,6 +59,69 @@ const decor3 = "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?aut
 const decor4 = "https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&q=100&w=1600";
 const decor5 = "https://images.unsplash.com/photo-1507838153414-b4b713384a76?auto=format&fit=crop&q=100&w=1200";
 
+// --- EFFECT 1: AUDIO WAVEFORM ---
+const AudioWaveform = () => (
+  <div className="flex items-center justify-center gap-[4px] h-[60px] opacity-40">
+    {[...Array(30)].map((_, i) => (
+      <motion.div
+        key={i}
+        animate={{
+          height: [15, Math.random() * 50 + 20, 15],
+          backgroundColor: ["#6CD1FD", "#35104C", "#6CD1FD"]
+        }}
+        transition={{
+          duration: Math.random() * 1.2 + 0.6,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+        className="w-[3px] rounded-full"
+      />
+    ))}
+  </div>
+);
+
+// --- EFFECT 2: FLOATING MUSIC ELEMENTS ---
+const FloatingMusicElements = () => {
+  const elements = [
+    { icon: <FaMicrophone />, top: "15%", left: "8%", size: 45, color: "text-sky", delay: 0 },
+    { icon: <FiMusic />, top: "25%", right: "12%", size: 38, color: "text-purple-400", delay: 1 },
+    { icon: <FaPlay />, bottom: "35%", left: "15%", size: 28, color: "text-pink-400", delay: 2 },
+    { icon: <FiMusic />, top: "60%", right: "8%", size: 32, color: "text-blue-400", delay: 1.5 },
+    { icon: <FaMicrophone />, bottom: "20%", right: "20%", size: 40, color: "text-indigo-400", delay: 0.5 },
+  ];
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+      {elements.map((item, i) => (
+        <motion.div
+          key={i}
+          style={{
+            position: "absolute",
+            top: item.top,
+            left: item.left,
+            right: item.right,
+            bottom: item.bottom
+          }}
+          animate={{
+            y: [0, -35, 0],
+            rotate: [0, 15, -15, 0],
+            opacity: [0.1, 0.3, 0.1]
+          }}
+          transition={{
+            duration: 6 + i * 2,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: item.delay
+          }}
+          className={`${item.color}`}
+        >
+          {React.cloneElement(item.icon, { size: item.size })}
+        </motion.div>
+      ))}
+    </div>
+  );
+};
+
 const NewLandingPage = () => {
   const { user, logout, setShowLoginModal } = useContext(AuthContext);
   const [scrolled, setScrolled] = useState(false);
@@ -66,29 +129,40 @@ const NewLandingPage = () => {
   return (
     <div className="min-h-screen bg-white font-sans text-[#35104C] selection:bg-sky/30 relative overflow-x-hidden">
       {/* --- HERO SECTION (BEIGE) --- */}
-      <section className="bg-[#E9DCD6] relative pt-10 pb-0">
+      <section className="bg-[#E9DCD6] relative pt-20 pb-32">
         <BackgroundRibbons />
+
         <div className="px-6 pt-2 pb-2 flex flex-col items-center text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="max-w-[1200px] mx-auto mt-[50px] mb-10"
+            className="max-w-[1200px] mx-auto mb-10"
           >
-            <h1 className="text-5xl md:text-[88px] font-bold leading-[1.02] tracking-tighter text-[#35104C] mb-8">
-              Create <span className="relative inline-block">
-                beautiful
-              </span> illustrations,
+            {/* Audio Visualizer before title */}
+            <div className="mb-8">
+              <AudioWaveform />
+            </div>
+
+            <h1
+              className="text-5xl md:text-[88px] font-bold leading-[1.02] tracking-tighter text-[#35104C] mb-8"
+              style={{ fontFamily: '"DM Serif Display", serif' }}
+            >
+              Transform your <span className="relative inline-block text-[#6CD1FD]">
+                voice
+              </span>
               <br />
-              no design skills needed
+              into a Masterpiece
             </h1>
+
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.8 }}
               className="text-[17px] md:text-[23px] font-medium text-[#35104C]/80 mb-10 max-w-[850px] mx-auto tracking-tight leading-relaxed"
             >
-              A growing illustration library that you can make your own
+              Phòng thu âm chuyên nghiệp với công nghệ hiện đại. <br />
+              Nơi chắp cánh cho giọng hát của bạn.
             </motion.p>
 
             <motion.button
@@ -96,7 +170,7 @@ const NewLandingPage = () => {
               onClick={() => setShowLoginModal(true, "signup")}
               className="px-12 py-5 bg-[#6CD1FD] text-white rounded-full text-[20px] font-bold mb-10 shadow-xl shadow-sky/10 active:scale-95"
             >
-              Find the perfect illustration
+              Đặt lịch thu âm ngay
             </motion.button>
 
             {/* Product Hunt Badge */}
@@ -111,7 +185,7 @@ const NewLandingPage = () => {
                   <FaMicrophone />
                 </div>
                 <div className="text-left">
-                  <p className="text-[16px] font-black text-[#e8762b] leading-tight">You are start of the Day</p>
+                  <p className="text-[16px] font-semibold text-[#e8762b] leading-tight">Phong cách - Sáng tạo - Năng lượng</p>
                 </div>
               </div>
             </motion.div>
@@ -145,17 +219,17 @@ const NewLandingPage = () => {
       </section>
 
       {/* --- SECTION 1: IN ACTION --- */}
-      <section className="py-24 px-6 bg-white relative mt-[120px]">
+      <section className="pt-64 pb-24 px-6 bg-white relative mt-0">
         <div className="max-w-[1400px] mx-auto text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="inline-block relative mb-24"
+            className="inline-block relative mb-16"
           >
             <div className="absolute inset-0 bg-[#ff99ed]/20 -rotate-2 blur-3xl transform scale-150"></div>
-            <h2 className="text-4xl md:text-[54px] font-bold tracking-tight text-[#35104C] relative">
-              designstrip in action
+            <h2 className="text-4xl md:text-[54px] font-bold tracking-tight text-[#35104C] relative" style={{ fontFamily: '"DM Serif Display", serif' }}>
+              hastudio qua từng khung hình
             </h2>
           </motion.div>
 
@@ -168,7 +242,7 @@ const NewLandingPage = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.1 }}
               whileHover={{ y: -20, rotate: -2, transition: { duration: 0.3 } }}
-              className="absolute top-[-8%] left-[2%] w-[30%] z-20"
+              className="absolute top-[-5%] left-[2%] w-[30%] z-20"
             >
               <img src={decor1} alt="Mobile Mockup" className="w-full aspect-[10/13] object-cover rounded-[40px] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.6)]" />
             </motion.div>
@@ -250,35 +324,36 @@ const NewLandingPage = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="text-4xl md:text-[54px] font-bold tracking-tight text-[#35104C] relative"
+              style={{ fontFamily: '"DM Serif Display", serif' }}
             >
-              enjoy your love, your feeling
+              Tận hưởng âm nhạc, trọn vẹn cảm xúc
             </motion.h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
             {[
               {
-                label: "Scene detail",
-                title: "Minimal or complex? You get to decide",
-                desc: "Add or remove objects from your scene, all while staying on topic and keeping beautiful composition.",
+                label: "Âm thanh chi tiết",
+                title: "Tối giản hay cầu kỳ? Bạn quyết định",
+                desc: "Tùy chỉnh độ dày của nhạc cụ, giọng hát để tạo nên một bản phối hoàn hảo nhất theo ý muốn.",
                 img: decor1
               },
               {
-                label: "Variations",
-                title: "Swap and change every object, they all magically fit and work",
-                desc: "Not feeling that chair? Swap it out. Want a different pose for a character? We've got you covered!",
+                label: "Đa dạng phong cách",
+                title: "Mọi phong cách nhạc đều được đáp ứng",
+                desc: "Từ Pop, Ballad đến Rock hay EDM, đội ngũ của chúng tôi luôn sẵn sàng hiện thực hóa ý tưởng của bạn.",
                 img: decor2
               },
               {
-                label: "Color palette",
-                title: "Explore endless color combos",
-                desc: "Change the mood of your illustration with one click. Our smart color system ensures everything stays harmonious.",
+                label: "Bảng màu cảm xúc",
+                title: "Khám phá sắc thái âm nhạc mới",
+                desc: "Thay đổi màu sắc âm thanh thông qua các thiết bị analog hiện đại, mang lại sự ấm áp và chiều sâu.",
                 img: decor3
               },
               {
-                label: "Sketch style",
-                title: "Sketch or full color?",
-                desc: "Switch between clean vector lines and hand-drawn sketch styles to match your brand's unique personality.",
+                label: "Quy trình chuyên nghiệp",
+                title: "Từ phác thảo đến hoàn thiện",
+                desc: "Chúng tôi đồng hành cùng bạn từ lúc thu demo cho đến khi có bản Master cuối cùng chuẩn quốc tế.",
                 img: decor4
               }
             ].map((tool, i) => (
@@ -317,7 +392,7 @@ const NewLandingPage = () => {
               onClick={() => setShowLoginModal(true, "signup")}
               className="px-10 py-4 bg-[#6CD1FD] text-[#35104C] rounded-full font-bold shadow-lg"
             >
-              Try tools for free
+              Xem bảng giá dịch vụ
             </motion.button>
           </div>
         </div>
@@ -390,7 +465,7 @@ const NewLandingPage = () => {
               viewport={{ once: true }}
               className="text-[100px] md:text-[54px] font-bold tracking-tight text-[#35104C] leading-[1.1] mb-6" style={{ fontFamily: '"DM Serif Display", serif' }}
             >
-              Hand-crafted styles for every brand & use-case
+              Đa dạng phong cách cho mọi cá tính âm nhạc
             </motion.h2>
             <motion.p
               initial={{ opacity: 0 }}
@@ -399,13 +474,13 @@ const NewLandingPage = () => {
               transition={{ delay: 0.5 }}
               className="text-[17px] mb-8"
             >
-              With new styles being added constantly
+              Luôn cập nhật những xu hướng âm thanh mới nhất
             </motion.p>
             <motion.button
               whileTap={{ scale: 0.95 }}
               className="inline-flex items-center gap-2 px-8 py-4 bg-[#6CD1FD] text-white rounded-full font-bold text-[18px] shadow-lg shadow-sky/30"
             >
-              <FiMusic className="text-xl" /> Find the perfect illustration <FiArrowRight className="text-lg" />
+              <FiMusic className="text-xl" /> Khám phá phòng thu ngay <FiArrowRight className="text-lg" />
             </motion.button>
           </div>
 
@@ -420,8 +495,9 @@ const NewLandingPage = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="text-4xl md:text-[52px] font-bold text-[#35104C] mb-6"
+            style={{ fontFamily: '"DM Serif Display", serif' }}
           >
-            Illustrated with hastudio
+            Ghi dấu ấn cùng hastudio
           </motion.h2>
           <motion.p
             initial={{ opacity: 0 }}
@@ -430,7 +506,7 @@ const NewLandingPage = () => {
             transition={{ delay: 0.3 }}
             className="text-[20px] mb-4 max-w-none mx-auto leading-relaxed whitespace-nowrap lg:whitespace-normal"
           >
-            From big companies, to a small local shops to simple party invitations. We have something for every need!
+            Từ những nghệ sĩ chuyên nghiệp đến những tài năng trẻ, chúng tôi tự hào đồng hành cùng mọi dự án âm nhạc.
           </motion.p>
           <motion.p
             initial={{ opacity: 0 }}
@@ -438,7 +514,7 @@ const NewLandingPage = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.5 }}
             className="text-[18px] font-bold text-[#35104C] mb-12"
-          >More community creations coming soon!</motion.p>
+          >Những dự án mới sẽ liên tục được cập nhật!</motion.p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Card 1: App Screens - Coral/Red */}
@@ -576,18 +652,20 @@ const NewLandingPage = () => {
           <div className="relative z-10 flex flex-col lg:flex-row items-start justify-between gap-12">
             {/* Left side */}
             <div className="max-w-[480px]">
-              <p className="text-[15px] text-[#35104C]/60 mb-3">Join the mailing list 🎉</p>
-              <h2 className="text-3xl md:text-[44px] font-bold text-[#35104C] leading-[1.15]">Be the first to get content updates!</h2>
+              <p className="text-[17px] text-[#35104C]/60 mb-3 flex items-center gap-2">
+                Đăng ký nhận tin <FiSend className="text-[#6CD1FD] text-xl" />
+              </p>
+              <h2 className="text-3xl md:text-[44px] font-semibold text-[#35104C] leading-[1.15]" style={{ fontFamily: '"DM Serif Display", serif' }}>Nhận thông báo về các ưu đãi và dự án mới nhất!</h2>
             </div>
 
             {/* Right side - Form */}
             <div className="w-full lg:w-[380px] flex flex-col gap-4">
-              <input type="text" placeholder="Full name" className="px-6 py-4 rounded-xl bg-white border border-gray-200 w-full outline-none focus:ring-2 ring-[#6CD1FD]/30 transition-all text-[15px]" />
-              <input type="email" placeholder="Your email" className="px-6 py-4 rounded-xl bg-white border border-gray-200 w-full outline-none focus:ring-2 ring-[#6CD1FD]/30 transition-all text-[15px]" />
+              <input type="text" placeholder="Họ và tên" className="px-6 py-4 rounded-xl bg-white border border-gray-200 w-full outline-none focus:ring-2 ring-[#6CD1FD]/30 transition-all text-[15px]" />
+              <input type="email" placeholder="Địa chỉ email" className="px-6 py-4 rounded-xl bg-white border border-gray-200 w-full outline-none focus:ring-2 ring-[#6CD1FD]/30 transition-all text-[15px]" />
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 className="px-10 py-4 bg-[#6CD1FD] text-[#35104C] rounded-full font-bold text-[15px] w-fit mt-1 shadow-lg shadow-sky/20"
-              >Subscribe</motion.button>
+              >Đăng ký ngay</motion.button>
             </div>
           </div>
         </motion.div>
@@ -617,33 +695,33 @@ const NewLandingPage = () => {
             {/* Link Columns */}
             <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-10">
               <div>
-                <h4 className="font-bold text-[#35104C] text-[17px] mb-6">Hastudio</h4>
+                <h4 className="font-bold text-[#35104C] text-[17px] mb-6">hastudio</h4>
                 <ul className="space-y-3 text-[17px] text-[#35104C]">
-                  <li className="cursor-pointer">Pricing</li>
-                  <li className="cursor-pointer" onClick={() => setShowLoginModal(true, "signup")}>Sign up</li>
+                  <li className="cursor-pointer">Bảng giá</li>
+                  <li className="cursor-pointer" onClick={() => setShowLoginModal(true, "signup")}>Đăng ký</li>
                 </ul>
               </div>
               <div>
-                <h4 className="font-bold text-[#35104C] text-[17px] mb-6">Company</h4>
+                <h4 className="font-bold text-[#35104C] text-[17px] mb-6">Công ty</h4>
                 <ul className="space-y-3 text-[17px] text-[#35104C]">
-                  <li className="cursor-pointer">About us</li>
-                  <li className="cursor-pointer">Careers</li>
-                  <li className="cursor-pointer">Media kit</li>
+                  <li className="cursor-pointer">Về chúng tôi</li>
+                  <li className="cursor-pointer">Tuyển dụng</li>
+                  <li className="cursor-pointer">Tư liệu truyền thông</li>
                 </ul>
               </div>
               <div>
-                <h4 className="font-bold text-[#35104C] text-[17px] mb-6">Support</h4>
+                <h4 className="font-bold text-[#35104C] text-[17px] mb-6">Hỗ trợ</h4>
                 <ul className="space-y-3 text-[17px] text-[#35104C]">
-                  <li className="cursor-pointer">Community</li>
-                  <li className="cursor-pointer">Contact us</li>
-                  <li className="cursor-pointer">License</li>
-                  <li className="cursor-pointer">Privacy</li>
+                  <li className="cursor-pointer">Cộng đồng</li>
+                  <li className="cursor-pointer">Liên hệ</li>
+                  <li className="cursor-pointer">Chứng nhận</li>
+                  <li className="cursor-pointer">Bảo mật</li>
                 </ul>
               </div>
               <div>
-                <h4 className="font-bold text-[#35104C] text-[17px] mb-6">Family</h4>
+                <h4 className="font-bold text-[#35104C] text-[17px] mb-6">Thành viên</h4>
                 <ul className="space-y-3 text-[17px] text-[#35104C]">
-                  <li className="cursor-pointer">Free Illustrations</li>
+                  <li className="cursor-pointer">Dự án miễn phí</li>
                   <li className="cursor-pointer">Glyphy</li>
                 </ul>
               </div>
@@ -652,7 +730,7 @@ const NewLandingPage = () => {
 
           {/* Copyright */}
           <div className="pt-2">
-            <p className="text-[14px] text-slate-600">Được phát triển bởi <span className="font-bold">Hồ Văn Duy</span></p>
+            <p className="text-[15px] text-slate-600">Được phát triển bởi <span className="font-bold">Hồ Văn Duy</span></p>
           </div>
         </div>
       </footer>
