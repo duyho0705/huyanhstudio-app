@@ -18,24 +18,9 @@ const ChatBox = ({ isOpen, onToggle }) => {
   const { user } = useContext(AuthContext);
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
-  const [guestId, setGuestId] = useState(null);
   const scrollRef = useRef(null);
 
-  // Tạo hoặc lấy Guest ID nếu chưa đăng nhập
-  useEffect(() => {
-    if (!user) {
-      let storedGuestId = localStorage.getItem('hastudio_guest_id');
-      if (!storedGuestId) {
-        storedGuestId = 'guest_' + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem('hastudio_guest_id', storedGuestId);
-      }
-      setGuestId(storedGuestId);
-    } else {
-      setGuestId(null);
-    }
-  }, [user]);
-
-  const currentUserId = user ? (user.email || user.username || user.id || user.customerName) : guestId;
+  const currentUserId = user?.email || user?.username || user?.id || user?.customerName;
 
   useEffect(() => {
     if (!currentUserId) return;
@@ -73,7 +58,6 @@ const ChatBox = ({ isOpen, onToggle }) => {
       receiverId: 'admin',
       content: inputValue,
       timestamp: serverTimestamp(),
-      isGuest: !user
     };
 
     try {
@@ -81,11 +65,10 @@ const ChatBox = ({ isOpen, onToggle }) => {
 
       await setDoc(doc(db, 'chat_list', currentUserId), {
         userId: currentUserId,
-        userName: user ? (user.customerName || currentUserId) : 'Khách vãng lai (' + currentUserId.slice(-4) + ')',
+        userName: user.customerName || currentUserId,
         lastMessage: inputValue,
         timestamp: serverTimestamp(),
-        unread: true,
-        isGuest: !user
+        unread: true
       });
 
       setInputValue('');
@@ -93,6 +76,8 @@ const ChatBox = ({ isOpen, onToggle }) => {
       console.error('Error sending message:', err);
     }
   };
+
+  if (!user) return null;
 
   return (
     <div className="fixed bottom-6 right-6 z-[100]">
@@ -112,11 +97,7 @@ const ChatBox = ({ isOpen, onToggle }) => {
                   <FiUser className="text-white" size={20} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-[15px]">Hỗ trợ trực tuyến</h3>
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
-                    <p className="text-[11px] text-white/60">Chúng tôi sẵn sàng giúp bạn</p>
-                  </div>
+                  <h3 className="font-bold text-[17px]">Hỗ trợ trực tuyến</h3>
                 </div>
               </div>
               <button 
@@ -141,7 +122,7 @@ const ChatBox = ({ isOpen, onToggle }) => {
               {messages.map((msg, idx) => (
                 <div key={idx} className={`flex ${msg.senderId === currentUserId ? 'justify-end' : 'justify-start'}`}>
                   <div
-                    className={`max-w-[85%] p-3 px-4 rounded-2xl text-[13px] leading-relaxed shadow-sm ${
+                    className={`max-w-[85%] p-3 px-4 rounded-2xl text-[15px] leading-relaxed shadow-sm ${
                       msg.senderId === currentUserId
                         ? 'bg-[#35104C] text-white rounded-tr-none'
                         : 'bg-white text-slate-700 border border-slate-100 rounded-tl-none'
@@ -158,7 +139,7 @@ const ChatBox = ({ isOpen, onToggle }) => {
               <input
                 type="text"
                 placeholder="Nhập nội dung..."
-                className="flex-1 bg-slate-100/50 border-none rounded-2xl px-4 py-2.5 text-[13px] focus:ring-1 focus:ring-[#35104C]/10 outline-none transition-all"
+                className="flex-1 bg-slate-100/50 border-none rounded-2xl px-4 py-2.5 text-[15px] focus:ring-1 focus:ring-[#35104C]/10 outline-none transition-all"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
               />

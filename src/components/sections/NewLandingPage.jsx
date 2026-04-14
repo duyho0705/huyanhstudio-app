@@ -2,7 +2,8 @@ import React, { useState, useEffect, useContext, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { FiSearch, FiArrowRight, FiSend, FiMessageCircle, FiX, FiMinus, FiImage, FiCode, FiMusic, FiUser, FiLogOut, FiGrid } from "react-icons/fi";
-import { FaPlay, FaMicrophone, FaReact } from "react-icons/fa";
+import { FaPlay, FaMicrophone, FaReact, FaFacebookF, FaTiktok, FaInstagram } from "react-icons/fa";
+import { SiThreads } from "react-icons/si";
 import { AuthContext } from "../../api/AuthContext";
 import productApi from "../../api/productApi";
 import phongthuImg from "../../assets/phongthu.png";
@@ -405,9 +406,9 @@ const NewLandingPage = () => {
                   <img src={tool.img} alt={tool.label} className="w-full h-full object-cover rounded-[40px] drop-shadow-[0_15px_25px_rgba(0,0,0,0.15)]" />
                 </motion.div>
 
-                <p className="text-[15px] font-bold text-[#35104C]/60 mb-3 px-2">{tool.label}</p>
+                <p className="text-[18px] font-bold text-[#35104C]/60 mb-3 px-2">{tool.label}</p>
                 <h3
-                  className="text-2xl md:text-[28px] font-bold text-[#35104C] mb-4 leading-tight px-2"
+                  className="text-2xl md:text-[28px] font-semibold text-[#35104C] mb-4 leading-tight px-2"
                   style={{ textShadow: "0 2px 4px rgba(0,0,0,0.1)" }}
                 >
                   {tool.title}
@@ -426,7 +427,7 @@ const NewLandingPage = () => {
                 if (user) navigate("/booking");
                 else setShowLoginModal(true, "signup");
               }}
-              className="px-10 py-4 bg-[#6CD1FD] text-[#35104C] rounded-full font-bold shadow-lg"
+              className="px-12 py-4 bg-[#6CD1FD] text-[#35104C] rounded-full font-bold text-[17px] shadow-lg active:scale-95"
             >
               Xem bảng giá dịch vụ
             </motion.button>
@@ -514,9 +515,9 @@ const NewLandingPage = () => {
             </motion.p>
             <motion.button
               whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center gap-2 px-8 py-4 bg-[#6CD1FD] text-white rounded-full font-bold text-[18px] shadow-lg shadow-sky/30"
+              className="inline-flex items-center gap-3 px-10 py-4 bg-[#6CD1FD] text-white rounded-full font-bold text-[20px] shadow-lg shadow-sky/30"
             >
-              <FiMusic className="text-xl" /> Khám phá phòng thu ngay <FiArrowRight className="text-lg" />
+              <FaMicrophone className="text-xl" /> Khám phá phòng thu ngay
             </motion.button>
           </div>
 
@@ -721,10 +722,19 @@ const NewLandingPage = () => {
                 </div>
                 <span className="text-[28px] font-bold text-[#35104C]" style={{ fontFamily: '"Satisfy", cursive' }}>hastudio</span>
               </div>
-              <div className="flex gap-5 mt-6">
-                <svg className="w-5 h-5 text-[#35104C] cursor-pointer" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" /></svg>
-                <svg className="w-5 h-5 text-[#35104C] cursor-pointer" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" /></svg>
-                <svg className="w-5 h-5 text-[#35104C] cursor-pointer" fill="currentColor" viewBox="0 0 24 24"><path d="M12 24C5.385 24 0 18.615 0 12S5.385 0 12 0s12 5.385 12 12-5.385 12-12 12zm10.12-10.358c-.35-.11-3.17-.953-6.384-.438 1.34 3.684 1.887 6.684 1.992 7.308a10.501 10.501 0 004.392-6.87zM15.895 19.59c-.155-.89-.756-3.996-2.19-7.737l-.066.022c-5.79 2.018-7.86 6.025-8.04 6.4a10.505 10.505 0 006.372 2.166c1.41 0 2.755-.288 3.924-.85zM4.003 16.9c.23-.38 3.058-4.97 8.386-6.66.135-.044.27-.085.405-.12-.125-.29-.255-.575-.392-.855-5.077 1.527-10.017 1.469-10.473 1.46l-.003.255c0 2.21.69 4.26 1.868 5.957l.209-.037zM2.498 9.27c.47.005 4.613.013 9.394-1.243C9.85 4.95 7.63 2.757 7.36 2.475A10.495 10.495 0 002.5 9.27zm6.43-7.687c.282.292 2.532 2.487 4.607 5.642 4.388-1.643 6.247-4.14 6.444-4.425a10.513 10.513 0 00-11.05-1.217zm12.095 2.65c-.242.318-2.268 2.94-6.82 4.793.12.245.235.494.345.745l.12.29c3.398-.426 6.78.257 7.115.33a10.505 10.505 0 00-.76-6.157z" /></svg>
+              <div className="flex gap-6 mt-6">
+                <a href="https://www.facebook.com/HUYANHPR" target="_blank" rel="noopener noreferrer">
+                  <FaFacebookF className="w-5 h-5 text-[#35104C] cursor-pointer hover:text-[#6CD1FD] transition-colors" />
+                </a>
+                <a href="https://www.instagram.com/hoanghuyanhpr?fbclid=IwY2xjawRK169leHRuA2FlbQIxMABicmlkETFPNDNBSHljVVhETUNsdndnc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHo-Kwen5S3fyAHZk-SMINQokDirzfthfKw0kjEq8osysQ1T8El9nIYwFPzt4_aem_JcXYOUWLCDqX99Zpi3g3wg" target="_blank" rel="noopener noreferrer">
+                  <FaInstagram className="w-5 h-5 text-[#35104C] cursor-pointer hover:text-[#6CD1FD] transition-colors" />
+                </a>
+                <a href="https://www.tiktok.com/@huyanhproduction" target="_blank" rel="noopener noreferrer">
+                  <FaTiktok className="w-5 h-5 text-[#35104C] cursor-pointer hover:text-[#6CD1FD] transition-colors" />
+                </a>
+                <a href="https://www.threads.net/@hoanghuyanhpr?xmt=AQF0ZZW777cGRocf3aD_HCJdwv_fgOThsUi9JQ0QzyeJ-UY" target="_blank" rel="noopener noreferrer">
+                  <SiThreads className="w-5 h-5 text-[#35104C] cursor-pointer hover:text-[#6CD1FD] transition-colors" />
+                </a>
               </div>
             </div>
 
@@ -766,7 +776,7 @@ const NewLandingPage = () => {
 
           {/* Copyright */}
           <div className="pt-2">
-            <p className="text-[15px] text-slate-600">Được phát triển bởi <span className="font-bold">Hồ Văn Duy</span></p>
+            <p className="text-[15px] text-slate-600">Được phát triển bởi <a href="https://www.facebook.com/HOVANDUYIT" target="_blank" rel="noopener noreferrer" className="font-bold hover:text-[#6CD1FD] transition-colors">Hồ Văn Duy</a></p>
           </div>
         </div>
       </footer>
@@ -780,21 +790,21 @@ const NewLandingPage = () => {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10"
           >
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsModalOpen(false)}
               className="absolute inset-0 bg-[#35104C]/95 backdrop-blur-3xl"
             />
-            
+
             <motion.div
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
               className="relative w-full max-w-6xl aspect-video bg-black rounded-[32px] overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.5)] border border-white/10"
             >
-              <button 
+              <button
                 onClick={() => setIsModalOpen(false)}
                 className="absolute top-6 right-6 z-10 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md flex items-center justify-center text-white transition-all border border-white/10"
               >
@@ -803,19 +813,18 @@ const NewLandingPage = () => {
 
               {selectedProject.videoUrl?.includes("youtube.com") || selectedProject.videoUrl?.includes("youtu.be") ? (
                 <iframe
-                  src={`https://www.youtube.com/embed/${
-                    selectedProject.videoUrl.match(/[?&]v=([^&]+)/)?.[1] || 
+                  src={`https://www.youtube.com/embed/${selectedProject.videoUrl.match(/[?&]v=([^&]+)/)?.[1] ||
                     selectedProject.videoUrl.split("youtu.be/")[1]?.split("?")[0]
-                  }?autoplay=1`}
+                    }?autoplay=1`}
                   className="w-full h-full border-none"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                 />
               ) : (
-                <video 
-                  src={selectedProject.videoUrl} 
-                  controls 
-                  autoPlay 
+                <video
+                  src={selectedProject.videoUrl}
+                  controls
+                  autoPlay
                   className="w-full h-full object-contain"
                 />
               )}
