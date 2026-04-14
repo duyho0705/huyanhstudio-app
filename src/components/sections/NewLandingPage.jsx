@@ -1,16 +1,16 @@
-import { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { FiSearch, FiArrowRight, FiSend, FiMessageCircle, FiX, FiMinus, FiImage, FiCode, FiMusic, FiUser, FiLogOut, FiGrid } from "react-icons/fi";
 import { FaPlay, FaMicrophone, FaReact } from "react-icons/fa";
 import { AuthContext } from "../../api/AuthContext";
+import productApi from "../../api/productApi";
 import phongthuImg from "../../assets/phongthu.png";
 import section3_anh1 from "../../assets/section3_anh1.webp";
 import section3_anh2 from "../../assets/section3_anh2.avif";
 import section3_anh3 from "../../assets/section3_anh3.jpg";
 import section3_anh4 from "../../assets/section3_anh4.jpg";
 import section3_anh5 from "../../assets/section3_anh5.webp";
-import React, { memo } from "react";
 
 // Local Background Ribbons with CSS animations (Persistent & localized)
 const BackgroundRibbons = memo(() => (
@@ -125,6 +125,35 @@ const FloatingMusicElements = () => {
 const NewLandingPage = () => {
   const { user, logout, setShowLoginModal } = useContext(AuthContext);
   const [scrolled, setScrolled] = useState(false);
+
+  // Product Showcase States - Kết nối dữ liệu thật từ Backend
+  const [projects, setProjects] = useState([]);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await productApi.getAll({ page: 0, size: 6 });
+        const data = response.data?.data?.list || response.data?.content || response.data || [];
+        setProjects(data);
+      } catch (err) {
+        console.error("Failed to fetch products:", err);
+      }
+    };
+    fetchProjects();
+  }, []);
+
+  const getThumbnail = (url) => {
+    if (!url) return "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=2070&auto=format&fit=crop";
+    if (url.includes("youtube.com") || url.includes("youtu.be")) {
+      const v = url.match(/[?&]v=([^&]+)/) || url.match(/youtu.be\/([^?]+)/);
+      const id = v ? v[1] : null;
+      return id ? `https://img.youtube.com/vi/${id}/maxresdefault.jpg` : "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=2070&auto=format&fit=crop";
+    }
+    // Đối với video host trực tiếp, dùng placeholder studio chất lượng cao
+    return "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=2070&auto=format&fit=crop";
+  };
 
   return (
     <div className="min-h-screen bg-white font-sans text-[#35104C] selection:bg-sky/30 relative overflow-x-hidden">
@@ -504,9 +533,9 @@ const NewLandingPage = () => {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
-            className="text-[20px] mb-4 max-w-none mx-auto leading-relaxed whitespace-nowrap lg:whitespace-normal"
+            className="text-[20px] mb-4 max-w-5xl mx-auto leading-relaxed"
           >
-            Từ những nghệ sĩ chuyên nghiệp đến những tài năng trẻ, chúng tôi tự hào đồng hành cùng mọi dự án âm nhạc.
+            Nơi khơi nguồn cảm hứng và hiện thực hóa mọi ý tưởng âm nhạc. Hastudio tự hào là cộng sự tin cậy trên con đường nghệ thuật của bạn.
           </motion.p>
           <motion.p
             initial={{ opacity: 0 }}
@@ -514,7 +543,7 @@ const NewLandingPage = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.5 }}
             className="text-[18px] font-bold text-[#35104C] mb-12"
-          >Những dự án mới sẽ liên tục được cập nhật!</motion.p>
+          >Mỗi bản ghi là một câu chuyện, mỗi dự án là một kiệt tác.</motion.p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Card 1: App Screens - Coral/Red */}
@@ -735,6 +764,64 @@ const NewLandingPage = () => {
         </div>
       </footer>
 
+      {/* --- VIDEO MODAL PLAYER --- */}
+      <AnimatePresence>
+        {isModalOpen && selectedProject && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10"
+          >
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsModalOpen(false)}
+              className="absolute inset-0 bg-[#35104C]/95 backdrop-blur-3xl"
+            />
+            
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className="relative w-full max-w-6xl aspect-video bg-black rounded-[32px] overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.5)] border border-white/10"
+            >
+              <button 
+                onClick={() => setIsModalOpen(false)}
+                className="absolute top-6 right-6 z-10 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md flex items-center justify-center text-white transition-all border border-white/10"
+              >
+                <FiX size={24} />
+              </button>
+
+              {selectedProject.videoUrl?.includes("youtube.com") || selectedProject.videoUrl?.includes("youtu.be") ? (
+                <iframe
+                  src={`https://www.youtube.com/embed/${
+                    selectedProject.videoUrl.match(/[?&]v=([^&]+)/)?.[1] || 
+                    selectedProject.videoUrl.split("youtu.be/")[1]?.split("?")[0]
+                  }?autoplay=1`}
+                  className="w-full h-full border-none"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                <video 
+                  src={selectedProject.videoUrl} 
+                  controls 
+                  autoPlay 
+                  className="w-full h-full object-contain"
+                />
+              )}
+
+              {/* Tên dự án bên trong Modal */}
+              <div className="absolute bottom-10 left-10 pointer-events-none hidden md:block">
+                <p className="text-[#6CD1FD] font-bold text-sm uppercase tracking-widest mb-1">{selectedProject.author}</p>
+                <h2 className="text-white text-3xl font-bold">{selectedProject.title}</h2>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
