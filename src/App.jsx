@@ -64,20 +64,20 @@ const CursorWaveBar = ({ index, mouseX, mouseY }) => {
 
   return (
     <motion.div
-      style={{ 
-        x, 
+      style={{
+        x,
         y,
         marginLeft: `${(index - 2.5) * 8}px`,
         marginTop: '-10px'
       }}
-      animate={{ 
+      animate={{
         height: [8, 20, 10, 24, 8],
-        opacity: [0.3, 0.6, 0.3] 
+        opacity: [0.3, 0.6, 0.3]
       }}
-      transition={{ 
-        duration: 1.5 + index * 0.2, 
-        repeat: Infinity, 
-        ease: "easeInOut" 
+      transition={{
+        duration: 1.5 + index * 0.2,
+        repeat: Infinity,
+        ease: "easeInOut"
       }}
       className="absolute w-[3px] bg-[#6CD1FD] rounded-full"
     />
