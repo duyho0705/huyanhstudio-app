@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiSearch, FiArrowRight, FiSend, FiMessageCircle, FiX, FiMinus, FiImage, FiCode, FiMusic, FiUser, FiLogOut, FiGrid } from "react-icons/fi";
 import { FaPlay, FaMicrophone, FaReact } from "react-icons/fa";
 import { AuthContext } from "../../api/AuthContext";
@@ -124,6 +124,7 @@ const FloatingMusicElements = () => {
 
 const NewLandingPage = () => {
   const { user, logout, setShowLoginModal } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
 
   // Product Showcase States - Kết nối dữ liệu thật từ Backend
@@ -196,7 +197,10 @@ const NewLandingPage = () => {
 
             <motion.button
               whileTap={{ scale: 0.95 }}
-              onClick={() => setShowLoginModal(true, "signup")}
+              onClick={() => {
+                if (user) navigate("/booking");
+                else setShowLoginModal(true, "signup");
+              }}
               className="px-12 py-5 bg-[#6CD1FD] text-white rounded-full text-[20px] font-bold mb-10 shadow-xl shadow-sky/10 active:scale-95"
             >
               Đặt lịch thu âm ngay
@@ -418,7 +422,10 @@ const NewLandingPage = () => {
           <div className="flex justify-center mt-20">
             <motion.button
               whileTap={{ scale: 0.95 }}
-              onClick={() => setShowLoginModal(true, "signup")}
+              onClick={() => {
+                if (user) navigate("/booking");
+                else setShowLoginModal(true, "signup");
+              }}
               className="px-10 py-4 bg-[#6CD1FD] text-[#35104C] rounded-full font-bold shadow-lg"
             >
               Xem bảng giá dịch vụ

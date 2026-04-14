@@ -14,21 +14,35 @@ import {
   doc 
 } from 'firebase/firestore';
 
-const ChatBox = () => {
+const ChatBox = ({ isOpen, onToggle }) => {
   const { user } = useContext(AuthContext);
-  const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
+  const [guestId, setGuestId] = useState(null);
   const scrollRef = useRef(null);
 
+  // Tạo hoặc lấy Guest ID nếu chưa đăng nhập
   useEffect(() => {
-    if (!user || (!user.id && !user.email && !user.username && !user.customerName)) return;
+    if (!user) {
+      let storedGuestId = localStorage.getItem('hastudio_guest_id');
+      if (!storedGuestId) {
+        storedGuestId = 'guest_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('hastudio_guest_id', storedGuestId);
+      }
+      setGuestId(storedGuestId);
+    } else {
+      setGuestId(null);
+    }
+  }, [user]);
 
-    const userId = user.email || user.username || user.id || user.customerName;
-    
+  const currentUserId = user ? (user.email || user.username || user.id || user.customerName) : guestId;
+
+  useEffect(() => {
+    if (!currentUserId) return;
+
     // Listen to messages from Firestore
     const q = query(
-      collection(db, 'chat_rooms', userId, 'messages'),
+      collection(db, 'chat_rooms', currentUserId, 'messages'),
       orderBy('timestamp', 'asc')
     );
 
@@ -42,7 +56,7 @@ const ChatBox = () => {
     });
 
     return () => unsubscribe();
-  }, [user]);
+  }, [currentUserId]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -52,80 +66,84 @@ const ChatBox = () => {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    if (!inputValue.trim() || !user) return;
+    if (!inputValue.trim() || !currentUserId) return;
 
-    const userId = user.email || user.username || user.id || user.customerName;
     const chatMessage = {
-      senderId: userId,
+      senderId: currentUserId,
       receiverId: 'admin',
       content: inputValue,
       timestamp: serverTimestamp(),
+      isGuest: !user
     };
 
     try {
-      // 1. Add message to the conversation
-      await addDoc(collection(db, 'chat_rooms', userId, 'messages'), chatMessage);
+      await addDoc(collection(db, 'chat_rooms', currentUserId, 'messages'), chatMessage);
 
-      // 2. Update chat list for admin to see
-      await setDoc(doc(db, 'chat_list', userId), {
-        userId: userId,
-        userName: user.customerName || userId,
+      await setDoc(doc(db, 'chat_list', currentUserId), {
+        userId: currentUserId,
+        userName: user ? (user.customerName || currentUserId) : 'Khách vãng lai (' + currentUserId.slice(-4) + ')',
         lastMessage: inputValue,
         timestamp: serverTimestamp(),
-        unread: true
+        unread: true,
+        isGuest: !user
       });
 
       setInputValue('');
     } catch (err) {
-      console.error('Error sending message to Firebase:', err);
+      console.error('Error sending message:', err);
     }
   };
 
-  if (!user) return null;
-
   return (
-    <div className="fixed bottom-6 right-6 z-50">
-      <AnimatePresence>
+    <div className="fixed bottom-6 right-6 z-[100]">
+      <AnimatePresence mode="wait">
         {isOpen ? (
           <motion.div
-            initial={{ opacity: 0, scale: 0.8, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, y: 20 }}
-            className="bg-white w-[350px] sm:w-[400px] h-[550px] rounded-[32px] shadow-2xl shadow-indigo-500/20 border border-slate-100 flex flex-col overflow-hidden"
+            key="chat-window"
+            initial={{ opacity: 0, scale: 0.5, y: 100, x: 50, originX: 1, originY: 1 }}
+            animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
+            exit={{ opacity: 0, scale: 0.5, y: 100, x: 50, transition: { duration: 0.3 } }}
+            className="bg-white w-[320px] sm:w-[380px] h-[500px] rounded-[32px] shadow-[0_20px_60px_rgba(0,0,0,0.15)] border border-slate-100 flex flex-col overflow-hidden"
           >
             {/* Header */}
-            <div className="bg-[#35104C] p-6 flex items-center justify-between text-white">
+            <div className="bg-[#35104C] p-5 flex items-center justify-between text-white">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
-                  <FiUser className="text-white" size={24} />
+                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
+                  <FiUser className="text-white" size={20} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-[16px]">Hỗ trợ trực tuyến</h3>
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                    <p className="text-[12px] text-white/60">Sẵn sàng hỗ trợ bạn</p>
+                  <h3 className="font-bold text-[15px]">Hỗ trợ trực tuyến</h3>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
+                    <p className="text-[11px] text-white/60">Chúng tôi sẵn sàng giúp bạn</p>
                   </div>
                 </div>
               </div>
-              <button onClick={() => setIsOpen(false)} className="hover:bg-white/10 p-2 rounded-full transition-colors">
-                <FiX size={24} />
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onToggle(false);
+                }} 
+                className="hover:bg-white/10 p-2 rounded-full transition-colors"
+              >
+                <FiX size={20} />
               </button>
             </div>
 
             {/* Messages */}
-            <div ref={scrollRef} className="flex-1 overflow-y-auto p-5 space-y-4 bg-slate-50/50">
+            <div ref={scrollRef} className="flex-1 overflow-y-auto p-5 space-y-4 bg-slate-50/30">
               {messages.length === 0 && (
-                <div className="text-center py-10 opacity-40">
-                  <FiMessageCircle size={40} className="mx-auto mb-3 text-[#35104C]" />
-                  <p className="text-sm font-bold text-[#35104C]">Xin chào! Chúng tôi có thể giúp gì cho bạn?</p>
+                <div className="text-center py-10 opacity-30">
+                  <FiMessageCircle size={32} className="mx-auto mb-3 text-[#35104C]" />
+                  <p className="text-xs font-bold text-[#35104C]">Để lại lời nhắn, tư vấn viên sẽ phản hồi bạn ngay!</p>
                 </div>
               )}
               {messages.map((msg, idx) => (
-                <div key={idx} className={`flex ${msg.senderId === (user.email || user.username || user.id || user.customerName) ? 'justify-end' : 'justify-start'}`}>
+                <div key={idx} className={`flex ${msg.senderId === currentUserId ? 'justify-end' : 'justify-start'}`}>
                   <div
-                    className={`max-w-[80%] p-4 rounded-2xl text-[14px] leading-relaxed shadow-sm ${
-                      msg.senderId !== 'admin'
-                        ? 'bg-[#6CD1FD] text-white rounded-tr-none'
+                    className={`max-w-[85%] p-3 px-4 rounded-2xl text-[13px] leading-relaxed shadow-sm ${
+                      msg.senderId === currentUserId
+                        ? 'bg-[#35104C] text-white rounded-tr-none'
                         : 'bg-white text-slate-700 border border-slate-100 rounded-tl-none'
                     }`}
                   >
@@ -135,32 +153,40 @@ const ChatBox = () => {
               ))}
             </div>
 
-            {/* Input */}
+            {/* Input Form */}
             <form onSubmit={handleSendMessage} className="p-4 bg-white border-t border-slate-100 flex items-center gap-2">
               <input
                 type="text"
-                placeholder="Nhập nội dung tin nhắn..."
-                className="flex-1 bg-slate-100/50 border-none rounded-2xl px-5 py-3 text-[14px] focus:ring-2 focus:ring-[#6CD1FD]/20 outline-none transition-all"
+                placeholder="Nhập nội dung..."
+                className="flex-1 bg-slate-100/50 border-none rounded-2xl px-4 py-2.5 text-[13px] focus:ring-1 focus:ring-[#35104C]/10 outline-none transition-all"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
               />
               <button
                 type="submit"
-                className="p-4 bg-[#35104C] text-white rounded-2xl shadow-lg border-none active:scale-95 transition-all"
+                className="p-3 bg-[#35104C] text-[#6CD1FD] rounded-xl shadow-lg border-none active:scale-90 transition-all"
               >
-                <FiSend size={20} />
+                <FiSend size={18} />
               </button>
             </form>
           </motion.div>
         ) : (
           <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setIsOpen(true)}
-            className="bg-[#35104C] text-white w-16 h-16 rounded-[24px] flex items-center justify-center shadow-2xl relative"
+            key="chat-button"
+            initial={{ opacity: 0, scale: 0.5, rotate: -45 }}
+            animate={{ opacity: 1, scale: 1, rotate: 0 }}
+            exit={{ opacity: 0, scale: 0.5, rotate: 45 }}
+            whileHover={{ scale: 1.1, rotate: 5 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => onToggle(true)}
+            className="bg-[#35104C] text-white w-16 h-16 rounded-[24px] flex items-center justify-center shadow-[0_10px_30px_rgba(53,16,76,0.3)] relative group"
           >
-            <FiMessageCircle size={30} />
-            <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#6CD1FD] rounded-full border-4 border-white"></span>
+            <FiMessageCircle size={28} className="group-hover:scale-110 transition-transform" />
+            <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#6CD1FD] rounded-full border-4 border-white shadow-sm"></span>
+            
+            <div className="absolute right-20 top-1/2 -translate-y-1/2 bg-[#35104C] text-white px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all pointer-events-none shadow-xl">
+               Hỗ trợ trực tuyến ✨
+            </div>
           </motion.button>
         )}
       </AnimatePresence>

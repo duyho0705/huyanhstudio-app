@@ -169,7 +169,7 @@ const Booking = () => {
     }
 
     return (
-        <div className="container-app pb-16 pt-4">
+        <div className="container-app pb-16 pt-0 lg:-mt-4">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -211,7 +211,7 @@ const Booking = () => {
                                         <FiMusic size={20} />
                                     </div>
                                     <div>
-                                        <div className="text-[15px] font-semibold text-white/40 mb-1">Giờ mở cửa</div>
+                                        <div className="text-[15px] font-semibold text-white/40 mb-1">Giờ hoạt động</div>
                                         <div className="text-[17px] font-bold text-white">08:00 - 22:00</div>
                                     </div>
                                 </div>
