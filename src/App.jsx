@@ -26,8 +26,8 @@ import LoginModal from "./components/features/auth/LoginModal";
 import ChatBox from "./components/features/chat/ChatBox";
 import AIAudioEnhancerModal from "./components/features/ai/AIAudioEnhancerModal";
 import { AnimatePresence, motion } from "framer-motion";
-import { FaMagic } from "react-icons/fa";
-import { FiZap } from "react-icons/fi";
+import { FaMagic, FaPlay } from "react-icons/fa";
+import { FiZap, FiGrid, FiMessageCircle, FiX } from "react-icons/fi";
 import { useState } from "react";
 
 const pageVariants = {
@@ -42,16 +42,95 @@ const pageTransition = {
   duration: 0.5,
 };
 
+// --- PERSISTENT MUSIC PLAYER UI ---
+const MiniMusicPlayer = ({ isPlaying, setIsPlaying }) => {
+  return (
+    <div 
+      className="fixed top-[120px] left-6 z-[100] flex items-center gap-4 bg-white/10 backdrop-blur-xl p-2.5 px-4 rounded-full border border-white/20 shadow-2xl group hover:bg-white/20 transition-all cursor-pointer" 
+      onClick={() => setIsPlaying(!isPlaying)}
+    >
+      {/* Visualizer and Logic only, sound comes from Global Source */}
+      <div className="relative w-12 h-12 flex items-center justify-center">
+        {/* The Spinning Vinyl Record */}
+        <motion.div
+          animate={isPlaying ? { rotate: [0, 360] } : { rotate: 0 }}
+          transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+          className={`relative w-full h-full rounded-full bg-[#12061A] flex items-center justify-center shadow-2xl border-4 border-[#35104C] ${isPlaying ? 'shadow-[0_0_20px_rgba(108,209,253,0.4)]' : ''}`}
+        >
+          {/* Vinyl Grooves (Subtle circles) */}
+          <div className="absolute inset-1 rounded-full border border-white/5"></div>
+          <div className="absolute inset-2 rounded-full border border-white/5"></div>
+          <div className="absolute inset-3 rounded-full border border-white/5"></div>
+          
+          {/* Center Label */}
+          <div className="w-4 h-4 bg-[#6CD1FD] rounded-full border-2 border-[#35104C] flex items-center justify-center">
+            <div className="w-1 h-1 bg-[#35104C] rounded-full"></div>
+          </div>
+        </motion.div>
+        
+        {/* Play/Pause Overlay Icon (Appears on Hover) */}
+        <div className="absolute inset-0 flex items-center justify-center text-white pointer-events-none">
+          {isPlaying ? (
+            <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-0.5">
+              <div className="w-1 h-3 bg-white rounded-full"></div>
+              <div className="w-1 h-3 bg-white rounded-full"></div>
+            </div>
+          ) : (
+            <FaPlay size={10} className="ml-0.5" />
+          )}
+        </div>
+      </div>
+
+      <div className="flex flex-col">
+        <p className="text-[13px] font-semibold text-[#35104C] leading-none mb-1">Mốc nè anh Huy</p>
+        <div className="flex items-center gap-1 h-2.5">
+          {[...Array(5)].map((_, i) => (
+            <motion.div
+              key={i}
+              animate={{
+                height: isPlaying ? [3, 10, 3] : 3,
+                backgroundColor: isPlaying ? "#6CD1FD" : "rgba(53, 16, 76, 0.3)"
+              }}
+              transition={{
+                duration: 0.5 + (i * 0.1),
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="w-0.5 rounded-full bg-[#35104C]"
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 function AppContent() {
   const { showLoginModal, setShowLoginModal } = useContext(AuthContext);
   const [isAIModalOpen, setIsAIModalOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isHubHovered, setIsHubHovered] = useState(false);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith("/admin");
 
   return (
     <>
       <ScrollToHash />
+      
+      {/* GLOBAL MUSIC ENGINE - PERSISTENT & INDEPENDENT */}
+      <div className="fixed -left-[999px] top-0 pointer-events-none z-0">
+        {isMusicPlaying && (
+          <iframe
+            width="100"
+            height="100"
+            src={`https://www.youtube.com/embed/e5Td3zrVdX4?autoplay=1&mute=0&loop=1&playlist=e5Td3zrVdX4&controls=0&enablejsapi=1&origin=${window.location.origin}`}
+            allow="autoplay; encrypted-media"
+            title="Hastudio Background Music"
+          ></iframe>
+        )}
+      </div>
+
       {!isAdminRoute && <NewNavbar />}
 
       {isAdminRoute ? (
@@ -183,40 +262,75 @@ function AppContent() {
       />
       {!isAdminRoute && (
         <>
-          <ChatBox isOpen={isChatOpen} onToggle={setIsChatOpen} />
-          
-          {/* Floating AI Button (Global) - Hidden when chat is open */}
-          <AnimatePresence>
-            {!isChatOpen && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.5, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.5, y: 20 }}
-                whileHover={{ scale: 1.1 }}
-                onClick={() => setIsAIModalOpen(true)}
-                className="fixed bottom-32 right-6 z-[90] cursor-pointer group"
-              >
-                <div className="absolute inset-0 bg-[#6CD1FD] blur-2xl opacity-20 group-hover:opacity-50 transition-all duration-500 rounded-full" />
-                <div className="relative w-16 h-16 rounded-full bg-[#35104C] flex items-center justify-center text-[#6CD1FD] shadow-[0_10px_30px_rgba(53,16,76,0.5)] border border-white/20">
-                  <FaMagic size={24} className="group-hover:rotate-12 transition-transform" />
-                  <motion.div
-                    animate={{ opacity: [0, 1, 0], scale: [0.5, 1.2, 0.5] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                    className="absolute -top-1 -right-1"
-                  >
-                    <FiZap size={16} fill="#6CD1FD" />
-                  </motion.div>
-                </div>
-                <div className="absolute right-20 top-1/2 -translate-y-1/2 bg-[#35104C] text-white px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all shadow-xl pointer-events-none">
-                  Thử AI Enhancer miễn phí ✨
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {/* Hastudio Magic Hub - Expanding Toolbox */}
+          <div
+            className="fixed bottom-6 right-6 z-[100]"
+            onMouseLeave={() => setIsHubHovered(false)}
+          >
+            <div className="flex flex-col items-end gap-3 relative">
 
-          <AIAudioEnhancerModal 
-            isOpen={isAIModalOpen} 
-            onClose={() => setIsAIModalOpen(false)} 
+              {/* Tool Option 1: AI Audio Enhancer */}
+              <motion.div
+                initial={false}
+                animate={isHubHovered ? { opacity: 1, scale: 1, y: 0, pointerEvents: "auto" } : { opacity: 0, scale: 0.8, y: 20, pointerEvents: "none" }}
+                transition={{ duration: 0.3, delay: 0.1 }}
+                className="flex items-center gap-3"
+              >
+                <span className="bg-[#35104C] text-white px-3 py-1.5 rounded-lg text-[15px] font-bold shadow-xl border border-white/5">AI hastudio</span>
+                <button
+                  onClick={() => setIsAIModalOpen(true)}
+                  className="w-12 h-12 bg-[#35104C]/80 backdrop-blur-xl border border-white/20 rounded-full flex items-center justify-center text-[#6CD1FD] shadow-xl hover:bg-[#6CD1FD] hover:text-[#35104C] transition-all active:scale-90"
+                >
+                  <FiZap size={20} />
+                </button>
+              </motion.div>
+
+              {/* Tool Option 2: Live Chat */}
+              <motion.div
+                initial={false}
+                animate={isHubHovered ? { opacity: 1, scale: 1, y: 0, pointerEvents: "auto" } : { opacity: 0, scale: 0.8, y: 20, pointerEvents: "none" }}
+                transition={{ duration: 0.3 }}
+                className="flex items-center gap-3"
+              >
+                <span className="bg-[#35104C] text-white px-3 py-1.5 rounded-lg text-[15px] font-bold shadow-xl border border-white/5">Hỗ trợ</span>
+                <button
+                  onClick={() => setIsChatOpen(true)}
+                  className="w-12 h-12 bg-[#35104C]/80 backdrop-blur-xl border border-white/20 rounded-full flex items-center justify-center text-white shadow-xl hover:bg-[#6CD1FD] hover:text-[#35104C] transition-all active:scale-90"
+                >
+                  <FiMessageCircle size={20} />
+                </button>
+              </motion.div>
+
+              {/* Main Hub Trigger - Mouse Enter here exclusively */}
+              <motion.div
+                onMouseEnter={() => setIsHubHovered(true)}
+                animate={isHubHovered ? { rotate: 90, scale: 1.1 } : { rotate: 0, scale: 1 }}
+                whileTap={{ scale: 0.9 }}
+                className="w-14 h-14 bg-[#35104C] rounded-full flex items-center justify-center text-[#6CD1FD] shadow-2xl cursor-pointer border border-white/10 z-10"
+              >
+                {isHubHovered ? <FiX size={24} /> : <FiGrid size={24} />}
+              </motion.div>
+            </div>
+          </div>
+
+          {/* Chat Window Container - Standalone now */}
+          <ChatBox
+            isOpen={isChatOpen}
+            onToggle={setIsChatOpen}
+            onlyWindow={true}
+          />
+
+          {/* Music Player UI - Only visible on Home Page */}
+          {!isAdminRoute && location.pathname === "/" && (
+            <MiniMusicPlayer 
+              isPlaying={isMusicPlaying} 
+              setIsPlaying={setIsMusicPlaying} 
+            />
+          )}
+
+          <AIAudioEnhancerModal
+            isOpen={isAIModalOpen}
+            onClose={() => setIsAIModalOpen(false)}
           />
         </>
       )}

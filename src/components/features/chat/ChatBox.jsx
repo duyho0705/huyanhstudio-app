@@ -3,18 +3,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FiMessageCircle, FiX, FiSend, FiUser } from 'react-icons/fi';
 import { AuthContext } from '../../../api/AuthContext';
 import { db } from '../../../api/firebase';
-import { 
-  collection, 
-  addDoc, 
-  query, 
-  orderBy, 
-  onSnapshot, 
+import {
+  collection,
+  addDoc,
+  query,
+  orderBy,
+  onSnapshot,
   serverTimestamp,
   setDoc,
-  doc 
+  doc
 } from 'firebase/firestore';
 
-const ChatBox = ({ isOpen, onToggle }) => {
+const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
   const { user } = useContext(AuthContext);
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
@@ -100,11 +100,11 @@ const ChatBox = ({ isOpen, onToggle }) => {
                   <h3 className="font-bold text-[17px]">Hỗ trợ trực tuyến</h3>
                 </div>
               </div>
-              <button 
+              <button
                 onClick={(e) => {
                   e.stopPropagation();
                   onToggle(false);
-                }} 
+                }}
                 className="hover:bg-white/10 p-2 rounded-full transition-colors"
               >
                 <FiX size={20} />
@@ -122,11 +122,10 @@ const ChatBox = ({ isOpen, onToggle }) => {
               {messages.map((msg, idx) => (
                 <div key={idx} className={`flex ${msg.senderId === currentUserId ? 'justify-end' : 'justify-start'}`}>
                   <div
-                    className={`max-w-[85%] p-3 px-4 rounded-2xl text-[15px] leading-relaxed shadow-sm ${
-                      msg.senderId === currentUserId
+                    className={`max-w-[85%] p-3 px-4 rounded-2xl text-[15px] leading-relaxed shadow-sm ${msg.senderId === currentUserId
                         ? 'bg-[#35104C] text-white rounded-tr-none'
                         : 'bg-white text-slate-700 border border-slate-100 rounded-tl-none'
-                    }`}
+                      }`}
                   >
                     {msg.content}
                   </div>
@@ -151,7 +150,7 @@ const ChatBox = ({ isOpen, onToggle }) => {
               </button>
             </form>
           </motion.div>
-        ) : (
+        ) : !onlyWindow ? (
           <motion.button
             key="chat-button"
             initial={{ opacity: 0, scale: 0.5, rotate: -45 }}
@@ -160,16 +159,16 @@ const ChatBox = ({ isOpen, onToggle }) => {
             whileHover={{ scale: 1.1, rotate: 5 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => onToggle(true)}
-            className="bg-[#35104C] text-white w-16 h-16 rounded-[24px] flex items-center justify-center shadow-[0_10px_30px_rgba(53,16,76,0.3)] relative group"
+            className="bg-[#35104C] text-white w-14 h-14 rounded-full flex items-center justify-center shadow-[0_10px_30px_rgba(53,16,76,0.3)] relative group"
           >
             <FiMessageCircle size={28} className="group-hover:scale-110 transition-transform" />
             <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#6CD1FD] rounded-full border-4 border-white shadow-sm"></span>
-            
+
             <div className="absolute right-20 top-1/2 -translate-y-1/2 bg-[#35104C] text-white px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all pointer-events-none shadow-xl">
-               Hỗ trợ trực tuyến ✨
+              Hỗ trợ trực tuyến
             </div>
           </motion.button>
-        )}
+        ) : null}
       </AnimatePresence>
     </div>
   );
