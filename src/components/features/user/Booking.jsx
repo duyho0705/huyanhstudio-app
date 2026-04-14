@@ -47,17 +47,35 @@ const Booking = () => {
     const fetchData = async () => {
         try {
             const [serviceRes, studioRes] = await Promise.all([
-                serviceApi.getAll(),
-                studioRoomApi.getAll()
+                serviceApi.getAll().catch(err => {
+                    console.error("Booking Page - Services API Error:", err);
+                    return { list: [] };
+                }),
+                studioRoomApi.getAll().catch(err => {
+                    console.error("Booking Page - Studios API Error:", err);
+                    return { list: [] };
+                })
             ]);
 
-            // Backend returns ApiResponse<PageResponse<T>>
-            // List is in res.data.data.list
-            const serviceData = serviceRes.data?.data?.list || (Array.isArray(serviceRes.data) ? serviceRes.data : []);
-            const studioData = studioRes.data?.data?.list || (Array.isArray(studioRes.data) ? studioRes.data : []);
+            const getList = (res) => {
+                if (!res) return [];
+                if (Array.isArray(res)) return res;
+                if (res.list && Array.isArray(res.list)) return res.list;
+                if (res.content && Array.isArray(res.content)) return res.content;
+                if (res.data) {
+                    if (Array.isArray(res.data)) return res.data;
+                    if (res.data.list && Array.isArray(res.data.list)) return res.data.list;
+                    if (res.data.content && Array.isArray(res.data.content)) return res.data.content;
+                }
+                return [];
+            };
 
-            const validServices = Array.isArray(serviceData) ? serviceData : [];
-            const validStudios = Array.isArray(studioData) ? studioData : [];
+            const validServices = getList(serviceRes);
+            const validStudios = getList(studioRes);
+
+            console.log("Customer Booking - Services found:", validServices.length);
+            console.log("Customer Booking - Studios found:", validStudios.length);
+
             setServices(validServices);
             setStudios(validStudios);
 
@@ -66,7 +84,7 @@ const Booking = () => {
                 setFormData(prev => ({ ...prev, studioRoomId: validStudios[0].id }));
             }
         } catch (err) {
-            console.error("Error fetching data:", err);
+            console.error("Critical error in fetchData:", err);
             setServices([]);
             setStudios([]);
         } finally {

@@ -14,10 +14,30 @@ const BookingProfile = () => {
 
   const fetchData = async (pageNum) => {
     try {
-      const res = await bookingApi.getBookingCustomer(pageNum, 10);
-      setBookings(res.data.list);
-      setTotalPages(res.data.totalPages);
-    } catch (err) { console.error("Error fetching bookings:", err); }
+      const res = await bookingApi.getBookingCustomer(pageNum, 10).catch(err => {
+        console.error("Booking Profile API Error:", err);
+        return { list: [], totalPages: 0 };
+      });
+
+      const getList = (data) => {
+        if (!data) return [];
+        if (Array.isArray(data)) return data;
+        if (data.list && Array.isArray(data.list)) return data.list;
+        if (data.content && Array.isArray(data.content)) return data.content;
+        if (data.data) {
+          if (Array.isArray(data.data)) return data.data;
+          if (data.data.list && Array.isArray(data.data.list)) return data.data.list;
+        }
+        return [];
+      };
+
+      const list = getList(res);
+      setBookings(list);
+      setTotalPages(res.totalPages || (res.data?.totalPages) || 1);
+    } catch (err) { 
+      console.error("Error fetching bookings:", err); 
+      setBookings([]);
+    }
   };
 
   useEffect(() => {

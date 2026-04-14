@@ -1,34 +1,68 @@
 import { useState, useEffect, useRef } from "react";
-import { FiSearch, FiSend, FiUser, FiMessageSquare, FiClock } from "react-icons/fi";
-import SockJS from "sockjs-client";
-import { Client } from "@stomp/stompjs";
-import axiosClient from "../../../api/axiosClient";
-import { motion, AnimatePresence } from "framer-motion";
+import { 
+    FiSend, 
+    FiUser, 
+    FiSearch, 
+    FiClock, 
+    FiMoreVertical,
+    FiMessageCircle 
+} from "react-icons/fi";
+import { db } from "../../../api/firebase";
+import { 
+    collection, 
+    query, 
+    orderBy, 
+    onSnapshot, 
+    addDoc, 
+    serverTimestamp,
+    updateDoc,
+    doc 
+} from "firebase/firestore";
 
 const ChatManagement = () => {
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState("");
-    const [stompClient, setStompClient] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
     const scrollRef = useRef(null);
 
-    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") || "http://localhost:8080";
-    const WS_URL = `${API_BASE_URL}/ws`;
-
+    // 1. Listen to chat list (sidebar)
     useEffect(() => {
-        fetchUsers();
-        connectWebSocket();
-        return () => {
-            if (stompClient) stompClient.deactivate();
-        };
+        const q = query(collection(db, "chat_list"), orderBy("timestamp", "desc"));
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const userList = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            setUsers(userList);
+        });
+        return () => unsubscribe();
     }, []);
 
+    // 2. Listen to messages for selected user
     useEffect(() => {
-        if (selectedUser) {
-            fetchHistory(selectedUser);
-        }
+        if (!selectedUser) return;
+
+        const q = query(
+            collection(db, "chat_rooms", selectedUser, "messages"),
+            orderBy("timestamp", "asc")
+        );
+
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const msgs = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data(),
+                timestamp: doc.data().timestamp?.toDate()?.toISOString() || new Date().toISOString()
+            }));
+            setMessages(msgs);
+            
+            // Mark as read when opening
+            const userRef = doc(db, "chat_list", selectedUser);
+            updateDoc(userRef, { unread: false }).catch(() => {});
+        });
+
+        return () => unsubscribe();
     }, [selectedUser]);
 
     useEffect(() => {
@@ -37,120 +71,99 @@ const ChatManagement = () => {
         }
     }, [messages]);
 
-    const fetchUsers = async () => {
-        try {
-            const res = await axiosClient.get(`/api/chat/users`);
-            setUsers((res.data || res).filter(u => u !== 'admin'));
-        } catch (err) {
-            console.error("Error fetching chat users:", err);
-        }
-    };
-
-    const fetchHistory = async (userId) => {
-        try {
-            const res = await axiosClient.get(`/api/chat/history`, {
-                params: { userId1: 'admin', userId2: userId }
-            });
-            setMessages(res.data || res);
-        } catch (err) {
-            console.error("Error fetching chat history:", err);
-        }
-    };
-
-    const connectWebSocket = () => {
-        const client = new Client({
-            webSocketFactory: () => new SockJS(WS_URL),
-            onConnect: () => {
-                console.log("Connected to WebSocket (Admin)");
-                client.subscribe(`/user/admin/queue/messages`, (message) => {
-                    const newMessage = JSON.parse(message.body);
-                    // If the message is from the currently selected user, add it to messages
-                    // We might need to refresh user list if it's a new user
-                    setMessages((prev) => {
-                        // Check if the message belongs to the current conversation
-                        if (newMessage.senderId === selectedUser || newMessage.receiverId === selectedUser) {
-                            return [...prev, newMessage];
-                        }
-                        return prev;
-                    });
-                    fetchUsers(); // Refresh list to show new activity
-                });
-            },
-        });
-        client.activate();
-        setStompClient(client);
-    };
-
-    const handleSendMessage = (e) => {
+    const handleSendMessage = async (e) => {
         e.preventDefault();
-        if (!inputValue.trim() || !stompClient || !selectedUser) return;
+        if (!inputValue.trim() || !selectedUser) return;
 
         const chatMessage = {
-            senderId: 'admin',
+            senderId: "admin",
             receiverId: selectedUser,
             content: inputValue,
+            timestamp: serverTimestamp(),
         };
 
-        stompClient.publish({
-            destination: "/app/chat.sendMessage",
-            body: JSON.stringify(chatMessage),
-        });
+        try {
+            // Add message to room
+            await addDoc(collection(db, "chat_rooms", selectedUser, "messages"), chatMessage);
+            
+            // Update last message in chat list
+            await updateDoc(doc(db, "chat_list", selectedUser), {
+                lastMessage: inputValue,
+                timestamp: serverTimestamp(),
+                unread: false
+            });
 
-        setMessages((prev) => [...prev, { ...chatMessage, timestamp: new Date().toISOString() }]);
-        setInputValue("");
+            setInputValue("");
+        } catch (err) {
+            console.error("Error sending admin message:", err);
+        }
     };
 
-    const filteredUsers = users.filter(u => u.toLowerCase().includes(searchTerm.toLowerCase()));
+    const filteredUsers = users.filter(u => 
+        u.userName?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        u.id?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     return (
-        <div className="flex h-[calc(100vh-140px)] bg-white rounded-[32px] overflow-hidden border border-slate-200 shadow-sm">
-            {/* User List Sidebar */}
-            <div className="w-80 border-r border-slate-100 flex flex-col bg-slate-50/30">
-                <div className="p-6 border-b border-slate-100 bg-white">
-                    <h2 className="text-[18px] font-bold text-slate-900 mb-4 flex items-center gap-2">
-                        <FiMessageSquare className="text-blue-500" /> Tin nhắn
-                    </h2>
+        <div className="h-[calc(100vh-140px)] bg-white rounded-3xl shadow-xl shadow-slate-200/50 flex overflow-hidden border border-slate-100">
+            {/* Sidebar */}
+            <div className="w-[380px] border-r border-slate-100 flex flex-col bg-slate-50/30">
+                <div className="p-6">
+                    <div className="flex items-center justify-between mb-6">
+                        <h2 className="text-[20px] font-bold text-slate-800 flex items-center gap-2">
+                            <FiMessageCircle className="text-blue-500" /> Tin nhắn
+                        </h2>
+                    </div>
+                    
                     <div className="relative">
-                        <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                        <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                         <input
                             type="text"
                             placeholder="Tìm kiếm người dùng..."
-                            className="w-full pl-10 pr-4 py-2 bg-slate-100 border-none rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500/10 transition-all font-medium"
+                            className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all shadow-sm"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
                 </div>
 
-                <div className="flex-1 overflow-y-auto p-3 space-y-1">
-                    {filteredUsers.length === 0 ? (
-                        <div className="text-center py-10 text-slate-400 text-sm italic">
-                            Chưa có cuộc hội thoại nào
-                        </div>
-                    ) : (
+                <div className="flex-1 overflow-y-auto px-3 space-y-1">
+                    {filteredUsers.length > 0 ? (
                         filteredUsers.map((u) => (
                             <button
-                                key={u}
-                                onClick={() => setSelectedUser(u)}
-                                className={`w-full flex items-center gap-3 p-3 rounded-2xl transition-all ${
-                                    selectedUser === u 
-                                    ? "bg-blue-500 text-white shadow-lg shadow-blue-500/20" 
-                                    : "hover:bg-white text-slate-600 hover:text-slate-900"
+                                key={u.id}
+                                onClick={() => setSelectedUser(u.id)}
+                                className={`w-full flex items-center gap-4 p-4 rounded-2xl transition-all ${
+                                    selectedUser === u.id 
+                                    ? "bg-blue-600 text-white shadow-lg shadow-blue-200" 
+                                    : "hover:bg-white text-slate-600 hover:shadow-md"
                                 }`}
                             >
-                                <div className={`w-10 h-10 rounded-full flex items-center justify-center shadow-sm ${
-                                    selectedUser === u ? "bg-white/20" : "bg-blue-500/10 text-blue-500"
+                                <div className={`w-12 h-12 rounded-full flex items-center justify-center shadow-sm ${
+                                    selectedUser === u.id ? "bg-white/20" : "bg-blue-50"
                                 }`}>
-                                    <FiUser size={18} />
+                                    <FiUser size={20} className={selectedUser === u.id ? "text-white" : "text-blue-600"} />
                                 </div>
-                                <div className="text-left overflow-hidden">
-                                    <p className="font-bold text-[14px] truncate">{u}</p>
-                                    <p className={`text-[11px] truncate ${selectedUser === u ? "text-white/70" : "text-slate-400"}`}>
-                                        Nhấn để xem tin nhắn
+                                <div className="text-left flex-1 min-w-0">
+                                    <div className="flex justify-between items-start mb-1">
+                                        <p className="font-bold text-[15px] truncate pr-2">
+                                            {u.userName || u.id}
+                                        </p>
+                                        {u.unread && (
+                                            <span className="w-2.5 h-2.5 bg-red-500 rounded-full ring-4 ring-white"></span>
+                                        )}
+                                    </div>
+                                    <p className={`text-[13px] truncate ${selectedUser === u.id ? 'text-white/80' : 'text-slate-400'}`}>
+                                        {u.lastMessage || "Chưa có tin nhắn"}
                                     </p>
                                 </div>
                             </button>
                         ))
+                    ) : (
+                        <div className="text-center py-10 text-slate-400">
+                            <FiSearch size={40} className="mx-auto mb-3 opacity-20" />
+                            <p className="text-sm">Không tìm thấy ai</p>
+                        </div>
                     )}
                 </div>
             </div>
@@ -159,38 +172,43 @@ const ChatManagement = () => {
             <div className="flex-1 flex flex-col bg-white">
                 {selectedUser ? (
                     <>
-                        {/* Header */}
-                        <div className="p-5 border-b border-slate-100 flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center border border-blue-50">
-                                    <FiUser size={20} />
+                        {/* Chat Header */}
+                        <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-white/80 backdrop-blur-md sticky top-0 z-10">
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                                    <FiUser size={24} />
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-slate-900 text-[15px]">{selectedUser}</h3>
-                                    <div className="flex items-center gap-1.5 text-[12px] text-green-500 font-medium">
+                                    <h3 className="font-bold text-slate-800 text-[17px]">
+                                        {users.find(u => u.id === selectedUser)?.userName || selectedUser}
+                                    </h3>
+                                    <div className="flex items-center gap-2">
                                         <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                                        Đang trực tuyến
+                                        <span className="text-[12px] text-slate-400 font-medium">Đang trực tuyến</span>
                                     </div>
                                 </div>
                             </div>
+                            <button className="p-2 hover:bg-slate-100 rounded-xl transition-colors text-slate-400">
+                                <FiMoreVertical size={20} />
+                            </button>
                         </div>
 
                         {/* Messages Area */}
-                        <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-4 bg-slate-50/20">
+                        <div ref={scrollRef} className="flex-1 overflow-y-auto p-8 space-y-6 bg-slate-50/30">
                             {messages.map((msg, idx) => (
                                 <div key={idx} className={`flex ${msg.senderId === 'admin' ? 'justify-end' : 'justify-start'}`}>
                                     <div className={`flex flex-col ${msg.senderId === 'admin' ? 'items-end' : 'items-start'} max-w-[70%]`}>
                                         <div
-                                            className={`p-4 rounded-2xl text-[14px] leading-relaxed shadow-sm ${
+                                            className={`p-4 rounded-2xl text-[15px] leading-relaxed shadow-sm ${
                                                 msg.senderId === 'admin'
-                                                    ? 'bg-blue-500 text-white rounded-tr-none'
+                                                    ? 'bg-blue-600 text-white rounded-tr-none'
                                                     : 'bg-white text-slate-700 border border-slate-100 rounded-tl-none'
                                             }`}
                                         >
                                             {msg.content}
                                         </div>
-                                        <div className="flex items-center gap-1 mt-1.5 text-[10px] text-slate-400 font-medium px-1">
-                                            <FiClock size={10} />
+                                        <div className="flex items-center gap-1.5 mt-2 text-[11px] text-slate-400 font-medium px-1">
+                                            <FiClock size={12} />
                                             {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                         </div>
                                     </div>
@@ -199,29 +217,35 @@ const ChatManagement = () => {
                         </div>
 
                         {/* Input Area */}
-                        <form onSubmit={handleSendMessage} className="p-5 border-t border-slate-100 flex items-center gap-3">
-                            <input
-                                type="text"
-                                placeholder="Nhập tin nhắn trả lời..."
-                                className="flex-1 bg-slate-100 border-none rounded-2xl px-5 py-3 text-[14px] font-medium outline-none focus:ring-2 focus:ring-blue-500/10 transition-all"
-                                value={inputValue}
-                                onChange={(e) => setInputValue(e.target.value)}
-                            />
-                            <button
-                                type="submit"
-                                className="p-4 bg-blue-500 text-white rounded-2xl shadow-xl shadow-blue-500/20 hover:bg-blue-600 transition-all active:scale-95"
-                            >
-                                <FiSend size={20} />
-                            </button>
-                        </form>
+                        <div className="p-6 bg-white border-t border-slate-100">
+                            <form onSubmit={handleSendMessage} className="flex gap-4">
+                                <div className="flex-1 relative">
+                                    <input
+                                        type="text"
+                                        placeholder="Để lại lời nhắn..."
+                                        className="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl text-sm focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder:text-slate-400"
+                                        value={inputValue}
+                                        onChange={(e) => setInputValue(e.target.value)}
+                                    />
+                                </div>
+                                <button
+                                    type="submit"
+                                    className="px-8 bg-blue-600 text-white rounded-2xl font-bold shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all flex items-center gap-2 active:scale-95"
+                                >
+                                    Gửi <FiSend />
+                                </button>
+                            </form>
+                        </div>
                     </>
                 ) : (
-                    <div className="flex-1 flex flex-col items-center justify-center text-slate-300">
-                        <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-4">
-                            <FiMessageSquare size={40} />
+                    <div className="flex-1 flex flex-col items-center justify-center text-slate-400 bg-slate-50/20">
+                        <div className="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mb-6 text-blue-500 animate-bounce">
+                            <FiMessageCircle size={48} />
                         </div>
-                        <p className="font-bold text-lg text-slate-400">Chọn một cuộc hội thoại để bắt đầu</p>
-                        <p className="text-sm">Hãy hồi đáp khách hàng một cách nhanh nhất!</p>
+                        <h3 className="text-[22px] font-bold text-slate-800 mb-2">Chọn một cuộc hội thoại</h3>
+                        <p className="text-slate-400 max-w-[300px] text-center text-[15px]">
+                            Chọn một khách hàng từ danh sách bên trái để bắt đầu hỗ trợ họ ngay lập tức!
+                        </p>
                     </div>
                 )}
             </div>

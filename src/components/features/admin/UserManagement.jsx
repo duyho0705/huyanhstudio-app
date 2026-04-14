@@ -76,6 +76,9 @@ const UserManagement = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedDetailUser, setSelectedDetailUser] = useState(null);
 
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deletingUser, setDeletingUser] = useState(null);
+
   const [notification, setNotification] = useState({
     show: false,
     type: "success",
@@ -192,6 +195,25 @@ const UserManagement = () => {
   const handleViewDetails = (record) => {
     setSelectedDetailUser(record);
     setIsDetailModalOpen(true);
+  };
+
+  const handleDelete = (record) => {
+    setDeletingUser(record);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!deletingUser) return;
+    try {
+        await userApi.admin.delete(deletingUser.id);
+        messageApi.success("Tài khoản đã được xóa vĩnh viễn!");
+        setIsDeleteModalOpen(false);
+        setDeletingUser(null);
+        fetchUsers();
+    } catch (error) {
+        console.error("Error deleting user:", error);
+        messageApi.error("Không thể xóa tài khoản này!");
+    }
   };
 
   const handleFormSubmit = async (values) => {
@@ -333,7 +355,7 @@ const UserManagement = () => {
             </Button>
             <Button
               type="text"
-              onClick={() => messageApi.warning("Tính năng xóa tài khoản đang bảo trì")}
+              onClick={() => handleDelete(record)}
               className="w-9 h-9 rounded-xl flex items-center justify-center text-red-500 hover:bg-red-50 transition-all p-0"
               title="Xóa tài khoản"
             >
@@ -629,6 +651,36 @@ const UserManagement = () => {
             </div>
           </div>
         )}
+      </Modal>
+
+      <Modal
+        open={isDeleteModalOpen}
+        onCancel={() => setIsDeleteModalOpen(false)}
+        onOk={confirmDelete}
+        title={
+            <div className="flex items-center gap-3 py-2">
+              <div className="w-10 h-10 rounded-full bg-red-50 text-red-500 flex items-center justify-center shrink-0">
+                <Trash2 size={20} strokeWidth={2.5} />
+              </div>
+              <span className="text-[17px] font-bold text-slate-900 leading-tight">Xóa tài khoản vĩnh viễn</span>
+            </div>
+        }
+        okText="Vâng, xóa ngay"
+        cancelText="Hủy bỏ"
+        okButtonProps={{
+          className: "bg-red-500 hover:bg-red-600 hover:shadow-md border-none rounded-xl font-medium shadow-sm h-10 px-5 text-[13px] transition-all",
+          danger: true
+        }}
+        cancelButtonProps={{
+          className: "rounded-xl font-medium h-10 px-5 border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50 text-[13px] transition-all"
+        }}
+        centered
+        width={440}
+        closeIcon={false}
+      >
+        <div className="pt-2 pb-5 text-slate-500 text-[14px] leading-relaxed">
+          Thao tác này sẽ xóa vĩnh viễn tài khoản của <strong className="text-slate-800 font-semibold">{deletingUser?.customerName || deletingUser?.username}</strong>. Toàn bộ dữ liệu kết nối không thể khôi phục lại. Bạn chắc chắn chứ?
+        </div>
       </Modal>
     </div>
   );

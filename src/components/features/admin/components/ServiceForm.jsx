@@ -233,16 +233,6 @@ const ServiceForm = ({
               </Form.Item>
             </div>
 
-            <Form.Item 
-                name="moreInfo" 
-                label={<span className="text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><Info size={14} className="text-blue-500" /> Ghi chú chân trang</span>}
-            >
-              <TextArea
-                className="p-3 bg-white border border-slate-200 hover:border-slate-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-medium min-h-[120px] text-[14px]"
-                rows={4}
-                placeholder="Các ghi chú hoặc điều kiện áp dụng thêm..."
-              />
-            </Form.Item>
           </div>
 
           <div className="space-y-6">

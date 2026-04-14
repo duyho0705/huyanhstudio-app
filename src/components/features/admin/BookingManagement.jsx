@@ -85,9 +85,9 @@ const BookingManagement = () => {
     fetchBookings,
   } = useBookingManagement();
 
-  const [services, setServices] = useState([]);
+  const [allServices, setAllServices] = useState([]);
+  const [allStudios, setAllStudios] = useState([]);
   const [staffList, setStaffList] = useState([]);
-  const [studios, setStudios] = useState([]);
 
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -108,27 +108,39 @@ const BookingManagement = () => {
     const fetchInitialData = async () => {
       try {
         const [servicesRes, staffRes, studiosRes] = await Promise.all([
-          serviceApi.admin.getAll({ page: 0, size: 100 }),
+          serviceApi.admin.getAll({ page: 0, size: 100 }).catch(err => {
+            console.error("Services API Error:", err);
+            return { list: [] };
+          }),
           userApi.admin.getStaff().catch(() => ({ data: [] })),
           studioRoomApi.getAll().catch(() => ({ data: [] })),
         ]);
 
         const getList = (res) => {
+          if (!res) return [];
+          // Trường hợp axiosClient đã unwrap response.data
           if (Array.isArray(res)) return res;
-          if (res?.data?.list && Array.isArray(res.data.list))
-            return res.data.list;
-          if (res?.data && Array.isArray(res.data)) return res.data;
-          if (res?.content && Array.isArray(res.content)) return res.content;
+          if (res.list && Array.isArray(res.list)) return res.list;
+          if (res.content && Array.isArray(res.content)) return res.content;
+          if (res.data && Array.isArray(res.data)) return res.data;
+          
+          // Trường hợp chưa unwrap (hiếm gặp với axiosClient hiện tại)
+          if (res.data?.list && Array.isArray(res.data.list)) return res.data.list;
+          if (res.data?.content && Array.isArray(res.data.content)) return res.data.content;
+          
           return [];
         };
 
-        const uniqueStaff = getList(staffRes).filter(
-          (v, i, a) => a.findIndex((t) => t.id === v.id) === i
-        );
+        const finalServices = getList(servicesRes);
+        const finalStudios = getList(studiosRes);
+        const finalStaff = getList(staffRes);
 
-        setServices(getList(servicesRes));
-        setStaffList(uniqueStaff);
-        setStudios(getList(studiosRes));
+        console.log("Loaded Services:", finalServices.length);
+        console.log("Loaded Studios:", finalStudios.length);
+
+        setAllServices(finalServices);
+        setAllStudios(finalStudios);
+        setStaffList(finalStaff.filter((v, i, a) => a.findIndex((t) => t.id === v.id) === i));
       } catch (error) {
         console.error("Error fetching initial data:", error);
       }
@@ -321,7 +333,7 @@ const BookingManagement = () => {
         width: 240,
         render: (svcs) => {
           if (!svcs) return <span className="text-slate-300 italic text-xs">N/A</span>;
-          const getServiceName = (s) => (s && typeof s === "object" && s.name) ? s.name : (services.find(svc => svc.id === s)?.name || s);
+          const getServiceName = (s) => (s && typeof s === "object" && s.id) ? (s.name || allServices.find(svc => svc.id === s.id)?.name || "N/A") : (allServices.find(svc => svc.id === s)?.name || s);
 
           const names = Array.isArray(svcs) ? svcs.map(getServiceName) : [getServiceName(svcs)];
           return (
@@ -396,7 +408,7 @@ const BookingManagement = () => {
         ),
       },
     ],
-    [services, staffList, updateBookingStatus, assignStaff, handleEdit, openDeleteModal]
+    [allServices, staffList, updateBookingStatus, assignStaff, handleEdit, openDeleteModal]
   );
 
   return (
@@ -519,8 +531,8 @@ const BookingManagement = () => {
         onCancel={() => setIsFormModalOpen(false)}
         onSubmit={handleFormSubmit}
         initialValues={selectedBooking}
-        services={services}
-        studios={studios}
+        services={allServices}
+        studios={allStudios}
       />
 
       <Modal

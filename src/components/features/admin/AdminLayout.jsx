@@ -1,14 +1,65 @@
-import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Outlet, useLocation } from "react-router-dom";
 import AdminSidebar from "./components/AdminSidebar";
 import AdminHeader from "./components/AdminHeader";
+import SockJS from "sockjs-client";
+import { Client } from "@stomp/stompjs";
+import { notification } from "antd";
 
-/**
- * Main layout for admin dashboard
- * Contains sidebar navigation and header
- */
 const AdminLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") || "http://localhost:8088";
+    const WS_URL = `${API_BASE_URL}/ws`;
+
+    const client = new Client({
+      webSocketFactory: () => new SockJS(WS_URL),
+      onConnect: () => {
+        console.log("Admin Global Notification Connected");
+        
+        // Listen for new bookings
+        client.subscribe("/topic/bookings", (message) => {
+          const booking = JSON.parse(message.body);
+          notification.success({
+            message: "🎉 CÓ LỊCH ĐẶT MỚI!",
+            description: (
+              <div>
+                <p>Khách hàng: <strong>{booking.customerName}</strong></p>
+                <p>Ngày thu: <strong>{booking.recordDate}</strong></p>
+                <p className="text-xs text-slate-400 mt-2">Mã: {booking.bookingCode?.slice(-8).toUpperCase()}</p>
+              </div>
+            ),
+            placement: "bottomRight",
+            duration: 10,
+          });
+        });
+
+        // Listen for chat messages (only notify if NOT on chat page)
+        client.subscribe("/user/admin/queue/messages", (message) => {
+          const data = JSON.parse(message.body);
+          if (data.type === 'READ_RECEIPT') return;
+
+          // If current page is NOT chat, show notification
+          if (!window.location.pathname.includes("/admin/chat")) {
+            notification.info({
+              message: "💬 TIN NHẮN MỚI",
+              description: `Bạn có tin nhắn mới từ khách hàng.`,
+              placement: "bottomRight",
+              duration: 5,
+            });
+          }
+        });
+      },
+    });
+
+    client.activate();
+
+    return () => {
+      if (client) client.deactivate();
+    };
+  }, []);
 
   return (
     <div className="flex min-h-screen bg-[#f8fafc] relative overflow-x-hidden antialiased">
