@@ -24,10 +24,65 @@ import OAuth2Callback from "./components/features/auth/OAuth2Callback";
 import LoginModal from "./components/features/auth/LoginModal";
 import ChatBox from "./components/features/chat/ChatBox";
 import AIAudioEnhancerModal from "./components/features/ai/AIAudioEnhancerModal";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useSpring, useMotionValue } from "framer-motion";
 import { FaMagic, FaPlay } from "react-icons/fa";
 import { FiZap, FiGrid, FiMessageCircle, FiX } from "react-icons/fi";
 import { useState, useEffect, useRef, useContext } from "react";
+
+// --- CUSTOM AUDIO WAVE CURSOR ---
+const AudioCursor = () => {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  // Smooth springs for the main dot
+  const springX = useSpring(mouseX, { stiffness: 500, damping: 28 });
+  const springY = useSpring(mouseY, { stiffness: 500, damping: 28 });
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [mouseX, mouseY]);
+
+  return (
+    <div className="fixed inset-0 pointer-events-none z-[9999] hidden md:block">
+      {/* Sound Wave Bars Trail - No main dot for a cleaner look */}
+      {[...Array(6)].map((_, i) => (
+        <CursorWaveBar key={i} index={i} mouseX={mouseX} mouseY={mouseY} />
+      ))}
+    </div>
+  );
+};
+
+const CursorWaveBar = ({ index, mouseX, mouseY }) => {
+  // Staggered springs for each bar to create trail effect
+  const x = useSpring(mouseX, { stiffness: 400 - index * 50, damping: 30 + index * 2 });
+  const y = useSpring(mouseY, { stiffness: 400 - index * 50, damping: 30 + index * 2 });
+
+  return (
+    <motion.div
+      style={{ 
+        x, 
+        y,
+        marginLeft: `${(index - 2.5) * 8}px`,
+        marginTop: '-10px'
+      }}
+      animate={{ 
+        height: [8, 20, 10, 24, 8],
+        opacity: [0.3, 0.6, 0.3] 
+      }}
+      transition={{ 
+        duration: 1.5 + index * 0.2, 
+        repeat: Infinity, 
+        ease: "easeInOut" 
+      }}
+      className="absolute w-[3px] bg-[#6CD1FD] rounded-full"
+    />
+  );
+};
 
 const pageVariants = {
   initial: { opacity: 0, x: 20 },
@@ -81,7 +136,7 @@ const MiniMusicPlayer = ({ isPlaying, setIsPlaying }) => {
       </div>
 
       <div className="flex flex-col">
-        <p className="text-[14px] font-semibold text-[#35104C] leading-none mb-1">Mốc nè anh Huy</p>
+        <p className="text-[15px] font-semibold text-[#35104C] leading-none mb-1">Mốc nè ahihi</p>
         <div className="flex items-center gap-1 h-2.5">
           {[...Array(5)].map((_, i) => (
             <motion.div
@@ -139,11 +194,12 @@ function AppContent() {
           'enablejsapi': 1,
           'origin': window.location.origin,
           'modestbranding': 1,
-          'rel': 0
+          'rel': 0,
+          'mute': 0,
+          'host': 'https://www.youtube-nocookie.com'
         },
         events: {
           'onStateChange': (event) => {
-            // If it ends, play again (loop fallback)
             if (event.data === window.YT.PlayerState.ENDED) {
               event.target.playVideo();
             }
@@ -173,8 +229,8 @@ function AppContent() {
     <>
       <ScrollToHash />
 
-      {/* ROCK-SOLID GLOBAL MUSIC ENGINE - Using IFrame API for Resume support */}
-      <div className="fixed -left-[2000px] top-0 w-[320px] h-[180px] opacity-0 pointer-events-none z-[-1]">
+      {/* ROCK-SOLID GLOBAL MUSIC ENGINE - Anti-throttle configuration */}
+      <div className="fixed top-0 left-0 w-1 h-1 opacity-[0.01] pointer-events-none z-[-1] overflow-hidden">
         <div id="hb-music-engine"></div>
       </div>
 
@@ -379,6 +435,9 @@ function AppContent() {
             isOpen={isAIModalOpen}
             onClose={() => setIsAIModalOpen(false)}
           />
+
+          {/* Special Visual Effect: Sound Wave Cursor */}
+          <AudioCursor />
         </>
       )}
     </>
