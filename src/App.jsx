@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AuthProvider } from "./api/AuthContext";
-import { useContext } from "react";
 import { AuthContext } from "./api/AuthContext";
 import ScrollToHash from "./api/utils/ScrollToHash";
 import NewNavbar from "./components/layout/NewNavbar";
@@ -28,7 +27,7 @@ import AIAudioEnhancerModal from "./components/features/ai/AIAudioEnhancerModal"
 import { AnimatePresence, motion } from "framer-motion";
 import { FaMagic, FaPlay } from "react-icons/fa";
 import { FiZap, FiGrid, FiMessageCircle, FiX } from "react-icons/fi";
-import { useState } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 
 const pageVariants = {
   initial: { opacity: 0, x: 20 },
@@ -45,8 +44,8 @@ const pageTransition = {
 // --- PERSISTENT MUSIC PLAYER UI ---
 const MiniMusicPlayer = ({ isPlaying, setIsPlaying }) => {
   return (
-    <div 
-      className="fixed top-[120px] left-6 z-[100] flex items-center gap-4 bg-white/10 backdrop-blur-xl p-2.5 px-4 rounded-full border border-white/20 shadow-2xl group hover:bg-white/20 transition-all cursor-pointer" 
+    <div
+      className="fixed top-[120px] left-6 z-[100] flex items-center gap-4 bg-white/10 backdrop-blur-xl p-2.5 px-4 rounded-full border border-white/20 shadow-2xl group hover:bg-white/20 transition-all cursor-pointer"
       onClick={() => setIsPlaying(!isPlaying)}
     >
       {/* Visualizer and Logic only, sound comes from Global Source */}
@@ -61,13 +60,13 @@ const MiniMusicPlayer = ({ isPlaying, setIsPlaying }) => {
           <div className="absolute inset-1 rounded-full border border-white/5"></div>
           <div className="absolute inset-2 rounded-full border border-white/5"></div>
           <div className="absolute inset-3 rounded-full border border-white/5"></div>
-          
+
           {/* Center Label */}
           <div className="w-4 h-4 bg-[#6CD1FD] rounded-full border-2 border-[#35104C] flex items-center justify-center">
             <div className="w-1 h-1 bg-[#35104C] rounded-full"></div>
           </div>
         </motion.div>
-        
+
         {/* Play/Pause Overlay Icon (Appears on Hover) */}
         <div className="absolute inset-0 flex items-center justify-center text-white pointer-events-none">
           {isPlaying ? (
@@ -82,7 +81,7 @@ const MiniMusicPlayer = ({ isPlaying, setIsPlaying }) => {
       </div>
 
       <div className="flex flex-col">
-        <p className="text-[13px] font-semibold text-[#35104C] leading-none mb-1">Mốc nè anh Huy</p>
+        <p className="text-[14px] font-semibold text-[#35104C] leading-none mb-1">Mốc nè anh Huy</p>
         <div className="flex items-center gap-1 h-2.5">
           {[...Array(5)].map((_, i) => (
             <motion.div
@@ -111,24 +110,72 @@ function AppContent() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isHubHovered, setIsHubHovered] = useState(false);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const playerRef = useRef(null);
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith("/admin");
+
+  // --- YOUTUBE API SETUP ---
+  useEffect(() => {
+    // 1. Load the API script
+    if (!window.YT) {
+      const tag = document.createElement('script');
+      tag.src = "https://www.youtube.com/iframe_api";
+      const firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    }
+
+    // 2. This function creates an <iframe> (and YouTube player) after the API code downloads.
+    window.onYouTubeIframeAPIReady = () => {
+      if (playerRef.current) return;
+      playerRef.current = new window.YT.Player('hb-music-engine', {
+        height: '180',
+        width: '320',
+        videoId: 'e5Td3zrVdX4',
+        playerVars: {
+          'autoplay': 0,
+          'controls': 0,
+          'loop': 1,
+          'playlist': 'e5Td3zrVdX4',
+          'enablejsapi': 1,
+          'origin': window.location.origin,
+          'modestbranding': 1,
+          'rel': 0
+        },
+        events: {
+          'onStateChange': (event) => {
+            // If it ends, play again (loop fallback)
+            if (event.data === window.YT.PlayerState.ENDED) {
+              event.target.playVideo();
+            }
+          }
+        }
+      });
+    };
+
+    // If API is already loaded (e.g. on hot reload)
+    if (window.YT && window.YT.Player && !playerRef.current) {
+      window.onYouTubeIframeAPIReady();
+    }
+  }, []);
+
+  // Control playback based on state
+  useEffect(() => {
+    if (playerRef.current && playerRef.current.playVideo) {
+      if (isMusicPlaying) {
+        playerRef.current.playVideo();
+      } else {
+        playerRef.current.pauseVideo();
+      }
+    }
+  }, [isMusicPlaying]);
 
   return (
     <>
       <ScrollToHash />
-      
-      {/* GLOBAL MUSIC ENGINE - PERSISTENT & INDEPENDENT */}
-      <div className="fixed -left-[999px] top-0 pointer-events-none z-0">
-        {isMusicPlaying && (
-          <iframe
-            width="100"
-            height="100"
-            src={`https://www.youtube.com/embed/e5Td3zrVdX4?autoplay=1&mute=0&loop=1&playlist=e5Td3zrVdX4&controls=0&enablejsapi=1&origin=${window.location.origin}`}
-            allow="autoplay; encrypted-media"
-            title="Hastudio Background Music"
-          ></iframe>
-        )}
+
+      {/* ROCK-SOLID GLOBAL MUSIC ENGINE - Using IFrame API for Resume support */}
+      <div className="fixed -left-[2000px] top-0 w-[320px] h-[180px] opacity-0 pointer-events-none z-[-1]">
+        <div id="hb-music-engine"></div>
       </div>
 
       {!isAdminRoute && <NewNavbar />}
@@ -322,9 +369,9 @@ function AppContent() {
 
           {/* Music Player UI - Only visible on Home Page */}
           {!isAdminRoute && location.pathname === "/" && (
-            <MiniMusicPlayer 
-              isPlaying={isMusicPlaying} 
-              setIsPlaying={setIsMusicPlaying} 
+            <MiniMusicPlayer
+              isPlaying={isMusicPlaying}
+              setIsPlaying={setIsMusicPlaying}
             />
           )}
 
