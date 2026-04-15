@@ -43,7 +43,10 @@ import {
   CalendarDays,
   CalendarCheck,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  ShoppingBag,
+  Timer,
+  UserX
 } from "lucide-react";
 import { FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
 import dayjs from "dayjs";
@@ -56,6 +59,7 @@ import studioRoomApi from "../../../api/studioRoomApi";
 import BookingForm from "./components/BookingForm";
 import BookingFilters from "./components/BookingFilters";
 import { useBookingManagement } from "./hooks/useBookingManagement";
+import statsApi from "../../../api/statsApi";
 
 const { Option } = Select;
 
@@ -89,6 +93,21 @@ const BookingManagement = () => {
   const [allStudios, setAllStudios] = useState([]);
   const [staffList, setStaffList] = useState([]);
 
+  const fetchStats = async () => {
+    try {
+      const res = await statsApi.getSummary();
+      const data = res.data?.data || res.data;
+      setGlobalStats({
+        totalBookings: data.totalBookings || 0,
+        pendingBookings: data.pendingBookings || 0,
+        completedBookings: data.completedBookings || 0,
+        cancelledBookings: data.cancelledBookings || 0,
+      });
+    } catch (err) {
+      console.error("Error fetching stats:", err);
+    }
+  };
+
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isBulkDeleteModalOpen, setIsBulkDeleteModalOpen] = useState(false);
@@ -104,42 +123,72 @@ const BookingManagement = () => {
     type: "",
   });
 
+  const [globalStats, setGlobalStats] = useState({
+    totalBookings: 0,
+    pendingBookings: 0,
+    completedBookings: 0,
+    cancelledBookings: 0,
+  });
+
+  useEffect(() => {
+    if (notification.show) {
+      const timer = setTimeout(() => {
+        setNotification({ show: false, message: "", type: "" });
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [notification.show]);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await statsApi.getSummary();
+        const data = res.data?.data || res.data;
+        setGlobalStats({
+          totalBookings: data.totalBookings || 0,
+          pendingBookings: data.pendingBookings || 0,
+          completedBookings: data.completedBookings || 0,
+          cancelledBookings: data.cancelledBookings || 0,
+        });
+      } catch (err) {
+        console.error("Error fetching stats:", err);
+      }
+    };
+    
+    fetchStats();
+  }, []); // Initial load only
+
+  // Fetch stats when status is updated through the table select
+  const handleStatusUpdate = async (id, val) => {
+    const success = await updateBookingStatus(id, val);
+    if (success) {
+      await fetchStats();
+    }
+  };
+
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
+        // Only load data needed for filters or forms later
+        // Note: Services & Studios are mostly for the Form, can be lazy loaded
         const [servicesRes, staffRes, studiosRes] = await Promise.all([
-          serviceApi.admin.getAll({ page: 0, size: 100 }).catch(err => {
-            console.error("Services API Error:", err);
-            return { list: [] };
-          }),
+          serviceApi.admin.getAll({ page: 0, size: 500 }).catch(() => ({ list: [] })),
           userApi.admin.getStaff().catch(() => ({ data: [] })),
           studioRoomApi.getAll().catch(() => ({ data: [] })),
         ]);
 
         const getList = (res) => {
           if (!res) return [];
-          // Trường hợp axiosClient đã unwrap response.data
           if (Array.isArray(res)) return res;
           if (res.list && Array.isArray(res.list)) return res.list;
           if (res.content && Array.isArray(res.content)) return res.content;
           if (res.data && Array.isArray(res.data)) return res.data;
-          
-          // Trường hợp chưa unwrap (hiếm gặp với axiosClient hiện tại)
-          if (res.data?.list && Array.isArray(res.data.list)) return res.data.list;
-          if (res.data?.content && Array.isArray(res.data.content)) return res.data.content;
-          
           return [];
         };
 
-        const finalServices = getList(servicesRes);
-        const finalStudios = getList(studiosRes);
+        setAllServices(getList(servicesRes));
+        setAllStudios(getList(studiosRes));
         const finalStaff = getList(staffRes);
-
-        console.log("Loaded Services:", finalServices.length);
-        console.log("Loaded Studios:", finalStudios.length);
-
-        setAllServices(finalServices);
-        setAllStudios(finalStudios);
         setStaffList(finalStaff.filter((v, i, a) => a.findIndex((t) => t.id === v.id) === i));
       } catch (error) {
         console.error("Error fetching initial data:", error);
@@ -159,14 +208,6 @@ const BookingManagement = () => {
     }
   }, [bookings, selectedDetailBooking, isDetailModalOpen]);
 
-  useEffect(() => {
-    if (notification.show) {
-      const timer = setTimeout(() => {
-        setNotification({ show: false, message: "", type: "" });
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [notification.show]);
 
   const handleCreate = useCallback(() => {
     setSelectedBooking(null);
@@ -193,6 +234,7 @@ const BookingManagement = () => {
             prev.filter((k) => k !== selectedBooking.id)
           );
         }
+        fetchStats();
       }
     }
   };
@@ -207,6 +249,7 @@ const BookingManagement = () => {
     if (success) {
       setSelectedRowKeys([]);
       setIsBulkDeleteModalOpen(false);
+      fetchStats();
     }
   };
 
@@ -251,6 +294,7 @@ const BookingManagement = () => {
         });
       }
       fetchBookings();
+      fetchStats();
     } catch (error) {
       const errorMsg = error.response?.data?.message || error.message;
       messageApi.error(
@@ -332,18 +376,37 @@ const BookingManagement = () => {
         key: "services",
         width: 240,
         render: (svcs) => {
-          if (!svcs) return <span className="text-slate-300 italic text-xs">N/A</span>;
-          const getServiceName = (s) => (s && typeof s === "object" && s.id) ? (s.name || allServices.find(svc => svc.id === s.id)?.name || "N/A") : (allServices.find(svc => svc.id === s)?.name || s);
-
-          const names = Array.isArray(svcs) ? svcs.map(getServiceName) : [getServiceName(svcs)];
-          return (
-            <div className="flex flex-wrap gap-1">
-              {names.map((n, i) => (
-                <span key={i} className="px-2 py-1 bg-blue-50 text-blue-600 rounded text-sm font-semibold tracking-wider border border-blue-100">
-                  {n}
+          if (!svcs || (Array.isArray(svcs) && svcs.length === 0)) return <span className="text-slate-300 italic text-xs">N/A</span>;
+          
+          const serviceList = Array.isArray(svcs) ? svcs : [svcs];
+          
+          if (serviceList.length > 1) {
+            return (
+              <Tooltip
+                title={
+                  <div className="flex flex-col gap-1.5 p-1">
+                    {serviceList.map((n, i) => (
+                      <div key={i} className="flex items-center gap-2">
+                        <span className="text-white text-[13px] font-medium">{typeof n === 'string' ? n : n.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                }
+                color="#0f172a"
+                placement="topLeft"
+              >
+                <span className="text-blue-600 text-[14px] font-semibold cursor-pointer border-b border-dashed border-blue-400 pb-0.5 hover:text-blue-700 hover:border-blue-700 transition-colors">
+                  Nhiều dịch vụ
                 </span>
-              ))}
-            </div>
+              </Tooltip>
+            );
+          }
+
+          const n = serviceList[0];
+          return (
+            <span className="text-slate-700 font-semibold text-[14px]">
+              {typeof n === 'string' ? n : n.name}
+            </span>
           );
         },
       },
@@ -356,7 +419,7 @@ const BookingManagement = () => {
           return (
             <Select
               value={status}
-              onChange={(val) => updateBookingStatus(record.id, val)}
+              onChange={(val) => handleStatusUpdate(record.id, val)}
               className="w-full select-custom-sm"
               dropdownStyle={{ borderRadius: '12px', padding: '4px', border: '1px solid #f1f5f9' }}
             >
@@ -418,61 +481,68 @@ const BookingManagement = () => {
       {/* Stats Section */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { icon: <CalendarDays className="text-blue-600" />, label: "Tổng đơn hàng", value: pagination.total, color: "blue" },
-          { icon: <Clock className="text-orange-600" />, label: "Chờ xác nhận", value: bookings.filter((b) => b.status === "PENDING").length, color: "orange" },
-          { icon: <CheckCircle className="text-green-600" />, label: "Hoàn thành", value: bookings.filter((b) => b.status === "COMPLETED").length, color: "green" },
-          { icon: <XCircle className="text-red-600" />, label: "Đã hủy", value: bookings.filter((b) => b.status === "CANCELLED").length, color: "red" },
-        ].map((stat, i) => (
-          <div key={i} className="bg-white p-6 rounded-[24px] border border-slate-200 shadow-sm flex items-center gap-5 group">
-            <div className={`w-14 h-14 rounded-2xl bg-${stat.color}-50 flex items-center justify-center`}>
-              {React.cloneElement(stat.icon, { size: 24 })}
+          { 
+            icon: <ShoppingBag size={26} strokeWidth={1.5} className="text-indigo-600" />, 
+            label: "Tổng đơn hàng", 
+            value: globalStats.totalBookings, 
+            config: "bg-indigo-100 border border-indigo-200/60" 
+          },
+          { 
+            icon: <Timer size={26} strokeWidth={1.5} className="text-amber-600" />, 
+            label: "Chờ xác nhận", 
+            value: globalStats.pendingBookings, 
+            config: "bg-amber-100 border border-amber-200/60" 
+          },
+          { 
+            icon: <CheckCircle2 size={26} strokeWidth={1.5} className="text-emerald-600" />, 
+            label: "Hoàn thành", 
+            value: globalStats.completedBookings, 
+            config: "bg-emerald-100 border border-emerald-200/60" 
+          },
+          { 
+            icon: <UserX size={26} strokeWidth={1.5} className="text-rose-500" />, 
+            label: "Đã hủy", 
+            value: globalStats.cancelledBookings, 
+            config: "bg-rose-100 border border-rose-200/60" 
+          }
+        ].map((item, i) => (
+          <div key={i} className="bg-white p-7 rounded-2xl border border-slate-300 shadow-sm flex items-center gap-5 transition-all hover:shadow-xl hover:shadow-slate-200/50 group">
+            <div className={`w-14 h-14 rounded-2xl ${item.config} flex items-center justify-center transition-transform group-hover:scale-110`}>
+              {item.icon}
             </div>
             <div>
-              <p className="text-[17px] font-semibold text-slate-600 transition-colors">{stat.label}</p>
-              <h4 className="text-3xl font-semibold text-slate-900 tracking-tight">{stat.value}</h4>
+              <h4 className="text-[17px] font-medium text-slate-600 group-hover:text-slate-900 transition-colors">{item.label}</h4>
+              <p className="text-2xl font-black text-slate-900 tracking-tight">{item.value}</p>
             </div>
           </div>
         ))}
       </div>
 
       <div className="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm space-y-6">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-50">
-          <div className="flex items-center gap-4">
-            <div className="w-1.5 h-10 bg-slate-900 rounded-full"></div>
-            <div>
-              <h2 className="text-[23px] font-semibold text-slate-900 tracking-tight">Danh sách lịch thu âm</h2>
-            </div>
-          </div>
-        </div>
+        <div className="flex flex-col lg:flex-row lg:items-center gap-4 pb-6 border-b border-slate-50">
+          <h2 className="text-[20px] font-bold text-slate-800 whitespace-nowrap mr-auto flex items-center gap-3">
+            <div className="w-1.5 h-8 bg-blue-600 rounded-full"></div>
+            Danh sách lịch thu âm
+          </h2>
 
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <BookingFilters
-            filters={filters}
-            onFilterChange={handleFilterChange}
-            onDateRangeChange={handleDateRangeChange}
-            onClear={clearFilters}
-            bookingStatuses={bookingStatuses}
-            selectedRowKeys={selectedRowKeys}
-            onBulkDelete={handleBulkDelete}
-            showSearch={false}
-          />
+          <div className="flex flex-wrap items-center gap-3">
+            <BookingFilters
+              filters={filters}
+              onFilterChange={handleFilterChange}
+              onDateRangeChange={handleDateRangeChange}
+              onClear={clearFilters}
+              bookingStatuses={bookingStatuses}
+              selectedRowKeys={selectedRowKeys}
+              onBulkDelete={handleBulkDelete}
+              showSearch={true}
+            />
 
-          <div className="flex items-center gap-3">
-            <div className="relative w-full sm:w-80">
-              <Input
-                placeholder="Mã đơn, tên khách hàng..."
-                value={filters.search}
-                onChange={(e) => handleFilterChange("search", e.target.value)}
-                className="h-12 pl-12 pr-6 bg-white border-2 border-slate-200 rounded-2xl font-semibold text-[16px] text-slate-700 placeholder:text-slate-700 placeholder:font-semibold focus:border-slate-900 focus:ring-0 transition-all shadow-sm"
-              />
-              <Search size={20} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500" />
-            </div>
             <Button
               onClick={handleCreate}
-              className="h-12 px-8 bg-slate-900 border-none font-semibold text-[16px] shadow-xl shadow-slate-200 flex items-center gap-3 whitespace-nowrap !text-white hover:!bg-slate-900 rounded-2xl"
+              className="h-10 px-6 bg-slate-900 border-none font-bold text-[14px] shadow-lg shadow-slate-200 flex items-center gap-2 !text-white hover:!bg-slate-800 rounded-xl transition-all"
             >
-              <Plus size={18} strokeWidth={3} />
-              Tạo lịch thu âm
+              <Plus size={16} strokeWidth={3} />
+              Tạo mới
             </Button>
           </div>
         </div>

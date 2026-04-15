@@ -7,6 +7,7 @@ import {
   Calendar as CalendarIcon,
   FilterX,
   Trash2,
+  Search as SearchIcon,
   CalendarDays
 } from "lucide-react";
 import dayjs from "dayjs";
@@ -38,31 +39,29 @@ const BookingFilters = ({
   return (
     <div className="flex flex-wrap items-center gap-4">
       {showSearch && (
-        <div className="w-full sm:w-auto">
-            <Search
-              placeholder="Tìm kiếm..."
-              value={filters.search}
-              onChange={(e) => onFilterChange("search", e.target.value)}
-              className="search-input-custom"
-              size="large"
-              style={{ width: 300 }}
-              allowClear
-            />
+        <div className="w-full sm:w-80">
+          <Input
+            placeholder="Tìm kiếm..."
+            value={filters.search}
+            onChange={(e) => onFilterChange("search", e.target.value)}
+            className="h-10 rounded-xl font-medium text-[14px] text-slate-700 bg-white"
+            prefix={<SearchIcon size={16} className="text-slate-400 mr-2" />}
+            allowClear
+          />
         </div>
       )}
 
       <div className="flex flex-wrap items-center gap-3">
           <Select
-            placeholder="Lọc trạng thái"
+            placeholder={<span className="font-semibold text-slate-600">Lọc trạng thái</span>}
             value={filters.status}
             onChange={(val) => onFilterChange("status", val)}
-            className="w-[220px] h-12 [&_.ant-select-selector]:!rounded-xl [&_.ant-select-selector]:!border-2 [&_.ant-select-selector]:!border-slate-200 [&_.ant-select-selection-placeholder]:!text-slate-700 [&_.ant-select-selection-placeholder]:!font-semibold [&_.ant-select-selection-placeholder]:!text-center [&_.ant-select-selection-item]:!font-semibold [&_.ant-select-selection-item]:!text-slate-700 [&_.ant-select-selection-item]:!text-center"
+            className="w-[180px] h-10 rounded-xl"
             allowClear
-            variant="outlined"
           >
             {bookingStatuses.map((s) => (
               <Option key={s.value} value={s.value}>
-                <div className="flex items-center gap-2 font-medium">
+                <div className="flex items-center gap-2 font-semibold text-[14px] text-slate-700">
                   {getStatusIcon(s.value)}
                   <span>{s.label}</span>
                 </div>
@@ -80,26 +79,28 @@ const BookingFilters = ({
             onChange={onDateRangeChange}
             separator={<div className="text-slate-300 mx-1">—</div>}
             placeholder={["Từ ngày", "Đến ngày"]}
-            className="h-12 bg-white px-2 font-semibold !rounded-xl border-2 border-slate-200 [&_.ant-picker-input_input::placeholder]:!text-slate-700 [&_.ant-picker-input_input]:!font-semibold [&_.ant-picker-input_input]:!text-slate-700 [&_.ant-picker-input_input]:!text-center"
-            suffixIcon={<CalendarDays size={20} className="text-slate-500" />}
+            className="h-10 bg-white px-3 font-semibold !rounded-xl border border-slate-200"
+            suffixIcon={<CalendarDays size={18} className="text-slate-500" />}
           />
 
-          <button 
+          <Button 
             onClick={onClear}
-            className="h-12 px-8 flex items-center gap-2 text-slate-700 font-semibold text-[15px] bg-white border-2 border-slate-200 rounded-xl transition-all"
+            className="h-10 px-4 flex items-center gap-2 text-slate-600 font-semibold text-[14px] bg-white border border-slate-200 rounded-xl hover:text-blue-600 hover:border-blue-600 transition-all"
+            icon={<FilterX size={16} />}
           >
-            <FilterX size={14} />
-            Xóa bộ lọc
-          </button>
+            Làm mới
+          </Button>
 
           {selectedRowKeys.length > 0 && (
-            <button 
+            <Button 
               onClick={onBulkDelete}
-              className="h-12 px-6 flex items-center gap-2 bg-red-50 text-red-600 font-semibold text-[15px] border border-red-100 rounded-[30px] animate-in zoom-in-95 duration-200"
+              danger
+              type="primary"
+              className="h-10 px-4 flex items-center gap-2 font-semibold text-[14px] rounded-xl animate-in zoom-in-95"
+              icon={<Trash2 size={16} />}
             >
-              <Trash2 size={14} />
-              Xóa đã chọn ({selectedRowKeys.length})
-            </button>
+              Xóa ({selectedRowKeys.length})
+            </Button>
           )}
       </div>
     </div>

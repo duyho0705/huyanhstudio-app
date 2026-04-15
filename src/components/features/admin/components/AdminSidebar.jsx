@@ -70,14 +70,14 @@ const AdminSidebar = ({ isOpen, onClose }) => {
           <div className="relative">
             <div className="absolute inset-0 bg-blue-600 blur-xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
             <div className="relative w-10 h-10 group-hover:scale-105 transition-transform duration-500">
-                <div className="absolute inset-0 bg-brand-orange rounded-md rotate-12 transition-transform shadow-lg shadow-brand-orange/20"></div>
-                <div className="absolute inset-0 bg-[#6CD1FD] rounded-md -rotate-6 transition-transform shadow-lg shadow-[#6CD1FD]/20"></div>
-                <div className="absolute inset-0 bg-[#35104C] rounded-md flex items-center justify-center text-white text-[11px] font-black shadow-xl shadow-black/20">HA</div>
+              <div className="absolute inset-0 bg-brand-orange rounded-md rotate-12 transition-transform shadow-lg shadow-brand-orange/20"></div>
+              <div className="absolute inset-0 bg-[#6CD1FD] rounded-md -rotate-6 transition-transform shadow-lg shadow-[#6CD1FD]/20"></div>
+              <div className="absolute inset-0 bg-[#35104C] rounded-md flex items-center justify-center text-white text-[11px] font-black shadow-xl shadow-black/20">HA</div>
             </div>
           </div>
           <div className="flex flex-col relative z-10 -translate-y-0.5">
-            <span 
-              className="text-3xl font-bold text-[#35104C] leading-none hover:text-[#6CD1FD] transition-colors" 
+            <span
+              className="text-3xl font-bold text-[#35104C] leading-none hover:text-[#6CD1FD] transition-colors"
               style={{ fontFamily: '"Satisfy", cursive' }}
             >
               hastudio

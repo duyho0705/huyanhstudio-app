@@ -46,7 +46,7 @@ const DemoForm = ({ open, onCancel, onSubmit, initialValues }) => {
 
   return (
     <Modal
-      title={initialValues ? "Cập nhật video demo" : "Thêm video demo mới"}
+      title={initialValues ? "Cập nhật nhạc nền" : "Thêm nhạc nền mới"}
       open={open}
       onOk={handleSubmit}
       onCancel={onCancel}
@@ -70,7 +70,7 @@ const DemoForm = ({ open, onCancel, onSubmit, initialValues }) => {
           label="Tiêu đề"
           rules={[{ required: true, message: "Vui lòng nhập tiêu đề!" }]}
         >
-          <Input placeholder="Nhập tiêu đề video" size="large" />
+          <Input placeholder="Nhập tiêu đề nhạc nền" size="large" />
         </Form.Item>
 
         <Form.Item
@@ -97,7 +97,7 @@ const DemoForm = ({ open, onCancel, onSubmit, initialValues }) => {
           name="isActive"
           label="Trạng thái hiển thị"
           valuePropName="checked"
-          tooltip="Chỉ có 1 video được phép hiển thị trên trang chủ tại một thời điểm."
+          tooltip="Chỉ có 1 bản nhạc được phép hiển thị làm nhạc nền chính tại một thời điểm."
         >
           <Switch checkedChildren="Hiển thị" unCheckedChildren="Ẩn" />
         </Form.Item>

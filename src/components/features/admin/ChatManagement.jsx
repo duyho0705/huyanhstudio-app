@@ -105,7 +105,7 @@ const ChatManagement = () => {
     );
 
     return (
-        <div className="h-[calc(100vh-140px)] bg-white rounded-3xl shadow-xl shadow-slate-200/50 flex overflow-hidden border border-slate-100">
+        <div className="h-[calc(100vh-120px)] w-full bg-white rounded-2xl shadow-xl shadow-slate-200/50 flex overflow-hidden border border-slate-100">
             {/* Sidebar */}
             <div className="w-[380px] border-r border-slate-100 flex flex-col bg-slate-50/30">
                 <div className="p-6">

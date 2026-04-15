@@ -78,20 +78,20 @@ export const useBookingManagement = () => {
   }, [filters, pagination.current, pagination.pageSize, messageApi]);
 
   /*** Handlers ***/
-  const handleTableChange = (newPagination) => {
-    setPagination({
-      ...pagination,
+  const handleTableChange = useCallback((newPagination) => {
+    setPagination((prev) => ({
+      ...prev,
       current: newPagination.current,
       pageSize: newPagination.pageSize,
-    });
-  };
+    }));
+  }, []);
 
-  const handleFilterChange = (key, value) => {
+  const handleFilterChange = useCallback((key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
     setPagination((prev) => ({ ...prev, current: 1 }));
-  };
+  }, []);
 
-  const handleDateRangeChange = (dates) => {
+  const handleDateRangeChange = useCallback((dates) => {
     const fromDate = dates ? dates[0].format("YYYY-MM-DD") : null;
     const toDate = dates ? dates[1].format("YYYY-MM-DD") : null;
     
@@ -101,9 +101,9 @@ export const useBookingManagement = () => {
       toDate,
     }));
     setPagination((prev) => ({ ...prev, current: 1 }));
-  };
+  }, []);
 
-  const clearFilters = () => {
+  const clearFilters = useCallback(() => {
     setFilters({
       status: null,
       studioId: null,
@@ -112,7 +112,7 @@ export const useBookingManagement = () => {
       search: "",
     });
     setPagination((prev) => ({ ...prev, current: 1 }));
-  };
+  }, []);
 
   const deleteBooking = useCallback(async (id) => {
     try {
