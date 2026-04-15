@@ -119,10 +119,10 @@ const ServiceForm = ({
       confirmLoading={confirmLoading}
       okButtonProps={{
         disabled: initialValues && !isChanged,
-        className: `h-10 px-6 rounded-xl bg-slate-900 border-none font-semibold text-[14px] text-white hover:bg-slate-800 transition-all shadow-sm ${initialValues && !isChanged ? "opacity-50" : "opacity-100"}`
+        className: `h-10 px-6 rounded-xl bg-slate-900 border-none font-semibold text-[14px] text-white shadow-sm ${initialValues && !isChanged ? "opacity-50" : "opacity-100"}`
       }}
       cancelButtonProps={{
-        className: "h-10 px-6 rounded-xl font-medium text-[14px] text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all"
+        className: "h-10 px-6 rounded-xl font-medium text-[14px] text-slate-600 border border-slate-200"
       }}
     >
       <Form form={form} layout="vertical" className="pt-6">

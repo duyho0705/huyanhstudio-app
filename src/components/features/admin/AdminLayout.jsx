@@ -79,9 +79,9 @@ const AdminLayout = () => {
         onClose={() => setIsSidebarOpen(false)}
       />
 
-      <div className="flex-1 flex flex-col w-full lg:ml-[280px] transition-all duration-500 ease-in-out">
+      <div className="flex-1 flex flex-col w-full lg:ml-[280px] transition-all duration-500 ease-in-out admin-area">
         <AdminHeader toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
-        <main className="flex-1 p-6 md:p-10 lg:p-12 overflow-y-auto w-full max-w-[1600px] mx-auto">
+        <main className="flex-1 p-4 md:p-6 lg:p-6 overflow-y-auto w-full max-w-full mx-auto">
           <Outlet />
         </main>
       </div>

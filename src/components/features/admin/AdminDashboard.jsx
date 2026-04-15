@@ -16,7 +16,7 @@ import {
   UserPlus,
   Music2,
 } from "lucide-react";
-import bookingApi from "../../../api/bookingApi";
+import statsApi from "../../../api/statsApi";
 import AdminRevenueChart from "./components/AdminRevenueChart";
 import AdminRecentBookings from "./components/AdminRecentBookings";
 import AdminPopularServices from "./components/AdminPopularServices";
@@ -36,34 +36,14 @@ const AdminDashboard = () => {
 
   const fetchStats = async () => {
     try {
-      const [totalRes, pendingRes, confirmedRes, completedRes] =
-        await Promise.all([
-          bookingApi.admin.getAll({ pageNumber: 0, pageSize: 1 }),
-          bookingApi.admin.getAll({
-            pageNumber: 0,
-            pageSize: 1,
-            status: "PENDING",
-          }),
-          bookingApi.admin.getAll({
-            pageNumber: 0,
-            pageSize: 1,
-            status: "CONFIRMED",
-          }),
-          bookingApi.admin.getAll({
-            pageNumber: 0,
-            pageSize: 1,
-            status: "COMPLETED",
-          }),
-        ]);
-
-      const getTotal = (res) =>
-        res.data?.data?.totalElements || res.data?.totalElements || 0;
-
+      const response = await statsApi.getSummary();
+      const data = response.data?.data || response.data;
+      
       setStats({
-        totalBookings: getTotal(totalRes),
-        pendingBookings: getTotal(pendingRes),
-        confirmedBookings: getTotal(confirmedRes),
-        completedBookings: getTotal(completedRes),
+        totalBookings: data.totalBookings || 0,
+        pendingBookings: data.pendingBookings || 0,
+        confirmedBookings: data.confirmedBookings || 0,
+        completedBookings: data.completedBookings || 0,
       });
     } catch (error) {
       console.error("Error fetching stats:", error);

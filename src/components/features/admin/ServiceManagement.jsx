@@ -231,13 +231,15 @@ const ServiceManagement = () => {
       key: "active",
       width: 150,
       render: (active, record) => (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <Switch
             checked={active}
             onChange={(checked) => handleStatusToggle(record.id, checked)}
             size="small"
           />
-          <span className={`text-[13px] font-semibold ${active ? "text-green-600" : "text-slate-400"}`}>
+          <span className={`px-2.5 py-1 rounded-full text-[13px] font-semibold text-white inline-block ${
+            active ? "bg-green-500 shadow-sm shadow-green-200" : "bg-red-500 shadow-sm shadow-red-200"
+          }`}>
             {active ? "Hoạt động" : "Tạm khóa"}
           </span>
         </div>

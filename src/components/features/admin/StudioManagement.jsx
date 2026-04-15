@@ -174,7 +174,9 @@ const StudioManagement = () => {
             className={status === "AVAILABLE" ? "!bg-green-500" : "!bg-red-400"}
             size="small"
           />
-          <span className={`text-[10px] font-black uppercase tracking-widest ${status === "AVAILABLE" ? "text-green-600" : "text-red-500"}`}>
+          <span className={`px-2.5 py-1 rounded-full text-[13px] font-semibold text-white inline-block ${
+            status === "AVAILABLE" ? "bg-green-500 shadow-sm shadow-green-200" : "bg-red-500 shadow-sm shadow-red-200"
+          }`}>
             {status === "AVAILABLE" ? "Sẵn sàng" : "Bảo trì"}
           </span>
         </div>

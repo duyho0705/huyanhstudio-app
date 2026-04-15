@@ -12,8 +12,9 @@ import {
   Statistic,
   Dropdown,
   Descriptions,
+  Tooltip,
 } from "antd";
-import userApi from "../../../api/userApi";
+import statsApi from "../../../api/statsApi";
 import {
   Users,
   CheckCircle,
@@ -62,12 +63,14 @@ const UserManagement = () => {
     status: null,
   });
 
+  // For debouncing search
+  const [searchTerm, setSearchTerm] = useState("");
+
   const [stats, setStats] = useState({
     total: 0,
     active: 0,
     inactive: 0,
     admin: 0,
-    staff: 0,
     customer: 0,
   });
 
@@ -87,9 +90,8 @@ const UserManagement = () => {
 
   const roles = [
     { value: "ROLE_ADMIN", label: "Quản trị viên", color: "red", classes: "bg-red-50 text-red-600 border-red-100" },
-    { value: "ROLE_STAFF", label: "Nhân viên", color: "blue", classes: "bg-blue-50 text-blue-600 border-blue-100" },
     { value: "ROLE_USER", label: "Khách hàng", color: "slate", classes: "bg-slate-50 text-slate-600 border-slate-100" },
-  ];
+];
 
   const statusOptions = [
     { value: true, label: "Đang hoạt động", color: "green", classes: "bg-green-50 text-green-600 shadow-green-100" },
@@ -98,7 +100,15 @@ const UserManagement = () => {
 
   useEffect(() => {
     fetchUsers();
-  }, [pagination.current, pagination.pageSize, filters]);
+  }, [pagination.current, pagination.pageSize, filters.role, filters.status, filters.search]);
+
+  useEffect(() => {
+      const delayDebounceFn = setTimeout(() => {
+          setFilters(prev => ({ ...prev, search: searchTerm }));
+      }, 500);
+
+      return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm]);
 
   useEffect(() => {
     fetchStats();
@@ -106,24 +116,15 @@ const UserManagement = () => {
 
   const fetchStats = async () => {
     try {
-      const [totalRes, activeRes, inactiveRes, adminRes, staffRes] =
-        await Promise.all([
-          userApi.admin.getAll({ page: 0, size: 1 }),
-          userApi.admin.getAll({ page: 0, size: 1, active: true }),
-          userApi.admin.getAll({ page: 0, size: 1, active: false }),
-          userApi.admin.getAll({ page: 0, size: 1, role: "ROLE_ADMIN" }),
-          userApi.admin.getAll({ page: 0, size: 1, role: "ROLE_STAFF" }),
-        ]);
-
-      const getTotal = (res) =>
-        res.data?.data?.totalElements || res.data?.totalElements || 0;
+      const response = await statsApi.getSummary();
+      const data = response.data?.data || response.data;
 
       setStats({
-        total: getTotal(totalRes),
-        active: getTotal(activeRes),
-        inactive: getTotal(inactiveRes),
-        admin: getTotal(adminRes),
-        staff: getTotal(staffRes),
+        total: data.totalUsers || 0,
+        active: data.activeUsers || 0,
+        inactive: data.inactiveUsers || 0,
+        admin: data.adminUsers || 0,
+        staff: data.staffUsers || 0,
       });
     } catch (error) {
       console.error("Error fetching stats:", error);
@@ -291,21 +292,45 @@ const UserManagement = () => {
         key: "phone",
         width: 150,
         render: (phone) => (
-          <span className="text-slate-600 text-[14px] font-semibold tracking-widest">{phone || "---"}</span>
+          <span className="text-slate-600 text-[14px] font-medium">{phone || "---"}</span>
         )
       },
       {
-        title: <span className="text-[13px] font-semibold text-slate-600">Thẩm quyền</span>,
+        title: <span className="text-[13px] font-semibold text-slate-600">Vai trò</span>,
         dataIndex: "roles",
         key: "roles",
         width: 150,
-        render: (userRoles) => (
-          <div className="flex gap-2">
-            {Array.isArray(userRoles) ? userRoles.map(role => (
-              <span key={role} className="text-slate-600 text-[14px] font-semibold">{getRoleLabel(role)}</span>
-            )) : <span className="text-slate-600 text-[14px] font-semibold">{userRoles}</span>}
-          </div>
-        ),
+        render: (userRoles) => {
+          const roleArray = Array.isArray(userRoles) ? userRoles : [userRoles];
+
+          if (!roleArray || roleArray.length === 0) {
+            return <span className="text-slate-600 text-[14px] font-semibold">---</span>;
+          }
+
+          if (roleArray.length === 1) {
+            return <span className="text-slate-600 text-[14px] font-semibold">{getRoleLabel(roleArray[0])}</span>;
+          }
+
+          return (
+            <Tooltip
+              title={
+                <div className="flex flex-col gap-1.5 p-1">
+                  {roleArray.map((role) => (
+                    <div key={role} className="flex items-center">
+                      <span className="text-white text-[13px] font-medium">{getRoleLabel(role)}</span>
+                    </div>
+                  ))}
+                </div>
+              }
+              color="#0f172a"
+              placement="top"
+            >
+              <span className="text-slate-600 text-[14px] font-semibold cursor-pointer border-b border-dashed border-slate-400 pb-0.5 hover:text-blue-600 hover:border-blue-600 transition-colors">
+                Nhiều vai trò
+              </span>
+            </Tooltip>
+          );
+        },
       },
       {
         title: <span className="text-[13px] font-semibold text-slate-600">Trạng thái</span>,
@@ -313,7 +338,8 @@ const UserManagement = () => {
         key: "active",
         width: 140,
         render: (active) => (
-          <span className={`text-[14px] font-semibold ${active ? "text-green-600" : "text-red-500"}`}>
+          <span className={`px-2.5 py-1 rounded-full text-[13px] font-semibold text-white inline-block ${active ? "bg-green-500 shadow-sm shadow-green-200" : "bg-red-500 shadow-sm shadow-red-200"
+            }`}>
             {active ? "Hoạt động" : "Bị khóa"}
           </span>
         ),
@@ -375,24 +401,24 @@ const UserManagement = () => {
       {/* Stats Section */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { icon: <Users size={24} className="text-blue-600" />, label: "Tổng tài khoản", value: pagination.total, config: "bg-blue-50" },
-          { icon: <CheckCircle size={24} className="text-green-600" />, label: "Đang hoạt động", value: stats.active, config: "bg-green-50" },
-          { icon: <XCircle size={24} className="text-red-500" />, label: "Số tài khoản khóa", value: stats.inactive, config: "bg-red-50" },
-          { icon: <ShieldAlert size={24} className="text-orange-500" />, label: "Quản trị viên", value: `${stats.admin}`, config: "bg-orange-50" }
+          { icon: <Users size={26} strokeWidth={1.5} className="text-indigo-600" />, label: "Tổng tài khoản", value: pagination.total, config: "bg-indigo-100 border border-indigo-200/60" },
+          { icon: <UserCheck size={26} strokeWidth={1.5} className="text-emerald-600" />, label: "Đang hoạt động", value: stats.active, config: "bg-emerald-100 border border-emerald-200/60" },
+          { icon: <UserX size={26} strokeWidth={1.5} className="text-rose-500" />, label: "Số tài khoản khóa", value: stats.inactive, config: "bg-rose-100 border border-rose-200/60" },
+          { icon: <ShieldCheck size={26} strokeWidth={1.5} className="text-amber-600" />, label: "Quản trị viên", value: `${stats.admin}`, config: "bg-amber-100 border border-amber-200/60" }
         ].map((item, i) => (
-          <div key={i} className="bg-white p-7 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-5 transition-all hover:shadow-xl hover:shadow-slate-200/50 group">
+          <div key={i} className="bg-white p-7 rounded-2xl border border-slate-300 shadow-sm flex items-center gap-5 transition-all hover:shadow-xl hover:shadow-slate-200/50 group">
             <div className={`w-14 h-14 rounded-2xl ${item.config} flex items-center justify-center transition-transform group-hover:scale-110`}>
               {item.icon}
             </div>
             <div>
-              <h4 className="text-[17px] font-semibold text-slate-600 group-hover:text-slate-900 transition-colors">{item.label}</h4>
+              <h4 className="text-[17px] font-medium text-slate-600 group-hover:text-slate-900 transition-colors">{item.label}</h4>
               <p className="text-2xl font-black text-slate-900 tracking-tight">{item.value}</p>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-6">
+      <div className="bg-white p-6 rounded-2xl border border-slate-300 shadow-sm space-y-6">
         <div className="flex flex-col lg:flex-row lg:items-center gap-4 pb-6 border-b border-slate-50">
           <h2 className="text-[18px] font-semibold text-slate-900 whitespace-nowrap mr-auto">Danh sách người dùng</h2>
 
@@ -426,14 +452,13 @@ const UserManagement = () => {
               ))}
             </Select>
 
-            {/* Search */}
             <div className="relative w-full sm:w-64">
               <Input
                 placeholder="Tìm theo tên hoặc điện thoại"
                 prefix={<Search size={18} className="text-slate-400" />}
                 className="h-10 border border-slate-300 rounded-xl text-[14px] font-semibold text-slate-900"
-                value={filters.search}
-                onChange={(e) => handleFilterChange("search", e.target.value)}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 allowClear
               />
             </div>
@@ -460,7 +485,7 @@ const UserManagement = () => {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-100 overflow-hidden bg-white shadow-inner">
+        <div className="rounded-2xl border border-slate-300 overflow-hidden bg-white shadow-inner">
           <Table
             columns={columns}
             dataSource={users}
@@ -658,21 +683,18 @@ const UserManagement = () => {
         onCancel={() => setIsDeleteModalOpen(false)}
         onOk={confirmDelete}
         title={
-          <div className="flex items-center gap-3 py-2">
-            <div className="w-10 h-10 rounded-full bg-red-50 text-red-500 flex items-center justify-center shrink-0">
-              <Trash2 size={20} strokeWidth={2.5} />
-            </div>
-            <span className="text-[17px] font-bold text-slate-900 leading-tight">Xóa tài khoản vĩnh viễn</span>
+          <div className="py-2">
+            <span className="text-[17px] font-semibold text-slate-900 leading-tight">Xóa tài khoản vĩnh viễn</span>
           </div>
         }
-        okText="Vâng, xóa ngay"
+        okText="Xác nhận"
         cancelText="Hủy bỏ"
         okButtonProps={{
-          className: "bg-red-500 hover:bg-red-600 hover:shadow-md border-none rounded-xl font-medium shadow-sm h-10 px-5 text-[13px] transition-all",
+          className: "bg-red-500 border-none rounded-xl font-medium shadow-sm h-10 px-5 text-[13px]",
           danger: true
         }}
         cancelButtonProps={{
-          className: "rounded-xl font-medium h-10 px-5 border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50 text-[13px] transition-all"
+          className: "rounded-xl font-medium h-10 px-5 border border-slate-200 text-slate-600 text-[13px]"
         }}
         centered
         width={440}

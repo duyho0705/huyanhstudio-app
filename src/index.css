@@ -72,3 +72,48 @@ input:-webkit-autofill:active {
 .ant-select-selector {
   background-color: white !important;
 }
+
+/* Disable all hover motion/shadow effects in admin area */
+.admin-area button:hover,
+.admin-area a:not(.nav-link):hover,
+.admin-area .ant-btn:hover,
+.admin-area .ant-btn-primary:hover,
+.admin-area .ant-btn-default:hover,
+.admin-area .ant-btn-text:hover,
+.admin-area .ant-btn-link:hover,
+.admin-area .group:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  transition: none !important;
+  filter: none !important;
+}
+
+/* Specifically prevent blue context/hover shifts without breaking base colors */
+.admin-area .bg-slate-900:hover {
+  background-color: #0f172a !important;
+  color: white !important;
+}
+
+.admin-area .bg-slate-900:hover span {
+  color: white !important;
+}
+
+.admin-area .bg-blue-600:hover {
+  background-color: #2563eb !important;
+  color: white !important;
+}
+
+.admin-area .ant-btn:hover {
+  border-color: transparent !important;
+}
+
+/* Prevent blue text on hover for simple text buttons */
+.admin-area .text-slate-900:hover, 
+.admin-area .text-slate-600:hover {
+  color: currentColor !important;
+}
+
+.admin-area .hover\:bg-blue-50:hover,
+.admin-area .hover\:bg-slate-50:hover {
+  background-color: transparent !important;
+}
