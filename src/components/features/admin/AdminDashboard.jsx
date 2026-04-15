@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import {
   Users,
@@ -15,13 +15,18 @@ import {
   ShoppingBag,
   UserPlus,
   Music2,
+  ArrowUpRight,
+  TrendingUp,
+  ArrowRight,
 } from "lucide-react";
+import { AuthContext } from "../../../api/AuthContext";
 import statsApi from "../../../api/statsApi";
 import AdminRevenueChart from "./components/AdminRevenueChart";
 import AdminRecentBookings from "./components/AdminRecentBookings";
 import AdminPopularServices from "./components/AdminPopularServices";
 
 const AdminDashboard = () => {
+  const { user } = useContext(AuthContext);
   const [stats, setStats] = useState({
     totalBookings: 0,
     pendingBookings: 0,
@@ -52,162 +57,118 @@ const AdminDashboard = () => {
     }
   };
 
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Chào buổi sáng";
+    if (hour < 18) return "Chào buổi chiều";
+    return "Chào buổi tối";
+  };
+
   const cards = [
     {
       title: "Tổng đặt lịch",
       value: stats.totalBookings,
-      icon: <BarChart3 size={32} />,
-      color: "blue",
+      icon: <BarChart3 size={20} />,
+      iconBg: "bg-blue-100 text-blue-600",
       link: "/admin/bookings",
     },
     {
       title: "Chờ xác nhận",
       value: stats.pendingBookings,
-      icon: <Clock size={32} />,
-      color: "orange",
+      icon: <Clock size={20} />,
+      iconBg: "bg-amber-100 text-amber-600",
       link: "/admin/bookings?status=PENDING",
     },
     {
       title: "Đã xác nhận",
       value: stats.confirmedBookings,
-      icon: <Calendar size={32} />,
-      color: "purple",
+      icon: <Calendar size={20} />,
+      iconBg: "bg-violet-100 text-violet-600",
       link: "/admin/bookings?status=CONFIRMED",
     },
     {
       title: "Hoàn thành",
       value: stats.completedBookings,
-      icon: <CheckCircle2 size={32} />,
-      color: "green",
+      icon: <CheckCircle2 size={20} />,
+      iconBg: "bg-emerald-100 text-emerald-600",
       link: "/admin/bookings?status=COMPLETED",
     },
   ];
 
-  const quickActions = [
-    {
-      title: "Đặt lịch mới",
-      icon: <CalendarPlus size={26} />,
-      link: "/admin/bookings?action=create",
-      color: "blue",
-    },
-    {
-      title: "Quản lý dịch vụ",
-      icon: <Headset size={26} />,
-      link: "/admin/services",
-      color: "purple",
-    },
-    {
-      title: "Quản lý sản phẩm",
-      icon: <ShoppingBag size={26} />,
-      link: "/admin/products",
-      color: "green",
-    },
-
-    {
-      title: "Quản lý người dùng",
-      icon: <UserPlus size={26} />,
-      link: "/admin/users",
-      color: "orange",
-    },
+  const quickLinks = [
+    { title: "Đặt lịch", icon: <CalendarPlus size={18} />, link: "/admin/bookings", color: "text-blue-600" },
+    { title: "Dịch vụ", icon: <Headset size={18} />, link: "/admin/services", color: "text-violet-600" },
+    { title: "Sản phẩm", icon: <ShoppingBag size={18} />, link: "/admin/products", color: "text-emerald-600" },
+    { title: "Người dùng", icon: <UserPlus size={18} />, link: "/admin/users", color: "text-amber-600" },
   ];
 
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin"></div>
-          <p className="text-slate-500 font-medium tracking-normal">Đang tải dữ liệu...</p>
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-2 border-slate-200 border-t-slate-600 rounded-full animate-spin"></div>
+          <p className="text-sm text-slate-400">Đang tải...</p>
         </div>
       </div>
     );
   }
 
-  const getColorClasses = (color) => {
-    const maps = {
-      blue: "bg-blue-50 text-blue-600 border-blue-100",
-      orange: "bg-orange-50 text-orange-600 border-orange-100",
-      purple: "bg-purple-50 text-purple-600 border-purple-100",
-      green: "bg-green-50 text-green-600 border-green-100",
-    };
-    return maps[color] || maps.blue;
-  };
-
-  const getIconBg = (color) => {
-    const maps = {
-      blue: "bg-blue-500/10 text-blue-600",
-      orange: "bg-orange-500/10 text-orange-600",
-      purple: "bg-purple-500/10 text-purple-600",
-      green: "bg-green-500/10 text-green-600",
-    };
-    return maps[color] || maps.blue;
-  };
-
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
+    <div className="space-y-6">
+      {/* Welcome header */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <p className="text-sm text-slate-400 font-medium mb-1">{getGreeting()}</p>
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+            {user?.fullName || "Admin"}
+          </h1>
+        </div>
+        <div className="flex items-center gap-2">
+          {quickLinks.map((item, i) => (
+            <Link
+              key={i}
+              to={item.link}
+              className="h-9 px-3.5 flex items-center gap-2 rounded-lg border border-slate-200 bg-white text-sm font-medium text-slate-600 hover:border-slate-300 hover:text-slate-900 transition-all"
+            >
+              <span className={item.color}>{item.icon}</span>
+              <span className="hidden lg:inline">{item.title}</span>
+            </Link>
+          ))}
+        </div>
+      </div>
+
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {cards.map((card, index) => (
           <Link
             key={index}
             to={card.link}
-            className={`p-4 rounded-2xl border border-slate-200 transition-all hover:border-slate-300 hover:shadow-sm group bg-white`}
+            className="group p-5 rounded-xl bg-white border border-slate-200 hover:border-slate-300 transition-all"
           >
-            <div className="flex items-center gap-4">
-              <div className={`w-12 h-12 flex items-center justify-center rounded-lg transition-transform ${getColorClasses(card.color)}`}>
+            <div className="flex items-center justify-between mb-3">
+              <div className={`w-9 h-9 rounded-lg ${card.iconBg} flex items-center justify-center`}>
                 {card.icon}
               </div>
-              <div className="flex flex-col">
-                <span className="text-[13px] font-medium text-slate-500 group-hover:text-slate-600 transition-colors">{card.title}</span>
-                <span className="text-2xl font-semibold text-slate-900 leading-tight">{card.value}</span>
-              </div>
+              <ArrowUpRight size={16} className="text-slate-300 group-hover:text-slate-500 transition-colors" />
             </div>
+            <p className="text-2xl font-bold text-slate-900 tracking-tight">{card.value}</p>
+            <p className="text-sm text-slate-500 mt-0.5">{card.title}</p>
           </Link>
         ))}
       </div>
 
-      {/* Quick Actions */}
-      <section className="bg-white p-5 md:p-6 rounded-[28px] border border-slate-200 shadow-sm relative overflow-hidden">
-        {/* Decorative Backgrounds */}
-        <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-50/40 rounded-full blur-[80px] -z-0"></div>
-        <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-purple-50/40 rounded-full blur-[80px] -z-0"></div>
-
-        <div className="relative z-10">
-          <div className="flex items-center gap-2 mb-5">
-            <div className="w-1.5 h-6 bg-blue-500 rounded-full"></div>
-            <h2 className="text-[17px] font-bold text-slate-900 tracking-tight">Thao tác nhanh</h2>
-          </div>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {quickActions.map((action, index) => (
-              <Link
-                key={index}
-                to={action.link}
-                className={`flex flex-col items-center gap-3 p-6 rounded-2xl border border-slate-100 bg-white/50 backdrop-blur-sm transition-all hover:bg-white hover:shadow-xl hover:shadow-slate-200/50 group hover:-translate-y-1 hover:border-blue-100`}
-              >
-                <div className={`w-14 h-14 flex items-center justify-center rounded-2xl transition-all group-hover:scale-110 shadow-sm ${getColorClasses(action.color)}`}>
-                  {action.icon}
-                </div>
-                <span className="text-[14px] font-semibold text-slate-700 group-hover:text-blue-600 transition-colors text-center tracking-normal">
-                  {action.title}
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Analytics & Popular Services Grid */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        <div className="bg-white p-6 rounded-[28px] border border-slate-200 shadow-sm overflow-hidden">
+      {/* Charts row */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+        <div className="bg-white p-5 rounded-xl border border-slate-200">
           <AdminRevenueChart />
         </div>
-        <div className="bg-white p-6 rounded-[28px] border border-slate-200 shadow-sm overflow-hidden">
+        <div className="bg-white p-5 rounded-xl border border-slate-200">
           <AdminPopularServices />
         </div>
       </div>
 
       {/* Recent Bookings */}
-      <div className="bg-white rounded-[28px] border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border border-slate-200">
         <AdminRecentBookings />
       </div>
     </div>

@@ -10,55 +10,18 @@ import userApi from "../../../api/userApi";
 import { auth, googleProvider, facebookProvider } from "../../../api/firebase";
 import { signInWithPopup } from "firebase/auth";
 
-const InputField = ({ label, name, type = "text", icon: Icon, error, value, onChange, ...props }) => {
-  const [showPassword, setShowPassword] = React.useState(false);
-  const isPassword = type === "password";
-
-  return (
-    <div className="mb-5 relative">
-      <div className="flex justify-between items-end mb-1.5 ml-1">
-        <label className="block text-[15px] font-semibold text-[#35104C]/70">{label}</label>
-      </div>
-      <div className="relative group">
-        <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${error ? "text-red-400" : "text-gray-400 group-focus-within:text-[#6CD1FD]"}`}>
-          <Icon size={18} />
-        </div>
-        <input
-          name={name}
-          type={isPassword ? (showPassword ? "text" : "password") : type}
-          value={value}
-          onChange={onChange}
-          className={`w-full pl-12 ${isPassword ? "pr-12" : "pr-4"} py-3 border rounded-[18px] text-[15px] text-[#35104C] outline-none transition-all placeholder:text-gray-300 ${error
-            ? "bg-[#FEF2F2] border-red-200 focus:border-red-400 focus:ring-4 focus:ring-red-400/5"
-            : "bg-[#F8F9FB] border-gray-200 focus:border-[#6CD1FD]/40 focus:ring-4 focus:ring-[#6CD1FD]/5"
-            }`}
-          {...props}
-        />
-        {isPassword && (
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#6CD1FD] transition-colors"
-          >
-            {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
-          </button>
-        )}
-      </div>
-    </div>
-  );
-};
-
 const Login = ({ onClose, initialMode = "login" }) => {
   const { login: loginContext } = useContext(AuthContext);
   const navigate = useNavigate();
   const [message, setMessage] = useState({ type: "", text: "" });
   const [isLogin, setIsLogin] = useState(initialMode === "login");
   const [loading, setLoading] = useState(false);
+  const [focusedField, setFocusedField] = useState(null);
 
-  // Cập nhật chế độ khi giá trị prop thay đổi
   React.useEffect(() => {
     setIsLogin(initialMode === "login");
   }, [initialMode]);
+
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -67,6 +30,8 @@ const Login = ({ onClose, initialMode = "login" }) => {
     confirmPassword: ""
   });
   const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const validateField = (name, value) => {
     let error = "";
@@ -118,7 +83,6 @@ const Login = ({ onClose, initialMode = "login" }) => {
 
       onClose?.();
 
-      // Kiểm tra role để chuyển hướng
       const roles = Array.isArray(userData?.roles) ? userData.roles : [];
       if (roles.includes("ROLE_ADMIN") || roles.includes("ROLE_STAFF")) {
         navigate("/admin");
@@ -149,7 +113,7 @@ const Login = ({ onClose, initialMode = "login" }) => {
         username: formData.username,
         password: formData.password
       });
-      setMessage({ type: "success", text: "✓ Chúc mừng! Đăng ký tài khoản thành công." });
+      setMessage({ type: "success", text: "Đăng ký thành công! Đang đăng nhập..." });
 
       const loginRes = await authApi.login({ username: formData.username, password: formData.password });
       loginContext({ accessToken: loginRes.accessToken });
@@ -187,198 +151,299 @@ const Login = ({ onClose, initialMode = "login" }) => {
   };
 
   return (
-    <div className="relative w-full max-w-[500px] bg-white rounded-[24px] shadow-[0_40px_100px_rgba(108,209,253,0.12),0_10px_40px_rgba(0,0,0,0.03)] overflow-hidden border border-white/50 ring-1 ring-black/[0.02]">
-      {/* Background Decor - Brighter and more vibrant */}
-      <div className="absolute top-0 right-0 w-48 h-48 bg-[#6CD1FD]/20 rounded-full blur-[80px] -mr-24 -mt-24 animate-pulse"></div>
-      <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-500/10 rounded-full blur-[80px] -ml-24 -mb-24"></div>
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-cyan-400/5 rounded-full blur-[100px]"></div>
+    <div className="relative w-full max-w-[440px] bg-white rounded-2xl shadow-[0_24px_80px_rgba(0,0,0,0.12)] overflow-hidden border border-gray-100">
 
-      <div className="p-7 md:p-9 relative z-10 transition-all">
-        {/* Header Section - Centered */}
-        <div className="flex justify-center items-center mb-6">
-          <div className="flex flex-col items-center">
-            <div className="flex items-center gap-2">
-              <div className="relative w-7 h-7">
-                <div className="absolute inset-0 bg-brand-orange rounded-sm rotate-12 opacity-80"></div>
-                <div className="absolute inset-0 bg-[#6CD1FD] rounded-sm -rotate-6"></div>
-                <div className="absolute inset-0 bg-[#35104C] rounded-sm flex items-center justify-center text-white text-[9px] font-bold">HA</div>
-              </div>
-              <span className="text-[26px] font-bold text-[#35104C]" style={{ fontFamily: '"Satisfy", cursive' }}>hastudio</span>
-            </div>
+      {/* Close button */}
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 z-20 w-8 h-8 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all"
+      >
+        <FiX size={18} />
+      </button>
+
+      <div className="p-8 pt-10">
+        {/* Logo */}
+        <div className="flex items-center gap-2 mb-8">
+          <div className="relative w-7 h-7">
+            <div className="absolute inset-0 bg-brand-orange rounded-sm rotate-12 opacity-80"></div>
+            <div className="absolute inset-0 bg-[#6CD1FD] rounded-sm -rotate-6"></div>
+            <div className="absolute inset-0 bg-[#35104C] rounded-sm flex items-center justify-center text-white text-[9px] font-bold">HA</div>
           </div>
+          <span className="text-xl font-bold text-[#35104C]" style={{ fontFamily: '"Satisfy", cursive' }}>hastudio</span>
         </div>
 
-        {/* Form Message */}
+        {/* Title */}
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
+            {isLogin ? "Đăng nhập" : "Tạo tài khoản"}
+          </h2>
+          <p className="text-sm text-gray-500 mt-1">
+            {isLogin 
+              ? "Chào mừng bạn quay trở lại" 
+              : "Bắt đầu trải nghiệm cùng hastudio"}
+          </p>
+        </div>
+
+        {/* Message */}
         <AnimatePresence mode="wait">
           {message.text && (
             <motion.div
-              initial={{ opacity: 0, y: -10 }}
+              initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className={`mb-6 px-5 py-4 rounded-[14px] text-[15px] font-semibold flex items-center gap-3 shadow-sm ${message.type === "error"
-                ? "bg-red-50 text-black border border-red-100"
-                : "bg-green-50 text-black border border-green-100"
+              exit={{ opacity: 0 }}
+              className={`mb-5 px-4 py-3 rounded-lg text-sm font-medium ${message.type === "error"
+                ? "bg-red-50 text-red-700 border border-red-100"
+                : "bg-emerald-50 text-emerald-700 border border-emerald-100"
                 }`}
             >
-              <div className={`w-1.5 h-1.5 rounded-full ${message.type === "error" ? "bg-red-500" : "bg-green-500"}`}></div>
               {message.text}
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Forms with Animation */}
-        <div className="min-h-[300px]">
-          <AnimatePresence mode="wait">
-            {isLogin ? (
-              <motion.form
-                key="login-form"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-                transition={{ duration: 0.3 }}
-                onSubmit={handleLogin}
-              >
-                <InputField
-                  label="Tên tài khoản"
-                  name="username"
-                  placeholder="Nhập tên tài khoản"
-                  icon={FiUser}
-                  error={errors.username}
-                  value={formData.username}
-                  onChange={handleInputChange}
-                />
-                <InputField
-                  label="Mật khẩu"
-                  name="password"
-                  type="password"
-                  placeholder="Nhập mật khẩu"
-                  icon={FiLock}
-                  error={errors.password}
-                  value={formData.password}
-                  onChange={handleInputChange}
-                />
-
-                <div className="flex justify-end mb-5">
-                  <button type="button" className="text-[13px] font-semibold text-[#6CD1FD]/70 hover:text-[#6CD1FD] transition-colors">
-                    Quên mật khẩu?
-                  </button>
-                </div>
-
-                <button
-                  disabled={loading}
-                  className="w-full py-3.5 bg-[#6CD1FD] text-white font-bold rounded-full shadow-lg shadow-[#6CD1FD]/20 hover:shadow-[#6CD1FD]/30 transition-all flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-70 normal-case tracking-normal"
-                >
-                  {loading ? "Đang đăng nhập..." : "Đăng nhập"}
-                </button>
-              </motion.form>
-            ) : (
-              <motion.form
-                key="signup-form"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3 }}
-                onSubmit={handleSignup}
-              >
-                <InputField
-                  label="Tên người dùng"
-                  name="fullName"
-                  placeholder="Nhập tên người dùng"
-                  icon={FiUser}
-                  error={errors.fullName}
-                  value={formData.fullName}
-                  onChange={handleInputChange}
-                />
-                <InputField
-                  label="Số điện thoại"
-                  name="phone"
-                  placeholder="Nhập số điện thoại"
-                  icon={FiPhone}
-                  error={errors.phone}
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                />
-                <InputField
-                  label="Tên tài khoản"
-                  name="username"
-                  placeholder="Nhập tên tài khoản"
-                  icon={FiMail}
-                  error={errors.username}
-                  value={formData.username}
-                  onChange={handleInputChange}
-                />
-                <InputField
-                  label="Mật khẩu"
-                  name="password"
-                  type="password"
-                  placeholder="Nhập mật khẩu"
-                  icon={FiLock}
-                  error={errors.password}
-                  value={formData.password}
-                  onChange={handleInputChange}
-                />
-                <InputField
-                  label="Xác nhận mật khẩu"
-                  name="confirmPassword"
-                  type="password"
-                  placeholder="Nhập lại mật khẩu"
-                  icon={FiKey}
-                  error={errors.confirmPassword}
-                  value={formData.confirmPassword}
-                  onChange={handleInputChange}
-                />
-
-                <button
-                  disabled={loading}
-                  className="w-full py-3.5 bg-[#35104C] text-white font-bold rounded-full shadow-lg shadow-[#35104C]/20 hover:shadow-[#35104C]/30 transition-all flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-70 normal-case tracking-normal"
-                >
-                  {loading ? "Đang tạo tài khoản..." : "Đăng ký ngay"}
-                </button>
-              </motion.form>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* Divider */}
-        <div className="flex items-center gap-4 my-6">
-          <div className="flex-1 h-[1px] bg-gray-100"></div>
-          <span className="text-[15px] text-slate-700 font-medium">Hoặc tiếp tục với</span>
-          <div className="flex-1 h-[1px] bg-gray-100"></div>
-        </div>
-
-        {/* Social Logins - Minimalist Icon Only */}
-        <div className="flex justify-center gap-6">
+        {/* Social Login - Đặt lên trên */}
+        <div className="flex gap-3 mb-6">
           <button
             type="button"
             onClick={() => handleSocialLogin(googleProvider)}
-            className="w-14 h-14 flex items-center justify-center rounded-2xl border border-slate-100 bg-white hover:bg-slate-50 hover:border-slate-200 hover:shadow-xl hover:shadow-slate-200 transition-all active:scale-90"
-            title="Đăng nhập Google"
+            className="flex-1 h-11 flex items-center justify-center gap-2.5 rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all active:scale-[0.98]"
           >
-            <FcGoogle size={28} />
+            <FcGoogle size={20} />
+            <span>Google</span>
           </button>
           <button
             type="button"
             onClick={() => handleSocialLogin(facebookProvider)}
-            className="w-14 h-14 flex items-center justify-center rounded-2xl bg-[#1877F2] text-white hover:bg-[#166fe5] hover:shadow-xl hover:shadow-blue-200 transition-all active:scale-90"
-            title="Đăng nhập Facebook"
+            className="flex-1 h-11 flex items-center justify-center gap-2.5 rounded-lg bg-[#1877F2] text-sm font-medium text-white hover:bg-[#1565d8] transition-all active:scale-[0.98]"
           >
-            <FaFacebookF size={24} />
+            <FaFacebookF size={16} />
+            <span>Facebook</span>
           </button>
         </div>
 
-        {/* Switch State */}
-        <div className="text-center mt-6">
-          <p className="text-[14px] text-slate-500 font-medium">
-            {isLogin ? "Bạn chưa có tài khoản?" : "Bạn đã có tài khoản chưa ?"}{" "}
-            <button
-              type="button"
-              className="text-[#6CD1FD]/80 font-semibold hover:text-[#6CD1FD] transition-all hover:underline bg-transparent border-none cursor-pointer"
-              onClick={() => setIsLogin(!isLogin)}
-            >
-              {isLogin ? "Tạo tài khoản" : "Đăng nhập"}
-            </button>
-          </p>
+        {/* Divider */}
+        <div className="flex items-center gap-3 mb-6">
+          <div className="flex-1 h-px bg-gray-200"></div>
+          <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">hoặc</span>
+          <div className="flex-1 h-px bg-gray-200"></div>
         </div>
+
+        {/* Forms */}
+        <AnimatePresence mode="wait">
+          {isLogin ? (
+            <motion.form
+              key="login-form"
+              initial={{ opacity: 0, x: -16 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 16 }}
+              transition={{ duration: 0.2 }}
+              onSubmit={handleLogin}
+            >
+              {/* Username */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Tên tài khoản</label>
+                <div className="relative">
+                  <input
+                    name="username"
+                    type="text"
+                    placeholder="Nhập tên tài khoản"
+                    value={formData.username}
+                    onChange={handleInputChange}
+                    onFocus={() => setFocusedField("username")}
+                    onBlur={() => setFocusedField(null)}
+                    className={`w-full h-11 px-3.5 rounded-lg text-sm text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
+                      errors.username
+                        ? "border-2 border-red-300 bg-red-50/50 focus:border-red-400"
+                        : "border border-gray-200 bg-white focus:border-[#35104C] focus:ring-1 focus:ring-[#35104C]/10"
+                    }`}
+                  />
+                </div>
+                {errors.username && <p className="text-xs text-red-500 mt-1 ml-1">{errors.username}</p>}
+              </div>
+
+              {/* Password */}
+              <div className="mb-4">
+                <div className="flex justify-between items-center mb-1.5">
+                  <label className="block text-sm font-medium text-gray-700">Mật khẩu</label>
+                  <button type="button" className="text-xs text-[#35104C]/60 hover:text-[#35104C] transition-colors font-medium">
+                    Quên mật khẩu?
+                  </button>
+                </div>
+                <div className="relative">
+                  <input
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Nhập mật khẩu"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    onFocus={() => setFocusedField("password")}
+                    onBlur={() => setFocusedField(null)}
+                    className={`w-full h-11 px-3.5 pr-10 rounded-lg text-sm text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
+                      errors.password
+                        ? "border-2 border-red-300 bg-red-50/50 focus:border-red-400"
+                        : "border border-gray-200 bg-white focus:border-[#35104C] focus:ring-1 focus:ring-[#35104C]/10"
+                    }`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+                  </button>
+                </div>
+                {errors.password && <p className="text-xs text-red-500 mt-1 ml-1">{errors.password}</p>}
+              </div>
+
+              <button
+                disabled={loading}
+                className="w-full h-11 mt-2 bg-[#35104C] text-white text-sm font-semibold rounded-lg hover:bg-[#2a0d3d] transition-all active:scale-[0.98] disabled:opacity-60"
+              >
+                {loading ? "Đang đăng nhập..." : "Đăng nhập"}
+              </button>
+            </motion.form>
+          ) : (
+            <motion.form
+              key="signup-form"
+              initial={{ opacity: 0, x: 16 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -16 }}
+              transition={{ duration: 0.2 }}
+              onSubmit={handleSignup}
+            >
+              {/* Full Name */}
+              <div className="mb-3.5">
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Họ và tên</label>
+                <input
+                  name="fullName"
+                  type="text"
+                  placeholder="Nhập họ và tên"
+                  value={formData.fullName}
+                  onChange={handleInputChange}
+                  className={`w-full h-11 px-3.5 rounded-lg text-sm text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
+                    errors.fullName
+                      ? "border-2 border-red-300 bg-red-50/50"
+                      : "border border-gray-200 bg-white focus:border-[#35104C] focus:ring-1 focus:ring-[#35104C]/10"
+                  }`}
+                />
+                {errors.fullName && <p className="text-xs text-red-500 mt-1 ml-1">{errors.fullName}</p>}
+              </div>
+
+              {/* Phone */}
+              <div className="mb-3.5">
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Số điện thoại</label>
+                <input
+                  name="phone"
+                  type="text"
+                  placeholder="Nhập số điện thoại"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  className={`w-full h-11 px-3.5 rounded-lg text-sm text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
+                    errors.phone
+                      ? "border-2 border-red-300 bg-red-50/50"
+                      : "border border-gray-200 bg-white focus:border-[#35104C] focus:ring-1 focus:ring-[#35104C]/10"
+                  }`}
+                />
+                {errors.phone && <p className="text-xs text-red-500 mt-1 ml-1">{errors.phone}</p>}
+              </div>
+
+              {/* Username */}
+              <div className="mb-3.5">
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Tên tài khoản</label>
+                <input
+                  name="username"
+                  type="text"
+                  placeholder="Nhập tên tài khoản"
+                  value={formData.username}
+                  onChange={handleInputChange}
+                  className={`w-full h-11 px-3.5 rounded-lg text-sm text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
+                    errors.username
+                      ? "border-2 border-red-300 bg-red-50/50"
+                      : "border border-gray-200 bg-white focus:border-[#35104C] focus:ring-1 focus:ring-[#35104C]/10"
+                  }`}
+                />
+                {errors.username && <p className="text-xs text-red-500 mt-1 ml-1">{errors.username}</p>}
+              </div>
+
+              {/* Password */}
+              <div className="mb-3.5">
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Mật khẩu</label>
+                <div className="relative">
+                  <input
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Tối thiểu 6 ký tự"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    className={`w-full h-11 px-3.5 pr-10 rounded-lg text-sm text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
+                      errors.password
+                        ? "border-2 border-red-300 bg-red-50/50"
+                        : "border border-gray-200 bg-white focus:border-[#35104C] focus:ring-1 focus:ring-[#35104C]/10"
+                    }`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+                  </button>
+                </div>
+                {errors.password && <p className="text-xs text-red-500 mt-1 ml-1">{errors.password}</p>}
+              </div>
+
+              {/* Confirm Password */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Xác nhận mật khẩu</label>
+                <div className="relative">
+                  <input
+                    name="confirmPassword"
+                    type={showConfirmPassword ? "text" : "password"}
+                    placeholder="Nhập lại mật khẩu"
+                    value={formData.confirmPassword}
+                    onChange={handleInputChange}
+                    className={`w-full h-11 px-3.5 pr-10 rounded-lg text-sm text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
+                      errors.confirmPassword
+                        ? "border-2 border-red-300 bg-red-50/50"
+                        : "border border-gray-200 bg-white focus:border-[#35104C] focus:ring-1 focus:ring-[#35104C]/10"
+                    }`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    {showConfirmPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+                  </button>
+                </div>
+                {errors.confirmPassword && <p className="text-xs text-red-500 mt-1 ml-1">{errors.confirmPassword}</p>}
+              </div>
+
+              <button
+                disabled={loading}
+                className="w-full h-11 mt-1 bg-[#35104C] text-white text-sm font-semibold rounded-lg hover:bg-[#2a0d3d] transition-all active:scale-[0.98] disabled:opacity-60"
+              >
+                {loading ? "Đang tạo tài khoản..." : "Đăng ký"}
+              </button>
+            </motion.form>
+          )}
+        </AnimatePresence>
+
+        {/* Switch */}
+        <p className="text-center text-sm text-gray-500 mt-6">
+          {isLogin ? "Chưa có tài khoản?" : "Đã có tài khoản?"}{" "}
+          <button
+            type="button"
+            className="text-[#35104C] font-semibold hover:underline bg-transparent border-none cursor-pointer"
+            onClick={() => {
+              setIsLogin(!isLogin);
+              setErrors({});
+              setMessage({ type: "", text: "" });
+            }}
+          >
+            {isLogin ? "Đăng ký" : "Đăng nhập"}
+          </button>
+        </p>
       </div>
     </div>
   );
