@@ -55,7 +55,7 @@ const ChangePassword = () => {
         <InputField label="Mật khẩu mới" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="Nhập mật khẩu mới" />
         <InputField label="Xác nhận mật khẩu mới" value={confirmedPassword} onChange={(e) => setConfirmedPassword(e.target.value)} placeholder="Nhập lại mật khẩu mới" />
 
-        <button type="submit" className="px-8 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-sky-400 to-blue-600 rounded-xl shadow-md shadow-blue-200 hover:opacity-90 transition-all mt-2">
+        <button type="submit" className="px-8 w-full py-3 text-[14px] font-semibold text-white bg-[#35104C] rounded-xl shadow-lg shadow-[#35104C]/20 transition-all mt-4">
           Xác nhận thay đổi
         </button>
       </form>

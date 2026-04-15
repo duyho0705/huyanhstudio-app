@@ -25,7 +25,7 @@ import LoginModal from "./components/features/auth/LoginModal";
 import ChatBox from "./components/features/chat/ChatBox";
 import AIAudioEnhancerModal from "./components/features/ai/AIAudioEnhancerModal";
 import { AnimatePresence, motion, useSpring, useMotionValue } from "framer-motion";
-import { FaMagic, FaPlay } from "react-icons/fa";
+import { FaMagic, FaPlay, FaRobot } from "react-icons/fa";
 import { FiZap, FiGrid, FiMessageCircle, FiX } from "react-icons/fi";
 import { useState, useEffect, useRef, useContext } from "react";
 
@@ -330,7 +330,7 @@ function AppContent() {
                   onClick={() => setIsAIModalOpen(true)}
                   className="w-12 h-12 bg-[#35104C]/80 backdrop-blur-xl border border-white/20 rounded-full flex items-center justify-center text-[#6CD1FD] shadow-xl hover:bg-[#6CD1FD] hover:text-[#35104C] transition-all active:scale-90"
                 >
-                  <FiZap size={20} />
+                  <FaRobot size={20} />
                 </button>
               </motion.div>
 

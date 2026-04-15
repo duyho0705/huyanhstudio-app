@@ -46,15 +46,15 @@ const BookingProfile = () => {
   }, [loading, user, page]);
 
   const statusMap = {
-    CONFIRMED: { label: "Đã xác nhận", class: "bg-green-100 text-green-700" },
+    CONFIRMED: { label: "Đã xác nhận", class: "bg-blue-100 text-blue-700" },
     PENDING: { label: "Chờ xác nhận", class: "bg-yellow-100 text-yellow-700" },
     CANCELLED: { label: "Đã hủy", class: "bg-red-100 text-red-700" },
-    COMPLETED: { label: "Đã hoàn thành", class: "bg-blue-100 text-blue-700" },
+    COMPLETED: { label: "Đã hoàn thành", class: "bg-emerald-500 text-white" },
   };
 
   const getStatus = (status) => {
     const s = statusMap[status] || { label: "Không rõ", class: "bg-gray-100 text-gray-600" };
-    return <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${s.class}`}>{s.label}</span>;
+    return <span className={`px-2.5 py-1 rounded-full text-[13px] font-semibold ${s.class}`}>{s.label}</span>;
   };
 
   const shortCode = (code) => code?.slice(-6);

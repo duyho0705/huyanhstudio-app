@@ -93,7 +93,7 @@ const Account = () => {
         </div>
 
         <div className="flex items-center gap-4 mt-6">
-          <button type="submit" className="px-8 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-sky-400 to-blue-600 rounded-xl shadow-md shadow-blue-200 hover:opacity-90 transition-all">
+          <button type="submit" className="px-8 py-3 text-[14px] font-semibold text-white bg-[#35104C] rounded-xl shadow-lg shadow-[#35104C]/20 transition-all">
             Lưu thay đổi
           </button>
 
