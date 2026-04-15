@@ -109,15 +109,6 @@ const AdminHeader = ({ toggleSidebar }) => {
           >
             <Menu size={20} />
           </button>
-
-          <div className="hidden md:flex items-center gap-3 px-5 py-2.5 bg-slate-50/50 rounded-2xl border border-slate-100 group transition-all focus-within:bg-white focus-within:ring-4 focus-within:ring-slate-100 focus-within:border-slate-200">
-            <Search size={16} className="text-slate-400 group-focus-within:text-blue-500 transition-colors" />
-            <input
-              type="text"
-              placeholder="Truy vấn hệ thống..."
-              className="bg-transparent border-none outline-none text-xs font-semibold text-slate-900 placeholder:text-slate-400 placeholder:font-semibold placeholder:tracking-widest w-48 lg:w-64"
-            />
-          </div>
         </div>
 
         <div className="flex items-center gap-3">

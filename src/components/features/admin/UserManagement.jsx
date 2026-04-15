@@ -205,14 +205,14 @@ const UserManagement = () => {
   const confirmDelete = async () => {
     if (!deletingUser) return;
     try {
-        await userApi.admin.delete(deletingUser.id);
-        messageApi.success("Tài khoản đã được xóa vĩnh viễn!");
-        setIsDeleteModalOpen(false);
-        setDeletingUser(null);
-        fetchUsers();
+      await userApi.admin.delete(deletingUser.id);
+      messageApi.success("Tài khoản đã được xóa vĩnh viễn!");
+      setIsDeleteModalOpen(false);
+      setDeletingUser(null);
+      fetchUsers();
     } catch (error) {
-        console.error("Error deleting user:", error);
-        messageApi.error("Không thể xóa tài khoản này!");
+      console.error("Error deleting user:", error);
+      messageApi.error("Không thể xóa tài khoản này!");
     }
   };
 
@@ -393,71 +393,71 @@ const UserManagement = () => {
       </div>
 
       <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-6">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-50">
-          <div>
-            <h2 className="text-[18px] font-semibold text-slate-900">Danh sách người dùng</h2>
-          </div>
+        <div className="flex flex-col lg:flex-row lg:items-center gap-4 pb-6 border-b border-slate-50">
+          <h2 className="text-[18px] font-semibold text-slate-900 whitespace-nowrap mr-auto">Danh sách người dùng</h2>
 
-          <div className="flex flex-col sm:flex-row items-center gap-3">
-            <div className="relative w-full sm:w-72">
+          <div className="flex flex-wrap items-center gap-3">
+            {/* Filters */}
+            <Select
+              placeholder={<span className="font-semibold text-slate-600">Vai trò hệ thống</span>}
+              value={filters.role}
+              onChange={(val) => handleFilterChange("role", val)}
+              className="w-[180px] h-10 rounded-xl"
+              allowClear
+            >
+              {roles.map((role) => (
+                <Option key={role.value} value={role.value}>
+                  <span className="font-semibold text-[14px] text-slate-700">{role.label}</span>
+                </Option>
+              ))}
+            </Select>
+
+            <Select
+              placeholder={<span className="font-semibold text-slate-600">Trạng thái</span>}
+              value={filters.status}
+              onChange={(val) => handleFilterChange("status", val)}
+              className="w-[180px] h-10 rounded-xl"
+              allowClear
+            >
+              {statusOptions.map((status) => (
+                <Option key={status.value.toString()} value={status.value}>
+                  <span className="font-semibold text-[14px] text-slate-700">{status.label}</span>
+                </Option>
+              ))}
+            </Select>
+
+            {/* Search */}
+            <div className="relative w-full sm:w-64">
               <Input
                 placeholder="Tìm theo tên hoặc điện thoại"
                 prefix={<Search size={18} className="text-slate-400" />}
-                className="h-11 border border-slate-300 rounded-xl text-[14px] font-semibold text-slate-900"
+                className="h-10 border border-slate-300 rounded-xl text-[14px] font-semibold text-slate-900"
                 value={filters.search}
                 onChange={(e) => handleFilterChange("search", e.target.value)}
                 allowClear
               />
             </div>
+
+            {/* Add Button */}
             <Button
-              type="primary"
               onClick={handleCreate}
-              className="h-10 px-4 bg-slate-900 hover:bg-slate-800 rounded-xl border-none font-semibold text-[14px] shadow-sm flex items-center gap-2 transition-all"
+              className="h-10 px-4 bg-slate-900 text-white rounded-full border-none font-semibold text-[14px] shadow-sm flex items-center gap-2"
             >
               <Plus size={16} strokeWidth={2.5} />
-              Thêm người dùng
+              Thêm mới
             </Button>
+
+            {/* Clear Filters Button */}
+            {(filters.role !== null || filters.status !== null || filters.search) && (
+              <button
+                onClick={clearFilters}
+                className="h-10 w-10 flex items-center justify-center text-slate-500 hover:text-red-500 bg-white border border-slate-100 rounded-xl transition-all active:scale-95"
+                title="Làm mới bộ lọc"
+              >
+                <RotateCcw size={16} />
+              </button>
+            )}
           </div>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3">
-          <Select
-            placeholder={<span className="font-semibold text-slate-600">Vai trò hệ thống</span>}
-            value={filters.role}
-            onChange={(val) => handleFilterChange("role", val)}
-            className="w-[180px] h-10 rounded-xl"
-            allowClear
-          >
-            {roles.map((role) => (
-              <Option key={role.value} value={role.value}>
-                <span className="font-semibold text-[14px] text-slate-700">{role.label}</span>
-              </Option>
-            ))}
-          </Select>
-
-          <Select
-            placeholder={<span className="font-semibold text-slate-600">Trạng thái</span>}
-            value={filters.status}
-            onChange={(val) => handleFilterChange("status", val)}
-            className="w-[180px] h-10 rounded-xl"
-            allowClear
-          >
-            {statusOptions.map((status) => (
-              <Option key={status.value.toString()} value={status.value}>
-                <span className="font-semibold text-[14px] text-slate-700">{status.label}</span>
-              </Option>
-            ))}
-          </Select>
-
-          {(filters.role !== null || filters.status !== null || filters.search) && (
-            <button
-              onClick={clearFilters}
-              className="h-12 px-6 flex items-center gap-2 text-slate-500 hover:text-slate-900 font-black uppercase tracking-widest text-[10px] bg-white border border-slate-100 rounded-xl transition-all active:scale-95"
-            >
-              <RotateCcw size={14} />
-              Làm mới bộ lọc
-            </button>
-          )}
         </div>
 
         <div className="rounded-2xl border border-slate-100 overflow-hidden bg-white shadow-inner">
@@ -658,12 +658,12 @@ const UserManagement = () => {
         onCancel={() => setIsDeleteModalOpen(false)}
         onOk={confirmDelete}
         title={
-            <div className="flex items-center gap-3 py-2">
-              <div className="w-10 h-10 rounded-full bg-red-50 text-red-500 flex items-center justify-center shrink-0">
-                <Trash2 size={20} strokeWidth={2.5} />
-              </div>
-              <span className="text-[17px] font-bold text-slate-900 leading-tight">Xóa tài khoản vĩnh viễn</span>
+          <div className="flex items-center gap-3 py-2">
+            <div className="w-10 h-10 rounded-full bg-red-50 text-red-500 flex items-center justify-center shrink-0">
+              <Trash2 size={20} strokeWidth={2.5} />
             </div>
+            <span className="text-[17px] font-bold text-slate-900 leading-tight">Xóa tài khoản vĩnh viễn</span>
+          </div>
         }
         okText="Vâng, xóa ngay"
         cancelText="Hủy bỏ"
