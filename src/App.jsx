@@ -29,60 +29,6 @@ import { FaMagic, FaPlay } from "react-icons/fa";
 import { FiZap, FiGrid, FiMessageCircle, FiX } from "react-icons/fi";
 import { useState, useEffect, useRef, useContext } from "react";
 
-// --- CUSTOM AUDIO WAVE CURSOR ---
-const AudioCursor = () => {
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  // Smooth springs for the main dot
-  const springX = useSpring(mouseX, { stiffness: 500, damping: 28 });
-  const springY = useSpring(mouseY, { stiffness: 500, damping: 28 });
-
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [mouseX, mouseY]);
-
-  return (
-    <div className="fixed inset-0 pointer-events-none z-[9999] hidden md:block">
-      {/* Sound Wave Bars Trail - No main dot for a cleaner look */}
-      {[...Array(6)].map((_, i) => (
-        <CursorWaveBar key={i} index={i} mouseX={mouseX} mouseY={mouseY} />
-      ))}
-    </div>
-  );
-};
-
-const CursorWaveBar = ({ index, mouseX, mouseY }) => {
-  // Staggered springs for each bar to create trail effect
-  const x = useSpring(mouseX, { stiffness: 400 - index * 50, damping: 30 + index * 2 });
-  const y = useSpring(mouseY, { stiffness: 400 - index * 50, damping: 30 + index * 2 });
-
-  return (
-    <motion.div
-      style={{
-        x,
-        y,
-        marginLeft: `${(index - 2.5) * 8}px`,
-        marginTop: '-10px'
-      }}
-      animate={{
-        height: [8, 20, 10, 24, 8],
-        opacity: [0.3, 0.6, 0.3]
-      }}
-      transition={{
-        duration: 1.5 + index * 0.2,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }}
-      className="absolute w-[3px] bg-[#6CD1FD] rounded-full"
-    />
-  );
-};
 
 const pageVariants = {
   initial: { opacity: 0, x: 20 },
@@ -431,13 +377,13 @@ function AppContent() {
             />
           )}
 
+
           <AIAudioEnhancerModal
             isOpen={isAIModalOpen}
             onClose={() => setIsAIModalOpen(false)}
           />
 
-          {/* Special Visual Effect: Sound Wave Cursor */}
-          <AudioCursor />
+          {/* Special Visual Effect: Sound Wave Cursor removed */}
         </>
       )}
     </>

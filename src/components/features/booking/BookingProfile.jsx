@@ -34,8 +34,8 @@ const BookingProfile = () => {
       const list = getList(res);
       setBookings(list);
       setTotalPages(res.totalPages || (res.data?.totalPages) || 1);
-    } catch (err) { 
-      console.error("Error fetching bookings:", err); 
+    } catch (err) {
+      console.error("Error fetching bookings:", err);
       setBookings([]);
     }
   };
