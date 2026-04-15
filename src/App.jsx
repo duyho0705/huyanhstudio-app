@@ -82,7 +82,7 @@ const MiniMusicPlayer = ({ isPlaying, setIsPlaying }) => {
       </div>
 
       <div className="flex flex-col">
-        <p className="text-[15px] font-semibold text-[#35104C] leading-none mb-1">Mốc nè ahihi</p>
+        <p className="text-[15px] font-semibold text-[#35104C] leading-none mb-1">Nhạc nền</p>
         <div className="flex items-center gap-1 h-2.5">
           {[...Array(5)].map((_, i) => (
             <motion.div
