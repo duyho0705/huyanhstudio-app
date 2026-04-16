@@ -549,7 +549,7 @@ const BookingManagement = () => {
             >
               <Button
                 onClick={handleCreate}
-                className="h-10 px-4 sm:px-6 bg-slate-900 border-none font-semibold sm:font-bold text-[13px] sm:text-[14px] flex items-center justify-center gap-1.5 sm:gap-2 !text-white hover:!bg-slate-800 rounded-xl transition-all flex-1 sm:flex-none"
+                className="h-10 px-4 xl:px-6 bg-slate-900 border-none font-semibold xl:font-bold text-[13px] xl:text-[14px] flex items-center justify-center gap-1.5 xl:gap-2 !text-white hover:!bg-slate-800 rounded-xl transition-all flex-[1.5] xl:flex-none"
               >
                 <Plus size={16} strokeWidth={3} />
                 Tạo mới
