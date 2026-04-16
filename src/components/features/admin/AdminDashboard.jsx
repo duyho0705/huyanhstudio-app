@@ -119,19 +119,19 @@ const AdminDashboard = () => {
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
           <p className="text-[12px] sm:text-sm text-slate-600 font-medium mb-1">{getGreeting()}</p>
-          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
             {user?.fullName || "Admin"}
           </h1>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide w-full sm:w-auto">
           {quickLinks.map((item, i) => (
             <Link
               key={i}
               to={item.link}
-              className="h-9 px-3.5 flex items-center gap-2 rounded-lg border border-slate-200 bg-white text-sm font-medium text-slate-600"
+              className="h-10 sm:h-9 px-3.5 flex shrink-0 items-center gap-2 rounded-xl border border-slate-200 bg-white text-[13px] sm:text-sm font-bold sm:font-medium text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm sm:shadow-none"
             >
               <span className={item.color}>{item.icon}</span>
-              <span className="hidden lg:inline">{item.title}</span>
+              <span className="inline lg:inline whitespace-nowrap">{item.title}</span>
             </Link>
           ))}
         </div>
@@ -143,32 +143,32 @@ const AdminDashboard = () => {
           <Link
             key={index}
             to={card.link}
-            className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200 shadow-sm"
+            className="p-4 sm:p-6 rounded-2xl sm:rounded-[24px] bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all group"
           >
-            <div className="flex items-center justify-between mb-2 sm:mb-3">
-              <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg ${card.iconBg} flex items-center justify-center`}>
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
+              <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl ${card.iconBg} flex items-center justify-center transition-transform group-hover:scale-110 duration-300`}>
                 {card.icon}
               </div>
-              <ArrowUpRight size={14} className="text-slate-300 sm:block hidden" />
+              <ArrowUpRight size={16} strokeWidth={2.5} className="text-slate-300 sm:block hidden group-hover:text-slate-900 transition-colors" />
             </div>
-            <p className="text-lg sm:text-2xl font-bold text-slate-900 tracking-tight">{card.value}</p>
-            <p className="text-[11px] sm:text-sm font-medium text-slate-500 mt-0.5 uppercase tracking-wide">{card.title}</p>
+            <p className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mb-1">{card.value}</p>
+            <p className="text-sm sm:text-base font-semibold text-slate-500 mt-0.5">{card.title}</p>
           </Link>
         ))}
       </div>
 
       {/* Charts row */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-        <div className="bg-white p-5 rounded-xl border border-slate-200">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
+        <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-2xl sm:rounded-[32px] border border-slate-200 overflow-hidden shadow-sm">
           <AdminRevenueChart />
         </div>
-        <div className="bg-white p-5 rounded-xl border border-slate-200">
+        <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-2xl sm:rounded-[32px] border border-slate-200 overflow-hidden shadow-sm">
           <AdminPopularServices />
         </div>
       </div>
 
       {/* Recent Bookings */}
-      <div className="bg-white rounded-xl border border-slate-200">
+      <div className="bg-white rounded-2xl sm:rounded-[32px] border border-slate-200 overflow-hidden shadow-sm">
         <AdminRecentBookings />
       </div>
     </div>

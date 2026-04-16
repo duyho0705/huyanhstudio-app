@@ -493,37 +493,37 @@ const BookingManagement = () => {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
         {[
           {
-            icon: <ShoppingBag size={26} strokeWidth={1.5} className="text-indigo-600" />,
-            label: "Tổng đơn hàng",
+            icon: <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6 text-indigo-600" strokeWidth={1.5} />,
+            label: "Tổng đơn",
             value: globalStats.totalBookings,
             config: "bg-indigo-100 border border-indigo-200/60"
           },
           {
-            icon: <Timer size={26} strokeWidth={1.5} className="text-amber-600" />,
-            label: "Đang xử lý",
+            icon: <Timer className="w-5 h-5 sm:w-6 sm:h-6 text-amber-600" strokeWidth={1.5} />,
+            label: "Xử lý",
             value: (globalStats.pendingBookings || 0) + (globalStats.confirmedBookings || 0),
             config: "bg-amber-100 border border-amber-200/60"
           },
           {
-            icon: <CheckCircle2 size={26} strokeWidth={1.5} className="text-emerald-600" />,
-            label: "Hoàn thành",
+            icon: <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-600" strokeWidth={1.5} />,
+            label: "Hoàn tất",
             value: globalStats.completedBookings,
             config: "bg-emerald-100 border border-emerald-200/60"
           },
           {
-            icon: <UserX size={26} strokeWidth={1.5} className="text-rose-500" />,
+            icon: <UserX className="w-5 h-5 sm:w-6 sm:h-6 text-rose-500" strokeWidth={1.5} />,
             label: "Đã hủy",
             value: globalStats.cancelledBookings,
             config: "bg-rose-100 border border-rose-200/60"
           }
         ].map((item, i) => (
-          <div key={i} className="bg-white p-3 sm:p-5 md:p-7 rounded-2xl border border-slate-300 shadow-sm flex items-center gap-3 sm:gap-5 transition-all hover:shadow-xl hover:shadow-slate-200/50 group">
-            <div className={`w-10 h-10 sm:w-14 sm:h-14 rounded-2xl ${item.config} flex items-center justify-center transition-transform group-hover:scale-110 shadow-sm shrink-0`}>
+          <div key={i} className={`bg-white p-3 sm:p-7 rounded-2xl sm:rounded-[24px] border border-slate-300 shadow-sm flex flex-col sm:flex-row items-center gap-2 sm:gap-5 transition-all hover:shadow-xl hover:shadow-slate-200/50 group text-center sm:text-left flex`}>
+            <div className={`w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl ${item.config} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300`}>
               {item.icon}
             </div>
             <div>
-              <h4 className="text-[12px] sm:text-[17px] font-medium text-slate-500 group-hover:text-slate-900 transition-colors">{item.label}</h4>
-              <p className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight">{item.value}</p>
+              <h4 className="text-sm sm:text-base font-semibold text-slate-500 sm:text-slate-600 whitespace-nowrap">{item.label}</h4>
+              <p className="text-xl sm:text-3xl font-black text-slate-900 tracking-tight leading-none mt-1">{item.value}</p>
             </div>
           </div>
         ))}
@@ -536,7 +536,7 @@ const BookingManagement = () => {
             Danh sách lịch thu âm
           </h2>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
             <BookingFilters
               filters={filters}
               onFilterChange={handleFilterChange}
@@ -546,15 +546,15 @@ const BookingManagement = () => {
               selectedRowKeys={selectedRowKeys}
               onBulkDelete={handleBulkDelete}
               showSearch={true}
-            />
-
-            <Button
-              onClick={handleCreate}
-              className="h-10 px-6 bg-slate-900 border-none font-bold text-[14px] shadow-lg shadow-slate-200 flex items-center gap-2 !text-white hover:!bg-slate-800 rounded-xl transition-all"
             >
-              <Plus size={16} strokeWidth={3} />
-              Tạo mới
-            </Button>
+              <Button
+                onClick={handleCreate}
+                className="h-10 px-4 sm:px-6 bg-slate-900 border-none font-semibold sm:font-bold text-[13px] sm:text-[14px] flex items-center justify-center gap-1.5 sm:gap-2 !text-white hover:!bg-slate-800 rounded-xl transition-all flex-1 sm:flex-none"
+              >
+                <Plus size={16} strokeWidth={3} />
+                Tạo mới
+              </Button>
+            </BookingFilters>
           </div>
         </div>
 

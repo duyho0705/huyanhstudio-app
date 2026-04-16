@@ -55,8 +55,8 @@ const AdminRecentBookings = () => {
   );
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-6">
+    <div className="p-4 sm:p-6 lg:p-8">
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
             <History size={20} />
@@ -74,11 +74,11 @@ const AdminRecentBookings = () => {
       <div className="space-y-3">
         {bookings.length > 0 ? (
           bookings.map((booking) => (
-            <div key={booking.id} className="flex flex-col xl:flex-row xl:items-center justify-between p-4 rounded-2xl bg-white border border-slate-100 hover:border-slate-200 hover:shadow-sm transition-all duration-300 gap-4 group">
-              <div className="flex items-center gap-4">
+            <div key={booking.id} className="flex flex-col xl:flex-row xl:items-center justify-between p-4 sm:p-5 rounded-2xl bg-white border border-slate-100 hover:border-slate-200 hover:shadow-sm transition-all duration-300 gap-4 sm:gap-6 group">
+              <div className="flex items-center gap-3 sm:gap-4">
                 <div className="relative">
                   <img
-                    className="w-12 h-12 rounded-full object-cover ring-2 ring-slate-50 shadow-sm"
+                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover ring-2 ring-slate-50 shadow-sm"
                     src={
                       booking.user?.avatar ||
                       `https://ui-avatars.com/api/?name=${booking.user?.fullName || "User"
@@ -86,29 +86,29 @@ const AdminRecentBookings = () => {
                     }
                     alt={booking.user?.fullName}
                   />
-                  <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+                  <div className="absolute bottom-0 right-0 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-green-500 border-2 border-white rounded-full"></div>
                 </div>
                 <div className="flex flex-col">
-                  <h4 className="font-semibold text-slate-900 text-[14px] leading-tight group-hover:text-blue-600 transition-colors">{booking.user?.fullName || "Khách vãng lai"}</h4>
-                  <p className="text-[13px] font-medium text-slate-500 mt-0.5">{booking.service?.name || "Dịch vụ thường"}</p>
+                  <h4 className="font-semibold text-slate-900 text-[13px] sm:text-[14px] leading-tight group-hover:text-blue-600 transition-colors">{booking.user?.fullName || "Khách vãng lai"}</h4>
+                  <p className="text-[12px] sm:text-[13px] font-medium text-slate-500 mt-0.5">{booking.service?.name || "Dịch vụ thường"}</p>
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center xl:w-[500px] justify-between gap-4">
-                <div className="flex flex-col gap-1 w-[180px]">
+              <div className="flex flex-col sm:flex-row sm:items-center xl:w-[500px] justify-between gap-3 sm:gap-4 pt-3 sm:pt-0 border-t sm:border-t-0 border-slate-50">
+                <div className="flex flex-row sm:flex-col justify-between sm:justify-start gap-1 sm:w-[180px]">
                   <div className="flex items-center gap-2 text-[13px] font-medium text-slate-700">
                     <Calendar size={16} className="text-slate-400" />
                     <span>{booking.bookingDate || "N/A"}</span>
                   </div>
-                  <div className="flex items-center gap-2 text-[13px] font-medium text-slate-500">
-                    <Clock size={16} className="text-slate-400" />
+                  <div className="flex items-center gap-1.5 sm:gap-2 text-[12px] sm:text-[13px] font-medium text-slate-500">
+                    <Clock size={14} className="text-slate-400 sm:w-4 sm:h-4" />
                     <span>
                       {booking.startTime} - {booking.endTime}
                     </span>
                   </div>
                 </div>
 
-                <div className="flex flex-col items-end gap-1.5 min-w-[120px]">
+                <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2 sm:gap-1.5 min-w-[120px] bg-slate-50 sm:bg-transparent p-2.5 sm:p-0 rounded-xl sm:rounded-none">
                   <span className="text-[15px] font-semibold text-slate-900">
                     {new Intl.NumberFormat("vi-VN", {
                       style: "currency",

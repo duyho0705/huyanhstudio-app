@@ -392,24 +392,27 @@ const UserManagement = () => {
       {messageContext}
 
       {/* 1. Stats Section - Multi-column responsive */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
         {[
-          { icon: <Users size={28} />, label: "Tổng tài khoản", value: pagination.total, config: "text-indigo-600 bg-indigo-50" },
-          { icon: <UserCheck size={28} />, label: "Đang hoạt động", value: stats.active, config: "text-emerald-600 bg-emerald-50" },
-          { icon: <UserX size={28} />, label: "Đã khóa", value: stats.inactive, config: "text-rose-600 bg-rose-50" },
-          { icon: <ShieldCheck size={28} />, label: "Quản trị viên", value: stats.admin, config: "text-amber-600 bg-amber-50" }
+          { icon: <Users className="w-5 h-5 sm:w-7 sm:h-7" />, label: "Tổng", value: pagination.total, config: "text-indigo-600 bg-indigo-50" },
+          { icon: <UserCheck className="w-5 h-5 sm:w-7 sm:h-7" />, label: "Hoạt động", value: stats.active, config: "text-emerald-600 bg-emerald-50" },
+          { icon: <UserX className="w-5 h-5 sm:w-7 sm:h-7" />, label: "Đã khóa", value: stats.inactive, config: "text-rose-600 bg-rose-50" },
+          { icon: <ShieldCheck className="w-5 h-5 sm:w-7 sm:h-7" />, label: "Quản trị viên", value: stats.admin, config: "text-amber-600 bg-amber-50" }
         ].map((item, i) => (
-          <div key={i} className="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm hover:shadow-lg transition-all group relative overflow-hidden">
-            <div className="flex items-center gap-6 relative z-10">
-              <div className={`w-14 h-14 rounded-2xl ${item.config} flex items-center justify-center transition-transform group-hover:scale-110 duration-500`}>
-                {item.icon}
+          <div key={i} className="bg-white p-4 sm:p-8 rounded-2xl sm:rounded-[32px] border border-slate-200 shadow-sm hover:shadow-lg transition-all group relative overflow-hidden flex flex-col justify-between min-h-[90px] sm:min-h-0">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 relative z-10 w-full">
+              <div className="flex justify-between items-center w-full sm:w-auto">
+                 <div className={`w-8 h-8 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl ${item.config} flex items-center justify-center transition-transform group-hover:scale-110 duration-500`}>
+                  {item.icon}
+                 </div>
+                 <h3 className="text-xl sm:hidden font-black text-slate-900 m-0 leading-none">{item.value}</h3>
               </div>
               <div className="min-w-0">
-                <p className="text-[17px] font-medium text-slate-600 mb-0.5 mt-0">{item.label}</p>
-                <h3 className="text-xl lg:text-2xl font-black text-slate-900 m-0 leading-none">{item.value}</h3>
+                <p className="text-sm sm:text-base font-semibold text-slate-500 sm:text-slate-600 mb-0.5 mt-0">{item.label}</p>
+                <h3 className="hidden sm:block text-2xl font-black text-slate-900 m-0 leading-none">{item.value}</h3>
               </div>
             </div>
-            <div className="absolute -right-6 -bottom-6 opacity-[0.03] group-hover:opacity-[0.1] transition-all duration-700 group-hover:-rotate-12 scale-150">
+            <div className="absolute -right-4 -bottom-4 sm:-right-6 sm:-bottom-6 opacity-[0.03] group-hover:opacity-[0.1] transition-all duration-700 group-hover:-rotate-12 scale-150">
               {item.icon}
             </div>
           </div>

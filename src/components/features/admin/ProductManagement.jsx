@@ -174,18 +174,18 @@ const ProductManagement = () => {
       {contextHolder}
 
       {/* Stats Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-6">
         {[
-          { icon: <LayoutGrid size={26} strokeWidth={1.5} className="text-indigo-600" />, label: "Tổng sản phẩm", value: stats.total, config: "bg-indigo-100 border border-indigo-200/60" },
-          { icon: <Video size={26} strokeWidth={1.5} className="text-emerald-600" />, label: "Video nội dung", value: stats.videos, config: "bg-emerald-100 border border-emerald-200/60" },
+          { icon: <LayoutGrid className="w-6 h-6 sm:w-8 sm:h-8 text-indigo-600" strokeWidth={1.5} />, label: "Tổng", value: stats.total, config: "bg-indigo-100 border border-indigo-200/60" },
+          { icon: <Video className="w-6 h-6 sm:w-8 sm:h-8 text-emerald-600" strokeWidth={1.5} />, label: "Video", value: stats.videos, config: "bg-emerald-100 border border-emerald-200/60" },
         ].map((item, i) => (
-          <div key={i} className="bg-white p-7 rounded-2xl border border-slate-300 shadow-sm flex items-center gap-5 group">
-            <div className={`w-14 h-14 rounded-2xl ${item.config} flex items-center justify-center`}>
+          <div key={i} className="bg-white p-3 sm:p-7 rounded-2xl border border-slate-300 shadow-sm flex flex-col sm:flex-row items-center sm:items-center gap-3 sm:gap-5 group text-center sm:text-left">
+            <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl ${item.config} flex items-center justify-center`}>
               {item.icon}
             </div>
             <div>
-              <h4 className="text-[17px] font-medium text-slate-600">{item.label}</h4>
-              <p className="text-2xl font-black text-slate-900 tracking-tight">{item.value}</p>
+              <h4 className="text-sm sm:text-base font-semibold text-slate-500 sm:text-slate-600 whitespace-nowrap">{item.label}</h4>
+              <p className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">{item.value}</p>
             </div>
           </div>
         ))}

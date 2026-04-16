@@ -278,19 +278,19 @@ const ServiceManagement = () => {
       {contextHolder}
 
       {/* Stats Summary Panel */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6">
         {[
-          { icon: <Gem size={22} />, label: "Gói cao cấp", value: services.filter(s => (s.price || 0) > 10000000).length, config: "bg-amber-50 text-amber-600 border-amber-100" },
-          { icon: <ShoppingBag size={22} />, label: "Đang mở bán", value: services.filter(s => s.active).length, config: "bg-indigo-50 text-indigo-600 border-indigo-100" },
-          { icon: <Briefcase size={22} />, label: "Tổng dịch vụ", value: pagination.total, config: "bg-slate-50 text-slate-600 border-slate-100" }
+          { icon: <Gem className="w-5 h-5 sm:w-6 sm:h-6" />, label: "Cao cấp", value: services.filter(s => (s.price || 0) > 10000000).length, config: "bg-amber-50 text-amber-600 border-amber-100" },
+          { icon: <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6" />, label: "Đang bán", value: services.filter(s => s.active).length, config: "bg-indigo-50 text-indigo-600 border-indigo-100" },
+          { icon: <Briefcase className="w-5 h-5 sm:w-6 sm:h-6" />, label: "Tổng dịch vụ", value: pagination.total, config: "bg-slate-50 text-slate-600 border-slate-100" }
         ].map((item, i) => (
           <div key={i} className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200/60 shadow-sm flex items-center gap-4 sm:gap-5 group">
-            <div className={`w-11 h-11 sm:w-14 sm:h-14 rounded-xl border ${item.config} flex items-center justify-center shadow-sm shrink-0`}>
+            <div className={`w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-[20px] ${item.config} border-2 flex items-center justify-center shrink-0 shadow-sm`}>
               {item.icon}
             </div>
             <div>
-              <h4 className="text-[13px] sm:text-[14px] font-semibold text-slate-500 mb-0.5 sm:mb-1">{item.label}</h4>
-              <p className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">{item.value}</p>
+              <p className="text-sm sm:text-base font-semibold text-slate-500">{item.label}</p>
+              <h4 className="text-xl sm:text-[28px] font-black text-slate-900 tracking-tight leading-none mt-1">{item.value}</h4>
             </div>
           </div>
         ))}
