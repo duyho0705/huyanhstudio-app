@@ -1,11 +1,13 @@
-import { useState, useEffect } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import AdminSidebar from "./components/AdminSidebar";
 import AdminHeader from "./components/AdminHeader";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 import { notification } from "antd";
 import { AnimatePresence, motion } from "framer-motion";
+import { collection, onSnapshot, query } from "firebase/firestore";
+import { db } from "../../../api/firebase";
 
 const pageVariants = {
   initial: { opacity: 0, y: 15 },
@@ -68,10 +70,93 @@ const AdminLayout = () => {
 
     client.activate();
 
-    return () => {
-      if (client) client.deactivate();
-    };
+    return () => client.deactivate();
   }, []);
+
+  const isInitialChatLoad = useRef(true);
+  const pathRef = useRef(location.pathname);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    pathRef.current = location.pathname;
+  }, [location.pathname]);
+
+  // Global Chat Listener for Sound & Notification
+  useEffect(() => {
+    const q = query(collection(db, "chat_list"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      if (isInitialChatLoad.current) {
+        isInitialChatLoad.current = false;
+        return; // Don't notify on initial load
+      }
+
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === 'modified' || change.type === 'added') {
+          const data = change.doc.data();
+          // Only trigger if it's unread (meaning it's from customer)
+          if (data.unread === true) {
+            const isChatOpen = pathRef.current.includes('/admin/chat') && document.visibilityState === 'visible';
+            
+            if (!isChatOpen) {
+              // Play double-tone "Ba-Ding" (Messenger-like sound)
+              try {
+                const audio = new Audio("/messenger.mp3");
+                audio.play().catch(() => {
+                  // Fallback: Nếu không có file messenger.mp3 trong thư mục public, dùng âm thanh giả lập
+                  const AudioContext = window.AudioContext || window.webkitAudioContext;
+                  if (AudioContext) {
+                      const ctx = new AudioContext();
+                      
+                      // Tone 1 (Ba - 698Hz)
+                      const osc1 = ctx.createOscillator();
+                      const gain1 = ctx.createGain();
+                      osc1.connect(gain1);
+                      gain1.connect(ctx.destination);
+                      osc1.type = 'sine';
+                      osc1.frequency.setValueAtTime(698.46, ctx.currentTime);
+                      gain1.gain.setValueAtTime(0, ctx.currentTime);
+                      gain1.gain.linearRampToValueAtTime(0.4, ctx.currentTime + 0.02);
+                      gain1.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+                      osc1.start(ctx.currentTime);
+                      osc1.stop(ctx.currentTime + 0.15);
+
+                      // Tone 2 (Ding - 880Hz)
+                      const osc2 = ctx.createOscillator();
+                      const gain2 = ctx.createGain();
+                      osc2.connect(gain2);
+                      gain2.connect(ctx.destination);
+                      osc2.type = 'sine';
+                      osc2.frequency.setValueAtTime(880.00, ctx.currentTime + 0.1);
+                      gain2.gain.setValueAtTime(0, ctx.currentTime + 0.1);
+                      gain2.gain.linearRampToValueAtTime(0.4, ctx.currentTime + 0.12);
+                      gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+                      osc2.start(ctx.currentTime + 0.1);
+                      osc2.stop(ctx.currentTime + 0.4);
+                  }
+                });
+              } catch (e) {
+                console.log("Audio skipped", e);
+              }
+
+              // Show popup notification
+              notification.info({
+                message: "Tin nhắn mới từ " + (data.userName || "Khách hàng"),
+                description: data.lastMessage || "Đã gửi 1 tin đính kèm",
+                placement: "topRight",
+                duration: 5,
+                className: "cursor-pointer",
+                onClick: () => {
+                  navigate("/admin/chat");
+                }
+              });
+            }
+          }
+        }
+      });
+    });
+
+    return () => unsubscribe();
+  }, []); // Run once, using pathRef for location
 
   return (
     <div className="flex h-screen bg-[#f8fafc] relative antialiased overflow-hidden">
@@ -91,9 +176,9 @@ const AdminLayout = () => {
         onClose={() => setIsSidebarOpen(false)}
       />
 
-      <div className="flex-1 flex flex-col w-full lg:ml-[260px] h-screen transition-all duration-500 ease-in-out admin-area overflow-hidden">
+      <div className="flex-1 flex flex-col w-full lg:pl-[260px] h-screen transition-all duration-500 ease-in-out admin-area overflow-hidden">
         <AdminHeader toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
-        <main className="flex-1 p-4 md:p-6 lg:p-6 overflow-y-auto w-full max-w-full mx-auto relative scroll-smooth">
+        <main className={`flex-1 overflow-y-auto w-full max-w-full mx-auto relative scroll-smooth ${location.pathname.includes("/admin/chat") ? "p-0" : "p-4 md:p-6 lg:p-6"}`}>
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}
@@ -102,7 +187,7 @@ const AdminLayout = () => {
               exit="exit"
               variants={pageVariants}
               transition={pageTransition}
-              className="w-full"
+              className="w-full h-full"
             >
               <Outlet />
             </motion.div>

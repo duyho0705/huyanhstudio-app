@@ -65,7 +65,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
       <div className="p-6 pb-8">
         <div className="flex items-center gap-4 cursor-pointer">
           <div className="relative">
-            <div className="absolute inset-0 bg-blue-600 blur-xl opacity-20"></div>
+            <div className="absolute inset-0 bg-[#35104C] blur-xl opacity-20"></div>
             <div className="relative w-9 h-9">
               <div className="absolute inset-0 bg-brand-orange rounded-md rotate-12"></div>
               <div className="absolute inset-0 bg-[#6CD1FD] rounded-md -rotate-6"></div>
@@ -88,7 +88,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
         {/* Sliding Active Indicator */}
         {activeIndex !== -1 && (
           <div 
-            className="absolute left-3 right-3 bg-blue-600 rounded-xl transition-all duration-300 ease-out z-0 h-[48px] shadow-lg shadow-blue-500/20"
+            className="absolute left-3 right-3 bg-[#35104C] rounded-xl transition-all duration-300 ease-out z-0 h-[48px] shadow-lg shadow-[#35104C]/20"
             style={{ 
               top: `${8 + activeIndex * (48 + 4)}px`, // 8px padding + index * (height + gap)
             }}
@@ -117,9 +117,6 @@ const AdminSidebar = ({ isOpen, onClose }) => {
                     </span>
                     <span className="text-[15px] font-semibold tracking-tight">{item.label}</span>
                   </div>
-                  {isActive && (
-                    <div className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_12px_rgba(255,255,255,0.8)]"></div>
-                  )}
                 </>
               )}
             </NavLink>

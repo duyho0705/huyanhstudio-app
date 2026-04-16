@@ -41,8 +41,8 @@ const AdminDropdown = ({ options, value, onChange, className = "" }) => {
                 setIsOpen(false);
               }}
               className={`w-full text-left px-4 py-2 text-[13px] font-medium transition-all ${value === option.value
-                  ? 'bg-blue-50 text-blue-600 border-r-2 border-blue-500'
-                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                ? 'bg-blue-50 text-blue-600 border-r-2 border-blue-500'
+                : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                 }`}
             >
               {option.label}

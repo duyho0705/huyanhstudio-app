@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiMessageCircle, FiX, FiSend, FiUser } from 'react-icons/fi';
+import { FiMessageCircle, FiX, FiSend, FiUser, FiClock } from 'react-icons/fi';
 import { AuthContext } from '../../../api/AuthContext';
 import { db } from '../../../api/firebase';
 import {
@@ -21,6 +21,23 @@ const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
   const scrollRef = useRef(null);
 
   const currentUserId = user?.email || user?.username || user?.id || user?.customerName;
+
+  const formatMessageTime = (isoString) => {
+    if (!isoString) return '';
+    const date = new Date(isoString);
+    const now = new Date();
+
+    const isToday = date.getDate() === now.getDate() && date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+    const yesterday = new Date(now);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const isYesterday = date.getDate() === yesterday.getDate() && date.getMonth() === yesterday.getMonth() && date.getFullYear() === yesterday.getFullYear();
+
+    const timeStr = date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+
+    if (isToday) return timeStr;
+    if (isYesterday) return `Hôm qua ${timeStr}`;
+    return `${timeStr} ${date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' })}`;
+  };
 
   useEffect(() => {
     if (!currentUserId) return;
@@ -121,32 +138,71 @@ const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
               )}
               {messages.map((msg, idx) => (
                 <div key={idx} className={`flex ${msg.senderId === currentUserId ? 'justify-end' : 'justify-start'}`}>
-                  <div
-                    className={`max-w-[85%] p-3 px-4 rounded-2xl text-[15px] leading-relaxed shadow-sm ${msg.senderId === currentUserId
+                  <div className={`flex flex-col ${msg.senderId === currentUserId ? 'items-end' : 'items-start'} max-w-[85%]`}>
+                    <div
+                      className={`px-4 py-2.5 rounded-2xl text-[15px] leading-relaxed shadow-sm ${msg.senderId === currentUserId
                         ? 'bg-[#35104C] text-white rounded-tr-none'
                         : 'bg-white text-slate-700 border border-slate-100 rounded-tl-none'
-                      }`}
-                  >
-                    {msg.content}
+                        }`}
+                    >
+                      {msg.imageUrl && (
+                        <div className="mb-2 max-w-[200px] rounded-xl overflow-hidden cursor-pointer hover:opacity-90 transition-opacity bg-black/5">
+                          <a href={msg.imageUrl} target="_blank" rel="noopener noreferrer">
+                            <img src={msg.imageUrl} alt="attachment" className="w-full h-auto object-cover rounded-lg" />
+                          </a>
+                        </div>
+                      )}
+                      <div className="flex flex-wrap items-end gap-3">
+                          <span className="flex-1 max-w-full break-words">
+                              {msg.content !== "Đã gửi một hình ảnh 📸" && msg.content}
+                          </span>
+                          <span className={`text-[10px] sm:text-[11px] mt-1 shrink-0 ${msg.senderId === currentUserId ? 'text-white/70' : 'text-slate-400'}`}>
+                              {formatMessageTime(msg.timestamp)}
+                          </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
 
             {/* Input Form */}
-            <form onSubmit={handleSendMessage} className="p-4 bg-white border-t border-slate-100 flex items-center gap-2">
-              <input
-                type="text"
-                placeholder="Nhập nội dung..."
-                className="flex-1 bg-slate-100/50 border-none rounded-2xl px-4 py-2.5 text-[15px] focus:ring-1 focus:ring-[#35104C]/10 outline-none transition-all"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-              />
+            <form onSubmit={handleSendMessage} className="p-3 bg-white border-t border-slate-100 flex items-center gap-2">
+              <button
+                  type="button"
+                  className="w-8 h-8 rounded-full bg-[#35104C] hover:bg-[#4a166a] text-white flex items-center justify-center transition-all shrink-0 shadow-sm"
+              >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+              </button>
+              
+              <div className="flex-1 relative flex items-center bg-slate-100 rounded-full px-2 shadow-inner border border-slate-200/50">
+                <input
+                  type="text"
+                  placeholder="Nhập nội dung..."
+                  className="w-full pl-3 pr-10 py-2 bg-transparent border-none text-[14px] focus:ring-0 outline-none placeholder:text-slate-500 text-slate-800"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                />
+                
+                <div className="absolute right-1">
+                    <button 
+                        type="button"
+                        className="w-7 h-7 rounded-full hover:bg-slate-200/80 text-[#35104C] flex items-center justify-center transition-all"
+                    >
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2" stroke="white" strokeWidth="2" strokeLinecap="round" fill="none"></path><circle cx="9" cy="9" r="1.5" fill="white"></circle><circle cx="15" cy="9" r="1.5" fill="white"></circle></svg>
+                    </button>
+                </div>
+              </div>
+
               <button
                 type="submit"
-                className="p-3 bg-[#35104C] text-[#6CD1FD] rounded-xl shadow-lg border-none active:scale-90 transition-all"
+                disabled={!inputValue.trim()}
+                className={`w-9 h-9 rounded-full flex items-center justify-center transition-all shrink-0 ${!inputValue.trim()
+                        ? "text-slate-300 pointer-events-none"
+                        : "text-[#35104C] hover:bg-slate-100 active:scale-95"
+                    }`}
               >
-                <FiSend size={18} />
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" className="ml-0.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </button>
             </form>
           </motion.div>

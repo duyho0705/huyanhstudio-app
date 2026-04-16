@@ -43,7 +43,7 @@ const AdminDashboard = () => {
     try {
       const response = await statsApi.getSummary();
       const data = response.data?.data || response.data;
-      
+
       setStats({
         totalBookings: data.totalBookings || 0,
         pendingBookings: data.pendingBookings || 0,
@@ -69,7 +69,7 @@ const AdminDashboard = () => {
       title: "Tổng đặt lịch",
       value: stats.totalBookings,
       icon: <BarChart3 size={20} />,
-      iconBg: "bg-blue-100 text-blue-600",
+      iconBg: "bg-[#35104C]/10 text-[#35104C]",
       link: "/admin/bookings",
     },
     {
@@ -96,7 +96,7 @@ const AdminDashboard = () => {
   ];
 
   const quickLinks = [
-    { title: "Đặt lịch", icon: <CalendarPlus size={18} />, link: "/admin/bookings", color: "text-blue-600" },
+    { title: "Đặt lịch", icon: <CalendarPlus size={18} />, link: "/admin/bookings", color: "text-[#35104C]" },
     { title: "Dịch vụ", icon: <Headset size={18} />, link: "/admin/services", color: "text-violet-600" },
     { title: "Sản phẩm", icon: <ShoppingBag size={18} />, link: "/admin/products", color: "text-emerald-600" },
     { title: "Người dùng", icon: <UserPlus size={18} />, link: "/admin/users", color: "text-amber-600" },
@@ -118,9 +118,8 @@ const AdminDashboard = () => {
       {/* Welcome header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
-          <p className="text-[12px] sm:text-sm text-slate-600 font-medium mb-1">{getGreeting()}</p>
-          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-            {user?.fullName || "Admin"}
+          <h1 className="text-xl sm:text-[19px] font-medium text-slate-700 tracking-tight mb-1">
+            {getGreeting()}, <span className="font-medium text-black">{user?.customerName}</span>
           </h1>
         </div>
         <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide w-full sm:w-auto">

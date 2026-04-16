@@ -103,9 +103,8 @@ const Navbar = () => {
 
       {/* Menu mobile */}
       <div
-        className={`md:hidden absolute top-full left-0 w-full bg-white border-t border-gray-100 shadow-lg transition-all duration-300 ${
-          open ? "max-h-96 opacity-100" : "max-h-0 opacity-0 overflow-hidden"
-        }`}
+        className={`md:hidden absolute top-full left-0 w-full bg-white border-t border-gray-100 shadow-lg transition-all duration-300 ${open ? "max-h-96 opacity-100" : "max-h-0 opacity-0 overflow-hidden"
+          }`}
       >
         <div className="flex flex-col py-4 px-6 gap-1">
           {[
