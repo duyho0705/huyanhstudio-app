@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { message, Table, Button, Tag, Switch, Tooltip, Modal } from "antd";
+import { message, Table, Button, Tag, Switch, Tooltip, Modal, Input } from "antd";
 import {
   Plus,
   ChevronLeft,
@@ -16,7 +16,8 @@ import {
   Camera,
   Video,
   Zap,
-  Heart
+  Heart,
+  AlertTriangle
 } from "lucide-react";
 import serviceApi from "../../../api/serviceApi";
 import ServiceForm from "./components/ServiceForm";
@@ -34,6 +35,7 @@ const ServiceManagement = () => {
   const [selectedService, setSelectedService] = useState(null);
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
   const [deletingService, setDeletingService] = useState(null);
 
   const [messageApi, contextHolder] = message.useMessage();
@@ -117,6 +119,7 @@ const ServiceManagement = () => {
 
   const handleDelete = (record) => {
     setDeletingService(record);
+    setDeleteConfirmText("");
     setIsDeleteModalOpen(true);
   };
 
@@ -390,7 +393,7 @@ const ServiceManagement = () => {
           {pagination.total > 0 && (
             <div className="p-6 bg-slate-50/30 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-6">
               <div className="px-3 py-1 bg-white border border-slate-100 rounded-xl text-[13px] font-medium text-slate-500 shadow-sm">Hiển thị
-                <span> {pagination.current}/ {Math.ceil(pagination.total / pagination.pageSize)}</span>
+                <span> {pagination.current} / {Math.ceil(pagination.total / (pagination.pageSize || 10))}</span>
               </div>
 
               <div className="flex items-center gap-2">
@@ -402,7 +405,7 @@ const ServiceManagement = () => {
                 />
                 <Button
                   className="h-9 w-9 flex items-center justify-center rounded-lg bg-white border-slate-200 text-slate-500 shadow-sm hover:border-blue-400 hover:text-blue-600 transition-all p-0"
-                  disabled={pagination.current >= Math.ceil(pagination.total / pagination.pageSize)}
+                  disabled={pagination.current >= Math.ceil(pagination.total / (pagination.pageSize || 10))}
                   onClick={() => handleTableChange({ current: pagination.current + 1, pageSize: pagination.pageSize })}
                   icon={<ChevronRight size={16} />}
                 />
@@ -415,30 +418,62 @@ const ServiceManagement = () => {
       <Modal
         open={isDeleteModalOpen}
         onCancel={() => setIsDeleteModalOpen(false)}
-        onOk={confirmDelete}
-        title={
-          <div className="flex items-center gap-3 py-2">
-            <div className="w-10 h-10 rounded-full bg-red-50 text-red-500 flex items-center justify-center shrink-0">
-              <Trash2 size={20} strokeWidth={2.5} />
-            </div>
-            <span className="text-[17px] font-bold text-slate-900 leading-tight">Xóa dịch vụ vĩnh viễn</span>
-          </div>
-        }
-        okText="Vâng, xóa ngay"
-        cancelText="Hủy bỏ"
-        okButtonProps={{
-          className: "bg-red-500 border-none rounded-xl font-medium shadow-sm h-10 px-5 text-[13px]",
-          danger: true
-        }}
-        cancelButtonProps={{
-          className: "rounded-xl font-medium h-10 px-5 border border-slate-200 text-slate-600 text-[13px]"
-        }}
+        footer={null}
         centered
-        width={440}
-        closeIcon={false}
+        width={480}
+        closable={false}
+        className="premium-delete-modal"
       >
-        <div className="pt-2 pb-5 text-slate-500 text-[14px] leading-relaxed">
-          Thao tác này sẽ gỡ bỏ hoàn toàn <strong className="text-slate-800 font-semibold">{deletingService?.name}</strong>. Mọi dữ liệu liên đới không thể khôi phục lại. Bạn chắc chắn chứ?
+        <div className="space-y-6">
+          <div className="space-y-2">
+            <h3 className="text-[24px] font-bold text-slate-900 leading-tight">Xóa vĩnh viễn?</h3>
+            <p className="text-[15px] text-slate-500 leading-relaxed font-medium">
+              Thao tác này sẽ xóa vĩnh viễn dịch vụ và tất cả dữ liệu liên quan. Hành động này không thể hoàn tác.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-[14px] font-semibold text-slate-700">
+                Nhập tên dịch vụ để xác nhận: <span className="text-red-500">"{deletingService?.name}"</span>
+              </label>
+              <Input
+                value={deleteConfirmText}
+                onChange={(e) => setDeleteConfirmText(e.target.value)}
+                placeholder="Nhập tên chính xác..."
+                className="h-11 rounded-xl border-slate-200 focus:border-red-500 focus:ring-red-100 font-medium text-[14px]"
+              />
+            </div>
+
+            <div className="flex items-start gap-4 p-4 bg-red-50 rounded-xl border border-red-100">
+              <div className="w-6 h-6 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0">
+                <AlertTriangle size={14} strokeWidth={2.5} />
+              </div>
+              <p className="text-[12px] font-bold text-red-800 leading-relaxed">
+                Cảnh báo: Việc xóa "{deletingService?.name}" sẽ ảnh hưởng đến các dữ liệu booking trong lịch sử.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex gap-3 pt-2">
+            <button
+              onClick={() => setIsDeleteModalOpen(false)}
+              className="flex-1 h-12 rounded-xl border border-slate-200 bg-white text-slate-700 font-bold text-[14px] hover:bg-slate-50 transition-colors"
+            >
+              Hủy bỏ
+            </button>
+            <button
+              onClick={confirmDelete}
+              disabled={deleteConfirmText !== deletingService?.name}
+              className={`flex-[1.5] h-12 rounded-xl font-bold text-[14px] shadow-lg shadow-red-100 transition-all ${
+                deleteConfirmText === deletingService?.name
+                  ? "bg-red-600 text-white hover:bg-red-700"
+                  : "bg-slate-100 text-slate-400 cursor-not-allowed border-none shadow-none"
+              }`}
+            >
+              Xác nhận xóa dịch vụ
+            </button>
+          </div>
         </div>
       </Modal>
 

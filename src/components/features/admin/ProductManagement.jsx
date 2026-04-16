@@ -17,7 +17,8 @@ import {
   Eye,
   MoreVertical,
   Layers,
-  CalendarDays
+  CalendarDays,
+  AlertTriangle
 } from "lucide-react";
 import productApi from "../../../api/productApi";
 import ProductForm from "./components/ProductForm";
@@ -34,6 +35,7 @@ const ProductManagement = () => {
 
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   const [messageApi, contextHolder] = message.useMessage();
@@ -219,107 +221,109 @@ const ProductManagement = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-8 pb-4">
-          {loading ? (
-            Array.from({ length: 10 }).map((_, i) => (
-              <div key={i} className="bg-white rounded-3xl border border-slate-100 p-5 space-y-5 animate-pulse">
-                <div className="aspect-video bg-slate-50 rounded-2xl"></div>
-                <div className="h-4 bg-slate-50 rounded-full w-3/4"></div>
-                <div className="flex justify-between">
-                  <div className="h-10 bg-slate-50 rounded-xl w-24"></div>
-                  <div className="h-10 bg-slate-50 rounded-xl w-10"></div>
-                </div>
-              </div>
-            ))
-          ) : products.length === 0 ? (
-            <div className="col-span-full flex flex-col items-center justify-center py-40 text-slate-400 bg-slate-50/20 rounded-[40px] border border-dashed border-slate-200">
-              <div className="w-24 h-24 rounded-3xl bg-white shadow-xl shadow-slate-200 flex items-center justify-center text-slate-200 mb-8">
-                <Package size={48} strokeWidth={1} />
-              </div>
-              <h3 className="text-2xl font-black text-slate-900 mb-2">
-                {searchText ? "Không tìm thấy dữ liệu" : "Trung tâm lưu trữ trống"}
-              </h3>
-              <p className="text-[10px] font-black text-slate-400  max-w-xs text-center leading-relaxed">
-                {searchText
-                  ? "Vui lòng kiểm tra lại từ khóa hoặc thay đổi tiêu chí tìm kiếm"
-                  : "Hệ thống chưa nhận được bản ghi sản phẩm nào từ bạn"}
-              </p>
-            </div>
-          ) : (
-            products.map((p) => (
-              <div key={p.id} className="group bg-white rounded-[28px] border border-slate-200 shadow-sm overflow-hidden flex flex-col">
-                <div className="relative aspect-video overflow-hidden">
-                  <img
-                    src={getThumbnail(p.videoUrl)}
-                    alt={p.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 backdrop-blur-[1px] flex items-center justify-center">
-                    <button
-                      onClick={() => window.open(p.videoUrl, "_blank", "noopener,noreferrer")}
-                      className="w-14 h-14 rounded-2xl bg-white text-slate-950 flex items-center justify-center shadow-2xl transform"
-                    >
-                      <Play size={20} fill="currentColor" strokeWidth={0} />
-                    </button>
-                  </div>
-                </div>
-
-                <div className="p-6 flex-1 flex flex-col justify-between">
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[14px] font-semibold text-slate-600 truncate">Tác giả: {p.author || "Chưa cập nhật"}</span>
-                    </div>
-                    <h3 className="font-semibold text-slate-900 text-[15px] leading-tight line-clamp-2 cursor-pointer">{p.title}</h3>
-                  </div>
-
-                  <div className="flex items-center justify-end pt-6 mt-4 border-t border-slate-100">
-                    <div className="flex items-center gap-2">
-                      <Button
-                        type="text"
-                        onClick={() => handleEdit(p)}
-                        className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-400 p-0"
-                      >
-                        <Edit size={18} strokeWidth={2.5} />
-                      </Button>
-                      <Button
-                        type="text"
-                        onClick={() => handleDelete(p)}
-                        className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-400 p-0"
-                      >
-                        <Trash2 size={18} strokeWidth={2.5} />
-                      </Button>
+        <div className="rounded-[28px] border-2 border-slate-200 overflow-hidden bg-white shadow-inner">
+          <div className="p-3 sm:p-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-8 pb-4">
+              {loading ? (
+                Array.from({ length: 10 }).map((_, i) => (
+                  <div key={i} className="bg-white rounded-3xl border border-slate-100 p-5 space-y-5 animate-pulse">
+                    <div className="aspect-video bg-slate-50 rounded-2xl"></div>
+                    <div className="h-4 bg-slate-50 rounded-full w-3/4"></div>
+                    <div className="flex justify-between">
+                      <div className="h-10 bg-slate-50 rounded-xl w-24"></div>
+                      <div className="h-10 bg-slate-50 rounded-xl w-10"></div>
                     </div>
                   </div>
+                ))
+              ) : products.length === 0 ? (
+                <div className="col-span-full flex flex-col items-center justify-center py-40 text-slate-400">
+                  <div className="w-24 h-24 rounded-3xl bg-white shadow-xl shadow-slate-200 flex items-center justify-center text-slate-200 mb-8">
+                    <Package size={48} strokeWidth={1} />
+                  </div>
+                  <h3 className="text-2xl font-black text-slate-900 mb-2">
+                    {searchText ? "Không tìm thấy dữ liệu" : "Trung tâm lưu trữ trống"}
+                  </h3>
+                  <p className="text-[10px] font-black text-slate-400  max-w-xs text-center leading-relaxed">
+                    {searchText
+                      ? "Vui lòng kiểm tra lại từ khóa hoặc thay đổi tiêu chí tìm kiếm"
+                      : "Hệ thống chưa nhận được bản ghi sản phẩm nào từ bạn"}
+                  </p>
                 </div>
-              </div>
-            ))
-          )}
-        </div>
+              ) : (
+                products.map((p) => (
+                  <div key={p.id} className="group bg-white rounded-[28px] border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+                    <div className="relative aspect-video overflow-hidden">
+                      <img
+                        src={getThumbnail(p.videoUrl)}
+                        alt={p.title}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 backdrop-blur-[1px] flex items-center justify-center">
+                        <button
+                          onClick={() => window.open(p.videoUrl, "_blank", "noopener,noreferrer")}
+                          className="w-14 h-14 rounded-2xl bg-white text-slate-950 flex items-center justify-center shadow-2xl transform"
+                        >
+                          <Play size={20} fill="currentColor" strokeWidth={0} />
+                        </button>
+                      </div>
+                    </div>
 
-        {pagination.total > 0 && (
-          <div className="p-8 bg-slate-50/50 border-t border-slate-100 rounded-[28px] flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div className="px-5 py-2.5 bg-white border border-slate-100 rounded-2xl text-[11px] font-black text-slate-600 shadow-sm flex items-center gap-2">
-              <span>{Math.min(pagination.total, (pagination.current - 1) * pagination.pageSize + 1)} — {Math.min(pagination.current * pagination.pageSize, pagination.total)}</span>
-              <span className="text-slate-200">/</span>
-              <span className="text-slate-500">{pagination.total} Hồ sơ</span>
-            </div>
+                    <div className="p-6 flex-1 flex flex-col justify-between">
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[14px] font-semibold text-slate-600 truncate">Tác giả: {p.author || "Chưa cập nhật"}</span>
+                        </div>
+                        <h3 className="font-semibold text-slate-900 text-[15px] leading-tight line-clamp-2 cursor-pointer">{p.title}</h3>
+                      </div>
 
-            <div className="flex items-center gap-3">
-              <Button
-                className="h-12 w-12 flex items-center justify-center rounded-2xl bg-white border-slate-200 text-slate-600 shadow-sm"
-                disabled={pagination.current === 1}
-                onClick={() => handlePageChange(pagination.current - 1)}
-                icon={<ChevronLeft size={20} />}
-              />
-              <Button
-                className="h-12 w-12 flex items-center justify-center rounded-2xl bg-white border-slate-200 text-slate-600 shadow-sm"
-                disabled={pagination.current >= Math.ceil(pagination.total / pagination.pageSize)}
-                onClick={() => handlePageChange(pagination.current + 1)}
-                icon={<ChevronRight size={20} />}
-              />
+                      <div className="flex items-center justify-end pt-6 mt-4 border-t border-slate-100">
+                        <div className="flex items-center gap-2">
+                          <Button
+                            type="text"
+                            onClick={() => handleEdit(p)}
+                            className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-400 p-0"
+                          >
+                            <Edit size={18} strokeWidth={2.5} />
+                          </Button>
+                          <Button
+                            type="text"
+                            onClick={() => handleDelete(p)}
+                            className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-400 p-0"
+                          >
+                            <Trash2 size={18} strokeWidth={2.5} />
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
-        )}
+
+          {pagination.total > 0 && (
+            <div className="p-6 bg-slate-50/30 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-6">
+              <div className="px-3 py-1 bg-white border border-slate-100 rounded-xl text-[13px] font-medium text-slate-500 shadow-sm">Hiển thị
+                <span> {pagination.current} / {Math.ceil(pagination.total / (pagination.pageSize || 10))}</span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Button
+                  className="h-9 w-9 flex items-center justify-center rounded-lg bg-white border-slate-200 text-slate-500 shadow-sm hover:border-blue-400 hover:text-blue-600 transition-all p-0"
+                  disabled={pagination.current === 1}
+                  onClick={() => handlePageChange(pagination.current - 1)}
+                  icon={<ChevronLeft size={16} />}
+                />
+                <Button
+                  className="h-9 w-9 flex items-center justify-center rounded-lg bg-white border-slate-200 text-slate-500 shadow-sm hover:border-blue-400 hover:text-blue-600 transition-all p-0"
+                  disabled={pagination.current >= Math.ceil(pagination.total / (pagination.pageSize || 10))}
+                  onClick={() => handlePageChange(pagination.current + 1)}
+                  icon={<ChevronRight size={16} />}
+                />
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       <ProductForm
@@ -333,56 +337,61 @@ const ProductManagement = () => {
         open={isDeleteModalOpen}
         onCancel={() => setIsDeleteModalOpen(false)}
         footer={null}
-        width={440}
         centered
+        width={540}
         closable={false}
-        className="premium-admin-modal"
+        className="premium-delete-modal"
       >
-        {selectedProduct && (
-          <div className="p-8 space-y-8">
-            <div className="flex flex-col items-center text-center space-y-4">
-              <div className="w-20 h-20 rounded-3xl bg-red-50 text-red-500 flex items-center justify-center shadow-xl shadow-red-100">
-                <Trash2 size={32} strokeWidth={2.5} />
-              </div>
-              <div>
-                <h3 className="text-2xl font-black text-slate-900">Loại bỏ sản phẩm</h3>
-                <p className="text-[10px] font-black text-slate-400 mt-1">Hành động này không thể hoàn tác</p>
-              </div>
-            </div>
+        <div className="space-y-8">
+          <div className="space-y-3">
+            <h3 className="text-[26px] font-bold text-slate-900 leading-tight">Xóa sản phẩm</h3>
+            <p className="text-[15px] text-slate-500 leading-relaxed font-medium">
+              Thao tác này sẽ xóa vĩnh viễn sản phẩm và tất cả dữ liệu liên quan. Hành động này không thể hoàn tác.
+            </p>
+          </div>
 
-            <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100 flex items-center gap-5">
-              <img
-                src={getThumbnail(selectedProduct.videoUrl)}
-                alt={selectedProduct.title}
-                className="w-24 h-16 rounded-xl object-cover shadow-sm grayscale"
+          <div className="space-y-6">
+            <div className="space-y-3">
+              <label className="text-[15px] font-semibold text-slate-700">
+                Nhập tên sản phẩm để xác nhận: <span className="text-red-500">"{selectedProduct?.title}"</span>
+              </label>
+              <Input
+                value={deleteConfirmText}
+                onChange={(e) => setDeleteConfirmText(e.target.value)}
+                placeholder="Nhập tên chính xác..."
+                className="h-12 rounded-xl border-slate-200 focus:border-red-500 focus:ring-red-100 font-medium text-[15px]"
               />
-              <div className="overflow-hidden">
-                <h4 className="text-xs font-black text-slate-900 truncate mb-1">
-                  {selectedProduct.title}
-                </h4>
-                <div className="flex items-center gap-1.5 opacity-30">
-                  <Film size={12} />
-                  <span className="text-[9px] font-black">Video Content</span>
-                </div>
-              </div>
             </div>
 
-            <div className="flex gap-4 pt-4">
-              <button
-                onClick={() => setIsDeleteModalOpen(false)}
-                className="flex-1 h-16 rounded-2xl bg-white border border-slate-100 text-slate-900 font-bold text-[10px] shadow-sm"
-              >
-                Hủy bỏ
-              </button>
-              <button
-                onClick={confirmDelete}
-                className="flex-1 h-16 rounded-2xl bg-red-600 text-white font-bold text-[10px] shadow-xl shadow-red-200"
-              >
-                Xác nhận
-              </button>
+            <div className="flex items-start gap-4 p-5 bg-red-50 rounded-2xl border border-red-100">
+              <div className="w-7 h-7 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0">
+                <AlertTriangle size={16} strokeWidth={2.5} />
+              </div>
+              <p className="text-[15px] font-medium text-red-800 leading-relaxed">
+                Cảnh báo: Việc xóa "{selectedProduct?.title}" sẽ loại bỏ hoàn toàn file media và các thông tin liên quan khỏi thư viện.
+              </p>
             </div>
           </div>
-        )}
+
+          <div className="flex gap-4 pt-2">
+            <button
+              onClick={() => setIsDeleteModalOpen(false)}
+              className="flex-1 h-13 py-3 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium text-[15px] hover:bg-slate-50 transition-colors"
+            >
+              Hủy bỏ
+            </button>
+            <button
+              onClick={confirmDelete}
+              disabled={deleteConfirmText !== selectedProduct?.title}
+              className={`flex-[1.5] h-13 py-3 rounded-xl font-medium text-[15px] shadow-lg shadow-red-100 transition-all ${deleteConfirmText === selectedProduct?.title
+                ? "bg-red-600 text-white hover:bg-red-700"
+                : "bg-slate-100 text-slate-400 cursor-not-allowed border-none shadow-none"
+                }`}
+            >
+              Xác nhận xóa sản phẩm
+            </button>
+          </div>
+        </div>
       </Modal>
     </div>
   );

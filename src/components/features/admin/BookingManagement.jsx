@@ -46,7 +46,8 @@ import {
   AlertCircle,
   ShoppingBag,
   Timer,
-  UserX
+  UserX,
+  AlertTriangle
 } from "lucide-react";
 import { FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
 import dayjs from "dayjs";
@@ -113,6 +114,7 @@ const BookingManagement = () => {
   const [isBulkDeleteModalOpen, setIsBulkDeleteModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
   const [selectedDetailBooking, setSelectedDetailBooking] = useState(null);
 
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -221,6 +223,7 @@ const BookingManagement = () => {
 
   const openDeleteModal = useCallback((record) => {
     setSelectedBooking(record);
+    setDeleteConfirmText("");
     setIsDeleteModalOpen(true);
   }, []);
 
@@ -681,38 +684,62 @@ const BookingManagement = () => {
       />
 
       <Modal
-        title={null}
         open={isDeleteModalOpen}
-        onOk={confirmDelete}
         onCancel={() => setIsDeleteModalOpen(false)}
         footer={null}
         centered
-        width={400}
-        className="delete-confirmation-modal !max-w-[95vw]"
+        width={540}
+        closable={false}
+        className="premium-delete-modal"
       >
-        <div className="p-4 text-center">
-          <div className="w-16 h-16 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
-            <Trash2 size={32} />
+        <div className="space-y-8">
+          <div className="space-y-3">
+            <h3 className="text-[26px] font-bold text-slate-900 leading-tight">Xóa lịch thu âm</h3>
+            <p className="text-[15px] text-slate-500 leading-relaxed font-medium">
+              Thao tác này sẽ xóa vĩnh viễn đơn đặt và các thông tin liên quan. Hành động này không thể hoàn tác.
+            </p>
           </div>
-          <h3 className="text-xl font-black text-slate-900  mb-2">Gỡ bỏ đơn hàng?</h3>
-          <p className="text-slate-500 text-sm font-medium mb-8">Thao tác này sẽ xóa hồ sơ đơn hàng vĩnh viễn và không thể khôi phục.</p>
 
-          {selectedBooking && (
-            <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 mb-8 text-left space-y-2">
-              <div className="flex justify-between">
-                <span className="text-[10px] font-black text-slate-400">Mã đơn</span>
-                <span className="text-xs font-black text-slate-700">{selectedBooking.bookingCode}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-[10px] font-black text-slate-400">Khách hàng</span>
-                <span className="text-xs font-black text-slate-700">{selectedBooking.customerName}</span>
-              </div>
+          <div className="space-y-6">
+            <div className="space-y-3">
+              <label className="text-[15px] font-semibold text-slate-700">
+                Nhập mã đơn để xác nhận: <span className="text-red-500">"{selectedBooking?.bookingCode}"</span>
+              </label>
+              <Input
+                value={deleteConfirmText}
+                onChange={(e) => setDeleteConfirmText(e.target.value)}
+                placeholder="Nhập mã đơn chính xác..."
+                className="h-12 rounded-xl border-slate-200 focus:border-red-500 focus:ring-red-100 font-medium text-[15px]"
+              />
             </div>
-          )}
 
-          <div className="flex gap-3">
-            <Button onClick={() => setIsDeleteModalOpen(false)} className="flex-1 h-12 rounded-none font-bold text-[10px]">Quay lại</Button>
-            <Button onClick={confirmDelete} danger type="primary" className="flex-1 h-12 rounded-none bg-red-600 border-none font-bold text-[10px]">Xác nhận xóa</Button>
+            <div className="flex items-start gap-4 p-5 bg-red-50 rounded-2xl border border-red-100">
+              <div className="w-7 h-7 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0">
+                <AlertTriangle size={16} strokeWidth={2.5} />
+              </div>
+              <p className="text-[13px] font-bold text-red-800 leading-relaxed">
+                Cảnh báo: Việc xóa "{selectedBooking?.bookingCode}" sẽ loại bỏ hoàn toàn lịch trình và doanh thu liên quan đến đơn này.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex gap-4 pt-2">
+            <button
+              onClick={() => setIsDeleteModalOpen(false)}
+              className="flex-1 h-13 py-3 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium text-[15px] hover:bg-slate-50 transition-colors"
+            >
+              Hủy bỏ
+            </button>
+            <button
+              onClick={confirmDelete}
+              disabled={deleteConfirmText !== selectedBooking?.bookingCode}
+              className={`flex-[1.5] h-13 py-3 rounded-xl font-medium text-[15px] shadow-lg shadow-red-100 transition-all ${deleteConfirmText === selectedBooking?.bookingCode
+                ? "bg-red-600 text-white hover:bg-red-700"
+                : "bg-slate-100 text-slate-400 cursor-not-allowed border-none shadow-none"
+                }`}
+            >
+              Xác nhận lịch này
+            </button>
           </div>
         </div>
       </Modal>

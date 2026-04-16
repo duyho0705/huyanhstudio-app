@@ -12,9 +12,7 @@ import AdminDashboard from "./components/features/admin/AdminDashboard";
 import BookingManagement from "./components/features/admin/BookingManagement";
 import ProductManagement from "./components/features/admin/ProductManagement";
 import ServiceManagement from "./components/features/admin/ServiceManagement";
-import StudioManagement from "./components/features/admin/StudioManagement";
 import UserManagement from "./components/features/admin/UserManagement";
-import DemoManagement from "./components/features/admin/DemoManagement";
 import ChatManagement from "./components/features/admin/ChatManagement";
 import ProductShowcase from "./components/features/user/ProductShowcase";
 import Services from "./components/features/user/Services";
@@ -197,8 +195,6 @@ function AppContent() {
               <Route path="bookings" element={<BookingManagement />} />
               <Route path="products" element={<ProductManagement />} />
               <Route path="services" element={<ServiceManagement />} />
-              <Route path="demos" element={<DemoManagement />} />
-              <Route path="studios" element={<StudioManagement />} />
               <Route path="users" element={<UserManagement />} />
               <Route path="chat" element={<ChatManagement />} />
             </Route>

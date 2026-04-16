@@ -39,7 +39,8 @@ import {
   ShieldAlert,
   ShieldCheck,
   UserCheck,
-  UserX
+  UserX,
+  AlertTriangle
 } from "lucide-react";
 import { FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
 import dayjs from "dayjs";
@@ -81,6 +82,7 @@ const UserManagement = () => {
   const [selectedDetailUser, setSelectedDetailUser] = useState(null);
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
   const [deletingUser, setDeletingUser] = useState(null);
 
   const [notification, setNotification] = useState({
@@ -201,6 +203,7 @@ const UserManagement = () => {
 
   const handleDelete = (record) => {
     setDeletingUser(record);
+    setDeleteConfirmText("");
     setIsDeleteModalOpen(true);
   };
 
@@ -404,12 +407,9 @@ const UserManagement = () => {
                 <p className="text-[13px] sm:text-[15px] font-bold text-slate-500 mb-1 truncate">{item.label}</p>
                 <h3 className="text-2xl sm:text-3xl font-black text-slate-900 m-0 leading-none">{item.value}</h3>
               </div>
-              <div className={`w-12 h-12 sm:w-14 sm:h-14 shrink-0 rounded-2xl ${item.config} flex items-center justify-center transition-transform group-hover:scale-110 duration-500`}>
+              <div className={`w-12 h-12 sm:w-14 sm:h-14 shrink-0 rounded-2xl ${item.config} flex items-center justify-center transition-transform group-hover:scale-110 duration-500 relative z-10`}>
                 {item.icon}
               </div>
-            </div>
-            <div className="absolute -right-4 -bottom-4 opacity-[0.03] group-hover:opacity-[0.08] transition-all duration-700 group-hover:-rotate-12 scale-[2]">
-              {item.icon}
             </div>
           </div>
         ))}
@@ -683,24 +683,60 @@ const UserManagement = () => {
       <Modal
         open={isDeleteModalOpen}
         onCancel={() => setIsDeleteModalOpen(false)}
-        onOk={confirmDelete}
-        title={null}
         footer={null}
         centered
-        width={440}
-        styles={{ content: { borderRadius: '28px', padding: '32px' } }}
+        width={480}
+        closable={false}
+        className="premium-delete-modal"
       >
-        <div className="text-center space-y-6">
-          <div className="w-20 h-20 bg-red-50 text-red-500 rounded-[32px] flex items-center justify-center mx-auto shadow-inner">
-            <Trash2 size={36} strokeWidth={2.5} />
+        <div className="space-y-6">
+          <div className="space-y-2">
+            <h3 className="text-[24px] font-bold text-slate-900 leading-tight">Xóa người dùng</h3>
+            <p className="text-[15px] text-slate-500 leading-relaxed font-medium">
+              Thao tác này sẽ xóa vĩnh viễn tài khoản người dùng và tất cả dữ liệu liên quan. Hành động này không thể hoàn tác.
+            </p>
           </div>
-          <div>
-            <h3 className="text-2xl font-black text-slate-900  m-0">Xóa vĩnh viễn?</h3>
-            <p className="text-slate-500 text-[14px] font-medium mt-2">Hành động này sẽ xóa hoàn toàn tài khoản <br /><span className="text-red-600 font-bold text-[15px]">{deletingUser?.customerName}</span> khỏi hệ thống.</p>
+
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-[15px] font-semibold text-slate-700">
+                Nhập tên khách hàng để xác nhận: <span className="text-red-500">"{deletingUser?.customerName}"</span>
+              </label>
+              <Input
+                value={deleteConfirmText}
+                onChange={(e) => setDeleteConfirmText(e.target.value)}
+                placeholder="Nhập tên chính xác..."
+                className="h-11 rounded-xl border-slate-200 focus:border-red-500 focus:ring-red-100 font-medium text-[14px]"
+              />
+            </div>
+
+            <div className="flex items-start gap-4 p-4 bg-red-50 rounded-xl border border-red-100">
+              <div className="w-6 h-6 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0">
+                <AlertTriangle size={14} strokeWidth={2.5} />
+              </div>
+              <p className="text-[15px] font-medium text-red-800 leading-relaxed">
+                Cảnh báo: Việc xóa "{deletingUser?.customerName}" sẽ loại bỏ toàn bộ lịch sử giao dịch và tài khoản đăng nhập của người dùng này.
+              </p>
+            </div>
           </div>
-          <div className="grid grid-cols-2 gap-3 pt-2">
-            <Button onClick={() => setIsDeleteModalOpen(false)} className="h-14 rounded-2xl font-black text-[11px] border-slate-200 text-slate-600">Hủy bỏ</Button>
-            <Button onClick={confirmDelete} danger type="primary" className="h-14 rounded-2xl bg-red-600 border-none font-black text-[11px] shadow-lg shadow-red-200">Xác nhận xóa</Button>
+
+          <div className="flex gap-3 pt-2">
+            <button
+              onClick={() => setIsDeleteModalOpen(false)}
+              className="flex-1 h-12 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium text-[15px] hover:bg-slate-50 transition-colors"
+            >
+              Hủy bỏ
+            </button>
+            <button
+              onClick={confirmDelete}
+              disabled={deleteConfirmText !== deletingUser?.customerName}
+              className={`flex-[1.5] h-12 rounded-xl font-medium text-[15px] shadow-lg shadow-red-100 transition-all ${deleteConfirmText === deletingUser?.customerName
+                ? "bg-red-600 text-white hover:bg-red-700"
+                : "bg-slate-100 text-slate-400 cursor-not-allowed border-none shadow-none"
+                }`}
+            >
+              Xác nhận xóa
+            </button>
           </div>
         </div>
       </Modal>
