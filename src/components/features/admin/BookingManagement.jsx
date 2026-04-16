@@ -64,10 +64,10 @@ import statsApi from "../../../api/statsApi";
 const { Option } = Select;
 
 const bookingStatuses = [
-  { value: "PENDING", label: "Chờ xác nhận", color: "orange", classes: "bg-orange-50 text-orange-600 border-orange-100" },
-  { value: "CONFIRMED", label: "Đã xác nhận", color: "purple", classes: "bg-purple-50 text-purple-600 border-purple-100" },
-  { value: "COMPLETED", label: "Hoàn thành", color: "green", classes: "bg-green-50 text-green-600 border-green-100" },
-  { value: "CANCELLED", label: "Đã hủy", color: "red", classes: "bg-red-50 text-red-600 border-red-100" },
+  { value: "PENDING", label: "Chờ xác nhận", color: "orange", classes: "bg-orange-500 text-white border-orange-600" },
+  { value: "CONFIRMED", label: "Đã xác nhận", color: "blue", classes: "bg-blue-600 text-white border-blue-700" },
+  { value: "COMPLETED", label: "Hoàn thành", color: "green", classes: "bg-emerald-600 text-white border-emerald-700" },
+  { value: "CANCELLED", label: "Đã hủy", color: "red", classes: "bg-red-600 text-white border-red-700" },
 ];
 
 const BookingManagement = () => {
@@ -154,7 +154,7 @@ const BookingManagement = () => {
         console.error("Error fetching stats:", err);
       }
     };
-    
+
     fetchStats();
   }, []); // Initial load only
 
@@ -311,10 +311,10 @@ const BookingManagement = () => {
 
   const getStatusIcon = (statusValue) => {
     switch (statusValue) {
-      case "PENDING": return <Clock size={14} />;
-      case "CONFIRMED": return <CalendarCheck size={14} />;
-      case "COMPLETED": return <CheckCircle2 size={14} />;
-      case "CANCELLED": return <XCircle size={14} />;
+      case "PENDING": return <Clock size={24} />;
+      case "CONFIRMED": return <CalendarCheck size={24} />;
+      case "COMPLETED": return <CheckCircle2 size={24} />;
+      case "CANCELLED": return <XCircle size={24} />;
       default: return null;
     }
   };
@@ -327,7 +327,7 @@ const BookingManagement = () => {
         key: "shortCode",
         width: 120,
         render: (code, record) => (
-          <div className="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-[13px] font-semibold tracking-wider border border-slate-200 inline-block shadow-sm">
+          <div className="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-[13px] font-medium tracking-wider border border-slate-200 inline-block shadow-sm">
             {code || record.bookingCode?.slice(0, 8)}
           </div>
         ),
@@ -339,7 +339,7 @@ const BookingManagement = () => {
         width: 200,
         render: (name, record) => (
           <div className="flex flex-col">
-            <span className="text-slate-900 font-semibold text-[15px] tracking-tight leading-none mb-1">{name}</span>
+            <span className="text-slate-900 font-medium text-[14px] tracking-tight leading-none mb-1">{name}</span>
             {record.needConsultation && (
               <span className="text-[10px] font-bold text-amber-500 flex items-center gap-1 uppercase tracking-wider">
                 <AlertCircle size={10} /> Cần tư vấn
@@ -354,7 +354,7 @@ const BookingManagement = () => {
         key: "phone",
         width: 150,
         render: (phone) => (
-          <span className="text-slate-600 text-[15px] font-semibold">
+          <span className="text-slate-600 text-[14px] font-medium">
             {phone}
           </span>
         ),
@@ -363,10 +363,21 @@ const BookingManagement = () => {
         title: <span className="text-[15px] font-semibold text-slate-600">Ngày thu</span>,
         dataIndex: "recordDate",
         key: "recordDate",
+        width: 130,
+        render: (date) => (
+          <span className="text-slate-600 text-[14px] font-semibold">
+            {dayjs(date).format("DD/MM/YYYY")}
+          </span>
+        ),
+      },
+      {
+        title: <span className="text-[15px] font-semibold text-slate-600">Ngày đặt</span>,
+        dataIndex: "createdDate",
+        key: "createdDate",
         width: 140,
         render: (date) => (
-          <span className="text-slate-600 text-[15px] font-semibold">
-            {dayjs(date).format("DD/MM/YYYY")}
+          <span className="text-slate-600 text-[14px] font-medium">
+            {date ? dayjs(date).format("DD/MM/YYYY") : "---"}
           </span>
         ),
       },
@@ -377,9 +388,9 @@ const BookingManagement = () => {
         width: 240,
         render: (svcs) => {
           if (!svcs || (Array.isArray(svcs) && svcs.length === 0)) return <span className="text-slate-300 italic text-xs">N/A</span>;
-          
+
           const serviceList = Array.isArray(svcs) ? svcs : [svcs];
-          
+
           if (serviceList.length > 1) {
             return (
               <Tooltip
@@ -479,49 +490,49 @@ const BookingManagement = () => {
       {messageContext}
 
       {/* Stats Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
         {[
-          { 
-            icon: <ShoppingBag size={26} strokeWidth={1.5} className="text-indigo-600" />, 
-            label: "Tổng đơn hàng", 
-            value: globalStats.totalBookings, 
-            config: "bg-indigo-100 border border-indigo-200/60" 
+          {
+            icon: <ShoppingBag size={26} strokeWidth={1.5} className="text-indigo-600" />,
+            label: "Tổng đơn hàng",
+            value: globalStats.totalBookings,
+            config: "bg-indigo-100 border border-indigo-200/60"
           },
-          { 
-            icon: <Timer size={26} strokeWidth={1.5} className="text-amber-600" />, 
-            label: "Chờ xác nhận", 
-            value: globalStats.pendingBookings, 
-            config: "bg-amber-100 border border-amber-200/60" 
+          {
+            icon: <Timer size={26} strokeWidth={1.5} className="text-amber-600" />,
+            label: "Đang xử lý",
+            value: (globalStats.pendingBookings || 0) + (globalStats.confirmedBookings || 0),
+            config: "bg-amber-100 border border-amber-200/60"
           },
-          { 
-            icon: <CheckCircle2 size={26} strokeWidth={1.5} className="text-emerald-600" />, 
-            label: "Hoàn thành", 
-            value: globalStats.completedBookings, 
-            config: "bg-emerald-100 border border-emerald-200/60" 
+          {
+            icon: <CheckCircle2 size={26} strokeWidth={1.5} className="text-emerald-600" />,
+            label: "Hoàn thành",
+            value: globalStats.completedBookings,
+            config: "bg-emerald-100 border border-emerald-200/60"
           },
-          { 
-            icon: <UserX size={26} strokeWidth={1.5} className="text-rose-500" />, 
-            label: "Đã hủy", 
-            value: globalStats.cancelledBookings, 
-            config: "bg-rose-100 border border-rose-200/60" 
+          {
+            icon: <UserX size={26} strokeWidth={1.5} className="text-rose-500" />,
+            label: "Đã hủy",
+            value: globalStats.cancelledBookings,
+            config: "bg-rose-100 border border-rose-200/60"
           }
         ].map((item, i) => (
-          <div key={i} className="bg-white p-7 rounded-2xl border border-slate-300 shadow-sm flex items-center gap-5 transition-all hover:shadow-xl hover:shadow-slate-200/50 group">
-            <div className={`w-14 h-14 rounded-2xl ${item.config} flex items-center justify-center transition-transform group-hover:scale-110`}>
+          <div key={i} className="bg-white p-3 sm:p-5 md:p-7 rounded-2xl border border-slate-300 shadow-sm flex items-center gap-3 sm:gap-5 transition-all hover:shadow-xl hover:shadow-slate-200/50 group">
+            <div className={`w-10 h-10 sm:w-14 sm:h-14 rounded-2xl ${item.config} flex items-center justify-center transition-transform group-hover:scale-110 shadow-sm shrink-0`}>
               {item.icon}
             </div>
             <div>
-              <h4 className="text-[17px] font-medium text-slate-600 group-hover:text-slate-900 transition-colors">{item.label}</h4>
-              <p className="text-2xl font-black text-slate-900 tracking-tight">{item.value}</p>
+              <h4 className="text-[12px] sm:text-[17px] font-medium text-slate-500 group-hover:text-slate-900 transition-colors">{item.label}</h4>
+              <p className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight">{item.value}</p>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm space-y-6">
+      <div className="bg-white p-4 sm:p-6 rounded-[32px] border border-slate-200 shadow-sm space-y-6">
         <div className="flex flex-col lg:flex-row lg:items-center gap-4 pb-6 border-b border-slate-50">
-          <h2 className="text-[20px] font-bold text-slate-800 whitespace-nowrap mr-auto flex items-center gap-3">
-            <div className="w-1.5 h-8 bg-blue-600 rounded-full"></div>
+          <h2 className="text-[16px] sm:text-[20px] font-bold text-slate-800 whitespace-nowrap mr-auto flex items-center gap-3">
+            <div className="w-1.5 h-5 sm:h-8 bg-blue-600 rounded-full"></div>
             Danh sách lịch thu âm
           </h2>
 
@@ -549,45 +560,110 @@ const BookingManagement = () => {
 
 
         <div className="rounded-[28px] border-2 border-slate-200 overflow-hidden bg-white shadow-inner">
-          <Table
-            rowSelection={rowSelection}
-            columns={columns}
-            dataSource={Array.isArray(bookings) ? bookings : []}
-            rowKey="id"
-            loading={loading}
-            pagination={false}
-            onChange={handleTableChange}
-            scroll={{ x: 1200 }}
-            className="custom-admin-table ant-table-custom ant-table-booking"
-            locale={{
-              emptyText: (
-                <div className="py-20 flex flex-col items-center opacity-30">
-                  <SlidersHorizontal size={48} className="mb-4" />
-                  <span className="text-[15px] text-slate-600 font-semibold ">Chưa có lịch thu âm nào</span>
-                </div>
-              )
-            }}
-          />
+          {/* Desktop Table */}
+          <div className="hidden lg:block">
+            <Table
+              rowSelection={rowSelection}
+              columns={columns}
+              dataSource={Array.isArray(bookings) ? bookings : []}
+              rowKey="id"
+              loading={loading}
+              pagination={false}
+              onChange={handleTableChange}
+              size={window.innerWidth < 1024 ? "small" : "default"}
+              className="custom-admin-table ant-table-custom ant-table-booking"
+              locale={{
+                emptyText: (
+                  <div className="py-20 flex flex-col items-center opacity-30">
+                    <SlidersHorizontal size={48} className="mb-4" />
+                    <span className="text-[15px] text-slate-600 font-semibold ">Chưa có lịch thu âm nào</span>
+                  </div>
+                )
+              }}
+            />
+          </div>
+
+          {/* Mobile Card View */}
+          <div className="lg:hidden">
+            {loading ? (
+              <div className="p-4 sm:p-6 space-y-4">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="h-24 bg-slate-50 rounded-2xl animate-pulse border border-slate-100"></div>
+                ))}
+              </div>
+            ) : (Array.isArray(bookings) && bookings.length > 0) ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 p-3 sm:p-6">
+                {bookings.map((booking) => (
+                  <div key={booking.id} className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-[14px] font-semibold text-slate-900 truncate">{booking.customerName}</h4>
+                        <p className="text-[12px] font-medium text-slate-500 mt-0.5">{booking.phone}</p>
+                      </div>
+                      <div className="px-2 py-0.5 bg-slate-100 text-slate-700 rounded-lg text-[11px] font-medium tracking-wider border border-slate-200 shrink-0">
+                        {booking.bookingCode || booking.bookingCode?.slice(0, 8)}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4 py-2 border-y border-slate-50 text-[12px]">
+                      <div className="flex items-center gap-1.5 text-slate-600">
+                        <CalendarDays size={13} className="text-blue-500" />
+                        <span className="font-semibold">{dayjs(booking.recordDate).format("DD/MM/YYYY")}</span>
+                      </div>
+                      {booking.needConsultation && (
+                        <span className="text-[10px] font-bold text-amber-500 flex items-center gap-1 uppercase tracking-wider">
+                          <AlertCircle size={10} /> Cần tư vấn
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <Select
+                        value={booking.status}
+                        onChange={(val) => handleStatusUpdate(booking.id, val)}
+                        className="w-[140px] select-custom-sm"
+                        size="small"
+                      >
+                        {bookingStatuses.map((s) => (
+                          <Option key={s.value} value={s.value}>
+                            <span className="text-[12px] font-semibold">{s.label}</span>
+                          </Option>
+                        ))}
+                      </Select>
+                      <div className="flex items-center gap-1">
+                        <Button type="text" onClick={() => handleViewDetails(booking)} className="w-8 h-8 rounded-lg flex items-center justify-center text-blue-500 p-0"><Search size={16} /></Button>
+                        <Button type="text" onClick={() => handleEdit(booking)} className="w-8 h-8 rounded-lg flex items-center justify-center text-amber-500 p-0"><Edit size={16} /></Button>
+                        <Button type="text" onClick={() => openDeleteModal(booking)} className="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 p-0"><Trash2 size={16} /></Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="py-16 flex flex-col items-center opacity-30">
+                <SlidersHorizontal size={40} className="mb-4" />
+                <span className="text-[13px] text-slate-600 font-semibold">Chưa có lịch thu âm nào</span>
+              </div>
+            )}
+          </div>
 
           {pagination.total > 0 && (
             <div className="p-6 bg-slate-50/30 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-6">
-              <div className="px-5 py-2.5 bg-white border border-slate-100 rounded-xl text-[11px] font-black text-slate-600 uppercase tracking-widest shadow-sm flex items-center gap-2">
-                <span>{Math.min(pagination.total, (pagination.current - 1) * pagination.pageSize + 1)} — {Math.min(pagination.current * pagination.pageSize, pagination.total)}</span>
+              <div className="px-3 py-1 bg-white border border-slate-100 rounded-xl text-[13px] font-medium text-slate-500 shadow-sm">Hiển thị
+                <span> {pagination.current} / {Math.ceil(pagination.total / (pagination.pageSize || 10))}</span>
               </div>
 
               <div className="flex items-center gap-2">
                 <Button
-                  className="h-12 w-12 flex items-center justify-center rounded-xl bg-white border-slate-100 text-slate-600 shadow-sm"
+                  className="h-9 w-9 flex items-center justify-center rounded-lg bg-white border-slate-200 text-slate-500 shadow-sm hover:border-blue-400 hover:text-blue-600 transition-all p-0"
                   disabled={pagination.current === 1}
                   onClick={() => handleTableChange({ current: pagination.current - 1, pageSize: pagination.pageSize })}
-                  icon={<ChevronLeft size={20} />}
+                  icon={<ChevronLeft size={16} />}
                 />
 
                 <Button
-                  className="h-12 w-12 flex items-center justify-center rounded-xl bg-white border-slate-100 text-slate-600 shadow-sm"
+                  className="h-9 w-9 flex items-center justify-center rounded-lg bg-white border-slate-200 text-slate-500 shadow-sm hover:border-blue-400 hover:text-blue-600 transition-all p-0"
                   disabled={pagination.current >= Math.ceil(pagination.total / pagination.pageSize)}
                   onClick={() => handleTableChange({ current: pagination.current + 1, pageSize: pagination.pageSize })}
-                  icon={<ChevronRight size={20} />}
+                  icon={<ChevronRight size={16} />}
                 />
               </div>
             </div>
@@ -613,7 +689,7 @@ const BookingManagement = () => {
         footer={null}
         centered
         width={400}
-        className="delete-confirmation-modal"
+        className="delete-confirmation-modal !max-w-[95vw]"
       >
         <div className="p-4 text-center">
           <div className="w-16 h-16 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
@@ -680,170 +756,178 @@ const BookingManagement = () => {
         </div>
       </Modal>
 
-      {/* Detail Modal */}
+      {/* Detail Modal Redesign */}
       <Modal
         open={isDetailModalOpen}
         onCancel={() => setIsDetailModalOpen(false)}
         footer={null}
-        width={1000}
+        width={900}
         centered
         closable={false}
-        className="booking-detail-modal"
+        className="premium-detail-modal !max-w-[95vw]"
+        styles={{ content: { padding: 0, borderRadius: '24px', overflow: 'hidden' } }}
       >
         {selectedDetailBooking && (
-          <div className="p-4 lg:p-10 space-y-10">
-            {/* Header Detail */}
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 border-b border-slate-100 pb-10">
-              <div className="flex items-center gap-6">
-                <div className="w-20 h-20 rounded-3xl bg-slate-900 flex items-center justify-center text-white shadow-2xl shadow-slate-200">
-                  <Calendar size={36} strokeWidth={1.5} />
+          <div className="flex flex-col bg-white">
+            {/* Modal Header - Light Theme */}
+            <div className="bg-slate-50 px-4 py-6 sm:px-8 sm:py-10 text-slate-900 relative overflow-hidden border-b border-slate-200">
+              {/* Subtle Decorative Element */}
+              <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl -mr-32 -mt-32"></div>
+
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-3">
+                    <span className="px-3 py-1 bg-white border border-slate-200 text-slate-500 rounded-lg text-[14px] font-medium shadow-sm">
+                      Chi tiết đặt lịch
+                    </span>
+                    <span className="text-slate-300 font-bold">/</span>
+                    <span className="text-slate-400 font-bold tracking-widest uppercase text-[12px]">
+                      #{selectedDetailBooking.bookingCode}
+                    </span>
+                  </div>
+                  <h2 className="text-2xl sm:text-4xl font-bold text-slate-900 mb-0">
+                    {selectedDetailBooking.customerName}
+                  </h2>
                 </div>
-                <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-[0.2em] border ${bookingStatuses.find(s => s.value === selectedDetailBooking.status)?.classes}`}>
+
+                <div className="flex flex-col items-end gap-3">
+                  <div className={`px-5 py-2 rounded-2xl flex items-center gap-2 border shadow-lg ${bookingStatuses.find(s => s.value === selectedDetailBooking.status)?.classes}`}>
+                    {getStatusIcon(selectedDetailBooking.status)}
+                    <span className="font-semibold text-[15px]">
                       {bookingStatuses.find(s => s.value === selectedDetailBooking.status)?.label}
                     </span>
-                    {selectedDetailBooking.needConsultation && (
-                      <span className="px-3 py-1 bg-amber-50 text-amber-600 rounded-lg text-[10px] font-black uppercase tracking-[0.2em] border border-amber-100 flex items-center gap-1">
-                        <Phone size={10} /> Cần tư vấn
-                      </span>
-                    )}
                   </div>
-                  <h2 className="text-3xl font-black text-slate-900 tracking-tight uppercase">{selectedDetailBooking.customerName}</h2>
-                  <p className="text-slate-400 text-xs font-bold uppercase tracking-widest flex items-center gap-2 mt-1">
-                    <CalendarClock size={14} className="text-blue-500" />
-                    Khởi tạo: {dayjs(selectedDetailBooking.createdDate).format("DD/MM/YYYY HH:mm")}
-                  </p>
                 </div>
               </div>
+            </div>
 
-              <div className="flex items-center gap-3">
+            {/* Modal Content */}
+            <div className="px-4 py-6 sm:px-8 sm:py-10">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-10">
+
+                {/* Left Column: Customer & Timeline */}
+                <div className="md:col-span-1 space-y-6 sm:space-y-8">
+                  <section>
+                    <h4 className="text-[16px] font-medium text-slate-600  mb-4 flex items-center gap-2">
+                      <User size={20} className="text-blue-500" /> Liên hệ
+                    </h4>
+                    <div className="space-y-4">
+                      <div>
+                        <p className="text-[16px] font-medium text-slate-900 mb-0.5">{selectedDetailBooking.phone}</p>
+                        <p className="text-[13px] font-medium text-slate-600">Số điện thoại</p>
+                      </div>
+                      <div>
+                        <p className="text-[16px] font-medium text-slate-900 mb-0.5">{selectedDetailBooking.email || "Chưa cập nhật"}</p>
+                        <p className="text-[13px] font-medium text-slate-600">Email liên lạc</p>
+                      </div>
+                    </div>
+                  </section>
+
+                  <div className="h-px bg-slate-100"></div>
+
+                  <section>
+                    <h4 className="text-[15px] font-medium text-slate-600 mb-4 flex items-center gap-2">
+                      <Clock size={20} className="text-amber-500" /> Thời gian
+                    </h4>
+                    <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
+                        <p className="text-[14px] font-bold text-slate-700 m-0">
+                          {selectedDetailBooking.createdDate ? dayjs(selectedDetailBooking.createdDate).format("DD/MM/YYYY") : "---"}
+                        </p>
+                      </div>
+                      <p className="text-[14px] font-medium text-slate-600 m-0 pl-4">
+                        Đặt lịch lúc: <span className="text-slate-600 ml-1">
+                          {selectedDetailBooking.createdDate ? dayjs(selectedDetailBooking.createdDate).format("HH:mm:ss") : "---"}
+                        </span>
+                      </p>
+                    </div>
+                  </section>
+                </div>
+
+                {/* Right Column: Services & Studio */}
+                <div className="md:col-span-2 space-y-6 sm:space-y-10">
+                  {/* Booking Info Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8">
+                    <div className="bg-white p-6 rounded-[24px] border border-slate-200 shadow-sm relative overflow-hidden group">
+                      <p className="text-[16px] font-medium text-slate-600 mb-2 flex items-center gap-2">
+                        <CalendarDays size={18} className="text-blue-500" /> Ngày thu âm
+                      </p>
+                      <p className="text-[19px] font-medium text-slate-700">
+                        {dayjs(selectedDetailBooking.recordDate).format("DD/MM/YYYY")}
+                      </p>
+                      {dayjs(selectedDetailBooking.recordDate).isBefore(dayjs(), 'day') ? (
+                        <span className="text-[13px] font-bold text-red-500">Đã quá hạn</span>
+                      ) : (
+                        <span className="text-[13px] font-bold text-emerald-500">Sắp đến</span>
+                      )}
+                    </div>
+
+                    <div className="bg-white p-6 rounded-[24px] border border-slate-200 shadow-sm relative overflow-hidden group">
+                      <p className="text-[16px] font-medium text-slate-600 mb-2 flex items-center gap-2">
+                        <Home size={18} className="text-orange-500" /> Phòng thu
+                      </p>
+                      <p className="text-[19px] font-medium text-slate-700">
+                        {typeof selectedDetailBooking.studioRoom === "object" ? selectedDetailBooking.studioRoom?.studioName : selectedDetailBooking.studioRoom}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Services List */}
+                  <section>
+                    <h4 className="text-[15px] font-medium text-slate-600 mb-4 flex items-center gap-2">
+                      <Package size={20} className="text-indigo-500" /> Dịch vụ
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {Array.isArray(selectedDetailBooking.services)
+                        ? selectedDetailBooking.services.map((s, i) => (
+                          <div key={i} className="px-4 py-2 bg-indigo-50 border border-indigo-100 text-indigo-700 font-semibold rounded-xl text-[14px] flex items-center gap-2">
+                            <CheckCircle size={18} strokeWidth={3} />
+                            {s.name || s}
+                          </div>
+                        ))
+                        : (
+                          <div className="px-4 py-2 bg-indigo-50 border border-indigo-100 text-indigo-700 font-bold rounded-xl text-[12px] flex items-center gap-2">
+                            <CheckCircle size={18} strokeWidth={3} />
+                            {selectedDetailBooking.services?.name || selectedDetailBooking.services}
+                          </div>
+                        )
+                      }
+                    </div>
+                  </section>
+
+                  {/* Notes */}
+                  <section>
+                    <h4 className="text-[15px] font-medium text-slate-600 mb-4 flex items-center gap-2">
+                      <FileText size={20} className="text-slate-500" /> Ghi chú
+                    </h4>
+                    <div className="p-6 bg-slate-50 rounded-[20px] border-l-4 border-slate-900 text-[15px] font-medium text-slate-600 leading-relaxed italic shadow-inner">
+                      {selectedDetailBooking.note || "Không có ghi chú"}
+                    </div>
+                  </section>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-4 py-4 sm:px-8 sm:py-6 bg-slate-50 border-t border-slate-200 flex items-center justify-end">
+              <div className="flex gap-3 w-full md:w-auto">
                 <Button
+                  onClick={() => setIsDetailModalOpen(false)}
+                  className="flex-1 md:flex-none h-12 px-10 rounded-xl bg-white border border-slate-300 font-bold text-[13px] text-slate-700 shadow-sm hover:!bg-white hover:!text-slate-700 hover:!border-slate-300 transition-none"
+                >
+                  Đóng
+                </Button>
+                <Button
+                  type="primary"
                   onClick={() => {
                     setIsDetailModalOpen(false);
                     handleEdit(selectedDetailBooking);
                   }}
-                  className="h-14 px-8 rounded-2xl font-black uppercase tracking-widest text-[10px] border-slate-200"
+                  className="flex-1 md:flex-none h-12 px-8 rounded-xl bg-slate-900 border-none font-medium text-[14px] text-white shadow-lg shadow-slate-200 hover:!bg-slate-900 hover:!text-white transition-none active:scale-95"
                 >
-                  Chỉnh sửa
+                  Chỉnh sửa lịch
                 </Button>
-                <Button
-                  type="primary"
-                  onClick={() => setIsDetailModalOpen(false)}
-                  className="h-14 px-8 rounded-2xl bg-slate-900 border-none font-black uppercase tracking-widest text-[10px] shadow-xl shadow-slate-200"
-                >
-                  Đóng cửa sổ
-                </Button>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-              {/* Information Groups */}
-              <div className="space-y-10">
-                <section className="space-y-6">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
-                      <FileText size={18} />
-                    </div>
-                    <h4 className="text-sm font-black text-slate-900 uppercase tracking-widest">Chi tiết đặt lịch</h4>
-                  </div>
-
-                  <div className="bg-slate-50 rounded-[24px] border border-slate-100 p-8 space-y-5">
-                    <div className="grid grid-cols-2 gap-6">
-                      <div>
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Ngày thu hình</p>
-                        <p className="text-sm font-bold text-slate-700 flex items-center gap-2">
-                          <CalendarDays size={16} className="text-blue-500" />
-                          {dayjs(selectedDetailBooking.recordDate).format("DD/MM/YYYY")}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Dịch vụ</p>
-                        <div className="flex flex-wrap gap-1">
-                          {Array.isArray(selectedDetailBooking.services)
-                            ? selectedDetailBooking.services.map((s, i) => (
-                              <Tag key={i} className="!m-0 bg-white border-slate-200 text-slate-600 font-bold px-2 py-0.5 rounded text-[10px]">{s.name || s}</Tag>
-                            ))
-                            : <Tag className="!m-0 bg-white border-slate-200 text-slate-600 font-bold px-2 py-0.5 rounded text-[10px]">{selectedDetailBooking.services?.name || selectedDetailBooking.services}</Tag>
-                          }
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="pt-5 border-t border-slate-200/50">
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 flex items-center gap-2">
-                        <Home size={12} /> Studio assigned
-                      </p>
-                      <p className="text-sm font-bold text-slate-700">
-                        {typeof selectedDetailBooking.studioRoom === "object" ? selectedDetailBooking.studioRoom?.studioName : selectedDetailBooking.studioRoom}
-                      </p>
-                    </div>
-
-                    <div className="pt-5 border-t border-slate-200/50">
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-2">
-                        <FileText size={12} /> Ghi chú nội bộ
-                      </p>
-                      <div className="p-4 bg-white rounded-2xl border border-slate-100 text-sm font-medium text-slate-500 italic leading-relaxed">
-                        {selectedDetailBooking.note || "Không có ghi chú đặc biệt cho đơn hàng này."}
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-
-              </div>
-
-              <div className="space-y-10">
-                <section className="space-y-6">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-none bg-green-50 text-green-600 flex items-center justify-center">
-                      <Phone size={18} />
-                    </div>
-                    <h4 className="text-sm font-black text-slate-900 uppercase tracking-widest">Hồ sơ khách hàng</h4>
-                  </div>
-                  <div className="bg-slate-50 rounded-none p-10 space-y-8 relative overflow-hidden border border-slate-100">
-                    <div className="space-y-1">
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Họ và tên</p>
-                      <p className="text-2xl font-black text-slate-900 tracking-tight">{selectedDetailBooking.customerName}</p>
-                    </div>
-
-                    <div className="grid grid-cols-1 gap-6">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-none bg-white border border-slate-100 shadow-sm flex items-center justify-center text-blue-500">
-                          <Phone size={20} />
-                        </div>
-                        <div>
-                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Hotline</p>
-                          <p className="font-black text-slate-700 tracking-wider text-base">{selectedDetailBooking.phone}</p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-none bg-white border border-slate-100 shadow-sm flex items-center justify-center text-blue-500">
-                          <Mail size={20} />
-                        </div>
-                        <div className="overflow-hidden">
-                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Thư điện tử</p>
-                          <p className="font-bold text-slate-700 truncate text-sm">{selectedDetailBooking.email || "N/A"}</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="pt-6 border-t border-slate-200 flex items-center justify-between">
-                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Loại khách hàng</span>
-                      <div className="px-5 py-2 bg-slate-900 rounded-none">
-                        <span className="text-[10px] font-black text-white uppercase tracking-[0.2em] flex items-center gap-2">
-                          <User size={12} className="text-blue-400" />
-                          {selectedDetailBooking.userBooking || selectedDetailBooking.user ? "Standard Membership" : "Guest Account"}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="absolute top-0 right-0 p-8">
-                      <CheckCircle2 size={80} className="text-slate-100" />
-                    </div>
-                  </div>
-                </section>
               </div>
             </div>
           </div>

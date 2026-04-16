@@ -118,8 +118,8 @@ const AdminDashboard = () => {
       {/* Welcome header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
-          <p className="text-sm text-slate-400 font-medium mb-1">{getGreeting()}</p>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+          <p className="text-[12px] sm:text-sm text-slate-600 font-medium mb-1">{getGreeting()}</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
             {user?.fullName || "Admin"}
           </h1>
         </div>
@@ -128,7 +128,7 @@ const AdminDashboard = () => {
             <Link
               key={i}
               to={item.link}
-              className="h-9 px-3.5 flex items-center gap-2 rounded-lg border border-slate-200 bg-white text-sm font-medium text-slate-600 hover:border-slate-300 hover:text-slate-900 transition-all"
+              className="h-9 px-3.5 flex items-center gap-2 rounded-lg border border-slate-200 bg-white text-sm font-medium text-slate-600"
             >
               <span className={item.color}>{item.icon}</span>
               <span className="hidden lg:inline">{item.title}</span>
@@ -138,21 +138,21 @@ const AdminDashboard = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {cards.map((card, index) => (
           <Link
             key={index}
             to={card.link}
-            className="group p-5 rounded-xl bg-white border border-slate-200 hover:border-slate-300 transition-all"
+            className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200 shadow-sm"
           >
-            <div className="flex items-center justify-between mb-3">
-              <div className={`w-9 h-9 rounded-lg ${card.iconBg} flex items-center justify-center`}>
+            <div className="flex items-center justify-between mb-2 sm:mb-3">
+              <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg ${card.iconBg} flex items-center justify-center`}>
                 {card.icon}
               </div>
-              <ArrowUpRight size={16} className="text-slate-300 group-hover:text-slate-500 transition-colors" />
+              <ArrowUpRight size={14} className="text-slate-300 sm:block hidden" />
             </div>
-            <p className="text-2xl font-bold text-slate-900 tracking-tight">{card.value}</p>
-            <p className="text-sm text-slate-500 mt-0.5">{card.title}</p>
+            <p className="text-lg sm:text-2xl font-bold text-slate-900 tracking-tight">{card.value}</p>
+            <p className="text-[11px] sm:text-sm font-medium text-slate-500 mt-0.5 uppercase tracking-wide">{card.title}</p>
           </Link>
         ))}
       </div>

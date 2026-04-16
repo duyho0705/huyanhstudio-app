@@ -8,7 +8,8 @@
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 150px;
-    scrollbar-gutter: stable;
+    scrollbar-gutter: stable !important;
+    overflow-y: scroll !important;
     font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
   }
 
@@ -22,7 +23,9 @@
     @apply m-0 p-0 text-gray-800 antialiased;
   }
 
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     box-sizing: border-box;
   }
 }
@@ -37,16 +40,19 @@
       @apply max-w-container-sm;
     }
   }
+
   @media (max-width: 992px) {
     .container-app {
       @apply max-w-container-md;
     }
   }
+
   @media (max-width: 768px) {
     .container-app {
       @apply max-w-[550px];
     }
   }
+
   @media (max-width: 455px) {
     .container-app {
       @apply max-w-full px-5;
@@ -56,8 +62,8 @@
 
 /* Fix Autofill background color */
 input:-webkit-autofill,
-input:-webkit-autofill:hover, 
-input:-webkit-autofill:focus, 
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 40px #fff inset !important;
   -webkit-text-fill-color: #334155 !important;
@@ -65,7 +71,7 @@ input:-webkit-autofill:active {
 }
 
 /* Ant Design Input active/filled state - Chỉ áp dụng khi KHÔNG có lỗi */
-.ant-input:not(.ant-input-status-error), 
+.ant-input:not(.ant-input-status-error),
 .ant-input-affix-wrapper:not(.ant-input-affix-wrapper-status-error),
 .ant-picker:not(.ant-picker-status-error),
 .ant-select-show-search .ant-select-selector,
@@ -108,7 +114,7 @@ input:-webkit-autofill:active {
 }
 
 /* Prevent blue text on hover for simple text buttons */
-.admin-area .text-slate-900:hover, 
+.admin-area .text-slate-900:hover,
 .admin-area .text-slate-600:hover {
   color: currentColor !important;
 }
@@ -117,3 +123,120 @@ input:-webkit-autofill:active {
 .admin-area .hover\:bg-slate-50:hover {
   background-color: transparent !important;
 }
+
+/* Disable Ant Design Table row hover effects globally in admin */
+.admin-area .ant-table-wrapper .ant-table-tbody>tr.ant-table-row:hover>td,
+.admin-area .ant-table-wrapper .ant-table-tbody>tr>td.ant-table-cell-row-hover {
+  background: inherit !important;
+}
+
+/* Force static border for framework-managed inputs and selects on hover */
+.admin-area .ant-input:hover,
+.admin-area .ant-input-affix-wrapper:hover,
+.admin-area .ant-select-selector:hover,
+.admin-area .ant-input-number:hover {
+  border-color: #e2e8f0 !important;
+}
+
+/* Prevent dynamic changes on radio buttons if any remain */
+.admin-area .ant-radio-button-wrapper:hover {
+  color: inherit !important;
+}
+
+/* ANTI-SHIFT: Force layout stability when Modal opens */
+body.ant-scrolling-effect {
+  width: 100% !important;
+  padding-right: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Premium Select Styling */
+.custom-select-premium .ant-select-selector {
+  border-radius: 12px !important;
+  border-color: #e2e8f0 !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05) !important;
+  padding-left: 12px !important;
+}
+
+.custom-select-premium:hover .ant-select-selector {
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important;
+}
+
+.custom-select-premium.ant-select-focused .ant-select-selector {
+  border-color: #94a3b8 !important;
+  box-shadow: 0 0 0 2px rgb(241 245 249) !important;
+}
+
+.ant-select-dropdown {
+  padding: 8px !important;
+}
+
+.ant-select-item-option-selected {
+  background-color: #f8fafc !important;
+  border-radius: 12px !important;
+}
+
+.ant-select-item-option-active {
+  background-color: #f1f5f9 !important;
+  border-radius: 12px !important;
+}
+
+/* ===== ADMIN RESPONSIVE OVERRIDES ===== */
+
+/* Table text sizing on smaller screens */
+@media (max-width: 1024px) {
+  .admin-area .ant-table {
+    font-size: 13px;
+  }
+  .admin-area .ant-table-thead > tr > th {
+    padding: 10px 12px !important;
+    font-size: 12px !important;
+  }
+  .admin-area .ant-table-tbody > tr > td {
+    padding: 10px 12px !important;
+  }
+}
+
+/* Ant Modal responsive - prevent overflow */
+@media (max-width: 768px) {
+  .ant-modal {
+    max-width: 95vw !important;
+    margin: 16px auto !important;
+  }
+  .ant-modal .ant-modal-content {
+    border-radius: 20px !important;
+    padding: 16px !important;
+  }
+  .ant-modal .ant-modal-body {
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  /* Fix notification toast position on mobile */
+  .admin-area .fixed.bottom-10.right-10 {
+    bottom: 16px !important;
+    right: 16px !important;
+    left: 16px !important;
+    max-width: calc(100vw - 32px) !important;
+  }
+}
+
+/* Ant DatePicker responsive */
+@media (max-width: 576px) {
+  .admin-area .ant-picker-panels {
+    flex-direction: column !important;
+  }
+  .admin-area .ant-picker-dropdown {
+    max-width: 95vw !important;
+  }
+}
+
+/* Scrollbar hiding utility for chat sidebar */
+.admin-area .scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.admin-area .scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

@@ -38,6 +38,7 @@ const StudioForm = ({ open, onCancel, onSubmit, initialValues }) => {
       okText={initialValues ? "Cập nhật" : "Tạo"}
       cancelText="Hủy"
       width={600}
+      className="!max-w-[95vw]"
     >
       <Form form={form} layout="vertical" style={{ marginTop: 24 }}>
         <Form.Item
@@ -56,9 +57,7 @@ const StudioForm = ({ open, onCancel, onSubmit, initialValues }) => {
           <TextArea placeholder="Nhập mô tả studio" rows={3} size="large" />
         </Form.Item>
 
-        <div
-          style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Form.Item
             name="capacity"
             label="Sức chứa (người)"

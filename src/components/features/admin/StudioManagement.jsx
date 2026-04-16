@@ -209,76 +209,123 @@ const StudioManagement = () => {
   ];
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
+    <div className="space-y-6 animate-in fade-in duration-500">
       {contextHolder}
 
-      <div className="bg-white p-6 rounded-none border border-slate-100 shadow-sm flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <div className="w-1.5 h-10 bg-blue-600 rounded-none"></div>
-          <div>
-            <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Hệ thống Studio</h2>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-0.5">Quản lý không gian quay chụp</p>
-          </div>
-        </div>
-        <Button
-          type="primary"
-          onClick={handleCreate}
-          className="h-14 px-8 bg-slate-900 hover:bg-slate-800 rounded-none border-none font-black uppercase tracking-widest text-xs shadow-xl shadow-slate-200 flex items-center gap-3  "
-        >
-          <Plus size={20} strokeWidth={3} />
-          Tạo Studio mới
-        </Button>
-      </div>
+      <div className="bg-white p-4 sm:p-6 rounded-[32px] border border-slate-200 shadow-sm space-y-4 sm:space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4 pb-0 border-b border-slate-50">
+          <h2 className="text-[17px] sm:text-[20px] font-bold text-slate-800 whitespace-nowrap mr-auto flex items-center gap-3">
+            <div className="w-1.5 h-6 sm:h-8 bg-blue-600 rounded-full"></div>
+            Hệ thống Studio
+          </h2>
 
-      <div className="bg-white rounded-none border border-slate-100 shadow-sm overflow-hidden bg-white">
-        <Table
-          columns={columns}
-          dataSource={studios}
-          rowKey="id"
-          loading={loading}
-          pagination={false}
-          onChange={handleTableChange}
-          scroll={{ x: 1200 }}
-          className="ant-table-custom"
-        />
+          <Button
+            onClick={handleCreate}
+            className="h-10 px-6 bg-slate-900 border-none font-bold text-[13px] sm:text-[14px] shadow-lg shadow-slate-200 flex items-center gap-2 !text-white hover:!bg-slate-800 rounded-xl transition-all w-full sm:w-auto justify-center"
+          >
+            <Plus size={18} strokeWidth={3} />
+            Tạo Studio mới
+          </Button>
+        </div>
+
+        <div className="rounded-[28px] border-2 border-slate-200 overflow-hidden bg-white shadow-inner">
+          {/* Desktop Table View */}
+          <div className="hidden lg:block">
+            <Table
+              columns={columns}
+              dataSource={studios}
+              rowKey="id"
+              loading={loading}
+              pagination={false}
+              onChange={handleTableChange}
+              scroll={{ x: 1200 }}
+              className="ant-table-custom"
+            />
+          </div>
+
+          {/* Mobile Card View */}
+          <div className="lg:hidden">
+            {loading ? (
+              <div className="p-4 sm:p-6 space-y-4">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="h-28 bg-slate-50 rounded-2xl animate-pulse border border-slate-100"></div>
+                ))}
+              </div>
+            ) : (Array.isArray(studios) && studios.length > 0) ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 sm:p-6">
+                {studios.map((studio) => (
+                  <div key={studio.id} className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-11 h-11 rounded-xl bg-slate-900 flex items-center justify-center text-white shrink-0 shadow-md">
+                        <Home size={18} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-[14px] font-black text-slate-900 uppercase tracking-tight truncate">{studio.studioName}</h4>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Không gian làm việc</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4 py-2 border-y border-slate-50 text-[12px] font-medium text-slate-500">
+                      <div className="flex items-center gap-1.5">
+                        <Users size={13} className="text-blue-500" />
+                        <span>{studio.capacity} người</span>
+                      </div>
+                      <div className="px-3 py-1 bg-green-50 text-green-700 rounded-lg border border-green-100 inline-flex items-center gap-1 font-bold text-[12px]">
+                        <DollarSign size={12} />
+                        {studio.hourlyRate?.toLocaleString("vi-VN")} / Giờ
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Switch
+                          checked={studio.status === "AVAILABLE"}
+                          onChange={() => handleStatusToggle(studio.id, studio.status)}
+                          className={studio.status === "AVAILABLE" ? "!bg-green-500" : "!bg-red-400"}
+                          size="small"
+                        />
+                        <span className={`px-2 py-0.5 rounded-full text-[11px] font-semibold text-white ${studio.status === "AVAILABLE" ? "bg-green-500" : "bg-red-500"}`}>
+                          {studio.status === "AVAILABLE" ? "Sẵn sàng" : "Bảo trì"}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button type="text" onClick={() => handleEdit(studio)} className="w-9 h-9 rounded-xl flex items-center justify-center text-amber-500 p-0" icon={<Edit size={18} />} />
+                        <Button type="text" danger onClick={() => handleDelete(studio)} className="w-9 h-9 rounded-xl flex items-center justify-center text-red-500 p-0" icon={<Trash2 size={18} />} />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="py-16 flex flex-col items-center text-slate-300 font-bold italic uppercase tracking-widest">Không có dữ liệu</div>
+            )}
+          </div>
 
         {pagination.total > 0 && (
-          <div className="p-8 border-t border-slate-50 flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div className="px-6 py-3 bg-slate-50 rounded-none text-[11px] font-black text-slate-500 uppercase tracking-widest">
-              Đang hiển thị {Math.min(pagination.total, (pagination.current - 1) * pagination.pageSize + 1)}-
-              {Math.min(pagination.current * pagination.pageSize, pagination.total)}
-              <span className="mx-2 text-slate-300">/</span>
-              {pagination.total} Studio
+          <div className="p-6 bg-slate-50/30 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div className="px-3 py-1 bg-white border border-slate-100 rounded-xl text-[13px] font-medium text-slate-500 shadow-sm">Hiển thị
+              <span> {pagination.current} / {Math.ceil(pagination.total / (pagination.pageSize || 10))}</span>
             </div>
 
             <div className="flex items-center gap-2">
               <Button
-                className="h-12 w-12 flex items-center justify-center rounded-none border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-600  font-black shadow-sm bg-white"
+                className="h-9 w-9 flex items-center justify-center rounded-lg bg-white border-slate-200 text-slate-500 shadow-sm hover:border-blue-400 hover:text-blue-600 transition-all p-0"
                 disabled={pagination.current === 1}
                 onClick={() => handleTableChange({ current: pagination.current - 1, pageSize: pagination.pageSize })}
-                icon={<ChevronLeft size={20} />}
+                icon={<ChevronLeft size={16} />}
               />
-              <div className="flex items-center gap-1 bg-slate-50 p-1 rounded-none border border-slate-100 shadow-inner">
-                <span className="w-10 h-10 flex items-center justify-center bg-blue-600 text-white rounded-none font-black shadow-lg shadow-blue-100">
-                  {pagination.current}
-                </span>
-                <span className="text-slate-300 font-black px-3 text-[10px] uppercase tracking-widest italic">Của</span>
-                <span className="w-10 h-10 flex items-center justify-center bg-white text-slate-500 border border-slate-100 rounded-none font-bold">
-                  {Math.ceil(pagination.total / pagination.pageSize) || 1}
-                </span>
-              </div>
+
               <Button
-                className="h-12 w-12 flex items-center justify-center rounded-none border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-600  font-black shadow-sm bg-white"
-                disabled={pagination.current >= Math.ceil(pagination.total / pagination.pageSize)}
+                className="h-9 w-9 flex items-center justify-center rounded-lg bg-white border-slate-200 text-slate-500 shadow-sm hover:border-blue-400 hover:text-blue-600 transition-all p-0"
+                disabled={pagination.current >= Math.ceil(pagination.total / (pagination.pageSize || 10))}
                 onClick={() => handleTableChange({ current: pagination.current + 1, pageSize: pagination.pageSize })}
-                icon={<ChevronRight size={20} />}
+                icon={<ChevronRight size={16} />}
               />
             </div>
           </div>
         )}
       </div>
+    </div>
 
-      <StudioForm
+    <StudioForm
         open={isFormModalOpen}
         onCancel={() => setIsFormModalOpen(false)}
         onSubmit={handleFormSubmit}

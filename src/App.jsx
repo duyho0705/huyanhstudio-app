@@ -184,7 +184,7 @@ function AppContent() {
 
       {isAdminRoute ? (
         <AnimatePresence mode="wait">
-          <Routes location={location} key={location.pathname}>
+          <Routes location={location}>
             <Route
               path="/admin"
               element={

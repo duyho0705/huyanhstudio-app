@@ -17,60 +17,40 @@ const BookingForm = ({
   const [form] = Form.useForm();
 
   useEffect(() => {
-    if (open) {
-      if (initialValues) {
-        // Map services
-        let sourceServices = [];
-        if (Array.isArray(initialValues.services)) {
-          sourceServices = initialValues.services;
-        } else if (typeof initialValues.services === "string") {
-          sourceServices = initialValues.services.includes(",")
-            ? initialValues.services.split(",")
-            : [initialValues.services];
-        } else if (initialValues.services) {
-          sourceServices = [initialValues.services];
-        }
-
-        const serviceIds = sourceServices
-          .map((s) => {
-            // If it's an object with id, use id
-            if (typeof s === "object" && s !== null && s.id) return s.id;
-            // If it's just a number (id), use it
-            if (typeof s === "number") return s;
-
-            // Extract name from object or use string directly
-            const serviceName =
-              typeof s === "object" && s !== null ? s.name : s;
-
-            // Match by name or moreInfo
-            const matched = services?.find((srv) => {
-              const srvName = srv.name || srv.moreInfo;
-              return (
-                srvName === serviceName ||
-                String(srvName).trim().toLowerCase() ===
-                String(serviceName).trim().toLowerCase()
-              );
-            });
-            return matched ? matched.id : null;
-          })
-          .filter(Boolean);
-
-        form.setFieldsValue({
-          customerName: initialValues.customerName,
-          phone: initialValues.phone,
-          email: initialValues.email,
-          recordDate: initialValues.recordDate
-            ? dayjs(initialValues.recordDate)
-            : null,
-          studioRoomId: initialValues.studioRoomId || (initialValues.studioRoom?.id) || null,
-          serviceIds,
-          note: initialValues.note,
-        });
-      } else {
-        form.resetFields();
+    if (open && initialValues) {
+      // Map services to IDs
+      let sourceServices = [];
+      if (Array.isArray(initialValues.services)) {
+        sourceServices = initialValues.services;
+      } else if (initialValues.services) {
+        sourceServices = [initialValues.services];
       }
+
+      const serviceIds = sourceServices
+        .map((s) => {
+          if (typeof s === "object" && s !== null) return s.id;
+          return s;
+        })
+        .filter(Boolean)
+        .map(id => (!isNaN(id) && id !== "") ? Number(id) : id); // Only cast if numeric string
+
+      // Map studioRoomId
+      const studioId = initialValues.studioRoomId || (initialValues.studioRoom?.id) || initialValues.studioRoom;
+      const finalStudioId = (studioId && !isNaN(studioId) && studioId !== "") ? Number(studioId) : studioId;
+
+      form.setFieldsValue({
+        customerName: initialValues.customerName,
+        phone: initialValues.phone,
+        email: initialValues.email,
+        recordDate: initialValues.recordDate ? dayjs(initialValues.recordDate) : null,
+        studioRoomId: finalStudioId || null,
+        serviceIds,
+        note: initialValues.note || "",
+      });
+    } else if (open) {
+      form.resetFields();
     }
-  }, [open, initialValues, form, services]);
+  }, [open, initialValues, form, services, studios]);
 
   const handleSubmit = () => {
     form
@@ -97,6 +77,7 @@ const BookingForm = ({
       okText={initialValues ? "Cập nhật" : "Tạo"}
       cancelText="Hủy"
       width={700}
+      className="!max-w-[95vw]"
       destroyOnHidden={true}
       okButtonProps={{
         style: {
@@ -115,9 +96,7 @@ const BookingForm = ({
           <Input placeholder="Nhập họ tên" size="large" />
         </Form.Item>
 
-        <div
-          style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Form.Item
             name="phone"
             label="Số điện thoại"

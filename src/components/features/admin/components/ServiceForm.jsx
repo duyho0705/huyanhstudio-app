@@ -109,21 +109,28 @@ const ServiceForm = ({
         </div>
       }
       open={open}
-      onOk={handleSubmit}
       onCancel={onCancel}
       afterClose={() => form.resetFields()} 
-      okText={initialValues ? "Cập nhật" : "Tạo dịch vụ"}
-      cancelText="Hủy"
       width={900}
+      className="!max-w-[95vw]"
       centered
-      confirmLoading={confirmLoading}
-      okButtonProps={{
-        disabled: initialValues && !isChanged,
-        className: `h-10 px-6 rounded-xl bg-slate-900 border-none font-semibold text-[14px] text-white shadow-sm ${initialValues && !isChanged ? "opacity-50" : "opacity-100"}`
-      }}
-      cancelButtonProps={{
-        className: "h-10 px-6 rounded-xl font-medium text-[14px] text-slate-600 border border-slate-200"
-      }}
+      footer={[
+        <button
+          key="cancel"
+          onClick={onCancel}
+          className="h-10 px-6 rounded-xl font-medium text-[14px] text-slate-600 border border-slate-200 bg-white mr-3"
+        >
+          Hủy
+        </button>,
+        <button
+          key="submit"
+          onClick={handleSubmit}
+          disabled={confirmLoading || (initialValues && !isChanged)}
+          className={`h-10 px-6 rounded-xl bg-slate-900 border-none font-semibold text-[14px] text-white ${(confirmLoading || (initialValues && !isChanged)) ? "opacity-50 cursor-not-allowed" : ""}`}
+        >
+          {confirmLoading ? "Đang xử lý..." : (initialValues ? "Cập nhật" : "Tạo dịch vụ")}
+        </button>
+      ]}
     >
       <Form form={form} layout="vertical" className="pt-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-10 gap-y-6">
@@ -139,7 +146,7 @@ const ServiceForm = ({
                   className="!mb-0"
                 >
                   <Input 
-                    className="h-10 px-4 bg-white border border-slate-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-100 hover:border-slate-300 transition-all font-medium text-[14px]" 
+                    className="h-10 px-4 bg-white border border-slate-200 rounded-xl focus:border-blue-500 hover:border-slate-200 font-medium text-[14px]" 
                     placeholder="Ví dụ: Quay phim phóng sự cưới" 
                   />
                 </Form.Item>
@@ -152,7 +159,7 @@ const ServiceForm = ({
                     className="!mb-0"
                   >
                     <InputNumber
-                      className="w-full h-10 flex items-center px-1 bg-white border border-slate-200 !rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-semibold text-[14px]"
+                      className="w-full h-10 flex items-center px-1 bg-white border border-slate-200 !rounded-xl focus:border-blue-500 hover:border-slate-200 font-semibold text-[14px]"
                       min={0}
                       formatter={(v) => `${v}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                       parser={(v) => v.replace(/,/g, "")}
@@ -213,7 +220,7 @@ const ServiceForm = ({
                     className="!mb-0"
                   >
                     <Input 
-                      className="h-10 px-4 bg-white border border-slate-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-medium text-[14px]" 
+                      className="h-10 px-4 bg-white border border-slate-200 rounded-xl focus:border-blue-500 hover:border-slate-200 font-medium text-[14px]" 
                       placeholder="VD: Đăng ký ngay, Bắt đầu..." 
                     />
                   </Form.Item>
@@ -242,7 +249,7 @@ const ServiceForm = ({
               rules={[{ required: true, message: "Vui lòng nhập mô tả!" }]}
             >
               <TextArea
-                className="p-3 bg-white border border-slate-200 hover:border-slate-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-medium min-h-[120px] text-[14px]"
+                className="p-3 bg-white border border-slate-200 rounded-xl focus:border-blue-500 hover:border-slate-200 font-medium min-h-[120px] text-[14px]"
                 rows={4}
                 placeholder="Mô tả tóm tắt về dịch vụ để khách hàng dễ hiểu"
               />
@@ -259,7 +266,7 @@ const ServiceForm = ({
                     <button
                       type="button"
                       onClick={() => add()}
-                      className="px-3 py-1.5 bg-slate-100 text-slate-700 rounded-lg text-[12px] font-semibold hover:bg-slate-200 transition-all flex items-center gap-1.5"
+                      className="px-3 py-1.5 bg-slate-100 text-slate-700 rounded-lg text-[12px] font-semibold flex items-center gap-1.5"
                     >
                       <Plus size={14} />
                       Thêm
@@ -277,13 +284,13 @@ const ServiceForm = ({
                         >
                           <Input 
                             placeholder="VD: Miễn phí flycam" 
-                            className="h-10 px-4 bg-white border border-slate-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-medium text-[14px]" 
+                            className="h-10 px-4 bg-white border border-slate-200 rounded-xl focus:border-blue-500 hover:border-slate-200 font-medium text-[14px]" 
                           />
                         </Form.Item>
                         <button
                           type="button"
                           onClick={() => remove(name)}
-                          className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-slate-400 hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition-all flex items-center justify-center shrink-0"
+                          className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-slate-400 flex items-center justify-center shrink-0"
                         >
                           <Trash2 size={16} />
                         </button>

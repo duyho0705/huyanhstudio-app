@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { User, UserCircle, Mail, Phone, Users, Power, Lock } from "lucide-react";
 
 const { Option } = Select;
- 
+
 const PrefixSelect = ({ icon: Icon, children, ...props }) => (
   <div className="relative w-full">
     <Icon size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 z-10 pointer-events-none" />
@@ -41,31 +41,39 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
       .then(async (values) => {
         await onSubmit(values);
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   return (
     <Modal
       title={
         <div className="py-2">
-            <h3 className="text-[18px] font-semibold text-slate-900 leading-tight">
-                {initialValues ? "Cập nhật người dùng" : "Thêm người dùng mới"}
-            </h3>
+          <h3 className="text-[18px] font-semibold text-slate-900 leading-tight">
+            {initialValues ? "Cập nhật người dùng" : "Thêm người dùng mới"}
+          </h3>
         </div>
       }
       open={open}
-      onOk={handleSubmit}
       onCancel={onCancel}
-      okText={initialValues ? "Cập nhật" : "Tạo tài khoản"}
-      cancelText="Hủy"
       width={600}
+      className="!max-w-[95vw]"
       centered
-      okButtonProps={{
-        className: "h-10 px-6 rounded-xl bg-slate-900 border-none font-semibold text-[14px] text-white shadow-sm"
-      }}
-      cancelButtonProps={{
-        className: "h-10 px-6 rounded-xl font-medium text-[14px] text-slate-600 border border-slate-200"
-      }}
+      footer={[
+        <button
+          key="cancel"
+          onClick={onCancel}
+          className="h-10 px-6 rounded-xl font-medium text-[14px] text-slate-600 border border-slate-200 bg-white mr-3"
+        >
+          Hủy
+        </button>,
+        <button
+          key="submit"
+          onClick={handleSubmit}
+          className="h-10 px-6 rounded-xl bg-slate-900 border-none font-semibold text-[14px] text-white"
+        >
+          {initialValues ? "Cập nhật" : "Tạo tài khoản"}
+        </button>
+      ]}
     >
       <Form form={form} layout="vertical" className="pt-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2">
@@ -75,10 +83,10 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
             rules={[{ required: true, message: "Vui lòng nhập họ tên!" }]}
             className={!initialValues ? "md:col-span-1" : "md:col-span-1"}
           >
-            <Input 
+            <Input
               prefix={<User size={18} className="text-slate-400 mr-2" />}
-              placeholder="Nhập họ tên" 
-              className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-300 focus:border-blue-500 transition-all font-medium text-[14px]" 
+              placeholder="Nhập họ tên"
+              className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-200 focus:border-blue-500 font-medium text-[14px]"
             />
           </Form.Item>
 
@@ -91,10 +99,10 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
                 { min: 3, message: "Tên người dùng phải có ít nhất 3 ký tự!" },
               ]}
             >
-              <Input 
+              <Input
                 prefix={<UserCircle size={18} className="text-slate-400 mr-2" />}
-                placeholder="Nhập tên đăng nhập" 
-                className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-300 focus:border-blue-500 transition-all font-medium text-[14px]" 
+                placeholder="Nhập tên đăng nhập"
+                className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-200 focus:border-blue-500 font-medium text-[14px]"
               />
             </Form.Item>
           ) : (
@@ -103,10 +111,10 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
               label={<span className="text-[13px] font-semibold text-slate-700">Email</span>}
               rules={[{ type: "email", message: "Email không hợp lệ!" }]}
             >
-              <Input 
+              <Input
                 prefix={<Mail size={18} className="text-slate-400 mr-2" />}
-                placeholder="Nhập email liên hệ" 
-                className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-300 focus:border-blue-500 transition-all font-medium text-[14px]" 
+                placeholder="Nhập email liên hệ"
+                className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-200 focus:border-blue-500 font-medium text-[14px]"
               />
             </Form.Item>
           )}
@@ -117,10 +125,10 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
               label={<span className="text-[13px] font-semibold text-slate-700">Email</span>}
               rules={[{ type: "email", message: "Email không hợp lệ!" }]}
             >
-              <Input 
+              <Input
                 prefix={<Mail size={18} className="text-slate-400 mr-2" />}
-                placeholder="Nhập email liên hệ" 
-                className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-300 focus:border-blue-500 transition-all font-medium text-[14px]" 
+                placeholder="Nhập email liên hệ"
+                className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-200 focus:border-blue-500 font-medium text-[14px]"
               />
             </Form.Item>
           )}
@@ -136,10 +144,10 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
               },
             ]}
           >
-            <Input 
+            <Input
               prefix={<Phone size={18} className="text-slate-400 mr-2" />}
-              placeholder="Nhập số điện thoại" 
-              className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-300 focus:border-blue-500 transition-all font-medium text-[14px]" 
+              placeholder="Nhập số điện thoại"
+              className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-200 focus:border-blue-500 font-medium text-[14px]"
             />
           </Form.Item>
 
@@ -148,10 +156,10 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
             label={<span className="text-[13px] font-semibold text-slate-700">Vai trò</span>}
             rules={[{ required: true, message: "Vui lòng chọn vai trò!" }]}
           >
-            <PrefixSelect 
+            <PrefixSelect
               icon={Users}
-              placeholder="Chọn vai trò hệ thống" 
-              className="h-10 text-[14px] font-medium rounded-xl border-slate-200"
+              placeholder="Chọn vai trò hệ thống"
+              className="h-10 text-[14px] font-medium rounded-xl border-slate-200 hover:border-slate-200"
             >
               {roles?.map((role) => (
                 <Option key={role.value} value={role.value}>
@@ -166,10 +174,10 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
             label={<span className="text-[13px] font-semibold text-slate-700">Trạng thái</span>}
             rules={[{ required: true, message: "Vui lòng chọn trạng thái!" }]}
           >
-            <PrefixSelect 
+            <PrefixSelect
               icon={Power}
-              placeholder="Trạng thái tài khoản" 
-              className="h-10 text-[14px] font-medium rounded-xl border-slate-200"
+              placeholder="Trạng thái tài khoản"
+              className="h-10 text-[14px] font-medium rounded-xl border-slate-200 hover:border-slate-200"
             >
               <Option value={true}><span className="text-[14px] font-medium text-slate-700">Hoạt động</span></Option>
               <Option value={false}><span className="text-[14px] font-medium text-slate-700">Vô hiệu hóa</span></Option>
@@ -186,10 +194,10 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
                   { min: 6, message: "Mật khẩu phải có ít nhất 6 ký tự!" },
                 ]}
               >
-                <Input.Password 
+                <Input.Password
                   prefix={<Lock size={18} className="text-slate-400 mr-2" />}
-                  placeholder="Nhập mật khẩu" 
-                  className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-300 focus:border-blue-500 transition-all font-medium text-[14px]" 
+                  placeholder="Nhập mật khẩu"
+                  className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-200 focus:border-blue-500 font-medium text-[14px]"
                 />
               </Form.Item>
 
@@ -209,10 +217,10 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
                   }),
                 ]}
               >
-                <Input.Password 
+                <Input.Password
                   prefix={<Lock size={18} className="text-slate-400 mr-2" />}
-                  placeholder="Nhập lại mật khẩu" 
-                  className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-300 focus:border-blue-500 transition-all font-medium text-[14px]" 
+                  placeholder="Nhập lại mật khẩu"
+                  className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-200 focus:border-blue-500 font-medium text-[14px]"
                 />
               </Form.Item>
             </>

@@ -179,22 +179,22 @@ const ProductManagement = () => {
           { icon: <LayoutGrid size={26} strokeWidth={1.5} className="text-indigo-600" />, label: "Tổng sản phẩm", value: stats.total, config: "bg-indigo-100 border border-indigo-200/60" },
           { icon: <Video size={26} strokeWidth={1.5} className="text-emerald-600" />, label: "Video nội dung", value: stats.videos, config: "bg-emerald-100 border border-emerald-200/60" },
         ].map((item, i) => (
-          <div key={i} className="bg-white p-7 rounded-2xl border border-slate-300 shadow-sm flex items-center gap-5 transition-all hover:shadow-xl hover:shadow-slate-200/50 group">
-            <div className={`w-14 h-14 rounded-2xl ${item.config} flex items-center justify-center transition-transform group-hover:scale-110`}>
+          <div key={i} className="bg-white p-7 rounded-2xl border border-slate-300 shadow-sm flex items-center gap-5 group">
+            <div className={`w-14 h-14 rounded-2xl ${item.config} flex items-center justify-center`}>
               {item.icon}
             </div>
             <div>
-              <h4 className="text-[17px] font-medium text-slate-600 group-hover:text-slate-900 transition-colors">{item.label}</h4>
+              <h4 className="text-[17px] font-medium text-slate-600">{item.label}</h4>
               <p className="text-2xl font-black text-slate-900 tracking-tight">{item.value}</p>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="bg-white p-8 rounded-[32px] border border-slate-300 shadow-sm space-y-8">
-        <div className="flex flex-col lg:flex-row lg:items-center gap-4 pb-6 border-b border-slate-50">
-          <h2 className="text-[20px] font-bold text-slate-800 whitespace-nowrap mr-auto flex items-center gap-3">
-            <div className="w-1.5 h-8 bg-blue-600 rounded-full"></div>
+      <div className="bg-white p-4 sm:p-8 rounded-[32px] border border-slate-300 shadow-sm space-y-6 sm:space-y-8">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-4 pb-0 border-b border-slate-50">
+          <h2 className="text-[17px] sm:text-[20px] font-bold text-slate-800 whitespace-nowrap mr-auto flex items-center gap-3">
+            <div className="w-1.5 h-6 sm:h-8 bg-blue-600 rounded-full"></div>
             Thư viện sản phẩm
           </h2>
 
@@ -211,7 +211,7 @@ const ProductManagement = () => {
             </div>
             <Button
               onClick={handleCreate}
-              className="h-10 px-6 bg-slate-900 border-none font-bold text-[14px] shadow-lg shadow-slate-200 flex items-center gap-2 !text-white hover:!bg-slate-800 rounded-xl transition-all"
+              className="h-10 px-6 bg-slate-900 border-none font-bold text-[13px] sm:text-[14px] flex items-center gap-2 !text-white rounded-xl w-full sm:w-auto justify-center"
             >
               <Plus size={16} strokeWidth={3} />
               Đăng sản phẩm
@@ -219,7 +219,7 @@ const ProductManagement = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8 pb-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-8 pb-4">
           {loading ? (
             Array.from({ length: 10 }).map((_, i) => (
               <div key={i} className="bg-white rounded-3xl border border-slate-100 p-5 space-y-5 animate-pulse">
@@ -247,17 +247,17 @@ const ProductManagement = () => {
             </div>
           ) : (
             products.map((p) => (
-              <div key={p.id} className="group bg-white rounded-[28px] border border-slate-200 transition-all duration-500 shadow-sm hover:shadow-2xl hover:shadow-slate-200/60 overflow-hidden flex flex-col">
+              <div key={p.id} className="group bg-white rounded-[28px] border border-slate-200 shadow-sm overflow-hidden flex flex-col">
                 <div className="relative aspect-video overflow-hidden">
                   <img
                     src={getThumbnail(p.videoUrl)}
                     alt={p.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-all duration-500 backdrop-blur-[1px] flex items-center justify-center">
+                  <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 backdrop-blur-[1px] flex items-center justify-center">
                     <button
                       onClick={() => window.open(p.videoUrl, "_blank", "noopener,noreferrer")}
-                      className="w-14 h-14 rounded-2xl bg-white text-slate-950 flex items-center justify-center shadow-2xl transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 hover:scale-110 active:scale-95"
+                      className="w-14 h-14 rounded-2xl bg-white text-slate-950 flex items-center justify-center shadow-2xl transform"
                     >
                       <Play size={20} fill="currentColor" strokeWidth={0} />
                     </button>
@@ -269,7 +269,7 @@ const ProductManagement = () => {
                     <div className="flex items-center gap-2">
                       <span className="text-[14px] font-semibold text-slate-600 truncate">Tác giả: {p.author || "Chưa cập nhật"}</span>
                     </div>
-                    <h3 className="font-semibold text-slate-900 text-[15px] leading-tight line-clamp-2 hover:text-blue-600 transition-colors cursor-pointer">{p.title}</h3>
+                    <h3 className="font-semibold text-slate-900 text-[15px] leading-tight line-clamp-2 cursor-pointer">{p.title}</h3>
                   </div>
 
                   <div className="flex items-center justify-end pt-6 mt-4 border-t border-slate-100">
@@ -277,14 +277,14 @@ const ProductManagement = () => {
                       <Button
                         type="text"
                         onClick={() => handleEdit(p)}
-                        className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-all p-0"
+                        className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-400 p-0"
                       >
                         <Edit size={18} strokeWidth={2.5} />
                       </Button>
                       <Button
                         type="text"
                         onClick={() => handleDelete(p)}
-                        className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 transition-all p-0"
+                        className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-400 p-0"
                       >
                         <Trash2 size={18} strokeWidth={2.5} />
                       </Button>
@@ -306,13 +306,13 @@ const ProductManagement = () => {
 
             <div className="flex items-center gap-3">
               <Button
-                className="h-12 w-12 flex items-center justify-center rounded-2xl bg-white border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-600 transition-all shadow-sm"
+                className="h-12 w-12 flex items-center justify-center rounded-2xl bg-white border-slate-200 text-slate-600 shadow-sm"
                 disabled={pagination.current === 1}
                 onClick={() => handlePageChange(pagination.current - 1)}
                 icon={<ChevronLeft size={20} />}
               />
               <Button
-                className="h-12 w-12 flex items-center justify-center rounded-2xl bg-white border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-600 transition-all shadow-sm"
+                className="h-12 w-12 flex items-center justify-center rounded-2xl bg-white border-slate-200 text-slate-600 shadow-sm"
                 disabled={pagination.current >= Math.ceil(pagination.total / pagination.pageSize)}
                 onClick={() => handlePageChange(pagination.current + 1)}
                 icon={<ChevronRight size={20} />}
@@ -370,13 +370,13 @@ const ProductManagement = () => {
             <div className="flex gap-4 pt-4">
               <button
                 onClick={() => setIsDeleteModalOpen(false)}
-                className="flex-1 h-16 rounded-2xl bg-white border border-slate-100 text-slate-900 font-black uppercase tracking-widest text-[10px] hover:bg-slate-50 transition-all shadow-sm"
+                className="flex-1 h-16 rounded-2xl bg-white border border-slate-100 text-slate-900 font-black uppercase tracking-widest text-[10px] shadow-sm"
               >
                 Hủy bỏ
               </button>
               <button
                 onClick={confirmDelete}
-                className="flex-1 h-16 rounded-2xl bg-red-600 text-white font-black uppercase tracking-widest text-[10px] hover:bg-red-700 transition-all shadow-xl shadow-red-200"
+                className="flex-1 h-16 rounded-2xl bg-red-600 text-white font-black uppercase tracking-widest text-[10px] shadow-xl shadow-red-200"
               >
                 Xác nhận
               </button>

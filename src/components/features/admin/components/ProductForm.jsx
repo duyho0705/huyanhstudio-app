@@ -83,199 +83,241 @@ const ProductForm = ({ open, onCancel, onSubmit, initialValues }) => {
           <h3 className="text-[20px] font-bold text-slate-900 leading-tight">
             {initialValues ? "Cập nhật sản phẩm" : "Thêm sản phẩm mới"}
           </h3>
-          <p className="text-[12px] text-slate-500 mt-1">Cung cấp thông tin và nội dung video cho kho sản phẩm</p>
         </div>
       }
       open={open}
-      onOk={handleSubmit}
       onCancel={onCancel}
-      confirmLoading={isUploading}
-      okText={initialValues ? "Lưu thay đổi" : "Đăng sản phẩm"}
-      cancelText="Hủy"
-      width={640}
-      okButtonProps={{
-        className: "h-11 px-8 rounded-xl bg-slate-900 border-none font-bold text-[14px] text-white hover:bg-slate-800 transition-all shadow-lg",
-        disabled: isUploading
-      }}
-      cancelButtonProps={{
-        className: "h-11 px-8 rounded-xl font-bold text-[14px] text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all"
-      }}
+      width={900}
+      className="!max-w-[95vw]"
       centered
+      footer={[
+        <button
+          key="cancel"
+          onClick={onCancel}
+          className="h-11 px-8 rounded-xl font-bold text-[14px] text-slate-600 border border-slate-200 bg-white mr-3 hover:bg-slate-50 transition-colors"
+        >
+          Hủy
+        </button>,
+        <button
+          key="submit"
+          onClick={handleSubmit}
+          disabled={isUploading}
+          className={`h-11 px-8 rounded-xl bg-slate-900 border-none font-bold text-[14px] text-white transition-all active:scale-95 ${isUploading ? "opacity-50 cursor-not-allowed" : "hover:shadow-lg hover:shadow-slate-200"}`}
+        >
+          {initialValues ? "Lưu thay đổi" : "Đăng sản phẩm"}
+        </button>
+      ]}
     >
-      <Form form={form} layout="vertical" className="pt-4 space-y-6">
-        <div className="grid grid-cols-2 gap-4">
-            <Form.Item
+      <Form form={form} layout="vertical" className="pt-4">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Left Column: Form Inputs */}
+          <div className="lg:col-span-7 space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Form.Item
                 name="title"
-                label={<span className="text-[13px] font-bold text-slate-700 uppercase tracking-wider">Tiêu đề sản phẩm</span>}
+                label={<span className="text-[14px] font-bold text-slate-600">Tiêu đề sản phẩm</span>}
                 rules={[{ required: true, message: "Vui lòng nhập tiêu đề!" }]}
                 className="mb-0"
-            >
+              >
                 <Input
-                    placeholder="Tên bài hát, tên dự án..."
-                    className="h-12 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-400 focus:border-blue-500 transition-all font-medium"
+                  placeholder="Nhập tên sản phẩm"
+                  className="h-11 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-200 focus:border-blue-500 font-medium"
                 />
-            </Form.Item>
+              </Form.Item>
 
-            <Form.Item
+              <Form.Item
                 name="author"
-                label={<span className="text-[13px] font-bold text-slate-700 uppercase tracking-wider">Tác giả / Nghệ sĩ</span>}
-                rules={[{ required: true, message: "Vui lòng nhập tên nghệ sĩ!" }]}
+                label={<span className="text-[14px] font-bold text-slate-600">Tác giả</span>}
+                rules={[{ required: true, message: "Vui lòng nhập tên tác giả!" }]}
                 className="mb-0"
-            >
+              >
                 <Input
-                    placeholder="Ca sĩ, Producer..."
-                    className="h-12 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-400 focus:border-blue-500 transition-all font-medium"
+                  placeholder="Nhập tên tác giả"
+                  className="h-11 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-200 focus:border-blue-500 font-medium"
                 />
-            </Form.Item>
-        </div>
+              </Form.Item>
+            </div>
 
-        <div className="bg-slate-50 p-6 rounded-[24px] border border-slate-100 space-y-6">
-            <div>
-                <label className="text-[13px] font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2 mb-4">
-                    <Video size={18} className="text-blue-500" /> Chọn hình thức đăng Video
+            <div className="bg-slate-50 p-6 rounded-[24px] border border-slate-100 space-y-6">
+              <div>
+                <label className="text-[14px] font-bold text-slate-600 flex items-center gap-2 mb-4">
+                  <Video size={18} className="text-blue-500" /> Chọn hình thức đăng Video
                 </label>
-                
-                <Radio.Group 
-                    value={sourceType} 
-                    onChange={(e) => setSourceType(e.target.value)}
-                    className="w-full flex gap-3"
-                >
-                    <Radio.Button 
-                        value="youtube" 
-                        className={`flex-1 h-14 rounded-xl flex items-center justify-center border-2 border-slate-200 hover:border-red-400 transition-all ${sourceType === 'youtube' ? 'bg-red-50 border-red-500 !text-red-600' : 'bg-white'}`}
-                    >
-                        <div className="flex flex-col items-center justify-center leading-none">
-                            <Youtube size={20} className="mb-1" />
-                            <span className="text-[11px] font-black uppercase">Dùng Link YouTube</span>
-                        </div>
-                    </Radio.Button>
-                    <Radio.Button 
-                        value="upload" 
-                        className={`flex-1 h-14 rounded-xl flex items-center justify-center border-2 border-slate-200 hover:border-blue-400 transition-all ${sourceType === 'upload' ? 'bg-blue-50 border-blue-500 !text-blue-600' : 'bg-white'}`}
-                    >
-                        <div className="flex flex-col items-center justify-center leading-none">
-                            <UploadIcon size={20} className="mb-1" />
-                            <span className="text-[11px] font-black uppercase">Tải từ máy tính</span>
-                        </div>
-                    </Radio.Button>
-                </Radio.Group>
-            </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm">
+                <div className="w-full h-[60px] flex gap-2 relative bg-slate-200/50 p-1 rounded-2xl border border-slate-200/50">
+                  <div 
+                    className="absolute top-1 bottom-1 w-[calc(50%-4px)] bg-white rounded-xl shadow-md transition-all duration-300 ease-out z-0"
+                    style={{ left: sourceType === "youtube" ? "4px" : "calc(50%)" }}
+                  />
+
+                  <div
+                    onClick={() => setSourceType("youtube")}
+                    className={`flex-1 h-full rounded-xl flex items-center justify-center cursor-pointer relative z-10 transition-colors duration-300 ${sourceType === 'youtube' ? 'text-red-600' : 'text-slate-500'}`}
+                  >
+                    <div className="flex flex-col items-center justify-center leading-none">
+                      <Youtube size={16} className="mb-0.5" />
+                      <span className="text-[12px] font-black uppercase tracking-tighter">Dùng Link YouTube</span>
+                    </div>
+                  </div>
+                  <div
+                    onClick={() => setSourceType("upload")}
+                    className={`flex-1 h-full rounded-xl flex items-center justify-center cursor-pointer relative z-10 transition-colors duration-300 ${sourceType === 'upload' ? 'text-blue-600' : 'text-slate-500'}`}
+                  >
+                    <div className="flex flex-col items-center justify-center leading-none">
+                      <UploadIcon size={16} className="mb-0.5" />
+                      <span className="text-[12px] font-black uppercase tracking-tighter">Tải từ máy tính</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm min-h-[120px] flex flex-col justify-center">
                 {sourceType === "youtube" ? (
-                    <Form.Item
-                        name="videoUrl"
-                        label={<span className="text-[12px] font-bold text-slate-500 uppercase tracking-tighter">Đường dẫn Video YouTube</span>}
-                        rules={[{ required: sourceType === "youtube", message: "Vui lòng nhập link Youtube" }]}
-                        className="mb-0"
-                    >
-                        <Input
-                            prefix={<Youtube size={16} className="text-red-500 mr-2" />}
-                            placeholder="Dán link (ví dụ: https://www.youtube.com/watch?v=...)"
-                            className="h-11 px-4 bg-slate-50 border-none rounded-xl font-medium focus:bg-white"
-                        />
-                    </Form.Item>
+                  <Form.Item
+                    name="videoUrl"
+                    label={<span className="text-[13px] font-bold text-slate-500 tracking-tighter">Đường dẫn Video YouTube</span>}
+                    rules={[{ required: sourceType === "youtube", message: "Vui lòng nhập link Youtube" }]}
+                    className="mb-0"
+                  >
+                    <Input
+                      prefix={<Youtube size={16} className="text-red-500 mr-2" />}
+                      placeholder="Dán link (ví dụ: https://www.youtube.com/watch?v=...)"
+                      className="h-11 px-4 bg-slate-50 border-none rounded-xl font-medium focus:bg-white hover:bg-slate-50"
+                    />
+                  </Form.Item>
                 ) : (
-                    <div className="space-y-4">
-                        <Form.Item
-                            name="videoUrl"
-                            rules={[{ required: sourceType === "upload", message: "Vui lòng tải video lên" }]}
-                            className="mb-0"
+                  <div className="space-y-4">
+                    <Form.Item
+                      name="videoUrl"
+                      rules={[{ required: sourceType === "upload", message: "Vui lòng tải video lên" }]}
+                      className="mb-0"
+                    >
+                      <Upload.Dragger
+                        customRequest={handleFileUpload}
+                        maxCount={1}
+                        showUploadList={false}
+                        accept="video/*"
+                        disabled={isUploading}
+                        style={{ padding: 0, backgroundColor: 'transparent' }}
+                        className="overflow-hidden border-2 border-dashed border-slate-200 rounded-2xl group hover:border-blue-400 transition-all bg-slate-50/50"
+                      >
+                        <div className="py-6 flex flex-col items-center gap-2">
+                          <div className="w-10 h-10 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                            <UploadIcon size={18} />
+                          </div>
+                          <div className="text-center">
+                            <p className="text-[12px] font-bold text-slate-700 m-0">Kéo thả tệp video</p>
+                            <p className="text-[10px] text-slate-400 mt-0.5">MP4, MOV</p>
+                          </div>
+                        </div>
+                      </Upload.Dragger>
+                    </Form.Item>
+
+                    {isUploading && (
+                      <div className="p-3 bg-blue-50 rounded-xl border border-blue-100">
+                        <div className="flex items-center justify-between mb-2 px-1">
+                          <span className="text-[11px] font-bold text-blue-700">Đang tải lên...</span>
+                          <span className="text-[11px] font-black text-blue-800">{uploadProgress}%</span>
+                        </div>
+                        <Progress percent={uploadProgress} showInfo={false} strokeColor="#3B82F6" strokeWidth={6} strokeLinecap="round" />
+                      </div>
+                    )}
+
+                    {form.getFieldValue("videoUrl") && !isUploading && (
+                      <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-100 flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center animate-pulse">
+                            <FileVideo size={16} />
+                          </div>
+                          <div className="overflow-hidden">
+                            <p className="text-[12px] font-bold text-emerald-900">Thành công</p>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => form.setFieldsValue({ videoUrl: "" })}
+                          className="p-2 rounded-full text-emerald-600"
                         >
-                            <Upload.Dragger
-                                customRequest={handleFileUpload}
-                                maxCount={1}
-                                showUploadList={false}
-                                accept="video/*"
-                                disabled={isUploading}
-                                className="bg-slate-50 border-2 border-dashed border-slate-200 rounded-xl p-6 hover:border-blue-400 transition-all group"
-                            >
-                                <div className="flex flex-col items-center gap-2">
-                                    <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                        <UploadIcon size={20} />
-                                    </div>
-                                    <div>
-                                        <p className="text-[13px] font-bold text-slate-700">Kéo thả tệp video của bạn vào đây</p>
-                                        <p className="text-[11px] text-slate-500 mt-1">Định dạng MP4, MOV được khuyến nghị</p>
-                                    </div>
-                                </div>
-                            </Upload.Dragger>
-                        </Form.Item>
-
-                        {isUploading && (
-                            <div className="p-3 bg-blue-50 rounded-xl border border-blue-100">
-                                <div className="flex items-center justify-between mb-2 px-1">
-                                    <span className="text-[11px] font-bold text-blue-700">Tiến trình upload...</span>
-                                    <span className="text-[11px] font-black text-blue-800">{uploadProgress}%</span>
-                                </div>
-                                <Progress percent={uploadProgress} showInfo={false} strokeColor="#3B82F6" strokeWidth={6} strokeLinecap="round" />
-                            </div>
-                        )}
-
-                        {form.getFieldValue("videoUrl") && !isUploading && (
-                            <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-100 flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 animate-pulse">
-                                        <FileVideo size={16} />
-                                    </div>
-                                    <div className="overflow-hidden">
-                                        <p className="text-[12px] font-bold text-emerald-900 leading-tight">Video đã tải lên thành công</p>
-                                        <p className="text-[10px] text-emerald-600 truncate max-w-[300px]">{form.getFieldValue("videoUrl")}</p>
-                                    </div>
-                                </div>
-                                <button 
-                                    onClick={() => form.setFieldsValue({ videoUrl: "" })}
-                                    className="p-2 hover:bg-emerald-100 rounded-full text-emerald-600 transition-all"
-                                >
-                                    <X size={14} />
-                                </button>
-                            </div>
-                        )}
-                    </div>
+                          <X size={14} />
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 )}
+              </div>
             </div>
-        </div>
+          </div>
 
-        {/* Thumbnail Preview (Chỉ dành cho Youtube) */}
-        {sourceType === "youtube" && (
-            <Form.Item
-              shouldUpdate={(prevValues, currentValues) =>
-                prevValues.videoUrl !== currentValues.videoUrl
-              }
-              className="mb-0"
-            >
-              {({ getFieldValue }) => {
-                const url = getFieldValue("videoUrl") || "";
-                const videoId = getVideoId(url);
-    
-                return videoId ? (
-                  <div className="p-4 bg-slate-50 rounded-[24px] border border-slate-200 animate-in fade-in slide-in-from-top-4 duration-500">
-                    <div className="flex items-center gap-2 text-[11px] font-bold text-emerald-600 mb-3 px-1 uppercase tracking-wider">
-                      <CheckCircle size={14} />
-                      Dự kiến kết quả hiển thị
-                    </div>
-                    <div className="relative aspect-video rounded-xl overflow-hidden border border-slate-200 shadow-xl bg-black group/preview">
-                        <img
+          {/* Right Column: Preview */}
+          <div className="lg:col-span-5 h-full">
+            <div className="h-full bg-slate-50/50 rounded-[32px] border border-slate-100 p-6 flex flex-col items-center justify-center sticky top-0 min-h-[400px]">
+              <Form.Item
+                shouldUpdate={(prevValues, currentValues) =>
+                  prevValues.videoUrl !== currentValues.videoUrl || prevValues.sourceType !== currentValues.sourceType
+                }
+                className="mb-0 w-full"
+              >
+                {({ getFieldValue }) => {
+                  const url = getFieldValue("videoUrl") || "";
+                  const videoId = sourceType === "youtube" ? getVideoId(url) : null;
+                  const isUploaded = sourceType === "upload" && url;
+
+                  return (
+                    <div className="w-full space-y-4">
+                      <div className="flex items-center gap-2 text-[14px] font-bold text-slate-600 px-1">
+                        <CheckCircle size={14} className="text-emerald-500" />
+                        Kết quả
+                      </div>
+                      
+                      {videoId ? (
+                        <div className="relative aspect-video rounded-2xl overflow-hidden border border-slate-200 shadow-2xl bg-black animate-in fade-in zoom-in-95 duration-500">
+                          <img
                             src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
                             alt="Preview"
-                            className="w-full h-full object-cover opacity-90 group-hover/preview:scale-105 transition-transform duration-700"
-                        />
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="w-12 h-12 rounded-full bg-red-600 text-white flex items-center justify-center shadow-2xl">
-                                <Youtube size={24} fill="white" />
+                            className="w-full h-full object-cover opacity-90 shadow-inner"
+                          />
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="w-14 h-14 rounded-full bg-red-600 text-white flex items-center justify-center shadow-2xl animate-pulse">
+                              <Youtube size={28} fill="white" />
                             </div>
+                          </div>
                         </div>
+                      ) : isUploaded ? (
+                        <div className="aspect-video rounded-2xl bg-slate-900 flex flex-col items-center justify-center gap-4 text-white border border-slate-700 shadow-2xl animate-in fade-in zoom-in-95 duration-500 overflow-hidden relative group">
+                           <video 
+                             src={url} 
+                             className="absolute inset-0 w-full h-full object-cover opacity-60"
+                           />
+                           <div className="relative z-10 flex flex-col items-center">
+                            <div className="w-16 h-16 rounded-full bg-blue-500 flex items-center justify-center mb-2 shadow-lg">
+                              <FileVideo size={32} />
+                            </div>
+                            <span className="text-[14px] font-bold">Video đã sẵn sàng</span>
+                           </div>
+                        </div>
+                      ) : (
+                        <div className="aspect-video rounded-2xl bg-white border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400 gap-3">
+                           <div className="w-16 h-16 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100">
+                              <Video size={32} className="opacity-20" />
+                           </div>
+                           <span className="text-[13px] font-medium italic">Vui lòng nhập nguồn video...</span>
+                        </div>
+                      )}
+
+                      <div className="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm mt-4">
+                        <h4 className="text-[15px] font-bold text-slate-900 truncate">
+                          {getFieldValue("title") || "Tiêu đề sản phẩm"}
+                        </h4>
+                        <p className="text-[12px] font-medium text-slate-500 mt-1">
+                          Tác giả: {getFieldValue("author") || "---"}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                ) : url ? (
-                  <div className="p-4 bg-red-50 rounded-xl border border-red-100 flex items-center gap-2 text-red-600 animate-in fade-in duration-300">
-                    <AlertCircle size={16} />
-                    <span className="text-[12px] font-bold">Link Youtube bạn vừa nhập không hợp lệ</span>
-                  </div>
-                ) : null;
-              }}
-            </Form.Item>
-        )}
+                  );
+                }}
+              </Form.Item>
+            </div>
+          </div>
+        </div>
       </Form>
     </Modal>
   );

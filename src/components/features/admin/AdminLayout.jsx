@@ -5,6 +5,18 @@ import AdminHeader from "./components/AdminHeader";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 import { notification } from "antd";
+import { AnimatePresence, motion } from "framer-motion";
+
+const pageVariants = {
+  initial: { opacity: 0, y: 15 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -15 },
+};
+
+const pageTransition = {
+  duration: 0.3,
+  ease: "easeOut"
+};
 
 const AdminLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -18,7 +30,7 @@ const AdminLayout = () => {
       webSocketFactory: () => new SockJS(WS_URL),
       onConnect: () => {
         console.log("Admin Global Notification Connected");
-        
+
         // Listen for new bookings
         client.subscribe("/topic/bookings", (message) => {
           const booking = JSON.parse(message.body);
@@ -81,8 +93,20 @@ const AdminLayout = () => {
 
       <div className="flex-1 flex flex-col w-full lg:ml-[280px] transition-all duration-500 ease-in-out admin-area">
         <AdminHeader toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
-        <main className="flex-1 p-4 md:p-6 lg:p-6 overflow-y-auto w-full max-w-full mx-auto">
-          <Outlet />
+        <main className="flex-1 p-4 md:p-6 lg:p-6 overflow-y-auto w-full max-w-full mx-auto relative">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={location.pathname}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              variants={pageVariants}
+              transition={pageTransition}
+              className="w-full"
+            >
+              <Outlet />
+            </motion.div>
+          </AnimatePresence>
         </main>
       </div>
     </div>

@@ -48,18 +48,26 @@ const DemoForm = ({ open, onCancel, onSubmit, initialValues }) => {
     <Modal
       title={initialValues ? "Cập nhật nhạc nền" : "Thêm nhạc nền mới"}
       open={open}
-      onOk={handleSubmit}
       onCancel={onCancel}
-      okText={initialValues ? "Cập nhật" : "Tạo"}
-      cancelText="Hủy"
       width={600}
-      okButtonProps={{
-        style: {
-          background: "linear-gradient(135deg, #1e293b 0%, #334155 100%)",
-          border: "none",
-        },
-      }}
+      className="!max-w-[95vw]"
       centered
+      footer={[
+        <button
+          key="cancel"
+          onClick={onCancel}
+          className="h-10 px-6 rounded-xl font-medium text-[14px] text-slate-600 border border-slate-200 bg-white mr-3"
+        >
+          Hủy
+        </button>,
+        <button
+          key="submit"
+          onClick={handleSubmit}
+          className="h-10 px-6 rounded-xl bg-slate-900 border-none font-semibold text-[14px] text-white"
+        >
+          {initialValues ? "Cập nhật" : "Tạo nhạc nền"}
+        </button>
+      ]}
       styles={{
         body: { paddingTop: 24 },
       }}
@@ -70,7 +78,7 @@ const DemoForm = ({ open, onCancel, onSubmit, initialValues }) => {
           label="Tiêu đề"
           rules={[{ required: true, message: "Vui lòng nhập tiêu đề!" }]}
         >
-          <Input placeholder="Nhập tiêu đề nhạc nền" size="large" />
+          <Input placeholder="Nhập tiêu đề nhạc nền" size="large" className="hover:border-slate-200" />
         </Form.Item>
 
         <Form.Item
@@ -90,6 +98,7 @@ const DemoForm = ({ open, onCancel, onSubmit, initialValues }) => {
           <Input
             placeholder="Ví dụ: https://www.youtube.com/watch?v=dQw4w9WgXcQ"
             size="large"
+            className="hover:border-slate-200"
           />
         </Form.Item>
 

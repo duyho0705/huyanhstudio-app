@@ -104,7 +104,7 @@ const AdminHeader = ({ toggleSidebar }) => {
       <header className="sticky top-0 z-40 bg-white/70 backdrop-blur-2xl border-b border-slate-100 h-20 flex items-center justify-between px-6 md:px-10">
         <div className="flex items-center gap-6">
           <button
-            className="w-10 h-10 flex items-center justify-center bg-slate-50 hover:bg-slate-100 rounded-xl text-slate-600 transition-all active:scale-90 lg:hidden"
+            className="w-10 h-10 flex items-center justify-center bg-slate-50 rounded-xl text-slate-600 lg:hidden"
             onClick={toggleSidebar}
           >
             <Menu size={20} />
@@ -114,7 +114,7 @@ const AdminHeader = ({ toggleSidebar }) => {
         <div className="flex items-center gap-3">
 
 
-          <button className="w-11 h-11 flex items-center justify-center text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-none transition-all relative group">
+          <button className="w-11 h-11 flex items-center justify-center text-slate-400 rounded-none relative group">
             <Bell size={18} strokeWidth={2.5} />
             <span className="absolute top-3 right-3 w-2 h-2 bg-red-500 rounded-full border-2 border-white shadow-sm ring-2 ring-red-500/20"></span>
           </button>
@@ -126,9 +126,9 @@ const AdminHeader = ({ toggleSidebar }) => {
             trigger={["click"]}
             placement="bottomRight"
           >
-            <div className="flex items-center gap-4 p-1 rounded-2xl hover:bg-slate-50 group cursor-pointer transition-all border border-transparent hover:border-slate-100">
+            <div className="flex items-center gap-4 p-1 rounded-2xl group cursor-pointer border border-transparent">
               <div className="relative">
-                <div className="w-11 h-11 bg-slate-900 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-slate-200 transition-transform group-hover:scale-95">
+                <div className="w-11 h-11 bg-slate-900 rounded-2xl flex items-center justify-center text-white">
                   <User size={20} />
                 </div>
 
@@ -140,7 +140,7 @@ const AdminHeader = ({ toggleSidebar }) => {
                     <span className="text-[10px] font-semibold text-blue-500 tracking-[0.2em] opacity-80">{getUserRole()}</span>
                   )}
                 </div>
-                <ChevronDown size={14} strokeWidth={3} className="text-slate-400 group-hover:translate-y-0.5 transition-transform" />
+                <ChevronDown size={14} strokeWidth={3} className="text-slate-400" />
               </div>
             </div>
           </Dropdown>
@@ -166,6 +166,7 @@ const AdminHeader = ({ toggleSidebar }) => {
         onCancel={() => setAccountModal(false)}
         footer={null}
         width={700}
+        className="!max-w-[95vw]"
         centered
         closable={false}
       >
@@ -186,6 +187,7 @@ const AdminHeader = ({ toggleSidebar }) => {
         onCancel={() => setBookingsModal(false)}
         footer={null}
         width={1000}
+        className="!max-w-[95vw]"
         centered
         closable={false}
       >
@@ -197,7 +199,7 @@ const AdminHeader = ({ toggleSidebar }) => {
                 <h3 className="text-xl font-semibold text-slate-900">Lịch sử hệ thống</h3>
               </div>
             </div>
-            <button onClick={() => setBookingsModal(false)} className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-900 transition-all">
+            <button onClick={() => setBookingsModal(false)} className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400">
               <Home size={18} />
             </button>
           </div>
@@ -211,6 +213,7 @@ const AdminHeader = ({ toggleSidebar }) => {
         onCancel={() => setPasswordModal(false)}
         footer={null}
         width={500}
+        className="!max-w-[95vw]"
         centered
         closable={false}
       >
