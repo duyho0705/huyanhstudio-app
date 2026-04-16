@@ -74,7 +74,7 @@ const AdminLayout = () => {
   }, []);
 
   return (
-    <div className="flex min-h-screen bg-[#f8fafc] relative overflow-x-hidden antialiased">
+    <div className="flex h-screen bg-[#f8fafc] relative antialiased overflow-hidden">
       {/* Decorative Background Blobs */}
       <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-400/5 rounded-full blur-[120px] -z-0 pointer-events-none"></div>
       <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-400/5 rounded-full blur-[120px] -z-0 pointer-events-none"></div>
@@ -91,9 +91,9 @@ const AdminLayout = () => {
         onClose={() => setIsSidebarOpen(false)}
       />
 
-      <div className="flex-1 flex flex-col w-full lg:ml-[280px] transition-all duration-500 ease-in-out admin-area">
+      <div className="flex-1 flex flex-col w-full lg:ml-[260px] h-screen transition-all duration-500 ease-in-out admin-area overflow-hidden">
         <AdminHeader toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
-        <main className="flex-1 p-4 md:p-6 lg:p-6 overflow-y-auto w-full max-w-full mx-auto relative">
+        <main className="flex-1 p-4 md:p-6 lg:p-6 overflow-y-auto w-full max-w-full mx-auto relative scroll-smooth">
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}

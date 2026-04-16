@@ -190,7 +190,7 @@ const ServiceManagement = () => {
                   </Tooltip>
                 )}
               </span>
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-tighter mt-0.5">{record.buttonText || "Đăng ký ngay"}</span>
+              <span className="text-[11px] font-bold text-slate-400  mt-0.5">{record.buttonText || "Đăng ký ngay"}</span>
             </div>
           </div>
         )
@@ -248,7 +248,6 @@ const ServiceManagement = () => {
       title: <span className="text-[13px] font-semibold text-slate-600">Thao tác</span>,
       key: "actions",
       width: 140,
-      fixed: "right",
       align: "center",
       render: (_, record) => (
         <div className="flex items-center justify-center gap-2">
@@ -312,8 +311,8 @@ const ServiceManagement = () => {
         </div>
 
         <div className="border border-slate-100 overflow-hidden bg-white shadow-sm rounded-2xl">
-          {/* Desktop Table View */}
-          <div className="hidden lg:block">
+          {/* Table View (shown from md/768px) */}
+          <div className="hidden md:block">
             <Table
               columns={columns}
               dataSource={Array.isArray(services) ? services : []}
@@ -327,15 +326,15 @@ const ServiceManagement = () => {
                 emptyText: (
                   <div className="py-24 flex flex-col items-center opacity-30">
                     <Briefcase size={64} strokeWidth={1} className="mb-4" />
-                    <span className="text-sm font-black uppercase tracking-[0.2em]">Cơ sở dữ liệu dịch vụ trống</span>
+                    <span className="text-sm font-bold ">Cơ sở dữ liệu dịch vụ trống</span>
                   </div>
                 )
               }}
             />
           </div>
 
-          {/* Mobile Card View */}
-          <div className="lg:hidden">
+          {/* Mobile Card View (hidden from md/768px) */}
+          <div className="md:hidden">
             {loading ? (
               <div className="p-4 sm:p-6 space-y-4">
                 {[1, 2, 3].map(i => (
@@ -357,7 +356,7 @@ const ServiceManagement = () => {
                             {svc.name}
                             {svc.featured && <Star size={12} fill="currentColor" className="text-amber-500 shrink-0" />}
                           </h4>
-                          <p className="text-[11px] font-bold text-slate-400 uppercase tracking-tighter mt-0.5">{svc.buttonText || "Đăng ký ngay"}</p>
+                          <p className="text-[11px] font-bold text-slate-400 mt-0.5">{svc.buttonText || "Đăng ký ngay"}</p>
                         </div>
                       </div>
                       <div className="flex items-center justify-between py-2 border-y border-slate-50">
@@ -383,7 +382,7 @@ const ServiceManagement = () => {
             ) : (
               <div className="py-16 flex flex-col items-center opacity-30 p-4">
                 <Briefcase size={48} strokeWidth={1} className="mb-4" />
-                <span className="text-sm font-black uppercase tracking-[0.2em] text-center">Cơ sở dữ liệu dịch vụ trống</span>
+                <span className="text-sm font-black text-center">Cơ sở dữ liệu dịch vụ trống</span>
               </div>
             )}
           </div>

@@ -341,7 +341,7 @@ const BookingManagement = () => {
           <div className="flex flex-col">
             <span className="text-slate-900 font-medium text-[14px] tracking-tight leading-none mb-1">{name}</span>
             {record.needConsultation && (
-              <span className="text-[10px] font-bold text-amber-500 flex items-center gap-1 uppercase tracking-wider">
+              <span className="text-[10px] font-bold text-amber-500 flex items-center gap-1">
                 <AlertCircle size={10} /> Cần tư vấn
               </span>
             )}
@@ -450,7 +450,6 @@ const BookingManagement = () => {
         title: <span className="text-[15px] font-semibold text-slate-600">Thao tác</span>,
         key: "actions",
         width: 140,
-        fixed: "right",
         align: "center",
         render: (_, record) => (
           <div className="flex items-center justify-center gap-2">
@@ -490,7 +489,7 @@ const BookingManagement = () => {
       {messageContext}
 
       {/* Stats Section */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-6">
         {[
           {
             icon: <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6 text-indigo-600" strokeWidth={1.5} />,
@@ -530,7 +529,7 @@ const BookingManagement = () => {
       </div>
 
       <div className="bg-white p-4 sm:p-6 rounded-[32px] border border-slate-200 shadow-sm space-y-6">
-        <div className="flex flex-col lg:flex-row lg:items-center gap-4 pb-6 border-b border-slate-50">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-4 pb-2 sm:pb-6 border-b border-slate-50">
           <h2 className="text-[16px] sm:text-[20px] font-bold text-slate-800 whitespace-nowrap mr-auto flex items-center gap-3">
             <div className="w-1.5 h-5 sm:h-8 bg-blue-600 rounded-full"></div>
             Danh sách lịch thu âm
@@ -560,8 +559,8 @@ const BookingManagement = () => {
 
 
         <div className="rounded-[28px] border-2 border-slate-200 overflow-hidden bg-white shadow-inner">
-          {/* Desktop Table */}
-          <div className="hidden lg:block">
+          {/* Table View (shown from md/768px) */}
+          <div className="hidden md:block">
             <Table
               rowSelection={rowSelection}
               columns={columns}
@@ -570,7 +569,7 @@ const BookingManagement = () => {
               loading={loading}
               pagination={false}
               onChange={handleTableChange}
-              size={window.innerWidth < 1024 ? "small" : "default"}
+              size={window.innerWidth < 1200 ? "small" : "default"}
               className="custom-admin-table ant-table-custom ant-table-booking"
               locale={{
                 emptyText: (
@@ -583,8 +582,8 @@ const BookingManagement = () => {
             />
           </div>
 
-          {/* Mobile Card View */}
-          <div className="lg:hidden">
+          {/* Mobile Card View (hidden from md/768px) */}
+          <div className="md:hidden">
             {loading ? (
               <div className="p-4 sm:p-6 space-y-4">
                 {[1, 2, 3].map(i => (
@@ -610,7 +609,7 @@ const BookingManagement = () => {
                         <span className="font-semibold">{dayjs(booking.recordDate).format("DD/MM/YYYY")}</span>
                       </div>
                       {booking.needConsultation && (
-                        <span className="text-[10px] font-bold text-amber-500 flex items-center gap-1 uppercase tracking-wider">
+                        <span className="text-[10px] font-bold text-amber-500 flex items-center gap-1">
                           <AlertCircle size={10} /> Cần tư vấn
                         </span>
                       )}
@@ -695,7 +694,7 @@ const BookingManagement = () => {
           <div className="w-16 h-16 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
             <Trash2 size={32} />
           </div>
-          <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight mb-2">Gỡ bỏ đơn hàng?</h3>
+          <h3 className="text-xl font-black text-slate-900  mb-2">Gỡ bỏ đơn hàng?</h3>
           <p className="text-slate-500 text-sm font-medium mb-8">Thao tác này sẽ xóa hồ sơ đơn hàng vĩnh viễn và không thể khôi phục.</p>
 
           {selectedBooking && (
@@ -712,8 +711,8 @@ const BookingManagement = () => {
           )}
 
           <div className="flex gap-3">
-            <Button onClick={() => setIsDeleteModalOpen(false)} className="flex-1 h-12 rounded-none font-black uppercase tracking-widest text-[10px]">Quay lại</Button>
-            <Button onClick={confirmDelete} danger type="primary" className="flex-1 h-12 rounded-none bg-red-600 border-none font-black uppercase tracking-widest text-[10px]">Xác nhận xóa</Button>
+            <Button onClick={() => setIsDeleteModalOpen(false)} className="flex-1 h-12 rounded-none font-bold text-[10px]">Quay lại</Button>
+            <Button onClick={confirmDelete} danger type="primary" className="flex-1 h-12 rounded-none bg-red-600 border-none font-bold text-[10px]">Xác nhận xóa</Button>
           </div>
         </div>
       </Modal>
@@ -731,7 +730,7 @@ const BookingManagement = () => {
           <div className="w-16 h-16 bg-red-100 text-red-600 rounded-none flex items-center justify-center mx-auto mb-6">
             <Trash2 size={32} />
           </div>
-          <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight mb-2">Xóa hàng loạt?</h3>
+          <h3 className="text-xl font-black text-slate-900 mb-2">Xóa hàng loạt?</h3>
           <p className="text-slate-500 text-sm font-medium mb-6">Bạn đang chuẩn bị xóa <strong>{selectedRowKeys.length}</strong> đơn hàng đã chọn.</p>
 
           <div className="max-h-60 overflow-y-auto pr-2 custom-scrollbar mb-8 space-y-2">
@@ -740,7 +739,7 @@ const BookingManagement = () => {
               return booking ? (
                 <div key={key} className="flex items-center justify-between p-3 bg-slate-50 rounded-none border border-slate-100">
                   <div className="flex flex-col text-left">
-                    <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest">{booking.bookingCode}</span>
+                    <span className="text-[10px] font-black text-blue-600">{booking.bookingCode}</span>
                     <span className="text-xs font-bold text-slate-700">{booking.customerName}</span>
                   </div>
                   <span className="text-[10px] font-bold text-slate-400">{booking.phone}</span>
@@ -750,8 +749,8 @@ const BookingManagement = () => {
           </div>
 
           <div className="flex gap-3">
-            <Button onClick={() => setIsBulkDeleteModalOpen(false)} className="flex-1 h-12 rounded-none font-black uppercase tracking-widest text-[10px]">Hủy bỏ</Button>
-            <Button onClick={confirmBulkDelete} danger type="primary" className="flex-1 h-12 rounded-none bg-red-600 border-none font-black uppercase tracking-widest text-[10px]">Xóa {selectedRowKeys.length} đơn</Button>
+            <Button onClick={() => setIsBulkDeleteModalOpen(false)} className="flex-1 h-12 rounded-none font-bold text-[10px]">Hủy bỏ</Button>
+            <Button onClick={confirmBulkDelete} danger type="primary" className="flex-1 h-12 rounded-none bg-red-600 border-none font-bold text-[10px]">Xóa {selectedRowKeys.length} đơn</Button>
           </div>
         </div>
       </Modal>
@@ -781,7 +780,7 @@ const BookingManagement = () => {
                       Chi tiết đặt lịch
                     </span>
                     <span className="text-slate-300 font-bold">/</span>
-                    <span className="text-slate-400 font-bold tracking-widest uppercase text-[12px]">
+                    <span className="text-slate-400 font-bold  text-[12px]">
                       #{selectedDetailBooking.bookingCode}
                     </span>
                   </div>

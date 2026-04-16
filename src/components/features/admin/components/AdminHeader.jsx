@@ -50,37 +50,36 @@ const AdminHeader = ({ toggleSidebar }) => {
   };
 
   const menuItems = [
-
     {
       key: "account",
-      label: <span className="text-[15px] font-semibold">Hồ sơ cá nhân</span>,
-      icon: <UserCircle size={18} className="text-blue-500" />,
+      label: <span className="text-[13px] sm:text-[14px] font-semibold">Hồ sơ cá nhân</span>,
+      icon: <UserCircle size={16} className="text-blue-500" />,
       onClick: () => setAccountModal(true),
     },
     {
       key: "bookings",
-      label: <span className="text-[15px] font-semibold">Thông báo đặt lịch</span>,
-      icon: <Calendar size={18} className="text-blue-500" />,
+      label: <span className="text-[13px] sm:text-[14px] font-semibold">Thông báo đặt lịch</span>,
+      icon: <Calendar size={16} className="text-blue-500" />,
       onClick: () => setBookingsModal(true),
     },
     {
       key: "change-password",
-      label: <span className="text-[15px] font-semibold">Thiết lập mật khẩu</span>,
-      icon: <Lock size={18} className="text-blue-500" />,
+      label: <span className="text-[13px] sm:text-[14px] font-semibold">Thiết lập mật khẩu</span>,
+      icon: <Lock size={16} className="text-blue-500" />,
       onClick: () => setPasswordModal(true),
     },
     { type: "divider" },
     {
       key: "home",
-      label: <span className="text-[15px] font-semibold text-slate-600">Xem website chính</span>,
-      icon: <Home size={18} className="text-slate-400" />,
+      label: <span className="text-[13px] sm:text-[14px] font-semibold text-slate-600">Xem website chính</span>,
+      icon: <Home size={16} className="text-slate-400" />,
       onClick: handleGoHome,
     },
     { type: "divider" },
     {
       key: "logout",
-      label: <span className="text-[15px] font-semibold text-red-600">Thoát hệ thống</span>,
-      icon: <LogOut size={18} className="text-red-500" />,
+      label: <span className="text-[13px] sm:text-[14px] font-semibold text-red-600">Thoát hệ thống</span>,
+      icon: <LogOut size={16} className="text-red-500" />,
       onClick: logout,
     },
   ];
@@ -125,13 +124,13 @@ const AdminHeader = ({ toggleSidebar }) => {
             menu={{ items: menuItems }}
             trigger={["click"]}
             placement="bottomRight"
+            overlayClassName="[&_.ant-dropdown-menu]:!p-1 [&_.ant-dropdown-menu-item]:!py-1.5 [&_.ant-dropdown-menu-item]:!px-3 !min-w-[170px]"
           >
             <div className="flex items-center gap-4 p-1 rounded-2xl group cursor-pointer border border-transparent">
               <div className="relative">
                 <div className="w-11 h-11 bg-slate-900 rounded-2xl flex items-center justify-center text-white">
                   <User size={20} />
                 </div>
-
               </div>
               <div className="hidden sm:flex items-center gap-3">
                 <div className="flex items-baseline gap-2">

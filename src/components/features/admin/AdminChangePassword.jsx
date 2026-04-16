@@ -115,7 +115,7 @@ const AdminChangePassword = ({ onClose }) => {
 
         <button 
             type="submit" 
-            className="w-full h-14 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-[0.1em] text-sm hover:bg-slate-800 active:scale-95 transition-all shadow-xl shadow-slate-200 mt-4 flex items-center justify-center gap-2"
+            className="w-full h-14 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-slate-800 active:scale-95 transition-all shadow-xl shadow-slate-200 mt-4 flex items-center justify-center gap-2"
         >
           <CheckCircle2 size={18} />
           Xác nhận thay đổi

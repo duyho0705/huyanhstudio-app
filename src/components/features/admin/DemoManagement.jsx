@@ -241,7 +241,7 @@ const DemoManagement = () => {
         </div>
 
         <div className="rounded-[28px] border-2 border-slate-200 overflow-hidden bg-white shadow-inner">
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-8 p-3 sm:p-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 p-3 sm:p-6">
             {loading ? (
               Array.from({ length: 6 }).map((_, i) => (
                 <div key={i} className="bg-slate-50 h-[400px] rounded-[2.5rem] animate-pulse"></div>

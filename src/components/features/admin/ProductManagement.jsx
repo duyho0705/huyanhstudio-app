@@ -219,7 +219,7 @@ const ProductManagement = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-8 pb-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-8 pb-4">
           {loading ? (
             Array.from({ length: 10 }).map((_, i) => (
               <div key={i} className="bg-white rounded-3xl border border-slate-100 p-5 space-y-5 animate-pulse">
@@ -236,10 +236,10 @@ const ProductManagement = () => {
               <div className="w-24 h-24 rounded-3xl bg-white shadow-xl shadow-slate-200 flex items-center justify-center text-slate-200 mb-8">
                 <Package size={48} strokeWidth={1} />
               </div>
-              <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight mb-2">
+              <h3 className="text-2xl font-black text-slate-900 mb-2">
                 {searchText ? "Không tìm thấy dữ liệu" : "Trung tâm lưu trữ trống"}
               </h3>
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] max-w-xs text-center leading-relaxed">
+              <p className="text-[10px] font-black text-slate-400  max-w-xs text-center leading-relaxed">
                 {searchText
                   ? "Vui lòng kiểm tra lại từ khóa hoặc thay đổi tiêu chí tìm kiếm"
                   : "Hệ thống chưa nhận được bản ghi sản phẩm nào từ bạn"}
@@ -298,7 +298,7 @@ const ProductManagement = () => {
 
         {pagination.total > 0 && (
           <div className="p-8 bg-slate-50/50 border-t border-slate-100 rounded-[28px] flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div className="px-5 py-2.5 bg-white border border-slate-100 rounded-2xl text-[11px] font-black text-slate-600 uppercase tracking-widest shadow-sm flex items-center gap-2">
+            <div className="px-5 py-2.5 bg-white border border-slate-100 rounded-2xl text-[11px] font-black text-slate-600 shadow-sm flex items-center gap-2">
               <span>{Math.min(pagination.total, (pagination.current - 1) * pagination.pageSize + 1)} — {Math.min(pagination.current * pagination.pageSize, pagination.total)}</span>
               <span className="text-slate-200">/</span>
               <span className="text-slate-500">{pagination.total} Hồ sơ</span>
@@ -345,8 +345,8 @@ const ProductManagement = () => {
                 <Trash2 size={32} strokeWidth={2.5} />
               </div>
               <div>
-                <h3 className="text-2xl font-black text-slate-900 uppercase">Loại bỏ sản phẩm</h3>
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mt-1">Hành động này không thể hoàn tác</p>
+                <h3 className="text-2xl font-black text-slate-900">Loại bỏ sản phẩm</h3>
+                <p className="text-[10px] font-black text-slate-400 mt-1">Hành động này không thể hoàn tác</p>
               </div>
             </div>
 
@@ -357,12 +357,12 @@ const ProductManagement = () => {
                 className="w-24 h-16 rounded-xl object-cover shadow-sm grayscale"
               />
               <div className="overflow-hidden">
-                <h4 className="text-xs font-black text-slate-900 uppercase truncate mb-1">
+                <h4 className="text-xs font-black text-slate-900 truncate mb-1">
                   {selectedProduct.title}
                 </h4>
                 <div className="flex items-center gap-1.5 opacity-30">
                   <Film size={12} />
-                  <span className="text-[9px] font-black uppercase tracking-widest">Video Content</span>
+                  <span className="text-[9px] font-black">Video Content</span>
                 </div>
               </div>
             </div>
@@ -370,13 +370,13 @@ const ProductManagement = () => {
             <div className="flex gap-4 pt-4">
               <button
                 onClick={() => setIsDeleteModalOpen(false)}
-                className="flex-1 h-16 rounded-2xl bg-white border border-slate-100 text-slate-900 font-black uppercase tracking-widest text-[10px] shadow-sm"
+                className="flex-1 h-16 rounded-2xl bg-white border border-slate-100 text-slate-900 font-bold text-[10px] shadow-sm"
               >
                 Hủy bỏ
               </button>
               <button
                 onClick={confirmDelete}
-                className="flex-1 h-16 rounded-2xl bg-red-600 text-white font-black uppercase tracking-widest text-[10px] shadow-xl shadow-red-200"
+                className="flex-1 h-16 rounded-2xl bg-red-600 text-white font-bold text-[10px] shadow-xl shadow-red-200"
               >
                 Xác nhận
               </button>

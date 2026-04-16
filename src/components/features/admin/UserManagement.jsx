@@ -359,26 +359,25 @@ const UserManagement = () => {
       {
         title: <span className="text-[15px] font-medium text-slate-600">Thao tác</span>,
         key: "actions",
-        width: 140,
-        fixed: "right",
+        width: 100,
         align: "center",
         render: (_, record) => (
           <div className="flex items-center justify-center gap-2">
             <Button
               type="text"
               onClick={() => handleEdit(record)}
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-amber-500 hover:bg-amber-50 transition-all p-0"
+              className="w-8 h-8 rounded-xl flex items-center justify-center bg-amber-50 text-amber-500 hover:bg-amber-100 transition-all p-0"
               title="Chỉnh sửa"
             >
-              <Edit size={18} strokeWidth={2.5} />
+              <Edit size={16} strokeWidth={2.5} />
             </Button>
             <Button
               type="text"
               onClick={() => handleDelete(record)}
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-red-500 hover:bg-red-50 transition-all p-0"
+              className="w-8 h-8 rounded-xl flex items-center justify-center bg-rose-50 text-rose-500 hover:bg-rose-100 transition-all p-0"
               title="Xóa tài khoản"
             >
-              <Trash2 size={18} strokeWidth={2.5} />
+              <Trash2 size={16} strokeWidth={2.5} />
             </Button>
           </div>
         ),
@@ -391,28 +390,25 @@ const UserManagement = () => {
     <div className="space-y-6 animate-in fade-in duration-700">
       {messageContext}
 
-      {/* 1. Stats Section - Multi-column responsive */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+      {/* 1. Stats Section - Clean modern layout */}
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
         {[
-          { icon: <Users className="w-5 h-5 sm:w-7 sm:h-7" />, label: "Tổng", value: pagination.total, config: "text-indigo-600 bg-indigo-50" },
-          { icon: <UserCheck className="w-5 h-5 sm:w-7 sm:h-7" />, label: "Hoạt động", value: stats.active, config: "text-emerald-600 bg-emerald-50" },
-          { icon: <UserX className="w-5 h-5 sm:w-7 sm:h-7" />, label: "Đã khóa", value: stats.inactive, config: "text-rose-600 bg-rose-50" },
-          { icon: <ShieldCheck className="w-5 h-5 sm:w-7 sm:h-7" />, label: "Quản trị viên", value: stats.admin, config: "text-amber-600 bg-amber-50" }
+          { icon: <Users size={28} />, label: "Tổng số", value: pagination.total, config: "text-indigo-600 bg-indigo-50" },
+          { icon: <UserCheck size={28} />, label: "Hoạt động", value: stats.active, config: "text-emerald-600 bg-emerald-50" },
+          { icon: <UserX size={28} />, label: "Đã khóa", value: stats.inactive, config: "text-rose-600 bg-rose-50" },
+          { icon: <ShieldCheck size={28} />, label: "Quản trị viên", value: stats.admin, config: "text-amber-600 bg-amber-50" }
         ].map((item, i) => (
-          <div key={i} className="bg-white p-4 sm:p-8 rounded-2xl sm:rounded-[32px] border border-slate-200 shadow-sm hover:shadow-lg transition-all group relative overflow-hidden flex flex-col justify-between min-h-[90px] sm:min-h-0">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 relative z-10 w-full">
-              <div className="flex justify-between items-center w-full sm:w-auto">
-                 <div className={`w-8 h-8 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl ${item.config} flex items-center justify-center transition-transform group-hover:scale-110 duration-500`}>
-                  {item.icon}
-                 </div>
-                 <h3 className="text-xl sm:hidden font-black text-slate-900 m-0 leading-none">{item.value}</h3>
+          <div key={i} className="bg-white p-5 sm:p-6 rounded-[24px] border border-slate-200 shadow-sm hover:shadow-md transition-all group relative overflow-hidden">
+            <div className="flex items-center justify-between relative z-10 w-full">
+              <div className="flex flex-col min-w-0">
+                <p className="text-[13px] sm:text-[15px] font-bold text-slate-500 mb-1 truncate">{item.label}</p>
+                <h3 className="text-2xl sm:text-3xl font-black text-slate-900 m-0 leading-none">{item.value}</h3>
               </div>
-              <div className="min-w-0">
-                <p className="text-sm sm:text-base font-semibold text-slate-500 sm:text-slate-600 mb-0.5 mt-0">{item.label}</p>
-                <h3 className="hidden sm:block text-2xl font-black text-slate-900 m-0 leading-none">{item.value}</h3>
+              <div className={`w-12 h-12 sm:w-14 sm:h-14 shrink-0 rounded-2xl ${item.config} flex items-center justify-center transition-transform group-hover:scale-110 duration-500`}>
+                {item.icon}
               </div>
             </div>
-            <div className="absolute -right-4 -bottom-4 sm:-right-6 sm:-bottom-6 opacity-[0.03] group-hover:opacity-[0.1] transition-all duration-700 group-hover:-rotate-12 scale-150">
+            <div className="absolute -right-4 -bottom-4 opacity-[0.03] group-hover:opacity-[0.08] transition-all duration-700 group-hover:-rotate-12 scale-[2]">
               {item.icon}
             </div>
           </div>
@@ -421,99 +417,95 @@ const UserManagement = () => {
 
       {/* 2. Main Data Section */}
       <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-[32px] border border-slate-200 shadow-sm space-y-6">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-50">
-          <h2 className="text-[17px] sm:text-[20px] font-bold text-slate-800 whitespace-nowrap flex items-center gap-3">
+        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-5 pb-6 border-b border-slate-50">
+          <h2 className="text-[18px] sm:text-[20px] font-bold text-slate-800 whitespace-nowrap flex items-center gap-3">
             <div className="w-1.5 h-6 sm:h-8 bg-blue-600 rounded-full"></div>
             Danh sách người dùng
           </h2>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="w-full sm:w-80 relative">
-              <Input
-                placeholder="Truy vấn tài khoản..."
-                prefix={<Search size={18} className="text-slate-400" />}
-                className="h-10 border-slate-200 rounded-xl text-[14px] font-medium text-slate-900 shadow-sm hover:border-indigo-400 focus:border-indigo-500 placeholder:font-medium placeholder:text-slate-400"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                allowClear
-              />
-            </div>
+          <div className="flex flex-wrap items-center gap-3 w-full xl:w-auto">
+            <Input
+              placeholder="Truy vấn tài khoản..."
+              prefix={<Search size={16} className="text-slate-400" />}
+              className="h-10 w-full sm:w-[220px] border-slate-200 rounded-xl text-[14px] font-medium text-slate-900 shadow-sm hover:border-indigo-400 focus:border-indigo-500 placeholder:font-medium placeholder:text-slate-400"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              allowClear
+            />
 
-            <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
-              <Select
-                placeholder={
-                  <div className="flex items-center gap-2">
-                    <Shield size={14} className="text-slate-400" />
-                    <span className="font-bold text-slate-500">Vai trò</span>
+            <Select
+              placeholder={
+                <div className="flex items-center gap-2">
+                  <Shield size={14} className="text-slate-400" />
+                  <span className="font-bold text-slate-500">Vai trò</span>
+                </div>
+              }
+              value={filters.role}
+              onChange={(val) => handleFilterChange("role", val)}
+              className="h-10 w-[calc(50%-6px)] sm:w-[140px] custom-select-premium"
+              allowClear
+              dropdownStyle={{
+                borderRadius: '20px',
+                padding: '8px',
+                boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
+                border: '1px solid #f1f5f9'
+              }}
+            >
+              {roles.map(r => (
+                <Option key={r.value} value={r.value}>
+                  <div className="flex items-center gap-2.5 py-1">
+                    <div className={`w-2 h-2 rounded-full ${r.value === 'ROLE_ADMIN' ? 'bg-red-500' : 'bg-slate-400'}`}></div>
+                    <span className="font-bold text-slate-700 text-[13px]">{r.label}</span>
                   </div>
-                }
-                value={filters.role}
-                onChange={(val) => handleFilterChange("role", val)}
-                className="h-10 flex-1 sm:flex-none sm:min-w-[150px] custom-select-premium"
-                allowClear
-                dropdownStyle={{
-                  borderRadius: '20px',
-                  padding: '8px',
-                  boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
-                  border: '1px solid #f1f5f9'
-                }}
-              >
-                {roles.map(r => (
-                  <Option key={r.value} value={r.value}>
-                    <div className="flex items-center gap-2.5 py-1">
-                      <div className={`w-2 h-2 rounded-full ${r.value === 'ROLE_ADMIN' ? 'bg-red-500' : 'bg-slate-400'}`}></div>
-                      <span className="font-bold text-slate-700 text-[13px]">{r.label}</span>
-                    </div>
-                  </Option>
-                ))}
-              </Select>
+                </Option>
+              ))}
+            </Select>
 
-              <Select
-                placeholder={
-                  <div className="flex items-center gap-2">
-                    <Settings size={14} className="text-slate-400" />
-                    <span className="font-bold text-slate-500">Trạng thái</span>
+            <Select
+              placeholder={
+                <div className="flex items-center gap-2">
+                  <Settings size={14} className="text-slate-400" />
+                  <span className="font-bold text-slate-500">Trạng thái</span>
+                </div>
+              }
+              value={filters.status}
+              onChange={(val) => handleFilterChange("status", val)}
+              className="h-10 w-[calc(50%-6px)] sm:w-[140px] custom-select-premium"
+              allowClear
+              dropdownStyle={{
+                borderRadius: '20px',
+                padding: '8px',
+                boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
+                border: '1px solid #f1f5f9'
+              }}
+            >
+              {statusOptions.map(s => (
+                <Option key={s.value.toString()} value={s.value}>
+                  <div className="flex items-center gap-2.5 py-1">
+                    <div className={`w-2 h-2 rounded-full ${s.value ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                    <span className="font-bold text-slate-700 text-[13px]">{s.label}</span>
                   </div>
-                }
-                value={filters.status}
-                onChange={(val) => handleFilterChange("status", val)}
-                className="h-10 flex-1 sm:flex-none sm:min-w-[150px] custom-select-premium"
-                allowClear
-                dropdownStyle={{
-                  borderRadius: '20px',
-                  padding: '8px',
-                  boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
-                  border: '1px solid #f1f5f9'
-                }}
-              >
-                {statusOptions.map(s => (
-                  <Option key={s.value.toString()} value={s.value}>
-                    <div className="flex items-center gap-2.5 py-1">
-                      <div className={`w-2 h-2 rounded-full ${s.value ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.4)]' : 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.4)]'}`}></div>
-                      <span className="font-bold text-slate-700 text-[13px]">{s.label}</span>
-                    </div>
-                  </Option>
-                ))}
-              </Select>
+                </Option>
+              ))}
+            </Select>
 
+            <Button
+              onClick={handleCreate}
+              className="h-10 px-5 bg-slate-900 border-none rounded-xl font-bold text-[14px] text-white shadow-md shadow-slate-200 flex items-center gap-2 flex-1 sm:flex-none justify-center hover:bg-slate-800 transition-all"
+            >
+              <Plus size={18} strokeWidth={3} />
+              <span className="whitespace-nowrap">Thêm mới</span>
+            </Button>
+
+            {(filters.role !== null || filters.status !== null || filters.search) && (
               <Button
-                onClick={handleCreate}
-                className="h-10 px-6 bg-slate-900 border-none rounded-xl font-bold text-[14px] text-white shadow-lg shadow-slate-200 flex items-center gap-2 w-full sm:w-auto justify-center"
+                onClick={clearFilters}
+                className="h-10 px-4 flex items-center gap-2 text-slate-600 font-semibold text-[14px] bg-white border border-slate-200 rounded-xl hover:text-blue-600 hover:border-blue-600 transition-all flex-1 sm:flex-none justify-center"
+                icon={<RotateCcw size={16} />}
               >
-                <Plus size={18} strokeWidth={3} />
-                Thêm mới
+                <span className="hidden sm:inline whitespace-nowrap">Làm mới</span>
               </Button>
-
-              {(filters.role !== null || filters.status !== null || filters.search) && (
-                <Button
-                  onClick={clearFilters}
-                  className="h-10 px-4 flex items-center gap-2 text-slate-600 font-semibold text-[14px] bg-white border border-slate-200 rounded-xl hover:text-blue-600 hover:border-blue-600 transition-all"
-                  icon={<RotateCcw size={16} />}
-                >
-                  <span className="hidden sm:inline">Làm mới</span>
-                </Button>
-              )}
-            </div>
+            )}
           </div>
         </div>
 
@@ -534,8 +526,8 @@ const UserManagement = () => {
             </div>
           ) : (
             <>
-              {/* Desktop Table View */}
-              <div className="hidden lg:block overflow-hidden">
+              {/* Table View (shown from md/768px) */}
+              <div className="hidden md:block overflow-hidden">
                 <Table
                   columns={columns}
                   dataSource={users}
@@ -544,14 +536,14 @@ const UserManagement = () => {
                   pagination={false}
                   onChange={handleTableChange}
                   scroll={{ x: 1000 }}
-                  size={window.innerWidth < 1024 ? "small" : "default"}
+                  size={window.innerWidth < 1200 ? "small" : "default"}
                   className="ant-table-premium"
-                  locale={{ emptyText: <div className="py-20 text-slate-300 font-bold uppercase tracking-widest italic">Dữ liệu trống</div> }}
+                  locale={{ emptyText: <div className="py-20 text-slate-600 font-bold italic">Dữ liệu trống</div> }}
                 />
               </div>
 
-              {/* Mobile Card View */}
-              <div className="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 sm:p-6 lg:p-8">
+              {/* Mobile Card View (hidden from md/768px) */}
+              <div className="md:hidden grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 sm:p-6">
                 {users?.length > 0 ? users.map((u) => (
                   <div key={u.id} className="bg-white p-5 rounded-[28px] border border-slate-200 shadow-sm hover:border-indigo-200 transition-all space-y-4">
                     <div className="flex items-center gap-4">
@@ -559,22 +551,22 @@ const UserManagement = () => {
                         <User size={22} strokeWidth={1.5} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="text-[15px] font-black text-slate-900 m-0 uppercase truncate tracking-tight">{u.customerName}</h4>
-                        <p className="text-[12px] font-bold text-slate-400 m-0 flex items-center gap-1.5 mt-0.5 italic">
-                          <Phone size={12} className="text-indigo-400" /> {u.phone}
+                        <h4 className="text-[15px] font-bold text-slate-900 m-0 truncate">{u.customerName}</h4>
+                        <p className="text-[12px] font-bold text-slate-600 m-0 flex items-center gap-1.5 mt-0.5 italic">
+                          <Phone size={13} className="text-indigo-600" /> {u.phone}
                         </p>
                       </div>
                       <div className={`w-3 h-3 rounded-full ${u.active ? "bg-green-500 shadow-xl shadow-green-100 animate-pulse" : "bg-red-500 shadow-xl shadow-red-100"}`}></div>
                     </div>
                     <div className="flex flex-wrap gap-2 py-3 border-y border-slate-50">
                       {Array.isArray(u.roles) ? u.roles.map(r => (
-                        <span key={r} className="px-3 py-1 bg-indigo-50/50 text-indigo-600 rounded-lg text-[10px] font-black uppercase tracking-widest">{getRoleLabel(r)}</span>
+                        <span key={r} className="px-3 py-1 bg-indigo-50/50 text-indigo-600 rounded-lg text-[13px] font-bold">{getRoleLabel(r)}</span>
                       )) : (
-                        <span className="px-3 py-1 bg-indigo-50/50 text-indigo-600 rounded-lg text-[10px] font-black uppercase tracking-widest">{getRoleLabel(u.roles)}</span>
+                        <span className="px-3 py-1 bg-indigo-50/50 text-indigo-600 rounded-lg text-[13px] font-bold">{getRoleLabel(u.roles)}</span>
                       )}
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-bold text-slate-300 uppercase tracking-tighter">Ngày tạo: {u.createdAt ? dayjs(u.createdAt).format("DD/MM/YYYY") : "---"}</span>
+                      <span className="text-[12px] font-bold text-slate-500">Ngày tạo: {u.createdAt ? dayjs(u.createdAt).format("DD/MM/YYYY") : "---"}</span>
                       <div className="flex items-center gap-2">
                         <Button onClick={() => handleEdit(u)} className="w-9 h-9 flex items-center justify-center rounded-xl bg-amber-50 text-amber-500 border-none p-0 hover:bg-amber-100 hover:text-amber-600"><Edit size={18} strokeWidth={2.5} /></Button>
                         <Button onClick={() => handleDelete(u)} className="w-9 h-9 flex items-center justify-center rounded-xl bg-red-50 text-red-500 border-none p-0 hover:bg-red-100 hover:text-red-600"><Trash2 size={18} strokeWidth={2.5} /></Button>
@@ -582,7 +574,7 @@ const UserManagement = () => {
                     </div>
                   </div>
                 )) : (
-                  <div className="col-span-full py-16 text-center text-slate-300 font-bold italic uppercase tracking-widest bg-slate-50 rounded-[32px] border-2 border-dashed border-slate-200">Không có dữ liệu</div>
+                  <div className="col-span-full py-16 text-center text-slate-300 font-bold italic bg-slate-50 rounded-[32px] border-2 border-dashed border-slate-200">Không có dữ liệu</div>
                 )}
               </div>
             </>
@@ -621,7 +613,7 @@ const UserManagement = () => {
             {notification.type === "success" ? <CheckCircle size={24} strokeWidth={2.5} /> : <XCircle size={24} strokeWidth={2.5} />}
           </div>
           <div className="pr-4">
-            <h5 className="font-black text-slate-900 tracking-wider uppercase text-xs mb-1">{notification.type === "success" ? "Thành công" : "Có lỗi xảy ra"}</h5>
+            <h5 className="font-black text-slate-900 tracking-wider   text-xs mb-1">{notification.type === "success" ? "Thành công" : "Có lỗi xảy ra"}</h5>
             <p className="text-xs text-slate-500 font-bold mb-0">{notification.message}</p>
           </div>
         </div>
@@ -657,30 +649,30 @@ const UserManagement = () => {
                 <div className="text-center md:text-left">
                   <div className="flex items-center justify-center md:justify-start gap-3 mb-3">
                     {selectedDetailUser.roles?.map(r => (
-                      <span key={r} className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-xl text-[10px] font-black uppercase tracking-widest">{getRoleLabel(r)}</span>
+                      <span key={r} className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-xl text-[10px] font-bold ">{getRoleLabel(r)}</span>
                     ))}
                     <div className={`w-3 h-3 rounded-full ${selectedDetailUser.active ? "bg-green-400 animate-pulse" : "bg-red-400"}`}></div>
                   </div>
-                  <h2 className="text-2xl sm:text-4xl font-black uppercase tracking-tighter m-0">{selectedDetailUser.customerName}</h2>
+                  <h2 className="text-2xl sm:text-4xl font-bold m-0">{selectedDetailUser.customerName}</h2>
                 </div>
               </div>
             </div>
             <div className="p-5 sm:p-10 grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10">
               <div className="space-y-8">
                 <div className="space-y-1">
-                  <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest uppercase">Thông tin liên lạc</p>
+                  <p className="text-[11px] font-black text-slate-400">Thông tin liên lạc</p>
                   <div className="flex items-center gap-3 text-[16px] font-bold text-slate-900"><Phone size={18} className="text-indigo-500" /> {selectedDetailUser.phone}</div>
                   <div className="flex items-center gap-3 text-[16px] font-bold text-slate-900"><Mail size={18} className="text-indigo-500" /> {selectedDetailUser.email || "---"}</div>
                 </div>
               </div>
               <div className="bg-slate-50 p-4 sm:p-6 rounded-[24px] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                  <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1">Ngày gia nhập</p>
-                  <p className="text-[18px] font-black text-slate-900 m-0 uppercase leading-none">{dayjs(selectedDetailUser.createdAt).format("DD/MM/YYYY")}</p>
+                  <p className="text-[11px] font-black text-slate-400 mb-1">Ngày gia nhập</p>
+                  <p className="text-[18px] font-bold text-slate-900 m-0">{dayjs(selectedDetailUser.createdAt).format("DD/MM/YYYY")}</p>
                 </div>
                 <div className="flex gap-2 w-full sm:w-auto">
-                  <Button onClick={() => { setIsDetailModalOpen(false); handleEdit(selectedDetailUser); }} className="h-12 px-6 rounded-xl bg-indigo-600 text-white border-none font-bold text-[13px] uppercase tracking-widest flex-1 sm:flex-none">Cập nhật</Button>
-                  <Button onClick={() => setIsDetailModalOpen(false)} className="h-12 px-6 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold text-[13px] uppercase tracking-widest shadow-sm flex-1 sm:flex-none">Đóng</Button>
+                  <Button onClick={() => { setIsDetailModalOpen(false); handleEdit(selectedDetailUser); }} className="h-12 px-6 rounded-xl bg-indigo-600 text-white border-none font-bold text-[13px] flex-1 sm:flex-none">Cập nhật</Button>
+                  <Button onClick={() => setIsDetailModalOpen(false)} className="h-12 px-6 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold text-[13px] shadow-sm flex-1 sm:flex-none">Đóng</Button>
                 </div>
               </div>
             </div>
@@ -703,12 +695,12 @@ const UserManagement = () => {
             <Trash2 size={36} strokeWidth={2.5} />
           </div>
           <div>
-            <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight m-0">Xóa vĩnh viễn?</h3>
-            <p className="text-slate-500 text-[14px] font-medium mt-2">Hành động này sẽ xóa hoàn toàn tài khoản <br /><span className="text-red-600 font-black uppercase text-[15px]">{deletingUser?.customerName}</span> khỏi hệ thống.</p>
+            <h3 className="text-2xl font-black text-slate-900  m-0">Xóa vĩnh viễn?</h3>
+            <p className="text-slate-500 text-[14px] font-medium mt-2">Hành động này sẽ xóa hoàn toàn tài khoản <br /><span className="text-red-600 font-bold text-[15px]">{deletingUser?.customerName}</span> khỏi hệ thống.</p>
           </div>
           <div className="grid grid-cols-2 gap-3 pt-2">
-            <Button onClick={() => setIsDeleteModalOpen(false)} className="h-14 rounded-2xl font-black uppercase tracking-widest text-[11px] border-slate-200 text-slate-600">Hủy bỏ</Button>
-            <Button onClick={confirmDelete} danger type="primary" className="h-14 rounded-2xl bg-red-600 border-none font-black uppercase tracking-widest text-[11px] shadow-lg shadow-red-200">Xác nhận xóa</Button>
+            <Button onClick={() => setIsDeleteModalOpen(false)} className="h-14 rounded-2xl font-black text-[11px] border-slate-200 text-slate-600">Hủy bỏ</Button>
+            <Button onClick={confirmDelete} danger type="primary" className="h-14 rounded-2xl bg-red-600 border-none font-black text-[11px] shadow-lg shadow-red-200">Xác nhận xóa</Button>
           </div>
         </div>
       </Modal>
