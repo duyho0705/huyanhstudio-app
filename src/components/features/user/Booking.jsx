@@ -169,21 +169,21 @@ const Booking = () => {
     }
 
     return (
-        <div className="container-app pb-16 pt-0 lg:-mt-4">
+        <div className="container-app pb-16 pt-20 sm:pt-0 lg:-mt-4 px-3 sm:px-6">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="max-w-5xl mx-auto shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] rounded-[32px] overflow-hidden bg-white border border-gray-100"
+                className="max-w-5xl mx-auto shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] rounded-[20px] sm:rounded-[32px] overflow-hidden bg-white border border-gray-100"
             >
                 <div className="grid grid-cols-1 lg:grid-cols-12 min-h-max">
                     {/* Left Sidebar */}
-                    <div className="lg:col-span-4 bg-[#311142] p-8 flex flex-col justify-between relative overflow-hidden">
+                    <div className="lg:col-span-4 bg-[#311142] p-5 sm:p-8 flex flex-col justify-between relative overflow-hidden">
                         {/* Decorative background elements */}
                         <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
                         <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#6CD1FD]/10 rounded-full -ml-16 -mb-16 blur-2xl"></div>
 
                         <div className="relative z-10">
-                            <div className="text-white/60 text-[15px] font-medium leading-relaxed mb-14 max-w-[240px]">
+                            <div className="text-white/60 text-[13px] sm:text-[15px] font-medium leading-relaxed mb-6 sm:mb-14 max-w-[240px]">
                                 hastudio luôn lắng nghe quý khách hàng, luôn sẵn sàng hỗ trợ mọi yêu cầu của quý khách hàng! <br />Kính chúc quý khách hàng sẽ có những trải nghiệm tuyệt vời tại hastudio!
                                 <br />
                                 <br />
@@ -195,7 +195,7 @@ const Booking = () => {
                                 </ul>
                             </div>
 
-                            <div className="space-y-10">
+                            <div className="space-y-4 sm:space-y-10">
                                 <div className="flex items-center gap-4">
                                     <div className="w-12 h-12 rounded-[18px] bg-white/10 flex items-center justify-center text-[#6CD1FD] shadow-lg backdrop-blur-sm border border-white/5">
                                         <FiPhone size={20} />
@@ -218,7 +218,7 @@ const Booking = () => {
                             </div>
                         </div>
 
-                        <div className="relative z-10 mt-12">
+                        <div className="relative z-10 mt-6 sm:mt-12">
                             <div className="p-6 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10">
                                 <div className="text-[15px]  font-semibold text-white/40 mb-2 flex items-center gap-2">
                                     <FiMapPin className="text-[#6CD1FD]" /> Địa điểm
@@ -229,7 +229,7 @@ const Booking = () => {
                     </div>
 
                     {/* Right Form */}
-                    <div className="lg:col-span-8 p-6 lg:p-10 bg-white">
+                    <div className="lg:col-span-8 p-4 sm:p-6 lg:p-10 bg-white">
                         <form onSubmit={handleSubmit} className="space-y-4">
                             {/* Row 1: Full Name */}
                             <div className="space-y-1.5">

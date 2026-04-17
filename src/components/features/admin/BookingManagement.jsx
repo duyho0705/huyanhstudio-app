@@ -802,24 +802,24 @@ const BookingManagement = () => {
 
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
                 <div className="space-y-2">
-                  <div className="flex items-center gap-3">
-                    <span className="px-3 py-1 bg-white border border-slate-200 text-slate-500 rounded-lg text-[14px] font-medium shadow-sm">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-0.5 bg-white border border-slate-200 text-slate-500 rounded-md text-[12px] font-medium shadow-sm">
                       Chi tiết đặt lịch
                     </span>
                     <span className="text-slate-300 font-bold">/</span>
-                    <span className="text-slate-400 font-bold  text-[12px]">
+                    <span className="text-slate-400 font-bold text-[11px]">
                       #{selectedDetailBooking.bookingCode}
                     </span>
                   </div>
-                  <h2 className="text-2xl sm:text-4xl font-bold text-slate-900 mb-0">
+                  <h2 className="text-xl sm:text-3xl font-bold text-slate-900 mb-0">
                     {selectedDetailBooking.customerName}
                   </h2>
                 </div>
 
                 <div className="flex flex-col items-end gap-3">
-                  <div className={`px-5 py-2 rounded-2xl flex items-center gap-2 border shadow-lg ${bookingStatuses.find(s => s.value === selectedDetailBooking.status)?.classes}`}>
+                  <div className={`px-4 py-1.5 rounded-xl flex items-center gap-2 border shadow-md ${bookingStatuses.find(s => s.value === selectedDetailBooking.status)?.classes}`}>
                     {getStatusIcon(selectedDetailBooking.status)}
-                    <span className="font-semibold text-[15px]">
+                    <span className="font-semibold text-[13px]">
                       {bookingStatuses.find(s => s.value === selectedDetailBooking.status)?.label}
                     </span>
                   </div>
@@ -828,23 +828,23 @@ const BookingManagement = () => {
             </div>
 
             {/* Modal Content */}
-            <div className="px-4 py-6 sm:px-8 sm:py-10">
+            <div className="px-4 py-5 sm:px-8 sm:py-8">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-10">
 
                 {/* Left Column: Customer & Timeline */}
                 <div className="md:col-span-1 space-y-6 sm:space-y-8">
                   <section>
-                    <h4 className="text-[16px] font-medium text-slate-600  mb-4 flex items-center gap-2">
-                      <User size={20} className="text-blue-500" /> Liên hệ
+                    <h4 className="text-[14px] font-medium text-slate-500 mb-3 flex items-center gap-2">
+                      <User size={18} className="text-blue-500" /> Liên hệ
                     </h4>
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                       <div>
-                        <p className="text-[16px] font-medium text-slate-900 mb-0.5">{selectedDetailBooking.phone}</p>
-                        <p className="text-[13px] font-medium text-slate-600">Số điện thoại</p>
+                        <p className="text-[14px] font-medium text-slate-900 mb-0.5">{selectedDetailBooking.phone}</p>
+                        <p className="text-[12px] font-medium text-slate-500">Số điện thoại</p>
                       </div>
                       <div>
-                        <p className="text-[16px] font-medium text-slate-900 mb-0.5">{selectedDetailBooking.email || "Chưa cập nhật"}</p>
-                        <p className="text-[13px] font-medium text-slate-600">Email liên lạc</p>
+                        <p className="text-[14px] font-medium text-slate-900 mb-0.5">{selectedDetailBooking.email || "Chưa cập nhật"}</p>
+                        <p className="text-[12px] font-medium text-slate-500">Email liên lạc</p>
                       </div>
                     </div>
                   </section>
@@ -852,17 +852,17 @@ const BookingManagement = () => {
                   <div className="h-px bg-slate-100"></div>
 
                   <section>
-                    <h4 className="text-[15px] font-medium text-slate-600 mb-4 flex items-center gap-2">
-                      <Clock size={20} className="text-amber-500" /> Thời gian
+                    <h4 className="text-[14px] font-medium text-slate-500 mb-3 flex items-center gap-2">
+                      <Clock size={18} className="text-amber-500" /> Thời gian
                     </h4>
-                    <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                      <div className="flex items-center gap-3 mb-3">
+                    <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                      <div className="flex items-center gap-2 mb-2">
                         <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
-                        <p className="text-[14px] font-bold text-slate-700 m-0">
+                        <p className="text-[13px] font-bold text-slate-700 m-0">
                           {selectedDetailBooking.createdDate ? dayjs(selectedDetailBooking.createdDate).format("DD/MM/YYYY") : "---"}
                         </p>
                       </div>
-                      <p className="text-[14px] font-medium text-slate-600 m-0 pl-4">
+                      <p className="text-[13px] font-medium text-slate-600 m-0 pl-3.5">
                         Đặt lịch lúc: <span className="text-slate-600 ml-1">
                           {selectedDetailBooking.createdDate ? dayjs(selectedDetailBooking.createdDate).format("HH:mm:ss") : "---"}
                         </span>
@@ -875,25 +875,25 @@ const BookingManagement = () => {
                 <div className="md:col-span-2 space-y-6 sm:space-y-10">
                   {/* Booking Info Grid */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8">
-                    <div className="bg-white p-6 rounded-[24px] border border-slate-200 shadow-sm relative overflow-hidden group">
-                      <p className="text-[16px] font-medium text-slate-600 mb-2 flex items-center gap-2">
-                        <CalendarDays size={18} className="text-blue-500" /> Ngày thu âm
+                    <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden group">
+                      <p className="text-[14px] font-medium text-slate-500 mb-1.5 flex items-center gap-2">
+                        <CalendarDays size={16} className="text-blue-500" /> Ngày thu âm
                       </p>
-                      <p className="text-[19px] font-medium text-slate-700">
+                      <p className="text-[17px] font-medium text-slate-700">
                         {dayjs(selectedDetailBooking.recordDate).format("DD/MM/YYYY")}
                       </p>
                       {dayjs(selectedDetailBooking.recordDate).isBefore(dayjs(), 'day') ? (
-                        <span className="text-[13px] font-bold text-red-500">Đã quá hạn</span>
+                        <span className="text-[12px] font-bold text-red-500">Đã quá hạn</span>
                       ) : (
-                        <span className="text-[13px] font-bold text-emerald-500">Sắp đến</span>
+                        <span className="text-[12px] font-bold text-emerald-500">Sắp đến</span>
                       )}
                     </div>
 
-                    <div className="bg-white p-6 rounded-[24px] border border-slate-200 shadow-sm relative overflow-hidden group">
-                      <p className="text-[16px] font-medium text-slate-600 mb-2 flex items-center gap-2">
-                        <Home size={18} className="text-orange-500" /> Phòng thu
+                    <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden group">
+                      <p className="text-[14px] font-medium text-slate-500 mb-1.5 flex items-center gap-2">
+                        <Home size={16} className="text-orange-500" /> Phòng thu
                       </p>
-                      <p className="text-[19px] font-medium text-slate-700">
+                      <p className="text-[17px] font-medium text-slate-700">
                         {typeof selectedDetailBooking.studioRoom === "object" ? selectedDetailBooking.studioRoom?.studioName : selectedDetailBooking.studioRoom}
                       </p>
                     </div>
@@ -907,8 +907,8 @@ const BookingManagement = () => {
                     <div className="flex flex-wrap gap-2">
                       {Array.isArray(selectedDetailBooking.services)
                         ? selectedDetailBooking.services.map((s, i) => (
-                          <div key={i} className="px-4 py-2 bg-indigo-50 border border-indigo-100 text-indigo-700 font-semibold rounded-xl text-[14px] flex items-center gap-2">
-                            <CheckCircle size={18} strokeWidth={3} />
+                          <div key={i} className="px-3 py-1.5 bg-indigo-50 border border-indigo-100 text-indigo-700 font-semibold rounded-lg text-[13px] flex items-center gap-2">
+                            <CheckCircle size={16} strokeWidth={3} />
                             {s.name || s}
                           </div>
                         ))

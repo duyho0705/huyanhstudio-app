@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FiSearch, FiX, FiUser, FiGrid, FiChevronDown, FiLogOut, FiCalendar, FiLock } from "react-icons/fi";
+import { FiSearch, FiX, FiUser, FiGrid, FiChevronDown, FiLogOut, FiCalendar, FiLock, FiMenu, FiMusic } from "react-icons/fi";
+import { FaPlay, FaPause } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
 import { AuthContext } from "../../api/AuthContext";
 import { Modal } from "antd";
 import Account from "../features/user/Account";
@@ -11,7 +13,8 @@ const NewNavbar = () => {
     const { user, setShowLoginModal, logout } = useContext(AuthContext);
     const [scrolled, setScrolled] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [activeModal, setActiveModal] = useState(null); // 'account' | 'booking' | 'password' | null
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [activeModal, setActiveModal] = useState(null);
     const location = useLocation();
 
     useEffect(() => {
@@ -22,15 +25,45 @@ const NewNavbar = () => {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    // Close mobile menu on route change
+    useEffect(() => {
+        setIsMobileMenuOpen(false);
+    }, [location.pathname]);
+
+    // Prevent body scroll when menu is open
+    useEffect(() => {
+        if (isMobileMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => { document.body.style.overflow = ''; };
+    }, [isMobileMenuOpen]);
+
     const navLinkClass = "relative py-1 group transition-all duration-300";
     const underlineClass = "absolute -bottom-0.5 left-0 w-0 h-0.5 bg-[#35104C] transition-all duration-300 group-hover:w-full rounded-full";
 
+    const mobileNavLinks = [
+        { to: "/products", label: "Sản phẩm" },
+        { to: "/services", label: "Dịch vụ & Bảng giá" },
+        { to: "/booking", label: "Đặt lịch" },
+        { to: "/about", label: "Về chúng tôi" },
+    ];
+
     return (
-        <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 px-8 py-3.5 ${scrolled ? "bg-white/90 backdrop-blur-lg shadow-md border-b border-gray-100" : "bg-transparent"
+        <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 px-4 sm:px-8 py-3 sm:py-3.5 ${scrolled ? "bg-white/90 backdrop-blur-lg shadow-md border-b border-gray-100" : "bg-transparent"
             }`}>
             <div className="grid grid-cols-3 items-center max-w-[1400px] mx-auto">
-                {/* Left Column */}
+                {/* Left Column - Desktop nav links */}
                 <div className="flex items-center gap-10">
+                    {/* Hamburger button - Mobile only */}
+                    <button
+                        className="lg:hidden flex items-center justify-center w-10 h-10 rounded-xl text-[#35104C] hover:bg-black/5 transition-all"
+                        onClick={() => setIsMobileMenuOpen(true)}
+                    >
+                        <FiMenu size={22} />
+                    </button>
+
                     <div className="hidden lg:flex items-center gap-8 text-[17px] font-semibold text-[#35104C]">
                         <Link to="/products" className={navLinkClass}>
                             Sản phẩm
@@ -50,13 +83,13 @@ const NewNavbar = () => {
 
                 {/* Logo (Center Column) */}
                 <div className="flex justify-center translate-y-1">
-                    <Link to="/" className="flex items-center gap-2 group">
-                        <div className="relative w-8 h-8">
+                    <Link to="/" className="flex items-center gap-1.5 sm:gap-2 group">
+                        <div className="relative w-7 h-7 sm:w-8 sm:h-8">
                             <div className="absolute inset-0 bg-brand-orange rounded-sm rotate-12 transition-transform"></div>
                             <div className="absolute inset-0 bg-[#6CD1FD] rounded-sm -rotate-6 transition-transform"></div>
-                            <div className="absolute inset-0 bg-[#35104C] rounded-sm flex items-center justify-center text-white text-[10px] font-bold">HA</div>
+                            <div className="absolute inset-0 bg-[#35104C] rounded-sm flex items-center justify-center text-white text-[9px] sm:text-[10px] font-bold">HA</div>
                         </div>
-                        <span className="text-[40px] font-bold tracking-normal text-[#35104C] leading-none" style={{ fontFamily: '"Satisfy", cursive' }}>hastudio</span>
+                        <span className="text-[32px] sm:text-[40px] font-bold tracking-normal text-[#35104C] leading-none" style={{ fontFamily: '"Satisfy", cursive' }}>hastudio</span>
                     </Link>
                 </div>
 
@@ -129,6 +162,160 @@ const NewNavbar = () => {
                     </div>
                 </div>
             </div>
+
+            {/* ====== MOBILE SIDEBAR DRAWER ====== */}
+            <AnimatePresence>
+                {isMobileMenuOpen && (
+                    <>
+                        {/* Overlay */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[200]"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                        />
+
+                        {/* Sidebar */}
+                        <motion.div
+                            initial={{ x: "-100%" }}
+                            animate={{ x: 0 }}
+                            exit={{ x: "-100%" }}
+                            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                            className="fixed top-0 left-0 bottom-0 w-[280px] bg-white z-[300] shadow-2xl flex flex-col"
+                        >
+                            {/* Sidebar Header */}
+                            <div className="flex items-center justify-between p-5 border-b border-gray-100">
+                                <Link to="/" className="flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}>
+                                    <div className="relative w-7 h-7">
+                                        <div className="absolute inset-0 bg-brand-orange rounded-sm rotate-12"></div>
+                                        <div className="absolute inset-0 bg-[#6CD1FD] rounded-sm -rotate-6"></div>
+                                        <div className="absolute inset-0 bg-[#35104C] rounded-sm flex items-center justify-center text-white text-[9px] font-bold">HA</div>
+                                    </div>
+                                    <span className="text-[24px] font-bold text-[#35104C]" style={{ fontFamily: '"Satisfy", cursive' }}>hastudio</span>
+                                </Link>
+                                <button
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-gray-100 transition-colors"
+                                >
+                                    <FiX size={20} />
+                                </button>
+                            </div>
+
+                            {/* Navigation Links */}
+                            <div className="flex-1 overflow-y-auto py-4">
+                                <div className="space-y-1 px-3">
+                                    {mobileNavLinks.map((link, i) => (
+                                        <motion.div
+                                            key={link.to}
+                                            initial={{ opacity: 0, x: -20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            transition={{ delay: i * 0.05 }}
+                                        >
+                                            <Link
+                                                to={link.to}
+                                                onClick={() => setIsMobileMenuOpen(false)}
+                                                className={`flex items-center px-4 py-3 rounded-xl text-[15px] font-semibold transition-all ${location.pathname === link.to
+                                                        ? "bg-[#6CD1FD]/10 text-[#35104C]"
+                                                        : "text-gray-600 hover:bg-gray-50 hover:text-[#35104C]"
+                                                    }`}
+                                            >
+                                                {link.label}
+                                                {location.pathname === link.to && (
+                                                    <div className="ml-auto w-1.5 h-1.5 rounded-full bg-[#6CD1FD]"></div>
+                                                )}
+                                            </Link>
+                                        </motion.div>
+                                    ))}
+                                </div>
+
+                                {/* Music Player Toggle in Sidebar */}
+                                <div className="px-3 mt-6">
+                                    <div className="px-4 py-1 mb-2">
+                                        <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Trải nghiệm</p>
+                                    </div>
+                                    <button
+                                        onClick={() => {
+                                            // Dispatch a custom event to toggle music in App.jsx
+                                            window.dispatchEvent(new CustomEvent('toggleMusic'));
+                                        }}
+                                        className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[15px] font-semibold text-gray-600 hover:bg-purple-50 hover:text-[#35104C] transition-all"
+                                    >
+                                        <div className="w-8 h-8 rounded-full bg-[#35104C] flex items-center justify-center">
+                                            <FiMusic size={14} className="text-[#6CD1FD]" />
+                                        </div>
+                                        Nhạc nền
+                                    </button>
+                                </div>
+
+                                {/* User Actions in Sidebar */}
+                                {user && (
+                                    <div className="px-3 mt-6">
+                                        <div className="px-4 py-1 mb-2">
+                                            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Tài khoản</p>
+                                        </div>
+                                        <button
+                                            onClick={() => { setActiveModal("account"); setIsMobileMenuOpen(false); }}
+                                            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[15px] font-semibold text-gray-600 hover:bg-gray-50 transition-all"
+                                        >
+                                            <FiUser size={16} className="text-gray-400" /> Thông tin cá nhân
+                                        </button>
+                                        <button
+                                            onClick={() => { setActiveModal("booking"); setIsMobileMenuOpen(false); }}
+                                            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[15px] font-semibold text-gray-600 hover:bg-gray-50 transition-all"
+                                        >
+                                            <FiCalendar size={16} className="text-gray-400" /> Lịch sử đặt lịch
+                                        </button>
+                                        <button
+                                            onClick={() => { setActiveModal("password"); setIsMobileMenuOpen(false); }}
+                                            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[15px] font-semibold text-gray-600 hover:bg-gray-50 transition-all"
+                                        >
+                                            <FiLock size={16} className="text-gray-400" /> Đổi mật khẩu
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Sidebar Footer */}
+                            <div className="p-4 border-t border-gray-100">
+                                {!user ? (
+                                    <div className="flex flex-col gap-2">
+                                        <button
+                                            onClick={() => { setShowLoginModal(true, "login"); setIsMobileMenuOpen(false); }}
+                                            className="w-full py-3 rounded-xl border-2 border-[#35104C] text-[#35104C] font-bold text-[14px] hover:bg-[#35104C] hover:text-white transition-all"
+                                        >
+                                            Đăng nhập
+                                        </button>
+                                        <button
+                                            onClick={() => { setShowLoginModal(true, "register"); setIsMobileMenuOpen(false); }}
+                                            className="w-full py-3 rounded-xl bg-[#6CD1FD] text-white font-bold text-[14px] shadow-lg active:scale-95 transition-all"
+                                        >
+                                            Đăng ký miễn phí
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-full bg-[#6CD1FD]/20 flex items-center justify-center">
+                                            <FiUser size={18} className="text-[#35104C]" />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <p className="text-[14px] font-bold text-[#35104C] truncate">{user.customerName || user.email || "Bạn"}</p>
+                                            <p className="text-[12px] text-gray-400 truncate">{user.email}</p>
+                                        </div>
+                                        <button
+                                            onClick={() => { logout(); setIsMobileMenuOpen(false); }}
+                                            className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-red-50 transition-colors text-red-400"
+                                        >
+                                            <FiLogOut size={18} />
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </motion.div>
+                    </>
+                )}
+            </AnimatePresence>
 
             {/* Modals */}
             <Modal

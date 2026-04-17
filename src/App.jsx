@@ -44,24 +44,24 @@ const pageTransition = {
 const MiniMusicPlayer = ({ isPlaying, setIsPlaying }) => {
   return (
     <div
-      className="fixed top-[120px] left-6 z-[100] flex items-center gap-4 bg-white/10 backdrop-blur-xl p-2.5 px-4 rounded-full border border-white/20 shadow-2xl group hover:bg-white/20 transition-all cursor-pointer"
+      className="fixed sm:top-[120px] left-4 sm:left-6 z-[90] hidden sm:flex items-center gap-2 sm:gap-4 bg-white/10 backdrop-blur-xl p-2 sm:p-2.5 px-3 sm:px-4 rounded-full border border-white/20 shadow-2xl group hover:bg-white/20 transition-all cursor-pointer"
       onClick={() => setIsPlaying(!isPlaying)}
     >
       {/* Visualizer and Logic only, sound comes from Global Source */}
-      <div className="relative w-12 h-12 flex items-center justify-center">
+      <div className="relative w-9 h-9 sm:w-12 sm:h-12 flex items-center justify-center">
         {/* The Spinning Vinyl Record */}
         <motion.div
           animate={isPlaying ? { rotate: [0, 360] } : { rotate: 0 }}
           transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-          className={`relative w-full h-full rounded-full bg-[#12061A] flex items-center justify-center shadow-2xl border-4 border-[#35104C] ${isPlaying ? 'shadow-[0_0_20px_rgba(108,209,253,0.4)]' : ''}`}
+          className={`relative w-full h-full rounded-full bg-[#12061A] flex items-center justify-center shadow-2xl border-[3px] sm:border-4 border-[#35104C] ${isPlaying ? 'shadow-[0_0_20px_rgba(108,209,253,0.4)]' : ''}`}
         >
           {/* Vinyl Grooves (Subtle circles) */}
           <div className="absolute inset-1 rounded-full border border-white/5"></div>
           <div className="absolute inset-2 rounded-full border border-white/5"></div>
-          <div className="absolute inset-3 rounded-full border border-white/5"></div>
+          <div className="absolute inset-3 rounded-full border border-white/5 hidden sm:block"></div>
 
           {/* Center Label */}
-          <div className="w-4 h-4 bg-[#6CD1FD] rounded-full border-2 border-[#35104C] flex items-center justify-center">
+          <div className="w-3 h-3 sm:w-4 sm:h-4 bg-[#6CD1FD] rounded-full border-2 border-[#35104C] flex items-center justify-center">
             <div className="w-1 h-1 bg-[#35104C] rounded-full"></div>
           </div>
         </motion.div>
@@ -74,12 +74,12 @@ const MiniMusicPlayer = ({ isPlaying, setIsPlaying }) => {
               <div className="w-1 h-3 bg-white rounded-full"></div>
             </div>
           ) : (
-            <FaPlay size={10} className="ml-0.5" />
+            <FaPlay size={8} className="ml-0.5 sm:ml-0.5" />
           )}
         </div>
       </div>
 
-      <div className="flex flex-col">
+      <div className="flex-col hidden sm:flex">
         <p className="text-[15px] font-semibold text-[#35104C] leading-none mb-1">Nhạc nền</p>
         <div className="flex items-center gap-1 h-2.5">
           {[...Array(5)].map((_, i) => (
@@ -168,6 +168,13 @@ function AppContent() {
       }
     }
   }, [isMusicPlaying]);
+
+  // Listen for toggleMusic event from sidebar menu
+  useEffect(() => {
+    const handleToggleMusic = () => setIsMusicPlaying(prev => !prev);
+    window.addEventListener('toggleMusic', handleToggleMusic);
+    return () => window.removeEventListener('toggleMusic', handleToggleMusic);
+  }, []);
 
   return (
     <>

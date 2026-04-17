@@ -1,5 +1,5 @@
 import { Modal, Form, Input, DatePicker, Select } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
 const { TextArea } = Input;
@@ -15,6 +15,13 @@ const BookingForm = ({
   studios,
 }) => {
   const [form] = Form.useForm();
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     if (open && initialValues) {
@@ -76,7 +83,8 @@ const BookingForm = ({
       onCancel={onCancel}
       okText={initialValues ? "Cập nhật" : "Tạo"}
       cancelText="Hủy"
-      width={700}
+      width={isMobile ? "95%" : 700}
+      centered={isMobile}
       className="!max-w-[95vw]"
       destroyOnHidden={true}
       okButtonProps={{
@@ -87,19 +95,25 @@ const BookingForm = ({
         },
       }}
     >
-      <Form form={form} layout="vertical" style={{ marginTop: 24 }}>
+      <Form
+        form={form}
+        layout="vertical"
+        style={{ marginTop: isMobile ? 12 : 24 }}
+        className={isMobile ? "compact-form-mobile" : ""}
+      >
         <Form.Item
           name="customerName"
-          label="Họ tên"
+          label={<span className={isMobile ? "text-[13px] font-medium" : ""}>Họ tên</span>}
           rules={[{ required: true, message: "Vui lòng nhập họ tên!" }]}
+          className={isMobile ? "mb-3" : "mb-6"}
         >
-          <Input placeholder="Nhập họ tên" size="large" />
+          <Input placeholder="Nhập họ tên" size={isMobile ? "middle" : "large"} />
         </Form.Item>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className={`grid grid-cols-1 ${isMobile ? "gap-0" : "sm:grid-cols-2 gap-4"}`}>
           <Form.Item
             name="phone"
-            label="Số điện thoại"
+            label={<span className={isMobile ? "text-[13px] font-medium" : ""}>Số điện thoại</span>}
             rules={[
               { required: true, message: "Vui lòng nhập số điện thoại!" },
               {
@@ -107,42 +121,46 @@ const BookingForm = ({
                 message: "Số điện thoại không hợp lệ!",
               },
             ]}
+            className={isMobile ? "mb-3" : "mb-6"}
           >
-            <Input placeholder="Nhập số điện thoại" size="large" />
+            <Input placeholder="Nhập số điện thoại" size={isMobile ? "middle" : "large"} />
           </Form.Item>
 
           <Form.Item
             name="email"
-            label="Email"
+            label={<span className={isMobile ? "text-[13px] font-medium" : ""}>Email</span>}
             rules={[
               { required: true, message: "Vui lòng nhập email!" },
               { type: "email", message: "Email không hợp lệ!" },
             ]}
+            className={isMobile ? "mb-3" : "mb-6"}
           >
-            <Input placeholder="Nhập email" size="large" />
+            <Input placeholder="Nhập email" size={isMobile ? "middle" : "large"} />
           </Form.Item>
         </div>
 
         <Form.Item
           name="recordDate"
-          label="Ngày thu"
+          label={<span className={isMobile ? "text-[13px] font-medium" : ""}>Ngày thu</span>}
           rules={[{ required: true, message: "Vui lòng chọn ngày thu!" }]}
+          className={isMobile ? "mb-3" : "mb-6"}
         >
           <DatePicker
             placeholder="Chọn ngày thu"
             format="DD/MM/YYYY"
             style={{ width: "100%" }}
-            size="large"
+            size={isMobile ? "middle" : "large"}
             disabledDate={(current) => current && current <= dayjs().startOf('day')}
           />
         </Form.Item>
 
         <Form.Item
           name="studioRoomId"
-          label="Studio Room"
+          label={<span className={isMobile ? "text-[13px] font-medium" : ""}>Studio Room</span>}
           rules={[{ required: true, message: "Vui lòng chọn phòng studio!" }]}
+          className={isMobile ? "mb-3" : "mb-6"}
         >
-          <Select placeholder="Chọn phòng studio" size="large">
+          <Select placeholder="Chọn phòng studio" size={isMobile ? "middle" : "large"}>
             {studios?.map((studio) => (
               <Option key={studio.id} value={studio.id}>
                 {studio.studioName}
@@ -153,12 +171,13 @@ const BookingForm = ({
 
         <Form.Item
           name="serviceIds"
-          label="Dịch vụ"
+          label={<span className={isMobile ? "text-[13px] font-medium" : ""}>Dịch vụ</span>}
           rules={[
             { required: true, message: "Vui lòng chọn ít nhất một dịch vụ!" },
           ]}
+          className={isMobile ? "mb-3" : "mb-6"}
         >
-          <Select mode="multiple" placeholder="Chọn dịch vụ" size="large">
+          <Select mode="multiple" placeholder="Chọn dịch vụ" size={isMobile ? "middle" : "large"}>
             {services?.map((service) => (
               <Option key={service.id} value={service.id}>
                 {service.name || service.moreInfo}
@@ -167,12 +186,16 @@ const BookingForm = ({
           </Select>
         </Form.Item>
 
-        <Form.Item name="note" label="Ghi chú">
+        <Form.Item
+          name="note"
+          label={<span className={isMobile ? "text-[13px] font-medium" : ""}>Ghi chú</span>}
+          className="mb-0"
+        >
           <TextArea
             placeholder="Yêu cầu thêm..."
-            rows={4}
-            size="large"
-            style={{ maxHeight: 145, minHeight: 70 }}
+            rows={isMobile ? 3 : 4}
+            size={isMobile ? "middle" : "large"}
+            style={{ maxHeight: 145, minHeight: isMobile ? 60 : 70 }}
           />
         </Form.Item>
       </Form>

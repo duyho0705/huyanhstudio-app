@@ -39,6 +39,7 @@ const StudioForm = ({ open, onCancel, onSubmit, initialValues }) => {
       cancelText="Hủy"
       width={600}
       className="!max-w-[95vw]"
+      centered
     >
       <Form form={form} layout="vertical" style={{ marginTop: 24 }}>
         <Form.Item

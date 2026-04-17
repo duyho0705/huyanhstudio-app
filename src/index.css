@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,400&family=DM+Serif+Display:ital@0;1&family=Syne:wght@400..800&family=Satisfy&family=Roboto:wght@400;500;700;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,400&family=DM+Serif+Display:ital@0;1&family=Poppins:wght@300;400;500;600;700;800;900&family=Syne:wght@400..800&family=Satisfy&family=Roboto:wght@400;500;700;900&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -251,4 +251,107 @@ body.ant-scrolling-effect {
 .admin-area .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* ========== ADMIN FORM MODAL RESPONSIVE ========== */
+@media (max-width: 640px) {
+  /* All admin modals - compact on mobile */
+  .ant-modal {
+    top: 8px !important;
+    padding-bottom: 8px !important;
+  }
+
+  .ant-modal .ant-modal-content {
+    padding: 12px !important;
+    border-radius: 16px !important;
+  }
+
+  .ant-modal .ant-modal-header {
+    padding: 0 0 8px 0 !important;
+    margin-bottom: 8px !important;
+  }
+
+  .ant-modal .ant-modal-title {
+    font-size: 15px !important;
+  }
+
+  .ant-modal .ant-modal-body {
+    max-height: 65vh !important;
+    overflow-y: auto !important;
+    padding: 0 !important;
+  }
+
+  .ant-modal .ant-modal-footer {
+    padding: 8px 0 0 0 !important;
+    margin-top: 8px !important;
+  }
+
+  .ant-modal .ant-modal-footer button,
+  .ant-modal .ant-modal-footer .ant-btn {
+    height: 36px !important;
+    padding: 0 16px !important;
+    font-size: 13px !important;
+    border-radius: 10px !important;
+  }
+
+  /* Form items compact */
+  .ant-modal .ant-form-item {
+    margin-bottom: 10px !important;
+  }
+
+  .ant-modal .ant-form-item-label {
+    padding-bottom: 2px !important;
+  }
+
+  .ant-modal .ant-form-item-label > label {
+    font-size: 12px !important;
+    height: auto !important;
+  }
+
+  /* Input/Select/DatePicker compact */
+  .ant-modal .ant-input,
+  .ant-modal .ant-input-affix-wrapper,
+  .ant-modal .ant-select-selector,
+  .ant-modal .ant-picker,
+  .ant-modal .ant-input-number {
+    height: 38px !important;
+    font-size: 13px !important;
+    border-radius: 10px !important;
+  }
+
+  .ant-modal .ant-input-affix-wrapper .ant-input {
+    height: auto !important;
+  }
+
+  .ant-modal textarea.ant-input {
+    height: auto !important;
+    min-height: 60px !important;
+    font-size: 13px !important;
+  }
+
+  /* Grid adjustments inside forms */
+  .ant-modal .grid.grid-cols-2,
+  .ant-modal .grid.grid-cols-1.sm\:grid-cols-2 {
+    gap: 8px !important;
+  }
+
+  /* Form section cards compact */
+  .ant-modal .p-5,
+  .ant-modal .p-6 {
+    padding: 12px !important;
+  }
+
+  .ant-modal .rounded-2xl {
+    border-radius: 12px !important;
+  }
+
+  /* Upload area compact */
+  .ant-modal .ant-upload-drag {
+    padding: 8px !important;
+  }
+
+  /* Service form benefits list */
+  .ant-modal .max-h-\[220px\] {
+    max-height: 150px !important;
+  }
 }

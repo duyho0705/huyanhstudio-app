@@ -161,7 +161,7 @@ const NewLandingPage = () => {
   return (
     <div className="min-h-screen bg-white font-sans text-[#35104C] selection:bg-sky/30 relative overflow-x-hidden">
       {/* --- HERO SECTION (BEIGE) --- */}
-      <section className="bg-[#E9DCD6] relative pt-12 pb-20 md:pt-20 md:pb-32">
+      <section className="bg-[#E9DCD6] relative pt-12 pb-8 md:pt-20 md:pb-32">
         <BackgroundRibbons />
 
         <div className="px-4 md:px-6 pt-2 pb-2 flex flex-col items-center text-center relative z-10">
@@ -169,7 +169,7 @@ const NewLandingPage = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="max-w-[1200px] mx-auto mb-10"
+            className="max-w-[1200px] mx-auto mb-4 md:mb-10"
           >
             {/* Audio Visualizer before title */}
             <div className="mb-8">
@@ -177,8 +177,8 @@ const NewLandingPage = () => {
             </div>
 
             <h1
-              className="text-[40px] leading-[1.1] md:text-[88px] md:leading-[1.02] font-bold tracking-tighter text-[#35104C] mb-6 md:mb-8"
-              style={{ fontFamily: '"DM Serif Display", serif' }}
+              className="text-[32px] leading-[1.1] md:text-[72px] md:leading-[1.02] font-bold tracking-tighter text-[#35104C] mb-6 md:mb-8"
+              style={{ fontFamily: '"Poppins", sans-serif' }}
             >
               Transform your <span className="relative inline-block text-[#6CD1FD]">
                 voice
@@ -203,7 +203,7 @@ const NewLandingPage = () => {
                 if (user) navigate("/booking");
                 else setShowLoginModal(true, "signup");
               }}
-              className="px-8 py-4 md:px-12 md:py-5 bg-[#6CD1FD] text-white rounded-full text-[16px] md:text-[20px] font-bold mb-10 shadow-xl shadow-sky/10 active:scale-95"
+              className="px-8 py-4 md:px-12 md:py-5 bg-[#6CD1FD] text-white rounded-full text-[16px] md:text-[20px] font-bold mb-4 md:mb-10 shadow-xl shadow-sky/10 active:scale-95"
             >
               Đặt lịch thu âm ngay
             </motion.button>
@@ -215,12 +215,12 @@ const NewLandingPage = () => {
               transition={{ delay: 1, duration: 0.5 }}
               className="flex justify-center"
             >
-              <div className="flex items-center gap-4 px-8 py-2.5 bg-white border border-[#f0d9c4] rounded-full shadow-sm">
-                <div className="text-2xl text-[#e8762b]">
+              <div className="flex items-center gap-3 sm:gap-4 px-5 sm:px-8 py-2 sm:py-2.5 bg-white border border-[#f0d9c4] rounded-full shadow-sm">
+                <div className="text-xl sm:text-2xl text-[#e8762b]">
                   <FaMicrophone />
                 </div>
                 <div className="text-left">
-                  <p className="text-[16px] font-semibold text-[#e8762b] leading-tight">Phong cách - Sáng tạo - Năng lượng</p>
+                  <p className="text-[13px] sm:text-[16px] font-semibold text-[#e8762b] leading-tight">Phong cách - Sáng tạo - Năng lượng</p>
                 </div>
               </div>
             </motion.div>
@@ -234,7 +234,7 @@ const NewLandingPage = () => {
           <BackgroundRibbons />
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-white"></div>
-        <div className="max-w-[1180px] mx-auto px-4 flex justify-center py-10 relative z-10">
+        <div className="max-w-[1180px] mx-auto px-4 flex justify-center py-4 md:py-10 relative z-10">
           {/* --- MOVING GLOW EFFECTS (HÀO QUANG) --- */}
           <div className="absolute inset-0 flex items-center justify-center -z-10 pointer-events-none">
             {/* Lớp xanh lục (Cyan glow) */}
@@ -254,22 +254,82 @@ const NewLandingPage = () => {
       </section>
 
       {/* --- SECTION 1: IN ACTION --- */}
-      <section className="pt-32 md:pt-64 pb-16 md:pb-24 px-4 md:px-6 bg-white relative mt-0">
+      <section className="pt-24 sm:pt-32 md:pt-64 pb-24 sm:pb-16 md:pb-24 px-4 md:px-6 bg-white relative mt-0">
         <div className="max-w-[1400px] mx-auto text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="inline-block relative mb-16"
+            className="inline-block relative mb-6 sm:mb-16"
           >
             <div className="absolute inset-0 bg-[#ff99ed]/20 -rotate-2 blur-3xl transform scale-150"></div>
-            <h2 className="text-4xl md:text-[54px] font-bold tracking-tight text-[#35104C] relative" style={{ fontFamily: '"DM Serif Display", serif' }}>
+            <h2 className="text-[24px] sm:text-[28px] md:text-[48px] font-bold tracking-tight text-[#35104C] relative" style={{ fontFamily: '"Poppins", sans-serif' }}>
               hastudio qua từng khung hình
             </h2>
           </motion.div>
 
-          {/* --- COLLAGE LAYOUT --- */}
-          <div className="relative h-[400px] sm:h-[600px] md:h-[1000px] lg:h-[1400px] w-full max-w-[1400px] mx-auto mt-6 md:mt-10">
+          {/* === MOBILE COLLAGE GRID === */}
+          <div className="block lg:hidden">
+            <div className="grid grid-cols-6 gap-2 sm:gap-3 auto-rows-[80px] sm:auto-rows-[120px]">
+              {/* Image 1 - Large portrait taking 3 cols, 3 rows */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="col-span-3 row-span-3 rounded-[16px] sm:rounded-[24px] overflow-hidden shadow-lg"
+              >
+                <img src={decor1} alt="Studio" className="w-full h-full object-cover" />
+              </motion.div>
+
+              {/* Image 2 - Wide landscape taking 3 cols, 2 rows */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="col-span-3 row-span-2 rounded-[16px] sm:rounded-[24px] overflow-hidden shadow-lg"
+              >
+                <img src={decor2} alt="Recording" className="w-full h-full object-cover" />
+              </motion.div>
+
+              {/* Image 3 - Small square taking 3 cols, 1 row */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="col-span-3 row-span-2 rounded-[16px] sm:rounded-[24px] overflow-hidden shadow-lg"
+              >
+                <img src={decor3} alt="Headphones" className="w-full h-full object-cover" />
+              </motion.div>
+
+              {/* Image 4 - Wide taking 4 cols, 2 rows */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="col-span-4 row-span-2 rounded-[16px] sm:rounded-[24px] overflow-hidden shadow-lg"
+              >
+                <img src={decor4} alt="Instruments" className="w-full h-full object-cover" />
+              </motion.div>
+
+              {/* Image 5 - Square taking 2 cols, 2 rows */}
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="col-span-2 row-span-2 rounded-[16px] sm:rounded-[24px] overflow-hidden shadow-lg"
+              >
+                <img src={decor5} alt="Music" className="w-full h-full object-cover" />
+              </motion.div>
+            </div>
+          </div>
+
+          {/* === DESKTOP COLLAGE (absolute positioning) === */}
+          <div className="relative h-[1000px] lg:h-[1400px] w-full max-w-[1400px] mx-auto mt-10 hidden lg:block">
             {/* 1. Top Left - Portrait */}
             <motion.div
               initial={{ opacity: 0, y: 100 }}
@@ -347,48 +407,48 @@ const NewLandingPage = () => {
 
       {/* --- SECTION 2: CUSTOMIZATION TOOLS --- */}
       <section
-        className="pb-16 md:pb-32 pt-16 md:pt-24 px-4 md:px-6 bg-[#F0EBE8] -mt-[150px] sm:-mt-[200px] md:-mt-[300px] relative z-20 shadow-[0_-20px_50px_rgba(0,0,0,0.05)]"
-        style={{ borderRadius: '50% 50% 50% 50% / 100px 100px 100px 100px' }}
+        className="pb-10 md:pb-32 pt-10 md:pt-24 px-4 md:px-6 bg-[#F0EBE8] mt-8 sm:-mt-[200px] md:-mt-[300px] relative z-20 shadow-[0_-20px_50px_rgba(0,0,0,0.05)]"
+        style={{ borderRadius: '32px 32px 0 0 md:borderRadius: 50% 50% 50% 50% / 100px 100px 100px 100px' }}
       >
         <div className="max-w-[1200px] mx-auto">
-          <div className="text-center relative mb-12 md:mb-20">
+          <div className="text-center relative mb-7 md:mb-6">
 
 
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-[32px] sm:text-4xl md:text-[54px] font-bold tracking-tight text-[#35104C] relative px-2"
-              style={{ fontFamily: '"DM Serif Display", serif' }}
+              className="text-[28px] sm:text-[36px] md:text-[48px] font-bold tracking-tight text-[#35104C] relative px-2"
+              style={{ fontFamily: '"Poppins", sans-serif' }}
             >
-              Tận hưởng âm nhạc, trọn vẹn cảm xúc
+              tận hưởng âm nhạc, trọn vẹn cảm xúc
             </motion.h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
+          <div className="grid grid-cols-2 md:grid-cols-2 gap-x-4 sm:gap-x-12 gap-y-8 sm:gap-y-16">
             {[
               {
                 label: "Âm thanh chi tiết",
                 title: "Tối giản hay cầu kỳ? Bạn quyết định",
-                desc: "Tùy chỉnh độ dày của nhạc cụ, giọng hát để tạo nên một bản phối hoàn hảo nhất theo ý muốn.",
+                desc: "Tùy chỉnh độ dày của nhạc cụ, giọng hát để tạo nên một bản phối hoàn hảo.",
                 img: decor1
               },
               {
-                label: "Đa dạng phong cách",
+                label: "a dạng phong cách",
                 title: "Mọi phong cách nhạc đều được đáp ứng",
-                desc: "Từ Pop, Ballad đến Rock hay EDM, đội ngũ của chúng tôi luôn sẵn sàng hiện thực hóa ý tưởng của bạn.",
+                desc: "Từ Pop, Ballad đến Rock hay EDM, đội ngũ của chúng tôi luôn sẵn sàng.",
                 img: decor2
               },
               {
                 label: "Bảng màu cảm xúc",
                 title: "Khám phá sắc thái âm nhạc mới",
-                desc: "Thay đổi màu sắc âm thanh thông qua các thiết bị analog hiện đại, mang lại sự ấm áp và chiều sâu.",
+                desc: "Thay đổi màu sắc âm thanh thông qua các thiết bị analog hiện đại.",
                 img: decor3
               },
               {
                 label: "Quy trình chuyên nghiệp",
                 title: "Từ phác thảo đến hoàn thiện",
-                desc: "Chúng tôi đồng hành cùng bạn từ lúc thu demo cho đến khi có bản Master cuối cùng chuẩn quốc tế.",
+                desc: "Chúng tôi đồng hành cùng bạn từ lúc thu demo cho đến bản Master chuẩn.",
                 img: decor4
               }
             ].map((tool, i) => (
@@ -402,33 +462,32 @@ const NewLandingPage = () => {
               >
                 <motion.div
                   whileHover={{ y: -10, scale: 1.02 }}
-                  className="mb-4 aspect-square flex items-center justify-center transition-all duration-500 p-3 md:p-6"
+                  className="mb-3 sm:mb-4 aspect-square flex items-center justify-center transition-all duration-500 p-1 sm:p-3 md:p-6"
                 >
-                  <img src={tool.img} alt={tool.label} className="w-full h-full object-cover rounded-[20px] md:rounded-[40px] drop-shadow-[0_15px_25px_rgba(0,0,0,0.15)]" />
+                  <img src={tool.img} alt={tool.label} className="w-full h-full object-cover rounded-[16px] sm:rounded-[20px] md:rounded-[40px] drop-shadow-[0_15px_25px_rgba(0,0,0,0.15)]" />
                 </motion.div>
 
-                <p className="text-[18px] font-bold text-[#35104C]/60 mb-3 px-2">{tool.label}</p>
                 <h3
-                  className="text-2xl md:text-[28px] font-semibold text-[#35104C] mb-4 leading-tight px-2"
+                  className="text-[15px] sm:text-2xl md:text-[28px] font-semibold text-[#35104C] mb-2 sm:mb-4 leading-tight px-1 sm:px-2"
                   style={{ textShadow: "0 2px 4px rgba(0,0,0,0.1)" }}
                 >
                   {tool.title}
                 </h3>
-                <p className="text-[17px] text-gray-500 leading-relaxed px-2">
+                <p className="text-[13px] sm:text-[17px] text-gray-500 leading-relaxed px-1 sm:px-2 line-clamp-3 sm:line-clamp-none">
                   {tool.desc}
                 </p>
               </motion.div>
             ))}
           </div>
 
-          <div className="flex justify-center mt-20">
+          <div className="flex justify-center mt-4 sm:mt-12">
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => {
                 if (user) navigate("/booking");
                 else setShowLoginModal(true, "signup");
               }}
-              className="px-12 py-4 bg-[#6CD1FD] text-[#35104C] rounded-full font-bold text-[17px] shadow-lg active:scale-95"
+              className="px-8 py-3 sm:px-12 sm:py-4 bg-[#6CD1FD] text-[#35104C] rounded-full font-bold text-[14px] sm:text-[17px] shadow-lg active:scale-95 transition-all"
             >
               Xem bảng giá dịch vụ
             </motion.button>
@@ -437,112 +496,204 @@ const NewLandingPage = () => {
       </section>
 
       {/* --- SECTION 3: STYLES SHOWCASE --- */}
-      <section className="pt-16 md:pt-20 pb-0 px-4 md:px-6 bg-white relative overflow-hidden">
-        <div className="max-w-[1200px] mx-auto relative min-h-[600px] flex flex-col items-center justify-center">
+      <section className="pt-24 md:pt-20 md:pb-0 px-4 md:px-6 bg-white relative overflow-hidden">
+        <div className="max-w-[1200px] mx-auto">
 
-          {/* 1. TOP-LEFT: Illustration image */}
-          <motion.div
-            initial={{ opacity: 0, x: -100, rotate: -10 }}
-            whileInView={{ opacity: 1, x: 0, rotate: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1 }}
-            className="absolute top-0 left-0 w-[320px] h-[320px] rounded-[40px] hidden lg:flex items-center justify-center overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.6)]"
-          >
-            <img src={section3_anh1} alt="Style 1" className="w-full h-full object-cover" />
-          </motion.div>
+          {/* === MOBILE LAYOUT === */}
+          <div className="block lg:hidden">
+            {/* Title */}
+            <div className="text-center mb-6">
+              <motion.h2
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                className="text-[28px] sm:text-[36px] font-bold tracking-tight text-[#35104C] leading-[1.1] mb-3" style={{ fontFamily: '"Poppins", sans-serif' }}
+              >
+                đa dạng phong cách
+              </motion.h2>
+              <motion.p
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+                className="text-[15px] text-gray-500 mb-6"
+              >
+                Luôn cập nhật những xu hướng âm thanh mới nhất
+              </motion.p>
+            </div>
 
-          {/* 2. TOP-LEFT: Smaller image */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="absolute top-10 left-[280px] w-24 h-24 rounded-2xl hidden lg:block overflow-hidden shadow-xl"
-          >
-            <img src={section3_anh2} alt="Style 2" className="w-full h-full object-cover" />
-          </motion.div>
+            {/* Image Grid - Mobile */}
+            <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-6">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="col-span-2 row-span-2 rounded-[16px] sm:rounded-[24px] overflow-hidden shadow-lg aspect-square"
+              >
+                <img src={section3_anh1} alt="Style 1" className="w-full h-full object-cover" />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+                className="rounded-[16px] sm:rounded-[24px] overflow-hidden shadow-lg aspect-square"
+              >
+                <img src={section3_anh2} alt="Style 2" className="w-full h-full object-cover" />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="rounded-[16px] sm:rounded-[24px] overflow-hidden shadow-lg aspect-square"
+              >
+                <img src={section3_anh3} alt="Style 3" className="w-full h-full object-cover" />
+              </motion.div>
+            </div>
 
-          {/* 3. RIGHT: Main mockup image */}
-          <motion.div
-            initial={{ opacity: 0, x: 100, rotate: 10 }}
-            whileInView={{ opacity: 1, x: 0, rotate: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1 }}
-            className="absolute top-[40px] right-[60px] w-[260px] aspect-square rounded-[28px] hidden lg:flex items-center justify-center overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.6)]"
-          >
-            <img src={section3_anh3} alt="Style 3" className="w-full h-full object-cover" />
-          </motion.div>
+            <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+                className="rounded-[16px] sm:rounded-[24px] overflow-hidden shadow-lg aspect-video"
+              >
+                <img src={decor4} alt="Style 4" className="w-full h-full object-cover" />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4 }}
+                className="rounded-[16px] sm:rounded-[24px] overflow-hidden shadow-lg aspect-video"
+              >
+                <img src={section3_anh5} alt="Style 5" className="w-full h-full object-cover" />
+              </motion.div>
+            </div>
 
-          {/* 4. BOTTOM-LEFT: Illustration image */}
-          <motion.div
-            initial={{ opacity: 0, y: 100 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, delay: 0.2 }}
-            className="absolute bottom-[20px] left-[150px] w-[220px] h-[220px] rounded-[32px] hidden lg:flex items-center justify-center overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.6)]"
-          >
-            <img src={decor4} alt="Style 4" className="w-full h-full object-cover" />
-          </motion.div>
+            {/* CTA Button - Mobile */}
+            <div className="text-center">
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-[#6CD1FD] text-[#35104C] rounded-full font-bold text-[14px] shadow-lg shadow-sky/20 transition-all active:scale-95"
+              >
+                <FaMicrophone className="text-base" /> Khám phá phòng thu ngay
+              </motion.button>
+            </div>
+          </div>
 
-          {/* 5. BOTTOM-RIGHT: Work image */}
-          <motion.div
-            initial={{ opacity: 0, y: 100 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, delay: 0.4 }}
-            className="absolute bottom-[10px] right-0 w-[240px] h-[220px] rounded-[32px] hidden lg:flex items-center justify-center overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.6)]"
-          >
-            <img src={section3_anh5} alt="Style 5" className="w-full h-full object-cover" />
-          </motion.div>
+          {/* === DESKTOP LAYOUT (unchanged) === */}
+          <div className="hidden lg:block relative min-h-[600px]">
+            <div className="flex flex-col items-center justify-center min-h-[600px]">
 
-          {/* CENTER CONTENT */}
-          <div className="relative z-10 text-center max-w-[600px]">
-            <motion.h2
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="text-[40px] md:text-[54px] font-bold tracking-tight text-[#35104C] leading-[1.1] mb-4 md:mb-6" style={{ fontFamily: '"DM Serif Display", serif' }}
-            >
-              Đa dạng phong cách cho mọi cá tính âm nhạc
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.5 }}
-              className="text-[17px] mb-8"
-            >
-              Luôn cập nhật những xu hướng âm thanh mới nhất
-            </motion.p>
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center gap-3 px-10 py-4 bg-[#6CD1FD] text-white rounded-full font-bold text-[20px] shadow-lg shadow-sky/30"
-            >
-              <FaMicrophone className="text-xl" /> Khám phá phòng thu ngay
-            </motion.button>
+              {/* 1. TOP-LEFT: Illustration image */}
+              <motion.div
+                initial={{ opacity: 0, x: -100, rotate: -10 }}
+                whileInView={{ opacity: 1, x: 0, rotate: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1 }}
+                className="absolute top-0 left-0 w-[320px] h-[320px] rounded-[40px] flex items-center justify-center overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.6)]"
+              >
+                <img src={section3_anh1} alt="Style 1" className="w-full h-full object-cover" />
+              </motion.div>
+
+              {/* 2. TOP-LEFT: Smaller image */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="absolute top-10 left-[280px] w-24 h-24 rounded-2xl overflow-hidden shadow-xl"
+              >
+                <img src={section3_anh2} alt="Style 2" className="w-full h-full object-cover" />
+              </motion.div>
+
+              {/* 3. RIGHT: Main mockup image */}
+              <motion.div
+                initial={{ opacity: 0, x: 100, rotate: 10 }}
+                whileInView={{ opacity: 1, x: 0, rotate: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1 }}
+                className="absolute top-[40px] right-[60px] w-[260px] aspect-square rounded-[28px] flex items-center justify-center overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.6)]"
+              >
+                <img src={section3_anh3} alt="Style 3" className="w-full h-full object-cover" />
+              </motion.div>
+
+              {/* 4. BOTTOM-LEFT: Illustration image */}
+              <motion.div
+                initial={{ opacity: 0, y: 100 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 0.2 }}
+                className="absolute bottom-[20px] left-[150px] w-[220px] h-[220px] rounded-[32px] flex items-center justify-center overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.6)]"
+              >
+                <img src={decor4} alt="Style 4" className="w-full h-full object-cover" />
+              </motion.div>
+
+              {/* 5. BOTTOM-RIGHT: Work image */}
+              <motion.div
+                initial={{ opacity: 0, y: 100 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 0.4 }}
+                className="absolute bottom-[10px] right-0 w-[240px] h-[220px] rounded-[32px] flex items-center justify-center overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.6)]"
+              >
+                <img src={section3_anh5} alt="Style 5" className="w-full h-full object-cover" />
+              </motion.div>
+
+              {/* CENTER CONTENT */}
+              <div className="relative z-10 text-center max-w-[600px]">
+                <motion.h2
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  className="text-[48px] font-bold tracking-tight text-[#35104C] leading-[1.1] mb-6" style={{ fontFamily: '"Poppins", sans-serif' }}
+                >
+                  Đa dạng phong cách
+                </motion.h2>
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.5 }}
+                  className="text-[17px] mb-8"
+                >
+                  Luôn cập nhật những xu hướng âm thanh mới nhất
+                </motion.p>
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  className="inline-flex items-center gap-3 px-10 py-4 bg-[#6CD1FD] text-[#35104C] rounded-full font-bold text-[20px] shadow-lg shadow-sky/20 transition-all active:scale-95"
+                >
+                  <FaMicrophone className="text-xl" /> Khám phá phòng thu ngay
+                </motion.button>
+              </div>
+
+            </div>
           </div>
 
         </div>
       </section>
 
       {/* --- ILLUSTRATED WITH HASTUDIO --- */}
-      <section className="px-4 md:px-6 pt-16 md:pt-[100px] pb-12 md:pb-20 bg-white">
+      <section className="px-4 md:px-6 pt-32 md:pt-[100px] pb-32 md:pb-20 bg-white">
         <div className="max-w-[1200px] mx-auto text-center">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-[36px] md:text-[52px] font-bold text-[#35104C] mb-4 md:mb-6"
-            style={{ fontFamily: '"DM Serif Display", serif' }}
+            className="text-[28px] sm:text-[36px] md:text-[48px] font-bold text-[#35104C] mb-4 md:mb-6 leading-tight px-2"
+            style={{ fontFamily: '"Poppins", sans-serif' }}
           >
-            Ghi dấu ấn cùng hastudio
+            ghi dấu ấn cùng hastudio
           </motion.h2>
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
-            className="text-[20px] mb-4 max-w-5xl mx-auto leading-relaxed"
+            className="text-[16px] sm:text-[18px] md:text-[20px] mb-4 max-w-3xl mx-auto leading-relaxed px-4"
           >
             Nơi khơi nguồn cảm hứng và hiện thực hóa mọi ý tưởng âm nhạc. Hastudio tự hào là cộng sự tin cậy trên con đường nghệ thuật của bạn.
           </motion.p>
@@ -551,113 +702,109 @@ const NewLandingPage = () => {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.5 }}
-            className="text-[18px] font-bold text-[#35104C] mb-12"
+            className="text-[15px] sm:text-[16px] md:text-[18px] font-bold text-[#35104C] mb-12 px-4"
           >Mỗi bản ghi là một câu chuyện, mỗi dự án là một kiệt tác.</motion.p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Card 1: App Screens - Coral/Red */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6 lg:gap-12">
+            {/* Card 1: Music App UI - Coral/Red */}
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               whileHover={{ scale: 1.02 }}
-              className="bg-[#ff5a5a] rounded-[24px] p-6 md:p-8 pt-8 md:pt-10 pb-6 md:pb-8 min-h-[320px] md:min-h-[420px] flex items-center justify-center relative overflow-hidden group cursor-pointer"
+              className="bg-[#ff5a5a] rounded-[24px] sm:rounded-[32px] p-4 sm:p-8 md:p-10 min-h-[280px] sm:min-h-[360px] md:min-h-[440px] flex items-center justify-center relative overflow-hidden group cursor-pointer shadow-2xl shadow-red-500/20"
             >
-              <div className="flex gap-4 items-start">
-                {/* Phone Screen 1 */}
-                <motion.div
-                  whileHover={{ y: -10 }}
-                  className="w-[140px] bg-white rounded-[16px] p-4 shadow-lg"
-                >
-                  <p className="text-[10px] font-bold text-[#35104C] mb-1">itsbroken</p>
-                  <p className="text-[13px] font-bold text-[#35104C] leading-tight mb-3">Welcome to the repair shop</p>
-                  <div className="w-full h-[100px] bg-gray-100 rounded-lg mb-3 flex items-center justify-center">
-                    <span className="text-3xl">🔧</span>
+              {/* Abstract background shapes */}
+              <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-12 -mt-12 blur-xl sm:blur-2xl"></div>
+
+              <div className="relative z-10 w-full flex flex-col items-center">
+                <div className="w-[100px] sm:w-[140px] md:w-[160px] bg-white rounded-[16px] sm:rounded-[24px] p-3 sm:p-4 shadow-2xl transform rotate-[-2deg]">
+                  <div className="w-full aspect-square bg-[#35104C] rounded-lg sm:rounded-xl mb-2 sm:mb-3 overflow-hidden relative group-hover:scale-105 transition-transform duration-500">
+                    <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070&auto=format&fit=crop" alt="Song Cover" className="w-full h-full object-cover opacity-80" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-6 h-6 sm:w-10 sm:h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center">
+                        <FaPlay className="text-white text-[10px] sm:text-base ml-0.5 sm:ml-1" />
+                      </div>
+                    </div>
                   </div>
-                  <div className="w-full py-2 bg-[#ff5a5a] rounded-md text-white text-[10px] font-bold text-center mb-2">Sign up</div>
-                  <div className="w-full py-2 border border-gray-200 rounded-md text-[#35104C] text-[10px] font-bold text-center">Log in</div>
-                </motion.div>
-                {/* Phone Screen 2 */}
-                <motion.div
-                  whileHover={{ y: -10 }}
-                  className="w-[140px] bg-white rounded-[16px] p-4 shadow-lg mt-6"
-                >
-                  <p className="text-[13px] font-bold text-[#35104C] leading-tight mb-3">Create Account</p>
-                  <div className="w-full h-[60px] bg-gray-50 rounded-lg mb-3 flex items-center justify-center">
-                    <span className="text-2xl">🚀</span>
+                  <div className="space-y-1 sm:space-y-1.5">
+                    <div className="h-1.5 sm:h-2 w-3/4 bg-[#35104C]/10 rounded-full"></div>
+                    <div className="h-1 sm:h-1.5 w-1/2 bg-[#35104C]/5 rounded-full"></div>
+                    <div className="pt-2 sm:pt-3 flex items-center justify-between">
+                      <div className="h-0.5 sm:h-1 w-full bg-gray-100 rounded-full relative overflow-hidden">
+                        <div className="absolute left-0 top-0 h-full w-1/3 bg-[#ff5a5a]"></div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="space-y-2 mb-3">
-                    <div className="w-full h-2.5 bg-gray-100 rounded"></div>
-                    <div className="w-full h-2.5 bg-gray-100 rounded"></div>
-                    <div className="w-full h-2.5 bg-gray-100 rounded"></div>
-                  </div>
-                  <div className="w-16 py-1.5 bg-[#ff5a5a] rounded-md text-white text-[9px] font-bold text-center mb-2">Sign up</div>
-                  <div className="w-full py-1.5 border border-gray-200 rounded-md text-[#35104C] text-[9px] font-bold text-center">Log in</div>
-                </motion.div>
+                </div>
+                <p className="mt-4 sm:mt-6 text-white font-bold text-[10px] sm:text-base opacity-90 text-center">Music App</p>
               </div>
             </motion.div>
 
-            {/* Card 2: Book Cover - Yellow */}
+            {/* Card 2: Album Cover - Yellow */}
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
               whileHover={{ scale: 1.02 }}
-              className="bg-[#ffe24d] rounded-[24px] p-6 md:p-8 min-h-[320px] md:min-h-[420px] flex items-center justify-center relative overflow-hidden cursor-pointer"
+              className="bg-[#ffe24d] rounded-[24px] sm:rounded-[32px] p-4 sm:p-8 md:p-10 min-h-[280px] sm:min-h-[360px] md:min-h-[440px] flex items-center justify-center relative overflow-hidden cursor-pointer shadow-2xl shadow-yellow-500/20"
             >
-              <div className="w-[220px] bg-[#c8c4a8] rounded-[8px] p-6 shadow-xl relative transform -rotate-2">
-                <div className="absolute top-0 left-0 w-full h-full border-2 border-[#b8b498] rounded-[8px]"></div>
-                <div className="relative z-10">
-                  <p className="text-[9px] uppercase tracking-widest text-[#5a5840] mb-1">The</p>
-                  <h3 className="text-[28px] font-black text-[#2d4a2d] leading-none mb-1" style={{ fontFamily: '"DM Serif Display", serif' }}>Walking<br />Club</h3>
-                  <p className="text-[8px] uppercase tracking-[0.2em] text-[#5a5840] mb-4">Walking Notes</p>
-                  <div className="w-full h-[140px] bg-[#4a8c4a]/20 rounded-lg flex items-end justify-center overflow-hidden relative">
-                    <motion.div
-                      animate={{ height: ["50%", "70%", "50%"] }}
-                      transition={{ duration: 4, repeat: Infinity }}
-                      className="absolute bottom-0 w-full bg-[#2d7a2d]/30 rounded-t-full"
-                    ></motion.div>
-                    <motion.span
-                      animate={{ y: [0, -5, 0] }}
-                      transition={{ duration: 1, repeat: Infinity }}
-                      className="text-4xl relative z-10 mb-2"
-                    >🚶‍♀️</motion.span>
+              <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-black/5 rounded-full blur-2xl"></div>
+
+              <div className="relative z-10 w-full flex flex-col items-center">
+                <div className="w-[110px] sm:w-[160px] md:w-[180px] aspect-square bg-white rounded-lg p-1.5 sm:p-2 shadow-2xl transform rotate-[3deg] transition-transform duration-500 hover:rotate-0">
+                  <div className="w-full h-full border-[4px] sm:border-[8px] border-[#35104C] flex flex-col items-center justify-center p-2 sm:p-3 text-center">
+                    <p className="text-[6px] sm:text-[8px] uppercase tracking-[0.1em] font-bold text-[#35104C] mb-0.5 sm:mb-1">Original Motion Picture</p>
+                    <h3 className="text-[14px] sm:text-[24px] md:text-[28px] font-black text-[#35104C] leading-none mb-0.5 sm:mb-1" style={{ fontFamily: '"Poppins", sans-serif' }}>THE<br />SOUND</h3>
+                    <div className="w-4 sm:w-8 h-[1px] sm:h-[1.5px] bg-[#35104C] my-1 sm:my-3"></div>
+                    <p className="text-[6px] sm:text-[8px] uppercase tracking-[0.1em] font-medium text-[#35104C]">Recorded at HA</p>
                   </div>
                 </div>
+                <p className="mt-4 sm:mt-6 text-[#35104C] font-bold text-[10px] sm:text-base opacity-80 text-center">Album Art</p>
               </div>
             </motion.div>
 
-            {/* Card 3: Annual Report - Gray/Purple */}
+            {/* Card 3: Sound Wave - Gray/Purple */}
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
               whileHover={{ scale: 1.02 }}
-              className="bg-[#9e9eab] rounded-[24px] p-6 md:p-8 min-h-[320px] md:min-h-[420px] flex items-center justify-center relative overflow-hidden cursor-pointer"
+              className="bg-[#2a2355] rounded-[24px] sm:rounded-[32px] p-4 sm:p-8 md:p-10 min-h-[280px] sm:min-h-[360px] md:min-h-[440px] flex items-center justify-center relative overflow-hidden cursor-pointer shadow-2xl shadow-purple-900/40"
             >
-              <div className="w-[200px] bg-[#2a2355] rounded-[8px] p-5 shadow-xl relative transform rotate-2">
-                <p className="text-[8px] uppercase tracking-widest text-white/60 mb-1">Annual</p>
-                <h3 className="text-[22px] font-black text-white leading-none mb-0.5" style={{ fontFamily: '"DM Serif Display", serif' }}>Report</h3>
-                <p className="text-[24px] font-black text-[#ff8c42] leading-none mb-3">2023</p>
-                <div className="w-full h-[160px] bg-[#3d3570] rounded-lg flex items-center justify-center overflow-hidden relative">
-                  <motion.div
-                    animate={{ height: ["40%", "80%", "40%"] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                    className="absolute bottom-0 left-0 w-12 bg-[#ff8c42] rounded-t-lg"
-                  ></motion.div>
-                  <motion.div
-                    animate={{ height: ["60%", "30%", "60%"] }}
-                    transition={{ duration: 2.5, repeat: Infinity }}
-                    className="absolute bottom-0 right-4 w-10 bg-[#4FC3F7] rounded-t-lg"
-                  ></motion.div>
-                  <motion.span
-                    animate={{ rotate: [0, 10, -10, 0] }}
-                    transition={{ duration: 3, repeat: Infinity }}
-                    className="text-4xl relative z-10"
-                  >🎸</motion.span>
+              {/* Grid background effect */}
+              <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '15px 15px' }}></div>
+
+              <div className="relative z-10 w-full flex flex-col items-center">
+                <div className="w-[120px] sm:w-[180px] md:w-[210px] h-[100px] sm:h-[150px] md:h-[180px] bg-white/5 backdrop-blur-md rounded-lg sm:rounded-xl border border-white/10 p-3 sm:p-5 flex flex-col justify-between overflow-hidden shadow-2xl">
+                  <div className="flex justify-between items-center mb-2 sm:mb-3">
+                    <div className="flex gap-0.5">
+                      <div className="w-1 h-1 rounded-full bg-red-500 animate-pulse"></div>
+                      <div className="w-1 h-1 rounded-full bg-yellow-500"></div>
+                      <div className="w-1 h-1 rounded-full bg-green-500"></div>
+                    </div>
+                    <span className="text-[6px] sm:text-[8px] text-white/40 font-mono tracking-widest uppercase">Mastering</span>
+                  </div>
+
+                  <div className="flex items-end justify-between h-12 sm:h-20 gap-0.5 sm:gap-1">
+                    {[...Array(12)].map((_, i) => (
+                      <motion.div
+                        key={i}
+                        animate={{ height: [10, Math.random() * 40 + 10, 10] }}
+                        transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.05 }}
+                        className="w-full bg-gradient-to-t from-[#6CD1FD] to-purple-400 rounded-full opacity-80"
+                      ></motion.div>
+                    ))}
+                  </div>
+
+                  <div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-white/5 flex justify-between">
+                    <div className="w-1/3 h-0.5 sm:h-1 bg-white/10 rounded-full"></div>
+                    <div className="w-1/4 h-0.5 sm:h-1 bg-[#6CD1FD]/40 rounded-full"></div>
+                  </div>
                 </div>
+                <p className="mt-4 sm:mt-6 text-white font-bold text-[10px] sm:text-base opacity-80 text-center">Audio Tools</p>
               </div>
             </motion.div>
           </div>
@@ -672,20 +819,20 @@ const NewLandingPage = () => {
           viewport={{ once: true }}
           className="max-w-[1200px] mx-auto bg-[#f8f3ed] rounded-[24px] md:rounded-[48px] p-6 sm:p-8 md:p-16 lg:p-20 relative overflow-hidden"
         >
-          {/* Decorative shapes */}
+          {/* Decorative shapes - refined for mobile */}
           <motion.div
             animate={{ y: [0, -20, 0], x: [0, 10, 0] }}
             transition={{ duration: 5, repeat: Infinity }}
-            className="absolute -top-8 right-[30%] w-24 h-24 bg-[#4ECDC4] rounded-full opacity-80"
+            className="absolute -top-10 -right-6 sm:right-[30%] w-16 h-16 sm:w-24 sm:h-24 bg-[#4ECDC4] rounded-full opacity-40 sm:opacity-80 blur-lg sm:blur-none"
           ></motion.div>
           <motion.div
             animate={{ scale: [1, 1.2, 1] }}
             transition={{ duration: 4, repeat: Infinity }}
-            className="absolute -bottom-6 -left-6 w-32 h-32 bg-[#ff69b4] rounded-full opacity-60"
+            className="absolute -bottom-8 -left-8 w-20 h-20 sm:w-32 sm:h-32 bg-[#ff69b4] rounded-full opacity-30 sm:opacity-60 blur-lg sm:blur-none"
           ></motion.div>
-          <div className="absolute bottom-12 left-20 w-16 h-16 bg-[#ff99cc] rounded-full opacity-50"></div>
-          <div className="absolute top-1/2 left-[15%] w-[200px] h-[200px] bg-[#c9b8d4]/30 -rotate-12 rounded-lg"></div>
-          <div className="absolute top-[20%] left-[25%] w-[120px] h-[120px] bg-[#d4c4de]/20 rotate-12 rounded-lg"></div>
+          <div className="absolute bottom-12 left-20 w-16 h-16 bg-[#ff99cc] rounded-full opacity-50 hidden sm:block"></div>
+          <div className="absolute top-1/2 left-[15%] w-[200px] h-[200px] bg-[#c9b8d4]/30 -rotate-12 rounded-lg hidden sm:block"></div>
+          <div className="absolute top-[20%] left-[25%] w-[120px] h-[120px] bg-[#d4c4de]/20 rotate-12 rounded-lg hidden sm:block"></div>
 
           <div className="relative z-10 flex flex-col lg:flex-row items-start justify-between gap-8 md:gap-12">
             {/* Left side */}
@@ -693,7 +840,7 @@ const NewLandingPage = () => {
               <p className="text-[15px] md:text-[17px] text-[#35104C]/60 mb-2 md:mb-3 flex items-center gap-2">
                 Đăng ký nhận tin <FiSend className="text-[#6CD1FD] text-lg md:text-xl" />
               </p>
-              <h2 className="text-[28px] md:text-[44px] font-semibold text-[#35104C] leading-[1.15]" style={{ fontFamily: '"DM Serif Display", serif' }}>Nhận thông báo về các ưu đãi và dự án mới nhất!</h2>
+              <h2 className="text-[24px] md:text-[38px] font-semibold text-[#35104C] leading-[1.15]" style={{ fontFamily: '"Poppins", sans-serif' }}>Nhận thông báo về các ưu đãi và dự án mới nhất!</h2>
             </div>
 
             {/* Right side - Form */}
@@ -712,10 +859,10 @@ const NewLandingPage = () => {
       {/* --- FOOTER --- */}
       <footer className="pb-12 px-6 bg-white">
         <div className="max-w-[1200px] mx-auto border-t pt-20">
-          <div className="flex flex-col lg:flex-row gap-16 mb-6">
+          <div className="flex flex-col lg:flex-row items-center lg:items-start text-center lg:text-left gap-16 mb-6">
             {/* Left: Logo + Social */}
             <div className="lg:w-[280px] shrink-0">
-              <div className="flex items-center gap-2 mb-10">
+              <div className="flex items-center justify-center lg:justify-start gap-2 mb-10">
                 <div className="relative w-8 h-8">
                   <div className="absolute inset-0 bg-brand-orange rounded-sm rotate-12"></div>
                   <div className="absolute inset-0 bg-sky rounded-sm -rotate-6"></div>
@@ -723,7 +870,7 @@ const NewLandingPage = () => {
                 </div>
                 <span className="text-[28px] font-bold text-[#35104C]" style={{ fontFamily: '"Satisfy", cursive' }}>hastudio</span>
               </div>
-              <div className="flex gap-6 mt-6">
+              <div className="flex justify-center lg:justify-start gap-6 mt-6">
                 <a href="https://www.facebook.com/HUYANHPR" target="_blank" rel="noopener noreferrer">
                   <FaFacebookF className="w-5 h-5 text-[#35104C] cursor-pointer hover:text-[#6CD1FD] transition-colors" />
                 </a>
@@ -740,43 +887,43 @@ const NewLandingPage = () => {
             </div>
 
             {/* Link Columns */}
-            <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10">
+            <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 md:gap-10 w-full">
               <div>
-                <h4 className="font-bold text-[#35104C] text-[17px] mb-6">hastudio</h4>
-                <ul className="space-y-3 text-[17px] text-[#35104C]">
-                  <li className="cursor-pointer">Bảng giá</li>
-                  <li className="cursor-pointer" onClick={() => setShowLoginModal(true, "signup")}>Đăng ký</li>
+                <h4 className="font-bold text-[#35104C] text-[15px] sm:text-[17px] mb-4 sm:mb-6">hastudio</h4>
+                <ul className="space-y-2 sm:space-y-3 text-[14px] sm:text-[17px] text-[#35104C]">
+                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">Bảng giá</li>
+                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors" onClick={() => setShowLoginModal(true, "signup")}>Đăng ký</li>
                 </ul>
               </div>
               <div>
-                <h4 className="font-bold text-[#35104C] text-[17px] mb-6">Công ty</h4>
-                <ul className="space-y-3 text-[17px] text-[#35104C]">
-                  <li className="cursor-pointer">Về chúng tôi</li>
-                  <li className="cursor-pointer">Tuyển dụng</li>
-                  <li className="cursor-pointer">Tư liệu truyền thông</li>
+                <h4 className="font-bold text-[#35104C] text-[15px] sm:text-[17px] mb-4 sm:mb-6">Công ty</h4>
+                <ul className="space-y-2 sm:space-y-3 text-[14px] sm:text-[17px] text-[#35104C]">
+                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">Về chúng tôi</li>
+                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">Tuyển dụng</li>
+                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">Tư liệu truyền thông</li>
                 </ul>
               </div>
               <div>
-                <h4 className="font-bold text-[#35104C] text-[17px] mb-6">Hỗ trợ</h4>
-                <ul className="space-y-3 text-[17px] text-[#35104C]">
-                  <li className="cursor-pointer">Cộng đồng</li>
-                  <li className="cursor-pointer">Liên hệ</li>
-                  <li className="cursor-pointer">Chứng nhận</li>
-                  <li className="cursor-pointer">Bảo mật</li>
+                <h4 className="font-bold text-[#35104C] text-[15px] sm:text-[17px] mb-4 sm:mb-6">Hỗ trợ</h4>
+                <ul className="space-y-2 sm:space-y-3 text-[14px] sm:text-[17px] text-[#35104C]">
+                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">Cộng đồng</li>
+                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">Liên hệ</li>
+                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">Chứng nhận</li>
+                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">Bảo mật</li>
                 </ul>
               </div>
               <div>
-                <h4 className="font-bold text-[#35104C] text-[17px] mb-6">Thành viên</h4>
-                <ul className="space-y-3 text-[17px] text-[#35104C]">
-                  <li className="cursor-pointer">Dự án miễn phí</li>
-                  <li className="cursor-pointer">Glyphy</li>
+                <h4 className="font-bold text-[#35104C] text-[15px] sm:text-[17px] mb-4 sm:mb-6">Thành viên</h4>
+                <ul className="space-y-2 sm:space-y-3 text-[14px] sm:text-[17px] text-[#35104C]">
+                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">Dự án miễn phí</li>
+                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">Glyphy</li>
                 </ul>
               </div>
             </div>
           </div>
 
           {/* Copyright */}
-          <div className="pt-2">
+          <div className="pt-2 border-t border-gray-100 lg:border-none text-center lg:text-left mt-8 lg:mt-0">
             <p className="text-[15px] text-slate-600">Được phát triển bởi <a href="https://www.facebook.com/HOVANDUYIT" target="_blank" rel="noopener noreferrer" className="font-bold hover:text-[#6CD1FD] transition-colors">Hồ Văn Duy</a></p>
           </div>
         </div>

@@ -49,16 +49,16 @@ const ProductShowcase = () => {
 
   return (
     <div className="min-h-screen bg-transparent relative overflow-hidden">
-      <div className="relative z-10 pt-16 pb-24 px-6">
+      <div className="relative z-10 pt-20 sm:pt-16 pb-16 sm:pb-24 px-3 sm:px-6">
         <div className="max-w-[1400px] mx-auto">
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8">
               {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                <div key={i} className="h-[420px] bg-white/20 rounded-[32px] border border-white/50 animate-pulse"></div>
+                <div key={i} className="h-[240px] sm:h-[360px] lg:h-[420px] bg-white/20 rounded-[20px] sm:rounded-[32px] border border-white/50 animate-pulse"></div>
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8">
               {products.map((product, index) => (
                 <motion.div
                   key={product.id}
@@ -66,7 +66,7 @@ const ProductShowcase = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1, duration: 0.7, ease: "easeOut" }}
                   whileHover={{ y: -15 }}
-                  className="group relative h-[420px] bg-white rounded-[32px] overflow-hidden shadow-2xl shadow-[#35104C]/5 border border-white transition-all duration-500"
+                  className="group relative h-[240px] sm:h-[360px] lg:h-[420px] bg-white rounded-[20px] sm:rounded-[32px] overflow-hidden shadow-2xl shadow-[#35104C]/5 border border-white transition-all duration-500"
                 >
                   <div className="absolute inset-0">
                     <img
@@ -77,19 +77,20 @@ const ProductShowcase = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-[#35104C] via-[#35104C]/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
                   </div>
 
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 scale-90 group-hover:scale-100 pb-20">
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 scale-90 group-hover:scale-100 pb-14 sm:pb-20">
                     <button
                       onClick={() => window.open(product.videoUrl, "_blank")}
-                      className="w-20 h-20 bg-white text-[#35104C] rounded-[28px] flex items-center justify-center shadow-2xl"
+                      className="w-12 h-12 sm:w-20 sm:h-20 bg-white text-[#35104C] rounded-[16px] sm:rounded-[28px] flex items-center justify-center shadow-2xl"
                     >
-                      <FiPlay size={28} className="fill-current ml-1" />
+                      <FiPlay size={18} className="fill-current ml-0.5 sm:ml-1 sm:hidden" />
+                      <FiPlay size={28} className="fill-current ml-1 hidden sm:block" />
                     </button>
                   </div>
 
-                  <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <h3 className="text-xl md:text-2xl font-bold text-white leading-tight mb-3 group-hover:text-[#6CD1FD] transition-colors">{product.title}</h3>
-                    <p className="text-[14px] text-white/60 line-clamp-1 leading-relaxed font-bold uppercase tracking-wider">
-                      Tác giả: {product.author || "Huy Anh Studio"}
+                  <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-6">
+                    <h3 className="text-[13px] sm:text-xl md:text-2xl font-bold text-white leading-tight mb-1 sm:mb-3 group-hover:text-[#6CD1FD] transition-colors">{product.title}</h3>
+                    <p className="text-[10px] sm:text-[14px] text-white/60 line-clamp-1 leading-relaxed font-bold uppercase tracking-wider">
+                      {product.author || "Huy Anh Studio"}
                     </p>
                   </div>
                 </motion.div>
