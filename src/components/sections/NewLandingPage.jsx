@@ -407,8 +407,13 @@ const NewLandingPage = () => {
 
       {/* --- SECTION 2: CUSTOMIZATION TOOLS --- */}
       <section
-        className="pb-10 md:pb-32 pt-10 md:pt-24 px-4 md:px-6 bg-[#F0EBE8] mt-8 sm:-mt-[200px] md:-mt-[300px] relative z-20 shadow-[0_-20px_50px_rgba(0,0,0,0.05)]"
-        style={{ borderRadius: '32px 32px 0 0 md:borderRadius: 50% 50% 50% 50% / 100px 100px 100px 100px' }}
+        className="pb-10 md:pb-32 pt-16 md:pt-32 px-4 md:px-6 bg-[#F0EBE8] mt-8 sm:-mt-[160px] md:-mt-[220px] relative z-20 shadow-[0_-30px_60px_rgba(0,0,0,0.03)]"
+        style={{ 
+          borderTopLeftRadius: '50% 60px',
+          borderTopRightRadius: '50% 60px',
+          borderBottomLeftRadius: '50% 60px',
+          borderBottomRightRadius: '50% 60px'
+        }}
       >
         <div className="max-w-[1200px] mx-auto">
           <div className="text-center relative mb-7 md:mb-6">
@@ -924,7 +929,7 @@ const NewLandingPage = () => {
 
           {/* Copyright */}
           <div className="pt-2 border-t border-gray-100 lg:border-none text-center lg:text-left mt-8 lg:mt-0">
-            <p className="text-[15px] text-slate-600">Được phát triển bởi <a href="https://www.facebook.com/HOVANDUYIT" target="_blank" rel="noopener noreferrer" className="font-bold hover:text-[#6CD1FD] transition-colors">Hồ Văn Duy</a></p>
+            <p className="text-[13px] text-slate-600">Được phát triển bởi <a href="https://www.facebook.com/HOVANDUYIT" target="_blank" rel="noopener noreferrer" className="font-bold hover:text-[#6CD1FD] transition-colors">Hồ Văn Duy</a></p>
           </div>
         </div>
       </footer>
