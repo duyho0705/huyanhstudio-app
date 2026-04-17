@@ -717,7 +717,7 @@ const BookingManagement = () => {
               <div className="w-7 h-7 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0">
                 <AlertTriangle size={16} strokeWidth={2.5} />
               </div>
-              <p className="text-[13px] font-bold text-red-800 leading-relaxed">
+              <p className="text-[15px] font-medium text-red-800 leading-relaxed">
                 Cảnh báo: Việc xóa "{selectedBooking?.bookingCode}" sẽ loại bỏ hoàn toàn lịch trình và doanh thu liên quan đến đơn này.
               </p>
             </div>

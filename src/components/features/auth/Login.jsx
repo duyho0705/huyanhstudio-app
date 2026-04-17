@@ -151,33 +151,32 @@ const Login = ({ onClose, initialMode = "login" }) => {
   };
 
   return (
-    <div className="relative w-full max-w-[440px] bg-white rounded-2xl shadow-[0_24px_80px_rgba(0,0,0,0.12)] overflow-hidden border border-gray-100">
+    <div className="relative w-full mx-auto max-w-[340px] bg-white rounded-2xl shadow-[0_24px_80px_rgba(0,0,0,0.12)] overflow-hidden border border-gray-100 flex flex-col max-h-[90vh]">
 
-      {/* Close button */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 z-20 w-8 h-8 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all"
+        className="absolute top-3 right-3 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-white/80 backdrop-blur-sm text-gray-400 hover:text-gray-600 hover:bg-gray-100 shadow-sm transition-all"
       >
         <FiX size={18} />
       </button>
 
-      <div className="p-8 pt-10">
+      <div className="p-4 sm:p-6 pt-5 overflow-y-auto custom-scrollbar flex-1">
         {/* Logo */}
-        <div className="flex items-center gap-2 mb-8">
-          <div className="relative w-7 h-7">
+        <div className="flex items-center gap-2 mb-5">
+          <div className="relative w-5 h-5">
             <div className="absolute inset-0 bg-brand-orange rounded-sm rotate-12 opacity-80"></div>
             <div className="absolute inset-0 bg-[#6CD1FD] rounded-sm -rotate-6"></div>
-            <div className="absolute inset-0 bg-[#35104C] rounded-sm flex items-center justify-center text-white text-[9px] font-bold">HA</div>
+            <div className="absolute inset-0 bg-[#35104C] rounded-sm flex items-center justify-center text-white text-[7px] font-bold">HA</div>
           </div>
-          <span className="text-xl font-bold text-[#35104C]" style={{ fontFamily: '"Satisfy", cursive' }}>hastudio</span>
+          <span className="text-base font-bold text-[#35104C]" style={{ fontFamily: '"Satisfy", cursive' }}>hastudio</span>
         </div>
 
         {/* Title */}
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
+        <div className="mb-4">
+          <h2 className="text-[18px] font-bold text-gray-900 tracking-tight">
             {isLogin ? "Đăng nhập" : "Tạo tài khoản"}
           </h2>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-[12px] text-gray-500 mt-0.5">
             {isLogin 
               ? "Chào mừng bạn quay trở lại" 
               : "Bắt đầu trải nghiệm cùng hastudio"}
@@ -202,30 +201,30 @@ const Login = ({ onClose, initialMode = "login" }) => {
         </AnimatePresence>
 
         {/* Social Login - Đặt lên trên */}
-        <div className="flex gap-3 mb-6">
+        <div className="flex gap-2 mb-4">
           <button
             type="button"
             onClick={() => handleSocialLogin(googleProvider)}
-            className="flex-1 h-11 flex items-center justify-center gap-2.5 rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all active:scale-[0.98]"
+            className="flex-1 h-9 flex items-center justify-center gap-1.5 rounded-lg border border-gray-200 bg-white text-[12px] font-medium text-gray-700 hover:bg-gray-50 transition-all active:scale-[0.98]"
           >
-            <FcGoogle size={20} />
+            <FcGoogle size={16} />
             <span>Google</span>
           </button>
           <button
             type="button"
             onClick={() => handleSocialLogin(facebookProvider)}
-            className="flex-1 h-11 flex items-center justify-center gap-2.5 rounded-lg bg-[#1877F2] text-sm font-medium text-white hover:bg-[#1565d8] transition-all active:scale-[0.98]"
+            className="flex-1 h-9 flex items-center justify-center gap-1.5 rounded-lg bg-[#1877F2] text-[12px] font-medium text-white hover:bg-[#1565d8] transition-all active:scale-[0.98]"
           >
-            <FaFacebookF size={16} />
+            <FaFacebookF size={13} />
             <span>Facebook</span>
           </button>
         </div>
 
         {/* Divider */}
-        <div className="flex items-center gap-3 mb-6">
-          <div className="flex-1 h-px bg-gray-200"></div>
-          <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">hoặc</span>
-          <div className="flex-1 h-px bg-gray-200"></div>
+        <div className="flex items-center gap-3 mb-4">
+          <div className="flex-1 h-px bg-gray-100"></div>
+          <span className="text-[11px] text-gray-400 font-medium">hoặc</span>
+          <div className="flex-1 h-px bg-gray-100"></div>
         </div>
 
         {/* Forms */}
@@ -240,8 +239,8 @@ const Login = ({ onClose, initialMode = "login" }) => {
               onSubmit={handleLogin}
             >
               {/* Username */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Tên tài khoản</label>
+              <div className="mb-3">
+                <label className="block text-[12px] font-medium text-gray-700 mb-1">Tên tài khoản</label>
                 <div className="relative">
                   <input
                     name="username"
@@ -251,21 +250,21 @@ const Login = ({ onClose, initialMode = "login" }) => {
                     onChange={handleInputChange}
                     onFocus={() => setFocusedField("username")}
                     onBlur={() => setFocusedField(null)}
-                    className={`w-full h-11 px-3.5 rounded-lg text-sm text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
+                    className={`w-full h-9 px-3 rounded-lg text-[12px] text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
                       errors.username
-                        ? "border-2 border-red-300 bg-red-50/50 focus:border-red-400"
+                        ? "border border-red-300 bg-red-50/50 focus:border-red-400"
                         : "border border-gray-200 bg-white focus:border-[#35104C] focus:ring-1 focus:ring-[#35104C]/10"
                     }`}
                   />
                 </div>
-                {errors.username && <p className="text-xs text-red-500 mt-1 ml-1">{errors.username}</p>}
+                {errors.username && <p className="text-[10px] text-red-500 mt-1 ml-1">{errors.username}</p>}
               </div>
 
               {/* Password */}
-              <div className="mb-4">
-                <div className="flex justify-between items-center mb-1.5">
-                  <label className="block text-sm font-medium text-gray-700">Mật khẩu</label>
-                  <button type="button" className="text-xs text-[#35104C]/60 hover:text-[#35104C] transition-colors font-medium">
+              <div className="mb-3">
+                <div className="flex justify-between items-center mb-1">
+                  <label className="block text-[12px] font-medium text-gray-700">Mật khẩu</label>
+                  <button type="button" className="text-[10px] text-[#35104C]/60 hover:text-[#35104C] transition-colors font-medium">
                     Quên mật khẩu?
                   </button>
                 </div>
@@ -278,26 +277,26 @@ const Login = ({ onClose, initialMode = "login" }) => {
                     onChange={handleInputChange}
                     onFocus={() => setFocusedField("password")}
                     onBlur={() => setFocusedField(null)}
-                    className={`w-full h-11 px-3.5 pr-10 rounded-lg text-sm text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
+                    className={`w-full h-9 px-3 pr-9 rounded-lg text-[12px] text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
                       errors.password
-                        ? "border-2 border-red-300 bg-red-50/50 focus:border-red-400"
+                        ? "border border-red-300 bg-red-50/50 focus:border-red-400"
                         : "border border-gray-200 bg-white focus:border-[#35104C] focus:ring-1 focus:ring-[#35104C]/10"
                     }`}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                   >
-                    {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+                    {showPassword ? <FiEyeOff size={14} /> : <FiEye size={14} />}
                   </button>
                 </div>
-                {errors.password && <p className="text-xs text-red-500 mt-1 ml-1">{errors.password}</p>}
+                {errors.password && <p className="text-[10px] text-red-500 mt-1 ml-1">{errors.password}</p>}
               </div>
 
               <button
                 disabled={loading}
-                className="w-full h-11 mt-2 bg-[#35104C] text-white text-sm font-semibold rounded-lg hover:bg-[#2a0d3d] transition-all active:scale-[0.98] disabled:opacity-60"
+                className="w-full h-9 mt-1.5 bg-[#35104C] text-white text-[12px] font-semibold rounded-lg hover:bg-[#2a0d3d] transition-all active:scale-[0.98] disabled:opacity-60"
               >
                 {loading ? "Đang đăng nhập..." : "Đăng nhập"}
               </button>
@@ -312,62 +311,62 @@ const Login = ({ onClose, initialMode = "login" }) => {
               onSubmit={handleSignup}
             >
               {/* Full Name */}
-              <div className="mb-3.5">
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Họ và tên</label>
+              <div className="mb-3">
+                <label className="block text-[12px] font-medium text-gray-700 mb-1">Họ và tên</label>
                 <input
                   name="fullName"
                   type="text"
                   placeholder="Nhập họ và tên"
                   value={formData.fullName}
                   onChange={handleInputChange}
-                  className={`w-full h-11 px-3.5 rounded-lg text-sm text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
+                  className={`w-full h-9 px-3 rounded-lg text-[12px] text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
                     errors.fullName
-                      ? "border-2 border-red-300 bg-red-50/50"
+                      ? "border border-red-300 bg-red-50/50"
                       : "border border-gray-200 bg-white focus:border-[#35104C] focus:ring-1 focus:ring-[#35104C]/10"
                   }`}
                 />
-                {errors.fullName && <p className="text-xs text-red-500 mt-1 ml-1">{errors.fullName}</p>}
+                {errors.fullName && <p className="text-[10px] text-red-500 mt-1 ml-1">{errors.fullName}</p>}
               </div>
 
               {/* Phone */}
-              <div className="mb-3.5">
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Số điện thoại</label>
+              <div className="mb-3">
+                <label className="block text-[12px] font-medium text-gray-700 mb-1">Số điện thoại</label>
                 <input
                   name="phone"
                   type="text"
                   placeholder="Nhập số điện thoại"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  className={`w-full h-11 px-3.5 rounded-lg text-sm text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
+                  className={`w-full h-9 px-3 rounded-lg text-[12px] text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
                     errors.phone
-                      ? "border-2 border-red-300 bg-red-50/50"
+                      ? "border border-red-300 bg-red-50/50"
                       : "border border-gray-200 bg-white focus:border-[#35104C] focus:ring-1 focus:ring-[#35104C]/10"
                   }`}
                 />
-                {errors.phone && <p className="text-xs text-red-500 mt-1 ml-1">{errors.phone}</p>}
+                {errors.phone && <p className="text-[10px] text-red-500 mt-1 ml-1">{errors.phone}</p>}
               </div>
 
               {/* Username */}
-              <div className="mb-3.5">
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Tên tài khoản</label>
+              <div className="mb-3">
+                <label className="block text-[12px] font-medium text-gray-700 mb-1">Tên tài khoản</label>
                 <input
                   name="username"
                   type="text"
                   placeholder="Nhập tên tài khoản"
                   value={formData.username}
                   onChange={handleInputChange}
-                  className={`w-full h-11 px-3.5 rounded-lg text-sm text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
+                  className={`w-full h-9 px-3 rounded-lg text-[12px] text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
                     errors.username
-                      ? "border-2 border-red-300 bg-red-50/50"
+                      ? "border border-red-300 bg-red-50/50"
                       : "border border-gray-200 bg-white focus:border-[#35104C] focus:ring-1 focus:ring-[#35104C]/10"
                   }`}
                 />
-                {errors.username && <p className="text-xs text-red-500 mt-1 ml-1">{errors.username}</p>}
+                {errors.username && <p className="text-[10px] text-red-500 mt-1 ml-1">{errors.username}</p>}
               </div>
 
               {/* Password */}
-              <div className="mb-3.5">
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Mật khẩu</label>
+              <div className="mb-3">
+                <label className="block text-[12px] font-medium text-gray-700 mb-1">Mật khẩu</label>
                 <div className="relative">
                   <input
                     name="password"
@@ -375,26 +374,26 @@ const Login = ({ onClose, initialMode = "login" }) => {
                     placeholder="Tối thiểu 6 ký tự"
                     value={formData.password}
                     onChange={handleInputChange}
-                    className={`w-full h-11 px-3.5 pr-10 rounded-lg text-sm text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
+                    className={`w-full h-9 px-3 pr-9 rounded-lg text-[12px] text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
                       errors.password
-                        ? "border-2 border-red-300 bg-red-50/50"
+                        ? "border border-red-300 bg-red-50/50"
                         : "border border-gray-200 bg-white focus:border-[#35104C] focus:ring-1 focus:ring-[#35104C]/10"
                     }`}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                   >
-                    {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+                    {showPassword ? <FiEyeOff size={14} /> : <FiEye size={14} />}
                   </button>
                 </div>
-                {errors.password && <p className="text-xs text-red-500 mt-1 ml-1">{errors.password}</p>}
+                {errors.password && <p className="text-[10px] text-red-500 mt-1 ml-1">{errors.password}</p>}
               </div>
 
               {/* Confirm Password */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Xác nhận mật khẩu</label>
+              <div className="mb-3">
+                <label className="block text-[12px] font-medium text-gray-700 mb-1">Xác nhận mật khẩu</label>
                 <div className="relative">
                   <input
                     name="confirmPassword"
@@ -402,26 +401,26 @@ const Login = ({ onClose, initialMode = "login" }) => {
                     placeholder="Nhập lại mật khẩu"
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
-                    className={`w-full h-11 px-3.5 pr-10 rounded-lg text-sm text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
+                    className={`w-full h-9 px-3 pr-9 rounded-lg text-[12px] text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
                       errors.confirmPassword
-                        ? "border-2 border-red-300 bg-red-50/50"
+                        ? "border border-red-300 bg-red-50/50"
                         : "border border-gray-200 bg-white focus:border-[#35104C] focus:ring-1 focus:ring-[#35104C]/10"
                     }`}
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                   >
-                    {showConfirmPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+                    {showConfirmPassword ? <FiEyeOff size={14} /> : <FiEye size={14} />}
                   </button>
                 </div>
-                {errors.confirmPassword && <p className="text-xs text-red-500 mt-1 ml-1">{errors.confirmPassword}</p>}
+                {errors.confirmPassword && <p className="text-[10px] text-red-500 mt-1 ml-1">{errors.confirmPassword}</p>}
               </div>
 
               <button
                 disabled={loading}
-                className="w-full h-11 mt-1 bg-[#35104C] text-white text-sm font-semibold rounded-lg hover:bg-[#2a0d3d] transition-all active:scale-[0.98] disabled:opacity-60"
+                className="w-full h-9 mt-1 bg-[#35104C] text-white text-[12px] font-semibold rounded-lg hover:bg-[#2a0d3d] transition-all active:scale-[0.98] disabled:opacity-60"
               >
                 {loading ? "Đang tạo tài khoản..." : "Đăng ký"}
               </button>

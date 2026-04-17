@@ -161,10 +161,10 @@ const NewLandingPage = () => {
   return (
     <div className="min-h-screen bg-white font-sans text-[#35104C] selection:bg-sky/30 relative overflow-x-hidden">
       {/* --- HERO SECTION (BEIGE) --- */}
-      <section className="bg-[#E9DCD6] relative pt-20 pb-32">
+      <section className="bg-[#E9DCD6] relative pt-12 pb-20 md:pt-20 md:pb-32">
         <BackgroundRibbons />
 
-        <div className="px-6 pt-2 pb-2 flex flex-col items-center text-center relative z-10">
+        <div className="px-4 md:px-6 pt-2 pb-2 flex flex-col items-center text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -177,7 +177,7 @@ const NewLandingPage = () => {
             </div>
 
             <h1
-              className="text-5xl md:text-[88px] font-bold leading-[1.02] tracking-tighter text-[#35104C] mb-8"
+              className="text-[40px] leading-[1.1] md:text-[88px] md:leading-[1.02] font-bold tracking-tighter text-[#35104C] mb-6 md:mb-8"
               style={{ fontFamily: '"DM Serif Display", serif' }}
             >
               Transform your <span className="relative inline-block text-[#6CD1FD]">
@@ -191,7 +191,7 @@ const NewLandingPage = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.8 }}
-              className="text-[17px] md:text-[23px] font-medium text-[#35104C]/80 mb-10 max-w-[850px] mx-auto tracking-tight leading-relaxed"
+              className="text-[16px] md:text-[23px] font-medium text-[#35104C]/80 mb-8 md:mb-10 max-w-[850px] mx-auto tracking-tight leading-relaxed px-2 md:px-0"
             >
               Phòng thu âm chuyên nghiệp với công nghệ hiện đại. <br />
               Nơi chắp cánh cho giọng hát của bạn.
@@ -203,7 +203,7 @@ const NewLandingPage = () => {
                 if (user) navigate("/booking");
                 else setShowLoginModal(true, "signup");
               }}
-              className="px-12 py-5 bg-[#6CD1FD] text-white rounded-full text-[20px] font-bold mb-10 shadow-xl shadow-sky/10 active:scale-95"
+              className="px-8 py-4 md:px-12 md:py-5 bg-[#6CD1FD] text-white rounded-full text-[16px] md:text-[20px] font-bold mb-10 shadow-xl shadow-sky/10 active:scale-95"
             >
               Đặt lịch thu âm ngay
             </motion.button>
@@ -248,13 +248,13 @@ const NewLandingPage = () => {
           <img
             src={phongthuImg}
             alt="Phòng thu Editor"
-            className="w-full max-w-[1000px] h-auto rounded-[40px] shadow-[0_50px_100px_rgba(0,0,0,0.15)] relative z-10"
+            className="w-full max-w-[1000px] h-auto rounded-[20px] md:rounded-[40px] shadow-[0_30px_60px_rgba(0,0,0,0.15)] md:shadow-[0_50px_100px_rgba(0,0,0,0.15)] relative z-10"
           />
         </div>
       </section>
 
       {/* --- SECTION 1: IN ACTION --- */}
-      <section className="pt-64 pb-24 px-6 bg-white relative mt-0">
+      <section className="pt-32 md:pt-64 pb-16 md:pb-24 px-4 md:px-6 bg-white relative mt-0">
         <div className="max-w-[1400px] mx-auto text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -269,7 +269,7 @@ const NewLandingPage = () => {
           </motion.div>
 
           {/* --- COLLAGE LAYOUT --- */}
-          <div className="relative h-[1000px] md:h-[1400px] w-full max-w-[1400px] mx-auto mt-10">
+          <div className="relative h-[400px] sm:h-[600px] md:h-[1000px] lg:h-[1400px] w-full max-w-[1400px] mx-auto mt-6 md:mt-10">
             {/* 1. Top Left - Portrait */}
             <motion.div
               initial={{ opacity: 0, y: 100 }}
@@ -347,18 +347,18 @@ const NewLandingPage = () => {
 
       {/* --- SECTION 2: CUSTOMIZATION TOOLS --- */}
       <section
-        className="pb-32 pt-24 px-6 bg-[#F0EBE8] -mt-[300px] relative z-20 shadow-[0_-20px_50px_rgba(0,0,0,0.05)]"
+        className="pb-16 md:pb-32 pt-16 md:pt-24 px-4 md:px-6 bg-[#F0EBE8] -mt-[150px] sm:-mt-[200px] md:-mt-[300px] relative z-20 shadow-[0_-20px_50px_rgba(0,0,0,0.05)]"
         style={{ borderRadius: '50% 50% 50% 50% / 100px 100px 100px 100px' }}
       >
         <div className="max-w-[1200px] mx-auto">
-          <div className="text-center relative mb-20">
+          <div className="text-center relative mb-12 md:mb-20">
 
 
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-4xl md:text-[54px] font-bold tracking-tight text-[#35104C] relative"
+              className="text-[32px] sm:text-4xl md:text-[54px] font-bold tracking-tight text-[#35104C] relative px-2"
               style={{ fontFamily: '"DM Serif Display", serif' }}
             >
               Tận hưởng âm nhạc, trọn vẹn cảm xúc
@@ -402,9 +402,9 @@ const NewLandingPage = () => {
               >
                 <motion.div
                   whileHover={{ y: -10, scale: 1.02 }}
-                  className="mb-4 aspect-square flex items-center justify-center transition-all duration-500 p-6"
+                  className="mb-4 aspect-square flex items-center justify-center transition-all duration-500 p-3 md:p-6"
                 >
-                  <img src={tool.img} alt={tool.label} className="w-full h-full object-cover rounded-[40px] drop-shadow-[0_15px_25px_rgba(0,0,0,0.15)]" />
+                  <img src={tool.img} alt={tool.label} className="w-full h-full object-cover rounded-[20px] md:rounded-[40px] drop-shadow-[0_15px_25px_rgba(0,0,0,0.15)]" />
                 </motion.div>
 
                 <p className="text-[18px] font-bold text-[#35104C]/60 mb-3 px-2">{tool.label}</p>
@@ -437,7 +437,7 @@ const NewLandingPage = () => {
       </section>
 
       {/* --- SECTION 3: STYLES SHOWCASE --- */}
-      <section className="pt-20 pb-0 px-6 bg-white relative">
+      <section className="pt-16 md:pt-20 pb-0 px-4 md:px-6 bg-white relative overflow-hidden">
         <div className="max-w-[1200px] mx-auto relative min-h-[600px] flex flex-col items-center justify-center">
 
           {/* 1. TOP-LEFT: Illustration image */}
@@ -501,7 +501,7 @@ const NewLandingPage = () => {
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="text-[100px] md:text-[54px] font-bold tracking-tight text-[#35104C] leading-[1.1] mb-6" style={{ fontFamily: '"DM Serif Display", serif' }}
+              className="text-[40px] md:text-[54px] font-bold tracking-tight text-[#35104C] leading-[1.1] mb-4 md:mb-6" style={{ fontFamily: '"DM Serif Display", serif' }}
             >
               Đa dạng phong cách cho mọi cá tính âm nhạc
             </motion.h2>
@@ -526,13 +526,13 @@ const NewLandingPage = () => {
       </section>
 
       {/* --- ILLUSTRATED WITH HASTUDIO --- */}
-      <section className="px-6 pt-[100px] pb-20 bg-white">
+      <section className="px-4 md:px-6 pt-16 md:pt-[100px] pb-12 md:pb-20 bg-white">
         <div className="max-w-[1200px] mx-auto text-center">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-[52px] font-bold text-[#35104C] mb-6"
+            className="text-[36px] md:text-[52px] font-bold text-[#35104C] mb-4 md:mb-6"
             style={{ fontFamily: '"DM Serif Display", serif' }}
           >
             Ghi dấu ấn cùng hastudio
@@ -561,7 +561,7 @@ const NewLandingPage = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               whileHover={{ scale: 1.02 }}
-              className="bg-[#ff5a5a] rounded-[24px] p-8 pt-10 pb-8 min-h-[420px] flex items-center justify-center relative overflow-hidden group cursor-pointer"
+              className="bg-[#ff5a5a] rounded-[24px] p-6 md:p-8 pt-8 md:pt-10 pb-6 md:pb-8 min-h-[320px] md:min-h-[420px] flex items-center justify-center relative overflow-hidden group cursor-pointer"
             >
               <div className="flex gap-4 items-start">
                 {/* Phone Screen 1 */}
@@ -604,7 +604,7 @@ const NewLandingPage = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
               whileHover={{ scale: 1.02 }}
-              className="bg-[#ffe24d] rounded-[24px] p-8 min-h-[420px] flex items-center justify-center relative overflow-hidden cursor-pointer"
+              className="bg-[#ffe24d] rounded-[24px] p-6 md:p-8 min-h-[320px] md:min-h-[420px] flex items-center justify-center relative overflow-hidden cursor-pointer"
             >
               <div className="w-[220px] bg-[#c8c4a8] rounded-[8px] p-6 shadow-xl relative transform -rotate-2">
                 <div className="absolute top-0 left-0 w-full h-full border-2 border-[#b8b498] rounded-[8px]"></div>
@@ -635,7 +635,7 @@ const NewLandingPage = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
               whileHover={{ scale: 1.02 }}
-              className="bg-[#9e9eab] rounded-[24px] p-8 min-h-[420px] flex items-center justify-center relative overflow-hidden cursor-pointer"
+              className="bg-[#9e9eab] rounded-[24px] p-6 md:p-8 min-h-[320px] md:min-h-[420px] flex items-center justify-center relative overflow-hidden cursor-pointer"
             >
               <div className="w-[200px] bg-[#2a2355] rounded-[8px] p-5 shadow-xl relative transform rotate-2">
                 <p className="text-[8px] uppercase tracking-widest text-white/60 mb-1">Annual</p>
@@ -665,12 +665,12 @@ const NewLandingPage = () => {
       </section>
 
       {/* --- NEWSLETTER --- */}
-      <section className="px-6 py-16">
+      <section className="px-4 md:px-6 py-10 md:py-16">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className="max-w-[1200px] mx-auto bg-[#f8f3ed] rounded-[48px] p-12 md:p-16 lg:p-20 relative overflow-hidden"
+          className="max-w-[1200px] mx-auto bg-[#f8f3ed] rounded-[24px] md:rounded-[48px] p-6 sm:p-8 md:p-16 lg:p-20 relative overflow-hidden"
         >
           {/* Decorative shapes */}
           <motion.div
@@ -687,13 +687,13 @@ const NewLandingPage = () => {
           <div className="absolute top-1/2 left-[15%] w-[200px] h-[200px] bg-[#c9b8d4]/30 -rotate-12 rounded-lg"></div>
           <div className="absolute top-[20%] left-[25%] w-[120px] h-[120px] bg-[#d4c4de]/20 rotate-12 rounded-lg"></div>
 
-          <div className="relative z-10 flex flex-col lg:flex-row items-start justify-between gap-12">
+          <div className="relative z-10 flex flex-col lg:flex-row items-start justify-between gap-8 md:gap-12">
             {/* Left side */}
             <div className="max-w-[480px]">
-              <p className="text-[17px] text-[#35104C]/60 mb-3 flex items-center gap-2">
-                Đăng ký nhận tin <FiSend className="text-[#6CD1FD] text-xl" />
+              <p className="text-[15px] md:text-[17px] text-[#35104C]/60 mb-2 md:mb-3 flex items-center gap-2">
+                Đăng ký nhận tin <FiSend className="text-[#6CD1FD] text-lg md:text-xl" />
               </p>
-              <h2 className="text-3xl md:text-[44px] font-semibold text-[#35104C] leading-[1.15]" style={{ fontFamily: '"DM Serif Display", serif' }}>Nhận thông báo về các ưu đãi và dự án mới nhất!</h2>
+              <h2 className="text-[28px] md:text-[44px] font-semibold text-[#35104C] leading-[1.15]" style={{ fontFamily: '"DM Serif Display", serif' }}>Nhận thông báo về các ưu đãi và dự án mới nhất!</h2>
             </div>
 
             {/* Right side - Form */}
@@ -740,7 +740,7 @@ const NewLandingPage = () => {
             </div>
 
             {/* Link Columns */}
-            <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-10">
+            <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10">
               <div>
                 <h4 className="font-bold text-[#35104C] text-[17px] mb-6">hastudio</h4>
                 <ul className="space-y-3 text-[17px] text-[#35104C]">

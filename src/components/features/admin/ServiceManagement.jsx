@@ -426,7 +426,7 @@ const ServiceManagement = () => {
       >
         <div className="space-y-6">
           <div className="space-y-2">
-            <h3 className="text-[24px] font-bold text-slate-900 leading-tight">Xóa vĩnh viễn?</h3>
+            <h3 className="text-[24px] font-bold text-slate-900 leading-tight">Xóa dịch vụ</h3>
             <p className="text-[15px] text-slate-500 leading-relaxed font-medium">
               Thao tác này sẽ xóa vĩnh viễn dịch vụ và tất cả dữ liệu liên quan. Hành động này không thể hoàn tác.
             </p>
@@ -434,7 +434,7 @@ const ServiceManagement = () => {
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-[14px] font-semibold text-slate-700">
+              <label className="text-[15px] font-semibold text-slate-700">
                 Nhập tên dịch vụ để xác nhận: <span className="text-red-500">"{deletingService?.name}"</span>
               </label>
               <Input
@@ -449,7 +449,7 @@ const ServiceManagement = () => {
               <div className="w-6 h-6 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0">
                 <AlertTriangle size={14} strokeWidth={2.5} />
               </div>
-              <p className="text-[12px] font-bold text-red-800 leading-relaxed">
+              <p className="text-[15px] font-medium text-red-800 leading-relaxed">
                 Cảnh báo: Việc xóa "{deletingService?.name}" sẽ ảnh hưởng đến các dữ liệu booking trong lịch sử.
               </p>
             </div>
@@ -458,20 +458,20 @@ const ServiceManagement = () => {
           <div className="flex gap-3 pt-2">
             <button
               onClick={() => setIsDeleteModalOpen(false)}
-              className="flex-1 h-12 rounded-xl border border-slate-200 bg-white text-slate-700 font-bold text-[14px] hover:bg-slate-50 transition-colors"
+              className="flex-1 h-12 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium text-[15px] hover:bg-slate-50 transition-colors"
             >
               Hủy bỏ
             </button>
             <button
               onClick={confirmDelete}
               disabled={deleteConfirmText !== deletingService?.name}
-              className={`flex-[1.5] h-12 rounded-xl font-bold text-[14px] shadow-lg shadow-red-100 transition-all ${
+              className={`flex-[1.5] h-12 rounded-xl font-medium text-[15px] shadow-lg shadow-red-100 transition-all ${
                 deleteConfirmText === deletingService?.name
                   ? "bg-red-600 text-white hover:bg-red-700"
                   : "bg-slate-100 text-slate-400 cursor-not-allowed border-none shadow-none"
               }`}
             >
-              Xác nhận xóa dịch vụ
+              Xác nhận xóa
             </button>
           </div>
         </div>
