@@ -322,10 +322,10 @@ const BookingManagement = () => {
 
   const getStatusIcon = (statusValue) => {
     switch (statusValue) {
-      case "PENDING": return <Clock size={24} />;
-      case "CONFIRMED": return <CalendarCheck size={24} />;
-      case "COMPLETED": return <CheckCircle2 size={24} />;
-      case "CANCELLED": return <XCircle size={24} />;
+      case "PENDING": return <Clock size={16} />;
+      case "CONFIRMED": return <CalendarCheck size={16} />;
+      case "COMPLETED": return <CheckCircle2 size={16} />;
+      case "CANCELLED": return <XCircle size={16} />;
       default: return null;
     }
   };
@@ -333,7 +333,7 @@ const BookingManagement = () => {
   const columns = useMemo(
     () => [
       {
-        title: <span className="text-[15px] font-semibold text-slate-600">Mã đơn</span>,
+        title: <span className="text-[15px] font-medium text-slate-600">Mã đơn</span>,
         dataIndex: "bookingCode",
         key: "shortCode",
         width: 120,
@@ -344,7 +344,7 @@ const BookingManagement = () => {
         ),
       },
       {
-        title: <span className="text-[15px] font-semibold text-slate-600">Khách hàng</span>,
+        title: <span className="text-[15px] font-medium text-slate-600">Khách hàng</span>,
         dataIndex: "customerName",
         key: "customerName",
         width: 200,
@@ -360,7 +360,7 @@ const BookingManagement = () => {
         ),
       },
       {
-        title: <span className="text-[15px] font-semibold text-slate-600">Số điện thoại</span>,
+        title: <span className="text-[15px] font-medium text-slate-600">Số điện thoại</span>,
         dataIndex: "phone",
         key: "phone",
         width: 150,
@@ -371,18 +371,18 @@ const BookingManagement = () => {
         ),
       },
       {
-        title: <span className="text-[15px] font-semibold text-slate-600">Ngày thu</span>,
+        title: <span className="text-[15px] font-medium text-slate-600">Ngày thu</span>,
         dataIndex: "recordDate",
         key: "recordDate",
         width: 130,
         render: (date) => (
-          <span className="text-slate-600 text-[14px] font-semibold">
+          <span className="text-slate-600 text-[14px] font-medium">
             {dayjs(date).format("DD/MM/YYYY")}
           </span>
         ),
       },
       {
-        title: <span className="text-[15px] font-semibold text-slate-600">Ngày đặt</span>,
+        title: <span className="text-[15px] font-medium text-slate-600">Ngày đặt</span>,
         dataIndex: "createdDate",
         key: "createdDate",
         width: 140,
@@ -393,7 +393,7 @@ const BookingManagement = () => {
         ),
       },
       {
-        title: <span className="text-[15px] font-semibold text-slate-600">Dịch vụ yêu cầu</span>,
+        title: <span className="text-[15px] font-medium text-slate-600">Dịch vụ yêu cầu</span>,
         dataIndex: "services",
         key: "services",
         width: 240,
@@ -417,7 +417,7 @@ const BookingManagement = () => {
                 color="#0f172a"
                 placement="topLeft"
               >
-                <span className="text-blue-600 text-[14px] font-semibold cursor-pointer border-b border-dashed border-blue-400 pb-0.5 hover:text-blue-700 hover:border-blue-700 transition-colors">
+                <span className="text-blue-600 text-[14px] font-medium cursor-pointer border-b border-dashed border-blue-400 pb-0.5 hover:text-blue-700 hover:border-blue-700 transition-colors">
                   Nhiều dịch vụ
                 </span>
               </Tooltip>
@@ -426,14 +426,14 @@ const BookingManagement = () => {
 
           const n = serviceList[0];
           return (
-            <span className="text-slate-700 font-semibold text-[14px]">
+            <span className="text-slate-700 font-medium text-[14px]">
               {typeof n === 'string' ? n : n.name}
             </span>
           );
         },
       },
       {
-        title: <span className="text-[15px] font-semibold text-slate-600">Tiến độ</span>,
+        title: <span className="text-[15px] font-medium text-slate-600">Tiến độ</span>,
         dataIndex: "status",
         key: "status",
         width: 180,
@@ -447,7 +447,7 @@ const BookingManagement = () => {
             >
               {bookingStatuses.map((s) => (
                 <Option key={s.value} value={s.value}>
-                  <div className="flex items-center gap-2 text-[13px] font-semibold text-slate-700">
+                  <div className="flex items-center gap-2 text-[13px] font-medium text-slate-700">
                     {getStatusIcon(s.value)}
                     <span>{s.label}</span>
                   </div>
@@ -458,7 +458,7 @@ const BookingManagement = () => {
         },
       },
       {
-        title: <span className="text-[15px] font-semibold text-slate-600">Thao tác</span>,
+        title: <span className="text-[15px] font-medium text-slate-600">Thao tác</span>,
         key: "actions",
         width: 140,
         align: "center",
@@ -470,7 +470,7 @@ const BookingManagement = () => {
               className="w-9 h-9 rounded-xl flex items-center justify-center text-blue-500 hover:bg-blue-50 transition-all p-0"
               title="Xem chi tiết"
             >
-              <Search size={18} strokeWidth={2.5} />
+              <Search size={16} strokeWidth={2} />
             </Button>
             <Button
               type="text"
@@ -478,7 +478,7 @@ const BookingManagement = () => {
               className="w-9 h-9 rounded-xl flex items-center justify-center text-amber-500 hover:bg-amber-50 transition-all p-0"
               title="Chỉnh sửa"
             >
-              <Edit size={18} strokeWidth={2.5} />
+              <Edit size={16} strokeWidth={2} />
             </Button>
             <Button
               type="text"
@@ -496,8 +496,9 @@ const BookingManagement = () => {
   );
 
   return (
-    <div className="space-y-8 animate-in transition-all duration-500">
-      {messageContext}
+    <>
+      <div className="space-y-8 animate-in transition-all duration-500">
+        {messageContext}
 
       {/* Stats Section */}
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-6">
@@ -539,10 +540,10 @@ const BookingManagement = () => {
         ))}
       </div>
 
-      <div className="bg-white p-4 sm:p-8 rounded-[32px] border border-slate-200 shadow-sm space-y-6">
-        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-5 border-b border-slate-50 pb-2">
-          <h2 className="text-[18px] sm:text-[20px] font-bold text-slate-800 whitespace-nowrap flex items-center gap-3">
-            <div className="w-1.5 h-6 sm:h-8 bg-blue-600 rounded-full"></div>
+      <div className="bg-white p-4 sm:p-8 rounded-[28px] sm:rounded-[32px] border-none sm:border border-slate-200 shadow-none sm:shadow-sm space-y-4 sm:space-y-6">
+        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 border-b border-slate-50 pb-2">
+          <h2 className="text-[17px] sm:text-[20px] font-bold text-slate-800 whitespace-nowrap flex items-center gap-2.5">
+            <div className="w-1 h-5 sm:h-8 bg-blue-600 rounded-full"></div>
             Lịch thu âm
           </h2>
 
@@ -557,20 +558,21 @@ const BookingManagement = () => {
                 selectedRowKeys={selectedRowKeys}
                 onBulkDelete={handleBulkDelete}
                 showSearch={true}
-              />
-              <Button
-                onClick={handleCreate}
-                className="h-9 px-4 bg-slate-900 border-none font-semibold text-[13px] flex items-center justify-center gap-2 !text-white hover:!bg-slate-800 rounded-xl transition-all"
               >
-                <Plus size={16} strokeWidth={3} />
-                <span className="hidden sm:inline text-white">Thêm lịch mới</span>
-              </Button>
+                <Button
+                  onClick={handleCreate}
+                  className="h-9 w-9 sm:w-auto sm:px-4 bg-slate-900 border-none font-medium text-[13px] flex items-center justify-center gap-2 !text-white hover:!bg-slate-800 rounded-xl transition-all p-0 shadow-lg shadow-slate-200"
+                >
+                  <Plus size={16} strokeWidth={3} className="text-white" />
+                  <span className="hidden sm:inline text-white">Thêm lịch</span>
+                </Button>
+              </BookingFilters>
             </div>
           </div>
         </div>
 
 
-        <div className="rounded-[28px] border-2 border-slate-200 overflow-hidden bg-white shadow-inner">
+        <div className="sm:rounded-[28px] sm:border-2 sm:border-slate-200 overflow-hidden bg-white sm:shadow-inner">
           {/* Table View (shown from md/768px) */}
           <div className="hidden md:block">
             <Table
@@ -587,7 +589,7 @@ const BookingManagement = () => {
                 emptyText: (
                   <div className="py-20 flex flex-col items-center opacity-30">
                     <SlidersHorizontal size={48} className="mb-4" />
-                    <span className="text-[15px] text-slate-600 font-semibold ">Chưa có lịch thu âm nào</span>
+                    <span className="text-[15px] text-slate-600 font-medium ">Chưa có lịch thu âm nào</span>
                   </div>
                 )
               }}
@@ -597,49 +599,49 @@ const BookingManagement = () => {
           {/* Mobile Card View (hidden from md/768px) */}
           <div className="md:hidden">
             {loading ? (
-              <div className="p-4 sm:p-6 space-y-4">
-                {[1, 2, 3].map(i => (
-                  <div key={i} className="h-32 bg-slate-50 rounded-2xl animate-pulse border border-slate-100"></div>
+              <div className="grid grid-cols-2 gap-2.5">
+                {[1, 2, 3, 4].map(i => (
+                  <div key={i} className="h-44 bg-slate-50 rounded-2xl animate-pulse border border-slate-100"></div>
                 ))}
               </div>
             ) : (Array.isArray(bookings) && bookings.length > 0) ? (
-              <div className="space-y-4 p-4">
+              <div className="grid grid-cols-2 gap-2.5">
                 {bookings.map((booking) => (
-                  <div key={booking.id} className="bg-white p-5 rounded-[24px] border border-slate-200 shadow-sm space-y-4">
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="min-w-0">
-                        <h4 className="text-[16px] font-bold text-slate-900 truncate leading-tight">{booking.customerName}</h4>
-                        <p className="text-[13px] font-medium text-slate-500 mt-1">{booking.phone}</p>
+                  <div key={booking.id} className="bg-white p-3 rounded-[20px] border border-slate-100 shadow-sm flex flex-col h-full hover:border-blue-200 transition-all">
+                    <div className="flex items-start justify-between gap-1 mb-1.5">
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-[13px] font-bold text-slate-900 truncate tracking-tight">{booking.customerName}</h4>
+                        <p className="text-[10px] font-medium text-slate-500 mt-0.5">{booking.phone}</p>
                       </div>
-                      <div className="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-[11px] font-bold tracking-wider border border-slate-200 shrink-0 shadow-sm">
-                        {booking.bookingCode || "---"}
+                      <div className="px-1 py-0.5 bg-slate-50 text-slate-400 rounded text-[9px] font-medium shrink-0">
+                         #{booking.bookingCode?.slice(-4)}
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-6 py-3 border-y border-slate-50">
-                      <div className="flex items-center gap-2 text-slate-600">
-                        <CalendarDays size={14} className="text-blue-500" />
-                        <span className="text-[13px] font-bold">{dayjs(booking.recordDate).format("DD/MM/YYYY")}</span>
+                    <div className="py-1.5 border-y border-slate-50 space-y-1 mb-2.5">
+                      <div className="flex items-center gap-1 text-slate-500">
+                        <CalendarDays size={11} className="shrink-0" />
+                        <span className="text-[10.5px] font-medium">{dayjs(booking.recordDate).format("DD/MM/YY")}</span>
                       </div>
                       {booking.needConsultation && (
-                        <div className="flex items-center gap-1.5 px-2.5 py-0.5 bg-amber-50 text-amber-600 rounded-full border border-amber-100">
-                          <AlertCircle size={12} strokeWidth={2.5} />
-                          <span className="text-[11px] font-bold uppercase tracking-wide">Cần tư vấn</span>
+                        <div className="flex items-center gap-1 px-1.5 py-0.5 bg-amber-50 text-amber-600 rounded text-[9px] font-bold uppercase w-fit">
+                          <span>Cần tư vấn</span>
                         </div>
                       )}
                     </div>
 
-                    <div className="flex items-center justify-between pt-1">
+                    <div className="mt-auto space-y-2.5">
                       <Select
                         value={booking.status}
                         onChange={(val) => handleStatusUpdate(booking.id, val)}
-                        className="w-[150px] select-custom-sm"
-                        size="middle"
-                        dropdownStyle={{ borderRadius: '16px', padding: '4px' }}
+                        className="w-full select-custom-xs status-select-mobile"
+                        size="small"
+                        bordered={false}
+                        dropdownStyle={{ borderRadius: '12px' }}
                       >
                         {bookingStatuses.map((s) => (
                           <Option key={s.value} value={s.value}>
-                            <div className="flex items-center gap-2 text-[13px] font-bold text-slate-700">
+                            <div className="flex items-center gap-1.5 text-[10.5px] font-medium">
                               {getStatusIcon(s.value)}
                               <span>{s.label}</span>
                             </div>
@@ -647,40 +649,38 @@ const BookingManagement = () => {
                         ))}
                       </Select>
                       
-                      <div className="flex items-center gap-2">
-                        <Button
-                          type="text"
+                      <div className="flex items-center justify-between pt-1 border-t border-slate-50">
+                        <button
                           onClick={() => handleViewDetails(booking)}
-                          className="w-10 h-10 rounded-xl flex items-center justify-center text-blue-500 hover:bg-blue-50 p-0"
+                          className="w-7 h-7 flex items-center justify-center text-slate-400 hover:text-blue-500 transition-colors p-0 bg-transparent border-none cursor-pointer"
                         >
-                          <Search size={18} />
-                        </Button>
-                        <Button
-                          type="text"
+                          <Search size={13} />
+                        </button>
+                        <button
                           onClick={() => handleEdit(booking)}
-                          className="w-10 h-10 rounded-xl flex items-center justify-center text-amber-500 hover:bg-amber-50 p-0"
+                          className="w-7 h-7 flex items-center justify-center text-slate-400 hover:text-amber-500 transition-colors p-0 bg-transparent border-none cursor-pointer"
                         >
-                          <Edit size={18} />
-                        </Button>
-                        <Button
-                          type="text"
+                          <Edit size={13} />
+                        </button>
+                        <button
                           onClick={() => openDeleteModal(booking)}
-                          className="w-10 h-10 rounded-xl flex items-center justify-center text-red-500 hover:bg-red-50 p-0"
+                          className="w-7 h-7 flex items-center justify-center text-slate-400 hover:text-red-500 transition-colors p-0 bg-transparent border-none cursor-pointer"
                         >
-                          <Trash2 size={18} />
-                        </Button>
+                          <Trash2 size={13} />
+                        </button>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="py-16 flex flex-col items-center opacity-30">
-                <SlidersHorizontal size={40} className="mb-4" />
-                <span className="text-[13px] text-slate-600 font-semibold">Chưa có lịch thu âm nào</span>
+              <div className="py-10 flex flex-col items-center opacity-30">
+                <SlidersHorizontal size={28} className="mb-2" />
+                <span className="text-[11px] text-slate-500 font-medium">Danh sách trống</span>
               </div>
             )}
           </div>
+        </div>
 
           {pagination.total > 0 && (
             <div className="p-4 sm:p-6 bg-slate-50/20 border-t border-slate-100 flex items-center justify-between">
@@ -706,8 +706,6 @@ const BookingManagement = () => {
             </div>
           )}
         </div>
-      </div>
-
       {/*** MODALS ***/}
       <BookingForm
         open={isFormModalOpen}
@@ -737,7 +735,7 @@ const BookingManagement = () => {
 
           <div className={isMobile ? "space-y-3" : "space-y-4"}>
             <div className="space-y-2">
-              <label className={`${isMobile ? "text-[13px]" : "text-[15px]"} font-semibold text-slate-700`}>
+              <label className={`${isMobile ? "text-[13px]" : "text-[15px]"} font-medium text-slate-700`}>
                 Mã xác nhận: <span className="text-red-500">"{selectedBooking?.bookingCode}"</span>
               </label>
               <Input
@@ -854,7 +852,7 @@ const BookingManagement = () => {
                 <div className="flex items-start sm:items-end">
                   <div className={`px-3 sm:px-4 py-1 sm:py-1.5 rounded-lg sm:rounded-xl flex items-center gap-1.5 sm:gap-2 border shadow-md ${bookingStatuses.find(s => s.value === selectedDetailBooking.status)?.classes}`}>
                     {getStatusIcon(selectedDetailBooking.status)}
-                    <span className="font-semibold text-[12px] sm:text-[13px]">
+                    <span className="font-medium text-[12px] sm:text-[13px]">
                       {bookingStatuses.find(s => s.value === selectedDetailBooking.status)?.label}
                     </span>
                   </div>
@@ -912,7 +910,7 @@ const BookingManagement = () => {
                   <div className="grid grid-cols-2 gap-3 sm:gap-8">
                     <div className="bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden group">
                       <p className="text-[12px] sm:text-[14px] font-medium text-slate-500 mb-1 sm:mb-1.5 flex items-center gap-1.5 sm:gap-2">
-                        <CalendarDays size={14} className="sm:w-4 sm:h-4 text-blue-500" /> Ngày thu
+                        <CalendarDays size={13} className="sm:w-4 sm:h-4 text-blue-500" /> Ngày thu
                       </p>
                       <p className="text-[15px] sm:text-[17px] font-medium text-slate-700">
                         {dayjs(selectedDetailBooking.recordDate).format("DD/MM/YYYY")}
@@ -926,7 +924,7 @@ const BookingManagement = () => {
 
                     <div className="bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden group">
                       <p className="text-[12px] sm:text-[14px] font-medium text-slate-500 mb-1 sm:mb-1.5 flex items-center gap-1.5 sm:gap-2">
-                        <Home size={14} className="sm:w-4 sm:h-4 text-orange-500" /> Phòng thu
+                        <Home size={13} className="sm:w-4 sm:h-4 text-orange-500" /> Phòng thu
                       </p>
                       <p className="text-[15px] sm:text-[17px] font-medium text-slate-700">
                         {typeof selectedDetailBooking.studioRoom === "object" ? selectedDetailBooking.studioRoom?.studioName : selectedDetailBooking.studioRoom}
@@ -942,8 +940,8 @@ const BookingManagement = () => {
                     <div className="flex flex-wrap gap-1.5 sm:gap-2">
                       {Array.isArray(selectedDetailBooking.services)
                         ? selectedDetailBooking.services.map((s, i) => (
-                          <div key={i} className="px-2.5 sm:px-3 py-1 sm:py-1.5 bg-indigo-50 border border-indigo-100 text-indigo-700 font-semibold rounded-lg text-[12px] sm:text-[13px] flex items-center gap-1.5 sm:gap-2">
-                            <CheckCircle size={14} strokeWidth={3} className="sm:w-4 sm:h-4" />
+                          <div key={i} className="px-2.5 sm:px-3 py-1 sm:py-1.5 bg-indigo-50 border border-indigo-100 text-indigo-700 font-medium rounded-lg text-[12px] sm:text-[13px] flex items-center gap-1.5 sm:gap-2">
+                            <CheckCircle size={13} strokeWidth={3} className="sm:w-4 sm:h-4" />
                             {s.name || s}
                           </div>
                         ))
@@ -994,7 +992,8 @@ const BookingManagement = () => {
           </div>
         )}
       </Modal>
-    </div>
+      </div>
+    </>
   );
 };
 

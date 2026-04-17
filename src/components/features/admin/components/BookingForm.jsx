@@ -15,15 +15,13 @@ const BookingForm = ({
   studios,
 }) => {
   const [form] = Form.useForm();
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  const isMobile = windowWidth < 640;
 
   useEffect(() => {
     if (open && initialValues) {
@@ -80,116 +78,115 @@ const BookingForm = ({
   return (
     <Modal
       title={
-        <div className={isMobile ? "py-1" : "py-2"}>
-          <h3 className={`${isMobile ? "text-[16px]" : "text-[18px]"} font-semibold text-slate-900 leading-tight`}>
+        <div className="flex items-center gap-2 py-1">
+          <span className="text-[17px] sm:text-[20px] font-bold text-slate-800">
             {initialValues ? "Cập nhật đặt lịch" : "Tạo đặt lịch mới"}
-          </h3>
+          </span>
         </div>
       }
       open={open}
+      onOk={handleSubmit}
       onCancel={onCancel}
-      width={isMobile ? "94%" : 650}
-      centered
-      className="!max-w-[95vw]"
       footer={[
         <button
           key="cancel"
           onClick={onCancel}
-          className={`${isMobile ? "h-9 px-4 text-[13px]" : "h-10 px-6 text-[14px]"} rounded-xl font-medium text-slate-600 border border-slate-200 bg-white mr-2 sm:mr-3 hover:bg-slate-50 transition-colors`}
+          className={`${isMobile ? "h-9 px-5 text-[13px]" : "h-11 px-8 text-[14px]"} rounded-xl font-medium text-slate-500 border border-slate-200 bg-white hover:bg-slate-50 transition-all mr-2`}
         >
           Hủy
         </button>,
         <button
           key="submit"
           onClick={handleSubmit}
-          className={`${isMobile ? "h-9 px-4 text-[13px]" : "h-10 px-6 text-[14px]"} rounded-xl bg-slate-900 border-none font-semibold text-white hover:bg-slate-800 transition-colors`}
+          className={`${isMobile ? "h-9 px-6 text-[13px]" : "h-11 px-10 text-[14px]"} rounded-xl bg-slate-900 border-none font-medium text-white hover:bg-slate-800 transition-all shadow-md shadow-slate-200`}
         >
-          {initialValues ? "Cập nhật" : "Tạo đơn"}
+          {initialValues ? "Cập nhật" : "Tạo ngay"}
         </button>
       ]}
-      bodyStyle={{ padding: isMobile ? "0 16px 16px 16px" : "0 24px 24px 24px" }}
+      width={isMobile ? "95%" : 720}
+      centered
+      className="premium-modal !max-w-[95vw]"
+      destroyOnHidden={true}
+      styles={{ body: { padding: isMobile ? "12px 16px" : "16px 24px" } }}
     >
       <Form
         form={form}
         layout="vertical"
-        className={isMobile ? "pt-3" : "pt-6"}
+        className={isMobile ? "space-y-0" : "space-y-2"}
       >
         <Form.Item
           name="customerName"
-          label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>Họ tên</span>}
-          rules={[{ required: true, message: "Vui lòng nhập họ tên!" }]}
-          className={isMobile ? "mb-2" : "mb-4"}
+          label={<span className="text-[13px] sm:text-[14px] font-medium text-slate-600">Họ và tên</span>}
+          rules={[{ required: true, message: "Nhập họ tên!" }]}
+          className={isMobile ? "mb-3" : "mb-5"}
         >
           <Input 
-            placeholder="Nhập họ tên" 
-            className={`${isMobile ? "h-9 text-[13px]" : "h-10 text-[14px]"} rounded-xl border-slate-200 px-3`}
+            placeholder="Ví dụ: Nguyễn Văn A" 
+            className={`${isMobile ? "h-9 text-[13px]" : "h-11 text-[14px]"} rounded-xl border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-100 font-medium`}
           />
         </Form.Item>
 
-        <div className={`grid grid-cols-1 ${isMobile ? "gap-0" : "sm:grid-cols-2 gap-4"}`}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
           <Form.Item
             name="phone"
-            label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>Số điện thoại</span>}
+            label={<span className="text-[13px] sm:text-[14px] font-medium text-slate-600">Số điện thoại</span>}
             rules={[
-              { required: true, message: "Vui lòng nhập số điện thoại!" },
-              {
-                pattern: /^[0-9]{10,11}$/,
-                message: "Số điện thoại không hợp lệ!",
-              },
+              { required: true, message: "Nhập SĐT!" },
+              { pattern: /^[0-9]{10,11}$/, message: "SĐT không lệ!" },
             ]}
-            className={isMobile ? "mb-2" : "mb-4"}
+            className={isMobile ? "mb-3" : "mb-5"}
           >
             <Input 
-              placeholder="Nhập số điện thoại" 
-              className={`${isMobile ? "h-9 text-[13px]" : "h-10 text-[14px]"} rounded-xl border-slate-200 px-3`}
+              placeholder="09xx.xxx.xxx" 
+              className={`${isMobile ? "h-9 text-[13px]" : "h-11 text-[14px]"} rounded-xl border-slate-200 font-medium`}
             />
           </Form.Item>
 
           <Form.Item
             name="email"
-            label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>Email</span>}
+            label={<span className="text-[13px] sm:text-[14px] font-medium text-slate-600">Email</span>}
             rules={[
-              { required: true, message: "Vui lòng nhập email!" },
-              { type: "email", message: "Email không hợp lệ!" },
+              { required: true, message: "Nhập email!" },
+              { type: "email", message: "Email sai format!" },
             ]}
-            className={isMobile ? "mb-2" : "mb-4"}
+            className={isMobile ? "mb-3" : "mb-5"}
           >
             <Input 
-              placeholder="Nhập email" 
-              className={`${isMobile ? "h-9 text-[13px]" : "h-10 text-[14px]"} rounded-xl border-slate-200 px-3`}
+              placeholder="example@gmail.com" 
+              className={`${isMobile ? "h-9 text-[13px]" : "h-11 text-[14px]"} rounded-xl border-slate-200 font-medium`}
             />
           </Form.Item>
         </div>
 
-        <div className={`grid ${isMobile ? "grid-cols-2 gap-3" : "grid-cols-2 gap-4"}`}>
+        <div className="grid grid-cols-2 gap-3 sm:gap-4">
           <Form.Item
             name="recordDate"
-            label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>Ngày thu</span>}
-            rules={[{ required: true, message: "Vui lòng chọn ngày thu!" }]}
-            className={isMobile ? "mb-2" : "mb-4"}
+            label={<span className="text-[13px] sm:text-[14px] font-medium text-slate-600">Ngày thu</span>}
+            rules={[{ required: true, message: "Chọn ngày!" }]}
+            className={isMobile ? "mb-3" : "mb-5"}
           >
             <DatePicker
               format="DD/MM/YYYY"
               style={{ width: "100%" }}
-              className={`${isMobile ? "h-9 text-[13px]" : "h-10 text-[14px]"} rounded-xl border-slate-200 px-3`}
+              className={`${isMobile ? "h-9 text-[13px]" : "h-11 text-[14px]"} rounded-xl border-slate-200 font-medium`}
               disabledDate={(current) => current && current <= dayjs().startOf('day')}
             />
           </Form.Item>
 
           <Form.Item
             name="studioRoomId"
-            label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>Phòng Studio</span>}
-            rules={[{ required: true, message: "Vui lòng chọn phòng!" }]}
-            className={isMobile ? "mb-2" : "mb-4"}
+            label={<span className="text-[13px] sm:text-[14px] font-medium text-slate-600">Phòng thu</span>}
+            rules={[{ required: true, message: "Chọn phòng!" }]}
+            className={isMobile ? "mb-3" : "mb-5"}
           >
             <Select 
               placeholder="Chọn phòng" 
-              className={`${isMobile ? "h-9 text-[13px]" : "h-10 text-[14px]"} rounded-xl border-slate-200`}
+              className={`${isMobile ? "h-9 text-[13px]" : "h-11 text-[14px]"} rounded-xl border-slate-200 font-medium w-full`}
               dropdownStyle={{ borderRadius: '12px' }}
             >
               {studios?.map((studio) => (
                 <Option key={studio.id} value={studio.id}>
-                  <span className="text-[13px] font-medium">{studio.studioName}</span>
+                  {studio.studioName}
                 </Option>
               ))}
             </Select>
@@ -198,21 +195,20 @@ const BookingForm = ({
 
         <Form.Item
           name="serviceIds"
-          label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>Dịch vụ</span>}
-          rules={[
-            { required: true, message: "Vui lòng chọn ít nhất một dịch vụ!" },
-          ]}
-          className={isMobile ? "mb-2" : "mb-4"}
+          label={<span className="text-[13px] sm:text-[14px] font-medium text-slate-600">Dịch vụ yêu cầu</span>}
+          rules={[{ required: true, message: "Chọn ít nhất 1 dịch vụ!" }]}
+          className={isMobile ? "mb-3" : "mb-5"}
         >
           <Select 
             mode="multiple" 
-            placeholder="Chọn dịch vụ" 
-            className={`${isMobile ? "min-h-[36px] text-[13px]" : "min-h-[40px] text-[14px]"} rounded-xl border-slate-200`}
+            placeholder="Chọn các dịch vụ..." 
+            className={`${isMobile ? "min-h-[36px]" : "min-h-[44px]"} rounded-xl border-slate-200 font-medium w-full`}
             dropdownStyle={{ borderRadius: '12px' }}
+            maxTagCount="responsive"
           >
             {services?.map((service) => (
               <Option key={service.id} value={service.id}>
-                <span className="text-[13px] font-medium">{service.name || service.moreInfo}</span>
+                {service.name || service.moreInfo}
               </Option>
             ))}
           </Select>
@@ -220,14 +216,14 @@ const BookingForm = ({
 
         <Form.Item
           name="note"
-          label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>Ghi chú</span>}
+          label={<span className="text-[13px] sm:text-[14px] font-medium text-slate-600">Ghi chú</span>}
           className="mb-0"
         >
           <TextArea
-            placeholder="Yêu cầu thêm..."
+            placeholder="Yêu cầu đặc biệt nếu có..."
             rows={isMobile ? 2 : 3}
-            className={`${isMobile ? "text-[13px]" : "text-[14px]"} rounded-xl border-slate-200 px-3 py-2`}
-            style={{ maxHeight: 120, minHeight: isMobile ? 50 : 60 }}
+            className="rounded-xl border-slate-200 font-medium text-[13px] sm:text-[14px]"
+            style={{ maxHeight: 120, minHeight: isMobile ? 60 : 70 }}
           />
         </Form.Item>
       </Form>
