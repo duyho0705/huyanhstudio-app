@@ -328,10 +328,10 @@ function AppContent() {
                 transition={{ duration: 0.3, delay: 0.1 }}
                 className="flex items-center gap-3"
               >
-                <span className="bg-[#35104C] text-white px-3 py-1.5 rounded-lg text-[15px] font-bold shadow-xl border border-white/5">AI hastudio</span>
+                <span className="bg-[#35104C]/70 backdrop-blur-lg text-white px-3 py-1.5 rounded-lg text-[14px] font-bold shadow-xl border border-white/10">AI hastudio</span>
                 <button
                   onClick={() => setIsAIModalOpen(true)}
-                  className="w-12 h-12 bg-[#35104C]/80 backdrop-blur-xl border border-white/20 rounded-full flex items-center justify-center text-[#6CD1FD] shadow-xl hover:bg-[#6CD1FD] hover:text-[#35104C] transition-all active:scale-90"
+                  className="w-12 h-12 bg-[#35104C]/40 backdrop-blur-xl border border-white/20 rounded-full flex items-center justify-center text-[#6CD1FD] shadow-xl hover:bg-[#6CD1FD] hover:text-[#35104C] transition-all active:scale-90"
                 >
                   <FaRobot size={20} />
                 </button>
@@ -344,24 +344,28 @@ function AppContent() {
                 transition={{ duration: 0.3 }}
                 className="flex items-center gap-3"
               >
-                <span className="bg-[#35104C] text-white px-3 py-1.5 rounded-lg text-[15px] font-bold shadow-xl border border-white/5">Hỗ trợ</span>
+                <span className="bg-[#35104C]/70 backdrop-blur-lg text-white px-3 py-1.5 rounded-lg text-[14px] font-bold shadow-xl border border-white/10">Hỗ trợ</span>
                 <button
                   onClick={() => setIsChatOpen(true)}
-                  className="w-12 h-12 bg-[#35104C]/80 backdrop-blur-xl border border-white/20 rounded-full flex items-center justify-center text-white shadow-xl hover:bg-[#6CD1FD] hover:text-[#35104C] transition-all active:scale-90"
+                  className="w-12 h-12 bg-[#35104C]/40 backdrop-blur-xl border border-white/20 rounded-full flex items-center justify-center text-white shadow-xl hover:bg-[#6CD1FD] hover:text-[#35104C] transition-all active:scale-90"
                 >
                   <FiMessageCircle size={20} />
                 </button>
               </motion.div>
 
               {/* Main Hub Trigger - Mouse Enter here exclusively */}
-              <motion.div
+              <motion.button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsHubHovered(!isHubHovered);
+                }}
                 onMouseEnter={() => setIsHubHovered(true)}
                 animate={isHubHovered ? { rotate: 90, scale: 1.1 } : { rotate: 0, scale: 1 }}
                 whileTap={{ scale: 0.9 }}
                 className="w-14 h-14 bg-[#35104C] rounded-full flex items-center justify-center text-[#6CD1FD] shadow-2xl cursor-pointer border border-white/10 z-10"
               >
                 {isHubHovered ? <FiX size={24} /> : <FiGrid size={24} />}
-              </motion.div>
+              </motion.button>
             </div>
           </div>
 
