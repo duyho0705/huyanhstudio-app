@@ -100,22 +100,22 @@ const AdminHeader = ({ toggleSidebar }) => {
 
   return (
     <>
-      <header className="sticky top-0 z-40 bg-white/70 backdrop-blur-2xl border-b border-slate-100 h-20 flex items-center justify-between px-6 md:px-10">
-        <div className="flex items-center gap-6">
+      <header className="sticky top-0 z-40 bg-white/70 backdrop-blur-2xl border-b border-slate-100 h-16 sm:h-20 flex items-center justify-between px-3 sm:px-6 md:px-10">
+        <div className="flex items-center gap-4 sm:gap-6">
           <button
-            className="w-10 h-10 flex items-center justify-center bg-slate-50 rounded-xl text-slate-600 lg:hidden"
+            className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center bg-slate-50 rounded-xl text-slate-600 lg:hidden"
             onClick={toggleSidebar}
           >
             <Menu size={20} />
           </button>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
 
 
-          <button className="w-11 h-11 flex items-center justify-center text-slate-400 rounded-none relative group">
-            <Bell size={18} strokeWidth={2.5} />
-            <span className="absolute top-3 right-3 w-2 h-2 bg-red-500 rounded-full border-2 border-white shadow-sm ring-2 ring-red-500/20"></span>
+          <button className="w-9 h-9 sm:w-11 sm:h-11 flex items-center justify-center text-slate-400 rounded-none relative group">
+            <Bell size={17} strokeWidth={2.5} />
+            <span className="absolute top-2 right-2 sm:top-3 sm:right-3 w-2 h-2 bg-red-500 rounded-full border-2 border-white shadow-sm ring-2 ring-red-500/20"></span>
           </button>
 
           <div className="w-[1px] h-8 bg-slate-100 mx-2 hidden sm:block"></div>
@@ -126,10 +126,10 @@ const AdminHeader = ({ toggleSidebar }) => {
             placement="bottomRight"
             overlayClassName="[&_.ant-dropdown-menu]:!p-1 [&_.ant-dropdown-menu-item]:!py-1.5 [&_.ant-dropdown-menu-item]:!px-3 !min-w-[170px]"
           >
-            <div className="flex items-center gap-4 p-1 rounded-2xl group cursor-pointer border border-transparent">
+            <div className="flex items-center gap-2 sm:gap-4 p-1 rounded-2xl group cursor-pointer border border-transparent">
               <div className="relative">
-                <div className="w-11 h-11 bg-slate-900 rounded-2xl flex items-center justify-center text-white">
-                  <User size={20} />
+                <div className="w-9 h-9 sm:w-11 sm:h-11 bg-slate-900 rounded-xl sm:rounded-2xl flex items-center justify-center text-white">
+                  <User size={18} className="sm:w-5 sm:h-5" />
                 </div>
               </div>
               <div className="hidden sm:flex items-center gap-3">
@@ -148,13 +148,13 @@ const AdminHeader = ({ toggleSidebar }) => {
 
       {/* Notifications */}
       {notification.show && (
-        <div className="fixed top-10 right-10 z-[2000] px-8 py-5 bg-white rounded-3xl shadow-2xl border border-slate-100 flex items-center gap-5 animate-in slide-in-from-right duration-500">
-          <div className={`p-3 rounded-2xl ${notification.type === "success" ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"}`}>
-            {notification.type === "success" ? <CheckCircle2 size={24} /> : <AlertCircle size={24} />}
+        <div className="fixed top-4 right-4 sm:top-10 sm:right-10 z-[2000] px-4 py-3 sm:px-8 sm:py-5 bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-100 flex items-center gap-3 sm:gap-5 animate-in slide-in-from-right duration-500 max-w-[calc(100vw-32px)] sm:max-w-none">
+          <div className={`p-2.5 sm:p-3 rounded-xl sm:rounded-2xl shrink-0 ${notification.type === "success" ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"}`}>
+            {notification.type === "success" ? <CheckCircle2 size={20} className="sm:w-6 sm:h-6" /> : <AlertCircle size={20} className="sm:w-6 sm:h-6" />}
           </div>
-          <div>
-            <h5 className="font-semibold text-slate-900 tracking-tight text-xs mb-0.5">{notification.type === "success" ? "HOÀN TẤT THAO TÁC" : "CẢNH BÁO HỆ THỐNG"}</h5>
-            <p className="text-xs text-slate-500 font-semibold">{notification.message}</p>
+          <div className="min-w-0">
+            <h5 className="font-semibold text-slate-900 tracking-tight text-[11px] sm:text-xs mb-0.5 truncate">{notification.type === "success" ? "HOÀN TẤT THAO TÁC" : "CẢNH BÁO HỆ THỐNG"}</h5>
+            <p className="text-[11px] sm:text-xs text-slate-500 font-semibold truncate">{notification.message}</p>
           </div>
         </div>
       )}
@@ -169,11 +169,11 @@ const AdminHeader = ({ toggleSidebar }) => {
         centered
         closable={false}
       >
-        <div className="p-8">
-          <div className="flex items-center gap-4 mb-8">
-            <div className="w-1.5 h-8 bg-blue-600 rounded-full"></div>
+        <div className="p-4 sm:p-8">
+          <div className="flex items-center gap-3 sm:gap-4 mb-5 sm:mb-8">
+            <div className="w-1.5 h-6 sm:h-8 bg-blue-600 rounded-full"></div>
             <div>
-              <h3 className="text-xl font-semibold text-slate-900">Cập nhật hồ sơ</h3>
+              <h3 className="text-lg sm:text-xl font-semibold text-slate-900">Cập nhật hồ sơ</h3>
             </div>
           </div>
           <AdminAccount onClose={handleAccountClose} isOpen={accountModal} />
@@ -190,16 +190,16 @@ const AdminHeader = ({ toggleSidebar }) => {
         centered
         closable={false}
       >
-        <div className="p-8">
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-4">
-              <div className="w-1.5 h-8 bg-blue-600 rounded-full"></div>
+        <div className="p-4 sm:p-8">
+          <div className="flex items-center justify-between mb-5 sm:mb-8">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="w-1.5 h-6 sm:h-8 bg-blue-600 rounded-full"></div>
               <div>
-                <h3 className="text-xl font-semibold text-slate-900">Lịch sử hệ thống</h3>
+                <h3 className="text-lg sm:text-xl font-semibold text-slate-900">Lịch sử hệ thống</h3>
               </div>
             </div>
-            <button onClick={() => setBookingsModal(false)} className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400">
-              <Home size={18} />
+            <button onClick={() => setBookingsModal(false)} className="w-9 h-9 sm:w-10 sm:h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400">
+              <Home size={16} className="sm:w-[18px] sm:h-[18px]" />
             </button>
           </div>
           <AdminBookings />
@@ -216,11 +216,11 @@ const AdminHeader = ({ toggleSidebar }) => {
         centered
         closable={false}
       >
-        <div className="p-8">
-          <div className="flex items-center gap-4 mb-8">
-            <div className="w-1.5 h-8 bg-red-500 rounded-full"></div>
+        <div className="p-4 sm:p-8">
+          <div className="flex items-center gap-3 sm:gap-4 mb-5 sm:mb-8">
+            <div className="w-1.5 h-6 sm:h-8 bg-red-500 rounded-full"></div>
             <div>
-              <h3 className="text-xl font-semibold text-slate-900">Bảo mật tài khoản</h3>
+              <h3 className="text-lg sm:text-xl font-semibold text-slate-900">Bảo mật tài khoản</h3>
             </div>
           </div>
           <AdminChangePassword onClose={() => setPasswordModal(false)} />

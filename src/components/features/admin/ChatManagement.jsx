@@ -166,9 +166,15 @@ const ChatManagement = () => {
                 formData.append('file', selectedImage);
                 formData.append('userId', selectedUser);
 
+                const token = localStorage.getItem("accessToken");
+                const baseUrl = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080').replace(/\/$/, "");
+                
                 // Upload through Spring Boot Backend (which syncs to Cloudinary)
-                const uploadResponse = await fetch('http://localhost:8080/media/upload-chat', {
+                const uploadResponse = await fetch(`${baseUrl}/media/upload-chat`, {
                     method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
                     body: formData
                 });
                 

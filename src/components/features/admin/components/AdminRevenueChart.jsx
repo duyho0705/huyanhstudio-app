@@ -33,19 +33,19 @@ const AdminRevenueChart = () => {
 
   return (
     <div className="w-full">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
-            <BarChart3 size={20} />
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+            <BarChart3 size={18} className="sm:w-5 sm:h-5" />
           </div>
           <div>
-            <h3 className="text-[17px] font-semibold text-slate-900 leading-tight">Doanh thu & Kinh doanh</h3>
-            <p className="text-[13px] font-medium text-slate-500 mt-0.5">Thống kê lưu lượng giao dịch tiền tệ</p>
+            <h3 className="text-[15px] sm:text-[17px] font-semibold text-slate-900 leading-tight">Doanh thu & Kinh doanh</h3>
+            <p className="text-[12px] sm:text-[13px] font-medium text-slate-500 mt-0.5 hidden sm:block">Thống kê lưu lượng giao dịch tiền tệ</p>
           </div>
         </div>
         
-        <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-green-50 rounded-lg text-green-600 text-[13px] font-semibold">
+        <div className="flex items-center gap-2 sm:gap-3">
+            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-green-50 rounded-lg text-green-600 text-[13px] font-semibold">
                 <TrendingUp size={16} />
                 +14.5% Tháng trước
             </div>
@@ -57,7 +57,7 @@ const AdminRevenueChart = () => {
         </div>
       </div>
 
-      <div className="h-[300px] w-full mt-4">
+      <div className="h-[220px] sm:h-[280px] lg:h-[300px] w-full mt-2 sm:mt-4">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={data}

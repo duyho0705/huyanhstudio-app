@@ -21,12 +21,12 @@ const AdminDropdown = ({ options, value, onChange, className = "" }) => {
     <div className={`relative ${className}`} ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between gap-3 h-9 px-4 bg-white border border-blue-500 rounded-lg text-[13px] font-semibold text-slate-700 hover:bg-slate-50 transition-all min-w-[150px] shadow-sm active:scale-[0.98]"
+        className="flex items-center justify-between gap-2 sm:gap-3 h-8 sm:h-9 px-3 sm:px-4 bg-white border border-blue-500 rounded-lg text-[12px] sm:text-[13px] font-semibold text-slate-700 hover:bg-slate-50 transition-all min-w-[120px] sm:min-w-[150px] shadow-sm active:scale-[0.98]"
       >
         <span className="truncate">{selectedOption.label}</span>
         <ChevronDown
           size={14}
-          className={`text-slate-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+          className={`text-slate-400 transition-transform duration-200 shrink-0 ${isOpen ? 'rotate-180' : ''}`}
           strokeWidth={3}
         />
       </button>

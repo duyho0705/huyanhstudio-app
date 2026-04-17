@@ -178,7 +178,7 @@ const AdminLayout = () => {
 
       <div className="flex-1 flex flex-col w-full lg:pl-[260px] h-screen transition-all duration-500 ease-in-out admin-area overflow-hidden">
         <AdminHeader toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
-        <main className={`flex-1 overflow-y-auto w-full max-w-full mx-auto relative scroll-smooth ${location.pathname.includes("/admin/chat") ? "p-0" : "p-4 md:p-6 lg:p-6"}`}>
+        <main className={`flex-1 overflow-y-auto w-full max-w-full mx-auto relative scroll-smooth ${location.pathname.includes("/admin/chat") ? "p-0" : "p-3 sm:p-4 md:p-6 lg:p-6"}`}>
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}

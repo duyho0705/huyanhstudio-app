@@ -796,30 +796,30 @@ const BookingManagement = () => {
         {selectedDetailBooking && (
           <div className="flex flex-col bg-white">
             {/* Modal Header - Light Theme */}
-            <div className="bg-slate-50 px-4 py-6 sm:px-8 sm:py-10 text-slate-900 relative overflow-hidden border-b border-slate-200">
+            <div className="bg-slate-50 px-4 py-5 sm:px-8 sm:py-10 text-slate-900 relative overflow-hidden border-b border-slate-200">
               {/* Subtle Decorative Element */}
-              <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl -mr-32 -mt-32"></div>
+              <div className="absolute top-0 right-0 w-48 h-48 sm:w-80 sm:h-80 bg-blue-500/5 rounded-full blur-3xl -mr-20 sm:-mr-32 -mt-20 sm:-mt-32"></div>
 
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 bg-white border border-slate-200 text-slate-500 rounded-md text-[12px] font-medium shadow-sm">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6 relative z-10">
+                <div className="space-y-1.5 sm:space-y-2">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="px-2 py-0.5 bg-white border border-slate-200 text-slate-500 rounded-md text-[11px] sm:text-[12px] font-medium shadow-sm">
                       Chi tiết đặt lịch
                     </span>
                     <span className="text-slate-300 font-bold">/</span>
-                    <span className="text-slate-400 font-bold text-[11px]">
+                    <span className="text-slate-400 font-bold text-[10px] sm:text-[11px] truncate max-w-[120px] sm:max-w-none">
                       #{selectedDetailBooking.bookingCode}
                     </span>
                   </div>
-                  <h2 className="text-xl sm:text-3xl font-bold text-slate-900 mb-0">
+                  <h2 className="text-lg sm:text-3xl font-bold text-slate-900 mb-0">
                     {selectedDetailBooking.customerName}
                   </h2>
                 </div>
 
-                <div className="flex flex-col items-end gap-3">
-                  <div className={`px-4 py-1.5 rounded-xl flex items-center gap-2 border shadow-md ${bookingStatuses.find(s => s.value === selectedDetailBooking.status)?.classes}`}>
+                <div className="flex items-start sm:items-end">
+                  <div className={`px-3 sm:px-4 py-1 sm:py-1.5 rounded-lg sm:rounded-xl flex items-center gap-1.5 sm:gap-2 border shadow-md ${bookingStatuses.find(s => s.value === selectedDetailBooking.status)?.classes}`}>
                     {getStatusIcon(selectedDetailBooking.status)}
-                    <span className="font-semibold text-[13px]">
+                    <span className="font-semibold text-[12px] sm:text-[13px]">
                       {bookingStatuses.find(s => s.value === selectedDetailBooking.status)?.label}
                     </span>
                   </div>
@@ -828,23 +828,23 @@ const BookingManagement = () => {
             </div>
 
             {/* Modal Content */}
-            <div className="px-4 py-5 sm:px-8 sm:py-8">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-10">
+            <div className="px-3 py-4 sm:px-8 sm:py-8">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-10">
 
                 {/* Left Column: Customer & Timeline */}
-                <div className="md:col-span-1 space-y-6 sm:space-y-8">
+                <div className="md:col-span-1 space-y-5 sm:space-y-8">
                   <section>
-                    <h4 className="text-[14px] font-medium text-slate-500 mb-3 flex items-center gap-2">
-                      <User size={18} className="text-blue-500" /> Liên hệ
+                    <h4 className="text-[13px] sm:text-[14px] font-medium text-slate-500 mb-2.5 sm:mb-3 flex items-center gap-2">
+                      <User size={16} className="sm:w-[18px] sm:h-[18px] text-blue-500" /> Liên hệ
                     </h4>
-                    <div className="space-y-3">
+                    <div className="space-y-2.5 sm:space-y-3">
                       <div>
-                        <p className="text-[14px] font-medium text-slate-900 mb-0.5">{selectedDetailBooking.phone}</p>
-                        <p className="text-[12px] font-medium text-slate-500">Số điện thoại</p>
+                        <p className="text-[13px] sm:text-[14px] font-medium text-slate-900 mb-0.5">{selectedDetailBooking.phone}</p>
+                        <p className="text-[11px] sm:text-[12px] font-medium text-slate-500">Số điện thoại</p>
                       </div>
                       <div>
-                        <p className="text-[14px] font-medium text-slate-900 mb-0.5">{selectedDetailBooking.email || "Chưa cập nhật"}</p>
-                        <p className="text-[12px] font-medium text-slate-500">Email liên lạc</p>
+                        <p className="text-[13px] sm:text-[14px] font-medium text-slate-900 mb-0.5">{selectedDetailBooking.email || "Chưa cập nhật"}</p>
+                        <p className="text-[11px] sm:text-[12px] font-medium text-slate-500">Email liên lạc</p>
                       </div>
                     </div>
                   </section>
@@ -852,17 +852,17 @@ const BookingManagement = () => {
                   <div className="h-px bg-slate-100"></div>
 
                   <section>
-                    <h4 className="text-[14px] font-medium text-slate-500 mb-3 flex items-center gap-2">
-                      <Clock size={18} className="text-amber-500" /> Thời gian
+                    <h4 className="text-[13px] sm:text-[14px] font-medium text-slate-500 mb-2.5 sm:mb-3 flex items-center gap-2">
+                      <Clock size={16} className="sm:w-[18px] sm:h-[18px] text-amber-500" /> Thời gian
                     </h4>
-                    <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
-                      <div className="flex items-center gap-2 mb-2">
+                    <div className="bg-slate-50 p-3 sm:p-3.5 rounded-lg sm:rounded-xl border border-slate-100">
+                      <div className="flex items-center gap-2 mb-1.5 sm:mb-2">
                         <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
-                        <p className="text-[13px] font-bold text-slate-700 m-0">
+                        <p className="text-[12px] sm:text-[13px] font-bold text-slate-700 m-0">
                           {selectedDetailBooking.createdDate ? dayjs(selectedDetailBooking.createdDate).format("DD/MM/YYYY") : "---"}
                         </p>
                       </div>
-                      <p className="text-[13px] font-medium text-slate-600 m-0 pl-3.5">
+                      <p className="text-[12px] sm:text-[13px] font-medium text-slate-600 m-0 pl-3.5">
                         Đặt lịch lúc: <span className="text-slate-600 ml-1">
                           {selectedDetailBooking.createdDate ? dayjs(selectedDetailBooking.createdDate).format("HH:mm:ss") : "---"}
                         </span>
@@ -872,28 +872,28 @@ const BookingManagement = () => {
                 </div>
 
                 {/* Right Column: Services & Studio */}
-                <div className="md:col-span-2 space-y-6 sm:space-y-10">
+                <div className="md:col-span-2 space-y-5 sm:space-y-10">
                   {/* Booking Info Grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8">
-                    <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden group">
-                      <p className="text-[14px] font-medium text-slate-500 mb-1.5 flex items-center gap-2">
-                        <CalendarDays size={16} className="text-blue-500" /> Ngày thu âm
+                  <div className="grid grid-cols-2 gap-3 sm:gap-8">
+                    <div className="bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden group">
+                      <p className="text-[12px] sm:text-[14px] font-medium text-slate-500 mb-1 sm:mb-1.5 flex items-center gap-1.5 sm:gap-2">
+                        <CalendarDays size={14} className="sm:w-4 sm:h-4 text-blue-500" /> Ngày thu
                       </p>
-                      <p className="text-[17px] font-medium text-slate-700">
+                      <p className="text-[15px] sm:text-[17px] font-medium text-slate-700">
                         {dayjs(selectedDetailBooking.recordDate).format("DD/MM/YYYY")}
                       </p>
                       {dayjs(selectedDetailBooking.recordDate).isBefore(dayjs(), 'day') ? (
-                        <span className="text-[12px] font-bold text-red-500">Đã quá hạn</span>
+                        <span className="text-[11px] sm:text-[12px] font-bold text-red-500">Đã quá hạn</span>
                       ) : (
-                        <span className="text-[12px] font-bold text-emerald-500">Sắp đến</span>
+                        <span className="text-[11px] sm:text-[12px] font-bold text-emerald-500">Sắp đến</span>
                       )}
                     </div>
 
-                    <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden group">
-                      <p className="text-[14px] font-medium text-slate-500 mb-1.5 flex items-center gap-2">
-                        <Home size={16} className="text-orange-500" /> Phòng thu
+                    <div className="bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden group">
+                      <p className="text-[12px] sm:text-[14px] font-medium text-slate-500 mb-1 sm:mb-1.5 flex items-center gap-1.5 sm:gap-2">
+                        <Home size={14} className="sm:w-4 sm:h-4 text-orange-500" /> Phòng thu
                       </p>
-                      <p className="text-[17px] font-medium text-slate-700">
+                      <p className="text-[15px] sm:text-[17px] font-medium text-slate-700">
                         {typeof selectedDetailBooking.studioRoom === "object" ? selectedDetailBooking.studioRoom?.studioName : selectedDetailBooking.studioRoom}
                       </p>
                     </div>
@@ -901,20 +901,20 @@ const BookingManagement = () => {
 
                   {/* Services List */}
                   <section>
-                    <h4 className="text-[15px] font-medium text-slate-600 mb-4 flex items-center gap-2">
-                      <Package size={20} className="text-indigo-500" /> Dịch vụ
+                    <h4 className="text-[13px] sm:text-[15px] font-medium text-slate-600 mb-3 sm:mb-4 flex items-center gap-2">
+                      <Package size={18} className="sm:w-5 sm:h-5 text-indigo-500" /> Dịch vụ
                     </h4>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
                       {Array.isArray(selectedDetailBooking.services)
                         ? selectedDetailBooking.services.map((s, i) => (
-                          <div key={i} className="px-3 py-1.5 bg-indigo-50 border border-indigo-100 text-indigo-700 font-semibold rounded-lg text-[13px] flex items-center gap-2">
-                            <CheckCircle size={16} strokeWidth={3} />
+                          <div key={i} className="px-2.5 sm:px-3 py-1 sm:py-1.5 bg-indigo-50 border border-indigo-100 text-indigo-700 font-semibold rounded-lg text-[12px] sm:text-[13px] flex items-center gap-1.5 sm:gap-2">
+                            <CheckCircle size={14} strokeWidth={3} className="sm:w-4 sm:h-4" />
                             {s.name || s}
                           </div>
                         ))
                         : (
-                          <div className="px-4 py-2 bg-indigo-50 border border-indigo-100 text-indigo-700 font-bold rounded-xl text-[12px] flex items-center gap-2">
-                            <CheckCircle size={18} strokeWidth={3} />
+                          <div className="px-3 sm:px-4 py-1.5 sm:py-2 bg-indigo-50 border border-indigo-100 text-indigo-700 font-bold rounded-lg sm:rounded-xl text-[11px] sm:text-[12px] flex items-center gap-1.5 sm:gap-2">
+                            <CheckCircle size={16} strokeWidth={3} className="sm:w-[18px] sm:h-[18px]" />
                             {selectedDetailBooking.services?.name || selectedDetailBooking.services}
                           </div>
                         )
@@ -924,10 +924,10 @@ const BookingManagement = () => {
 
                   {/* Notes */}
                   <section>
-                    <h4 className="text-[15px] font-medium text-slate-600 mb-4 flex items-center gap-2">
-                      <FileText size={20} className="text-slate-500" /> Ghi chú
+                    <h4 className="text-[13px] sm:text-[15px] font-medium text-slate-600 mb-3 sm:mb-4 flex items-center gap-2">
+                      <FileText size={18} className="sm:w-5 sm:h-5 text-slate-500" /> Ghi chú
                     </h4>
-                    <div className="p-6 bg-slate-50 rounded-[20px] border-l-4 border-slate-900 text-[15px] font-medium text-slate-600 leading-relaxed italic shadow-inner">
+                    <div className="p-4 sm:p-6 bg-slate-50 rounded-2xl sm:rounded-[20px] border-l-4 border-slate-900 text-[13px] sm:text-[15px] font-medium text-slate-600 leading-relaxed italic shadow-inner">
                       {selectedDetailBooking.note || "Không có ghi chú"}
                     </div>
                   </section>
@@ -936,11 +936,11 @@ const BookingManagement = () => {
             </div>
 
             {/* Modal Footer */}
-            <div className="px-4 py-4 sm:px-8 sm:py-6 bg-slate-50 border-t border-slate-200 flex items-center justify-end">
-              <div className="flex gap-3 w-full md:w-auto">
+            <div className="px-3 py-3 sm:px-8 sm:py-6 bg-slate-50 border-t border-slate-200 flex items-center justify-end">
+              <div className="flex gap-2 sm:gap-3 w-full md:w-auto">
                 <Button
                   onClick={() => setIsDetailModalOpen(false)}
-                  className="flex-1 md:flex-none h-12 px-10 rounded-xl bg-white border border-slate-300 font-bold text-[13px] text-slate-700 shadow-sm hover:!bg-white hover:!text-slate-700 hover:!border-slate-300 transition-none"
+                  className="flex-1 md:flex-none h-10 sm:h-12 px-6 sm:px-10 rounded-xl bg-white border border-slate-300 font-bold text-[12px] sm:text-[13px] text-slate-700 shadow-sm hover:!bg-white hover:!text-slate-700 hover:!border-slate-300 transition-none"
                 >
                   Đóng
                 </Button>
@@ -950,7 +950,7 @@ const BookingManagement = () => {
                     setIsDetailModalOpen(false);
                     handleEdit(selectedDetailBooking);
                   }}
-                  className="flex-1 md:flex-none h-12 px-8 rounded-xl bg-slate-900 border-none font-medium text-[14px] text-white shadow-lg shadow-slate-200 hover:!bg-slate-900 hover:!text-white transition-none active:scale-95"
+                  className="flex-1 md:flex-none h-10 sm:h-12 px-5 sm:px-8 rounded-xl bg-slate-900 border-none font-medium text-[12px] sm:text-[14px] text-white shadow-lg shadow-slate-200 hover:!bg-slate-900 hover:!text-white transition-none active:scale-95"
                 >
                   Chỉnh sửa lịch
                 </Button>

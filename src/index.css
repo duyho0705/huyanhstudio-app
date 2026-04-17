@@ -224,11 +224,15 @@ body.ant-scrolling-effect {
 
 
   /* Fix notification toast position on mobile */
-  .admin-area .fixed.bottom-10.right-10 {
-    bottom: 16px !important;
-    right: 16px !important;
-    left: 16px !important;
-    max-width: calc(100vw - 32px) !important;
+  .admin-area .fixed.bottom-10.right-10,
+  .admin-area .fixed.top-10.right-10 {
+    bottom: auto !important;
+    top: 12px !important;
+    right: 12px !important;
+    left: 12px !important;
+    max-width: calc(100vw - 24px) !important;
+    padding: 16px !important;
+    border-radius: 16px !important;
   }
 }
 
@@ -241,6 +245,17 @@ body.ant-scrolling-effect {
   .admin-area .ant-picker-dropdown {
     max-width: 95vw !important;
   }
+
+  /* Ant notification responsive */
+  .ant-notification {
+    inset-inline-end: 12px !important;
+    inset-inline-start: 12px !important;
+    width: calc(100vw - 24px) !important;
+  }
+
+  .ant-notification-notice {
+    width: 100% !important;
+  }
 }
 
 /* Scrollbar hiding utility for chat sidebar */
@@ -251,6 +266,29 @@ body.ant-scrolling-effect {
 .admin-area .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* ===== ADMIN CHART RESPONSIVE ===== */
+@media (max-width: 640px) {
+  .admin-area .recharts-wrapper {
+    font-size: 11px;
+  }
+}
+
+/* ===== ADMIN TABLE SCROLL SHADOW ===== */
+@media (max-width: 1200px) {
+  .admin-area .ant-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* ===== ADMIN HEADER RESPONSIVE ===== */
+@media (max-width: 480px) {
+  .admin-area header {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
 }
 
 /* ========== ADMIN FORM MODAL RESPONSIVE ========== */
