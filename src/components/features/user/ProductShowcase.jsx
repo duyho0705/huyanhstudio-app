@@ -49,7 +49,7 @@ const ProductShowcase = () => {
 
   return (
     <div className="min-h-screen bg-transparent relative overflow-hidden">
-      <div className="relative z-10 pt-20 sm:pt-16 pb-16 sm:pb-24 px-3 sm:px-6">
+      <div className="relative z-10 pt-0 pb-16 sm:pb-24 px-3 sm:px-6">
         <div className="max-w-[1400px] mx-auto">
           {loading ? (
             <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8">

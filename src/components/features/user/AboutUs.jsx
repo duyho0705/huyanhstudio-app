@@ -4,7 +4,7 @@ import { FiCheckCircle } from "react-icons/fi";
 
 const AboutUs = () => {
   return (
-    <div className="container-app pb-16 sm:pb-32 pt-20 sm:pt-8 px-3 sm:px-6">
+    <div className="container-app pb-16 sm:pb-32 sm:pt-8 px-3 sm:px-6">
       <header className="mb-8 text-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}

@@ -38,7 +38,7 @@ const Services = () => {
   };
 
   return (
-    <div className="container-app pb-16 sm:pb-32 pt-20 sm:pt-0">
+    <div className="container-app pb-16 sm:pb-32 sm:pt-0">
       <header className="mb-8 text-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}

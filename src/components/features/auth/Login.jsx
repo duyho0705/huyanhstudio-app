@@ -131,7 +131,7 @@ const Login = ({ onClose, initialMode = "login" }) => {
     try {
       const result = await signInWithPopup(auth, provider);
       const idToken = await result.user.getIdToken();
-      
+
       const data = await authApi.loginWithFirebase(idToken);
       const { accessToken } = data;
       const userData = await loginContext({ accessToken });
@@ -177,8 +177,8 @@ const Login = ({ onClose, initialMode = "login" }) => {
             {isLogin ? "Đăng nhập" : "Tạo tài khoản"}
           </h2>
           <p className="text-[12px] text-gray-500 mt-0.5">
-            {isLogin 
-              ? "Chào mừng bạn quay trở lại" 
+            {isLogin
+              ? "Chào mừng bạn quay trở lại"
               : "Bắt đầu trải nghiệm cùng hastudio"}
           </p>
         </div>
@@ -223,7 +223,7 @@ const Login = ({ onClose, initialMode = "login" }) => {
         {/* Divider */}
         <div className="flex items-center gap-3 mb-4">
           <div className="flex-1 h-px bg-gray-100"></div>
-          <span className="text-[11px] text-gray-400 font-medium">hoặc</span>
+          <span className="text-[14px] text-gray-400 font-medium">hoặc</span>
           <div className="flex-1 h-px bg-gray-100"></div>
         </div>
 
@@ -250,11 +250,10 @@ const Login = ({ onClose, initialMode = "login" }) => {
                     onChange={handleInputChange}
                     onFocus={() => setFocusedField("username")}
                     onBlur={() => setFocusedField(null)}
-                    className={`w-full h-9 px-3 rounded-lg text-[12px] text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
-                      errors.username
+                    className={`w-full h-9 px-3 rounded-lg text-[12px] text-gray-900 outline-none transition-all placeholder:text-gray-400 ${errors.username
                         ? "border border-red-300 bg-red-50/50 focus:border-red-400"
                         : "border border-gray-200 bg-white focus:border-[#35104C] focus:ring-1 focus:ring-[#35104C]/10"
-                    }`}
+                      }`}
                   />
                 </div>
                 {errors.username && <p className="text-[10px] text-red-500 mt-1 ml-1">{errors.username}</p>}
@@ -277,11 +276,10 @@ const Login = ({ onClose, initialMode = "login" }) => {
                     onChange={handleInputChange}
                     onFocus={() => setFocusedField("password")}
                     onBlur={() => setFocusedField(null)}
-                    className={`w-full h-9 px-3 pr-9 rounded-lg text-[12px] text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
-                      errors.password
+                    className={`w-full h-9 px-3 pr-9 rounded-lg text-[12px] text-gray-900 outline-none transition-all placeholder:text-gray-400 ${errors.password
                         ? "border border-red-300 bg-red-50/50 focus:border-red-400"
                         : "border border-gray-200 bg-white focus:border-[#35104C] focus:ring-1 focus:ring-[#35104C]/10"
-                    }`}
+                      }`}
                   />
                   <button
                     type="button"
@@ -319,11 +317,10 @@ const Login = ({ onClose, initialMode = "login" }) => {
                   placeholder="Nhập họ và tên"
                   value={formData.fullName}
                   onChange={handleInputChange}
-                  className={`w-full h-9 px-3 rounded-lg text-[12px] text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
-                    errors.fullName
+                  className={`w-full h-9 px-3 rounded-lg text-[12px] text-gray-900 outline-none transition-all placeholder:text-gray-400 ${errors.fullName
                       ? "border border-red-300 bg-red-50/50"
                       : "border border-gray-200 bg-white focus:border-[#35104C] focus:ring-1 focus:ring-[#35104C]/10"
-                  }`}
+                    }`}
                 />
                 {errors.fullName && <p className="text-[10px] text-red-500 mt-1 ml-1">{errors.fullName}</p>}
               </div>
@@ -337,11 +334,10 @@ const Login = ({ onClose, initialMode = "login" }) => {
                   placeholder="Nhập số điện thoại"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  className={`w-full h-9 px-3 rounded-lg text-[12px] text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
-                    errors.phone
+                  className={`w-full h-9 px-3 rounded-lg text-[12px] text-gray-900 outline-none transition-all placeholder:text-gray-400 ${errors.phone
                       ? "border border-red-300 bg-red-50/50"
                       : "border border-gray-200 bg-white focus:border-[#35104C] focus:ring-1 focus:ring-[#35104C]/10"
-                  }`}
+                    }`}
                 />
                 {errors.phone && <p className="text-[10px] text-red-500 mt-1 ml-1">{errors.phone}</p>}
               </div>
@@ -355,11 +351,10 @@ const Login = ({ onClose, initialMode = "login" }) => {
                   placeholder="Nhập tên tài khoản"
                   value={formData.username}
                   onChange={handleInputChange}
-                  className={`w-full h-9 px-3 rounded-lg text-[12px] text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
-                    errors.username
+                  className={`w-full h-9 px-3 rounded-lg text-[12px] text-gray-900 outline-none transition-all placeholder:text-gray-400 ${errors.username
                       ? "border border-red-300 bg-red-50/50"
                       : "border border-gray-200 bg-white focus:border-[#35104C] focus:ring-1 focus:ring-[#35104C]/10"
-                  }`}
+                    }`}
                 />
                 {errors.username && <p className="text-[10px] text-red-500 mt-1 ml-1">{errors.username}</p>}
               </div>
@@ -374,11 +369,10 @@ const Login = ({ onClose, initialMode = "login" }) => {
                     placeholder="Tối thiểu 6 ký tự"
                     value={formData.password}
                     onChange={handleInputChange}
-                    className={`w-full h-9 px-3 pr-9 rounded-lg text-[12px] text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
-                      errors.password
+                    className={`w-full h-9 px-3 pr-9 rounded-lg text-[12px] text-gray-900 outline-none transition-all placeholder:text-gray-400 ${errors.password
                         ? "border border-red-300 bg-red-50/50"
                         : "border border-gray-200 bg-white focus:border-[#35104C] focus:ring-1 focus:ring-[#35104C]/10"
-                    }`}
+                      }`}
                   />
                   <button
                     type="button"
@@ -401,11 +395,10 @@ const Login = ({ onClose, initialMode = "login" }) => {
                     placeholder="Nhập lại mật khẩu"
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
-                    className={`w-full h-9 px-3 pr-9 rounded-lg text-[12px] text-gray-900 outline-none transition-all placeholder:text-gray-400 ${
-                      errors.confirmPassword
+                    className={`w-full h-9 px-3 pr-9 rounded-lg text-[12px] text-gray-900 outline-none transition-all placeholder:text-gray-400 ${errors.confirmPassword
                         ? "border border-red-300 bg-red-50/50"
                         : "border border-gray-200 bg-white focus:border-[#35104C] focus:ring-1 focus:ring-[#35104C]/10"
-                    }`}
+                      }`}
                   />
                   <button
                     type="button"

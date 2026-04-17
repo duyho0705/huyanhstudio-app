@@ -677,7 +677,7 @@ const NewLandingPage = () => {
       </section>
 
       {/* --- ILLUSTRATED WITH HASTUDIO --- */}
-      <section className="px-4 md:px-6 pt-32 md:pt-[100px] pb-32 md:pb-20 bg-white">
+      <section className="px-4 md:px-6 pt-24 md:pt-[100px] pb-20 md:pb-20 bg-white">
         <div className="max-w-[1200px] mx-auto text-center">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -702,7 +702,7 @@ const NewLandingPage = () => {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.5 }}
-            className="text-[15px] sm:text-[16px] md:text-[18px] font-bold text-[#35104C] mb-12 px-4"
+            className="text-[15px] sm:text-[16px] md:text-[18px] font-bold text-[#35104C] mb-4 px-4"
           >Mỗi bản ghi là một câu chuyện, mỗi dự án là một kiệt tác.</motion.p>
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6 lg:gap-12">
@@ -858,7 +858,7 @@ const NewLandingPage = () => {
 
       {/* --- FOOTER --- */}
       <footer className="pb-12 px-6 bg-white">
-        <div className="max-w-[1200px] mx-auto border-t pt-20">
+        <div className="max-w-[1200px] mx-auto border-t pt-8">
           <div className="flex flex-col lg:flex-row items-center lg:items-start text-center lg:text-left gap-16 mb-6">
             {/* Left: Logo + Social */}
             <div className="lg:w-[280px] shrink-0">
