@@ -132,6 +132,14 @@ const BookingManagement = () => {
     cancelledBookings: 0,
   });
 
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  const isMobile = windowWidth < 640;
+
   useEffect(() => {
     if (notification.show) {
       const timer = setTimeout(() => {
@@ -495,68 +503,69 @@ const BookingManagement = () => {
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-6">
         {[
           {
-            icon: <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6 text-indigo-600" strokeWidth={1.5} />,
+            icon: <ShoppingBag className="w-5 h-5 text-indigo-600" strokeWidth={2} />,
             label: "Tổng đơn",
             value: globalStats.totalBookings,
-            config: "bg-indigo-100 border border-indigo-200/60"
+            config: "bg-indigo-50 border border-indigo-100"
           },
           {
-            icon: <Timer className="w-5 h-5 sm:w-6 sm:h-6 text-amber-600" strokeWidth={1.5} />,
-            label: "Xử lý",
+            icon: <Timer className="w-5 h-5 text-amber-600" strokeWidth={2} />,
+            label: "Sắp tới",
             value: (globalStats.pendingBookings || 0) + (globalStats.confirmedBookings || 0),
-            config: "bg-amber-100 border border-amber-200/60"
+            config: "bg-amber-50 border border-amber-100"
           },
           {
-            icon: <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-600" strokeWidth={1.5} />,
-            label: "Hoàn tất",
+            icon: <CheckCircle2 className="w-5 h-5 text-emerald-600" strokeWidth={2} />,
+            label: "Xong",
             value: globalStats.completedBookings,
-            config: "bg-emerald-100 border border-emerald-200/60"
+            config: "bg-emerald-50 border border-emerald-100"
           },
           {
-            icon: <UserX className="w-5 h-5 sm:w-6 sm:h-6 text-rose-500" strokeWidth={1.5} />,
+            icon: <XCircle className="w-5 h-5 text-rose-500" strokeWidth={2} />,
             label: "Đã hủy",
             value: globalStats.cancelledBookings,
-            config: "bg-rose-100 border border-rose-200/60"
+            config: "bg-rose-50 border border-rose-100"
           }
         ].map((item, i) => (
-          <div key={i} className={`bg-white p-3 sm:p-7 rounded-2xl sm:rounded-[24px] border border-slate-300 shadow-sm flex flex-col sm:flex-row items-center gap-2 sm:gap-5 transition-all hover:shadow-xl hover:shadow-slate-200/50 group text-center sm:text-left flex`}>
-            <div className={`w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl ${item.config} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300`}>
+          <div key={i} className="bg-white p-3 sm:p-5 rounded-2xl sm:rounded-[28px] border border-slate-200 shadow-sm flex items-center gap-3 sm:gap-4 transition-all hover:shadow-md group">
+            <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl ${item.config} flex items-center justify-center shrink-0`}>
               {item.icon}
             </div>
-            <div>
-              <h4 className="text-sm sm:text-base font-semibold text-slate-500 sm:text-slate-600 whitespace-nowrap">{item.label}</h4>
-              <p className="text-xl sm:text-3xl font-black text-slate-900 tracking-tight leading-none mt-1">{item.value}</p>
+            <div className="min-w-0">
+              <h4 className="text-[12px] sm:text-[13px] font-medium text-slate-500 truncate">{item.label}</h4>
+              <p className="text-[18px] sm:text-[22px] font-bold text-slate-900 leading-none mt-0.5">{item.value}</p>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="bg-white p-4 sm:p-6 rounded-[32px] border border-slate-200 shadow-sm space-y-6">
-        <div className="flex flex-col lg:flex-row lg:items-center gap-4 pb-2 sm:pb-6 border-b border-slate-50">
-          <h2 className="text-[16px] sm:text-[20px] font-bold text-slate-800 whitespace-nowrap mr-auto flex items-center gap-3">
-            <div className="w-1.5 h-5 sm:h-8 bg-blue-600 rounded-full"></div>
-            Danh sách lịch thu âm
+      <div className="bg-white p-4 sm:p-8 rounded-[32px] border border-slate-200 shadow-sm space-y-6">
+        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-5 border-b border-slate-50 pb-2">
+          <h2 className="text-[18px] sm:text-[20px] font-bold text-slate-800 whitespace-nowrap flex items-center gap-3">
+            <div className="w-1.5 h-6 sm:h-8 bg-blue-600 rounded-full"></div>
+            Lịch thu âm
           </h2>
 
-          <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
-            <BookingFilters
-              filters={filters}
-              onFilterChange={handleFilterChange}
-              onDateRangeChange={handleDateRangeChange}
-              onClear={clearFilters}
-              bookingStatuses={bookingStatuses}
-              selectedRowKeys={selectedRowKeys}
-              onBulkDelete={handleBulkDelete}
-              showSearch={true}
-            >
+          <div className="flex flex-col sm:flex-row items-center gap-3 w-full xl:w-auto">
+            <div className="flex items-center gap-2 w-full sm:w-auto flex-1">
+              <BookingFilters
+                filters={filters}
+                onFilterChange={handleFilterChange}
+                onDateRangeChange={handleDateRangeChange}
+                onClear={clearFilters}
+                bookingStatuses={bookingStatuses}
+                selectedRowKeys={selectedRowKeys}
+                onBulkDelete={handleBulkDelete}
+                showSearch={true}
+              />
               <Button
                 onClick={handleCreate}
-                className="h-10 px-4 xl:px-6 bg-slate-900 border-none font-semibold xl:font-bold text-[13px] xl:text-[14px] flex items-center justify-center gap-1.5 xl:gap-2 !text-white hover:!bg-slate-800 rounded-xl transition-all flex-[1.5] xl:flex-none"
+                className="h-9 px-4 bg-slate-900 border-none font-semibold text-[13px] flex items-center justify-center gap-2 !text-white hover:!bg-slate-800 rounded-xl transition-all"
               >
                 <Plus size={16} strokeWidth={3} />
-                Tạo mới
+                <span className="hidden sm:inline text-white">Thêm lịch mới</span>
               </Button>
-            </BookingFilters>
+            </div>
           </div>
         </div>
 
@@ -590,50 +599,76 @@ const BookingManagement = () => {
             {loading ? (
               <div className="p-4 sm:p-6 space-y-4">
                 {[1, 2, 3].map(i => (
-                  <div key={i} className="h-24 bg-slate-50 rounded-2xl animate-pulse border border-slate-100"></div>
+                  <div key={i} className="h-32 bg-slate-50 rounded-2xl animate-pulse border border-slate-100"></div>
                 ))}
               </div>
             ) : (Array.isArray(bookings) && bookings.length > 0) ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 p-3 sm:p-6">
+              <div className="space-y-4 p-4">
                 {bookings.map((booking) => (
-                  <div key={booking.id} className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-3">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex-1 min-w-0">
-                        <h4 className="text-[14px] font-semibold text-slate-900 truncate">{booking.customerName}</h4>
-                        <p className="text-[12px] font-medium text-slate-500 mt-0.5">{booking.phone}</p>
+                  <div key={booking.id} className="bg-white p-5 rounded-[24px] border border-slate-200 shadow-sm space-y-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <h4 className="text-[16px] font-bold text-slate-900 truncate leading-tight">{booking.customerName}</h4>
+                        <p className="text-[13px] font-medium text-slate-500 mt-1">{booking.phone}</p>
                       </div>
-                      <div className="px-2 py-0.5 bg-slate-100 text-slate-700 rounded-lg text-[11px] font-medium tracking-wider border border-slate-200 shrink-0">
-                        {booking.bookingCode || booking.bookingCode?.slice(0, 8)}
+                      <div className="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-[11px] font-bold tracking-wider border border-slate-200 shrink-0 shadow-sm">
+                        {booking.bookingCode || "---"}
                       </div>
                     </div>
-                    <div className="flex items-center gap-4 py-2 border-y border-slate-50 text-[12px]">
-                      <div className="flex items-center gap-1.5 text-slate-600">
-                        <CalendarDays size={13} className="text-blue-500" />
-                        <span className="font-semibold">{dayjs(booking.recordDate).format("DD/MM/YYYY")}</span>
+
+                    <div className="flex items-center gap-6 py-3 border-y border-slate-50">
+                      <div className="flex items-center gap-2 text-slate-600">
+                        <CalendarDays size={14} className="text-blue-500" />
+                        <span className="text-[13px] font-bold">{dayjs(booking.recordDate).format("DD/MM/YYYY")}</span>
                       </div>
                       {booking.needConsultation && (
-                        <span className="text-[10px] font-bold text-amber-500 flex items-center gap-1">
-                          <AlertCircle size={10} /> Cần tư vấn
-                        </span>
+                        <div className="flex items-center gap-1.5 px-2.5 py-0.5 bg-amber-50 text-amber-600 rounded-full border border-amber-100">
+                          <AlertCircle size={12} strokeWidth={2.5} />
+                          <span className="text-[11px] font-bold uppercase tracking-wide">Cần tư vấn</span>
+                        </div>
                       )}
                     </div>
-                    <div className="flex items-center justify-between">
+
+                    <div className="flex items-center justify-between pt-1">
                       <Select
                         value={booking.status}
                         onChange={(val) => handleStatusUpdate(booking.id, val)}
-                        className="w-[140px] select-custom-sm"
-                        size="small"
+                        className="w-[150px] select-custom-sm"
+                        size="middle"
+                        dropdownStyle={{ borderRadius: '16px', padding: '4px' }}
                       >
                         {bookingStatuses.map((s) => (
                           <Option key={s.value} value={s.value}>
-                            <span className="text-[12px] font-semibold">{s.label}</span>
+                            <div className="flex items-center gap-2 text-[13px] font-bold text-slate-700">
+                              {getStatusIcon(s.value)}
+                              <span>{s.label}</span>
+                            </div>
                           </Option>
                         ))}
                       </Select>
-                      <div className="flex items-center gap-1">
-                        <Button type="text" onClick={() => handleViewDetails(booking)} className="w-8 h-8 rounded-lg flex items-center justify-center text-blue-500 p-0"><Search size={16} /></Button>
-                        <Button type="text" onClick={() => handleEdit(booking)} className="w-8 h-8 rounded-lg flex items-center justify-center text-amber-500 p-0"><Edit size={16} /></Button>
-                        <Button type="text" onClick={() => openDeleteModal(booking)} className="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 p-0"><Trash2 size={16} /></Button>
+                      
+                      <div className="flex items-center gap-2">
+                        <Button
+                          type="text"
+                          onClick={() => handleViewDetails(booking)}
+                          className="w-10 h-10 rounded-xl flex items-center justify-center text-blue-500 hover:bg-blue-50 p-0"
+                        >
+                          <Search size={18} />
+                        </Button>
+                        <Button
+                          type="text"
+                          onClick={() => handleEdit(booking)}
+                          className="w-10 h-10 rounded-xl flex items-center justify-center text-amber-500 hover:bg-amber-50 p-0"
+                        >
+                          <Edit size={18} />
+                        </Button>
+                        <Button
+                          type="text"
+                          onClick={() => openDeleteModal(booking)}
+                          className="w-10 h-10 rounded-xl flex items-center justify-center text-red-500 hover:bg-red-50 p-0"
+                        >
+                          <Trash2 size={18} />
+                        </Button>
                       </div>
                     </div>
                   </div>
@@ -648,21 +683,21 @@ const BookingManagement = () => {
           </div>
 
           {pagination.total > 0 && (
-            <div className="p-6 bg-slate-50/30 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-6">
-              <div className="px-3 py-1 bg-white border border-slate-100 rounded-xl text-[13px] font-medium text-slate-500 shadow-sm">Hiển thị
-                <span> {pagination.current} / {Math.ceil(pagination.total / (pagination.pageSize || 10))}</span>
+            <div className="p-4 sm:p-6 bg-slate-50/20 border-t border-slate-100 flex items-center justify-between">
+              <div className="text-[12px] sm:text-[13px] font-medium text-slate-500">
+                Hiển thị <span className="text-slate-900">{pagination.current} / {Math.ceil(pagination.total / (pagination.pageSize || 10))}</span> trang
               </div>
 
               <div className="flex items-center gap-2">
                 <Button
-                  className="h-9 w-9 flex items-center justify-center rounded-lg bg-white border-slate-200 text-slate-500 shadow-sm hover:border-blue-400 hover:text-blue-600 transition-all p-0"
+                  className="h-8 w-8 sm:h-9 sm:w-9 flex items-center justify-center rounded-lg bg-white border-slate-200 text-slate-500 shadow-sm hover:border-blue-400 hover:text-blue-600 transition-all p-0"
                   disabled={pagination.current === 1}
                   onClick={() => handleTableChange({ current: pagination.current - 1, pageSize: pagination.pageSize })}
                   icon={<ChevronLeft size={16} />}
                 />
 
                 <Button
-                  className="h-9 w-9 flex items-center justify-center rounded-lg bg-white border-slate-200 text-slate-500 shadow-sm hover:border-blue-400 hover:text-blue-600 transition-all p-0"
+                  className="h-8 w-8 sm:h-9 sm:w-9 flex items-center justify-center rounded-lg bg-white border-slate-200 text-slate-500 shadow-sm hover:border-blue-400 hover:text-blue-600 transition-all p-0"
                   disabled={pagination.current >= Math.ceil(pagination.total / pagination.pageSize)}
                   onClick={() => handleTableChange({ current: pagination.current + 1, pageSize: pagination.pageSize })}
                   icon={<ChevronRight size={16} />}
@@ -688,57 +723,57 @@ const BookingManagement = () => {
         onCancel={() => setIsDeleteModalOpen(false)}
         footer={null}
         centered
-        width={540}
+        width={isMobile ? "92%" : 480}
         closable={false}
         className="premium-delete-modal"
       >
-        <div className="space-y-8">
-          <div className="space-y-3">
-            <h3 className="text-[26px] font-bold text-slate-900 leading-tight">Xóa lịch thu âm</h3>
-            <p className="text-[15px] text-slate-500 leading-relaxed font-medium">
-              Thao tác này sẽ xóa vĩnh viễn đơn đặt và các thông tin liên quan. Hành động này không thể hoàn tác.
+        <div className={isMobile ? "space-y-4" : "space-y-6"}>
+          <div className="space-y-1">
+            <h3 className={`${isMobile ? "text-[18px]" : "text-[24px]"} font-bold text-slate-900 leading-tight`}>Xóa lịch thu âm</h3>
+            <p className={`${isMobile ? "text-[13px]" : "text-[15px]"} text-slate-500 leading-relaxed font-medium`}>
+              Thao tác này sẽ xóa vĩnh viễn đơn đặt. Hành động này không thể hoàn tác.
             </p>
           </div>
 
-          <div className="space-y-6">
-            <div className="space-y-3">
-              <label className="text-[15px] font-semibold text-slate-700">
-                Nhập mã đơn để xác nhận: <span className="text-red-500">"{selectedBooking?.bookingCode}"</span>
+          <div className={isMobile ? "space-y-3" : "space-y-4"}>
+            <div className="space-y-2">
+              <label className={`${isMobile ? "text-[13px]" : "text-[15px]"} font-semibold text-slate-700`}>
+                Mã xác nhận: <span className="text-red-500">"{selectedBooking?.bookingCode}"</span>
               </label>
               <Input
                 value={deleteConfirmText}
                 onChange={(e) => setDeleteConfirmText(e.target.value)}
-                placeholder="Nhập mã đơn chính xác..."
-                className="h-12 rounded-xl border-slate-200 focus:border-red-500 focus:ring-red-100 font-medium text-[15px]"
+                placeholder="Nhập mã đơn..."
+                className={`${isMobile ? "h-9 text-[13px]" : "h-11 text-[14px]"} rounded-xl border-slate-200 focus:border-red-500 focus:ring-red-100 font-medium`}
               />
             </div>
 
-            <div className="flex items-start gap-4 p-5 bg-red-50 rounded-2xl border border-red-100">
-              <div className="w-7 h-7 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0">
-                <AlertTriangle size={16} strokeWidth={2.5} />
+            <div className={`flex items-start gap-3 ${isMobile ? "p-3" : "p-4"} bg-red-50 rounded-xl border border-red-100`}>
+              <div className="w-5 h-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0 mt-0.5">
+                <AlertTriangle size={12} strokeWidth={2.5} />
               </div>
-              <p className="text-[15px] font-medium text-red-800 leading-relaxed">
-                Cảnh báo: Việc xóa "{selectedBooking?.bookingCode}" sẽ loại bỏ hoàn toàn lịch trình và doanh thu liên quan đến đơn này.
+              <p className={`${isMobile ? "text-[12px]" : "text-[15px]"} font-medium text-red-800 leading-relaxed`}>
+                Cảnh báo: Việc xóa sẽ loại bỏ lịch trình và doanh thu.
               </p>
             </div>
           </div>
 
-          <div className="flex gap-4 pt-2">
+          <div className="flex gap-2 pt-1">
             <button
               onClick={() => setIsDeleteModalOpen(false)}
-              className="flex-1 h-13 py-3 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium text-[15px] hover:bg-slate-50 transition-colors"
+              className={`flex-1 ${isMobile ? "h-10 text-[13px]" : "h-12 text-[15px]"} rounded-xl border border-slate-200 bg-white text-slate-700 font-medium hover:bg-slate-50 transition-colors`}
             >
-              Hủy bỏ
+              Hủy
             </button>
             <button
               onClick={confirmDelete}
               disabled={deleteConfirmText !== selectedBooking?.bookingCode}
-              className={`flex-[1.5] h-13 py-3 rounded-xl font-medium text-[15px] shadow-lg shadow-red-100 transition-all ${deleteConfirmText === selectedBooking?.bookingCode
+              className={`flex-[1.5] ${isMobile ? "h-10 text-[13px]" : "h-12 text-[15px]"} rounded-xl font-medium shadow-lg shadow-red-100 transition-all ${deleteConfirmText === selectedBooking?.bookingCode
                 ? "bg-red-600 text-white hover:bg-red-700"
                 : "bg-slate-100 text-slate-400 cursor-not-allowed border-none shadow-none"
                 }`}
             >
-              Xác nhận lịch này
+              Xác nhận xóa
             </button>
           </div>
         </div>

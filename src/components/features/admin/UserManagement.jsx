@@ -91,6 +91,14 @@ const UserManagement = () => {
     message: "",
   });
 
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  const isMobile = windowWidth < 640;
+
   const roles = [
     { value: "ROLE_ADMIN", label: "Quản trị viên", color: "red", classes: "bg-red-50 text-red-600 border-red-100" },
     { value: "ROLE_USER", label: "Khách hàng", color: "slate", classes: "bg-slate-50 text-slate-600 border-slate-100" },
@@ -396,18 +404,18 @@ const UserManagement = () => {
       {/* 1. Stats Section - Clean modern layout */}
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
         {[
-          { icon: <Users size={28} />, label: "Tổng số", value: pagination.total, config: "text-indigo-600 bg-indigo-50" },
-          { icon: <UserCheck size={28} />, label: "Hoạt động", value: stats.active, config: "text-emerald-600 bg-emerald-50" },
-          { icon: <UserX size={28} />, label: "Đã khóa", value: stats.inactive, config: "text-rose-600 bg-rose-50" },
-          { icon: <ShieldCheck size={28} />, label: "Quản trị viên", value: stats.admin, config: "text-amber-600 bg-amber-50" }
+          { icon: <Users size={22} />, label: "Tổng số", value: pagination.total, config: "text-indigo-600 bg-indigo-50" },
+          { icon: <UserCheck size={22} />, label: "Hoạt động", value: stats.active, config: "text-emerald-600 bg-emerald-50" },
+          { icon: <UserX size={22} />, label: "Đã khóa", value: stats.inactive, config: "text-rose-600 bg-rose-50" },
+          { icon: <ShieldCheck size={22} />, label: "Quản trị viên", value: stats.admin, config: "text-amber-600 bg-amber-50" }
         ].map((item, i) => (
-          <div key={i} className="bg-white p-5 sm:p-6 rounded-[24px] border border-slate-200 shadow-sm hover:shadow-md transition-all group relative overflow-hidden">
+          <div key={i} className="bg-white p-4 sm:p-5 rounded-[22px] sm:rounded-[24px] border border-slate-200 shadow-sm hover:shadow-md transition-all group relative overflow-hidden">
             <div className="flex items-center justify-between relative z-10 w-full">
               <div className="flex flex-col min-w-0">
-                <p className="text-[13px] sm:text-[15px] font-bold text-slate-500 mb-1 truncate">{item.label}</p>
-                <h3 className="text-2xl sm:text-3xl font-black text-slate-900 m-0 leading-none">{item.value}</h3>
+                <p className="text-[12px] sm:text-[14px] font-medium text-slate-500 mb-0.5 truncate">{item.label}</p>
+                <h3 className="text-xl sm:text-2xl font-black text-slate-900 m-0 leading-none">{item.value}</h3>
               </div>
-              <div className={`w-12 h-12 sm:w-14 sm:h-14 shrink-0 rounded-2xl ${item.config} flex items-center justify-center transition-transform group-hover:scale-110 duration-500 relative z-10`}>
+              <div className={`w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-xl sm:rounded-2xl ${item.config} flex items-center justify-center transition-transform group-hover:scale-110 duration-500 relative z-10`}>
                 {item.icon}
               </div>
             </div>
@@ -417,7 +425,7 @@ const UserManagement = () => {
 
       {/* 2. Main Data Section */}
       <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-[32px] border border-slate-200 shadow-sm space-y-6">
-        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-5 pb-6 border-b border-slate-50">
+        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-5 border-b border-slate-50">
           <h2 className="text-[18px] sm:text-[20px] font-bold text-slate-800 whitespace-nowrap flex items-center gap-3">
             <div className="w-1.5 h-6 sm:h-8 bg-blue-600 rounded-full"></div>
             Danh sách người dùng
@@ -428,19 +436,19 @@ const UserManagement = () => {
             <div className="flex items-center gap-2 w-full">
               <Input
                 placeholder="Tìm tài khoản..."
-                prefix={<Search size={16} className="text-slate-400" />}
-                className="h-10 flex-1 border-slate-200 rounded-xl text-[14px] font-medium text-slate-900 shadow-sm hover:border-blue-400 focus:border-blue-500 placeholder:text-slate-400"
+                prefix={<Search size={14} className="text-slate-400" />}
+                className="h-9 sm:h-10 flex-1 border-slate-200 rounded-xl text-[13px] sm:text-[14px] font-medium text-slate-900 shadow-sm hover:border-blue-400 focus:border-blue-500 placeholder:text-slate-400"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 allowClear
               />
               <Button
                 onClick={handleCreate}
-                className="h-10 px-3 sm:px-5 bg-slate-900 border-none rounded-xl font-bold text-[14px] text-white shadow-md flex items-center gap-1.5 hover:bg-slate-800 transition-all"
+                className="h-9 sm:h-10 px-3 sm:px-5 bg-slate-900 border-none rounded-xl font-bold text-[13px] sm:text-[14px] text-white shadow-md flex items-center gap-1.5 hover:bg-slate-800 transition-all"
               >
-                <Plus size={18} strokeWidth={3} />
+                <Plus size={16} strokeWidth={3} />
                 <span className="hidden sm:inline">Thêm mới</span>
-                <span className="sm:hidden text-[13px]">Thêm</span>
+                <span className="sm:hidden">Thêm</span>
               </Button>
             </div>
 
@@ -449,13 +457,13 @@ const UserManagement = () => {
               <Select
                 placeholder={
                   <div className="flex items-center gap-2">
-                    <Shield size={14} className="text-slate-400" />
-                    <span className="font-bold text-slate-500">Vai trò</span>
+                    <Shield size={13} className="text-slate-400" />
+                    <span className="font-medium text-slate-500 text-[13px]">Vai trò</span>
                   </div>
                 }
                 value={filters.role}
                 onChange={(val) => handleFilterChange("role", val)}
-                className="h-10 flex-1 sm:w-[140px] sm:flex-none custom-select-premium"
+                className="h-9 sm:h-10 flex-1 sm:w-[140px] sm:flex-none custom-select-premium compact-select"
                 allowClear
                 dropdownStyle={{ borderRadius: '15px', padding: '8px' }}
               >
@@ -463,7 +471,7 @@ const UserManagement = () => {
                   <Option key={r.value} value={r.value}>
                     <div className="flex items-center gap-2 py-1">
                       <div className={`w-2 h-2 rounded-full ${r.value === 'ROLE_ADMIN' ? 'bg-red-500' : 'bg-slate-400'}`}></div>
-                      <span className="font-bold text-slate-700 text-[13px]">{r.label}</span>
+                      <span className="font-medium text-slate-700 text-[13px]">{r.label}</span>
                     </div>
                   </Option>
                 ))}
@@ -472,13 +480,13 @@ const UserManagement = () => {
               <Select
                 placeholder={
                   <div className="flex items-center gap-2">
-                    <Settings size={14} className="text-slate-400" />
-                    <span className="font-bold text-slate-500">Trạng thái</span>
+                    <Settings size={13} className="text-slate-400" />
+                    <span className="font-medium text-slate-500 text-[13px]">Trạng thái</span>
                   </div>
                 }
                 value={filters.status}
                 onChange={(val) => handleFilterChange("status", val)}
-                className="h-10 flex-1 sm:w-[140px] sm:flex-none custom-select-premium"
+                className="h-9 sm:h-10 flex-1 sm:w-[140px] sm:flex-none custom-select-premium compact-select"
                 allowClear
                 dropdownStyle={{ borderRadius: '15px', padding: '8px' }}
               >
@@ -486,7 +494,7 @@ const UserManagement = () => {
                   <Option key={s.value.toString()} value={s.value}>
                     <div className="flex items-center gap-2 py-1">
                       <div className={`w-2 h-2 rounded-full ${s.value ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                      <span className="font-bold text-slate-700 text-[13px]">{s.label}</span>
+                      <span className="font-medium text-slate-700 text-[13px]">{s.label}</span>
                     </div>
                   </Option>
                 ))}
@@ -495,8 +503,8 @@ const UserManagement = () => {
               {(filters.role !== null || filters.status !== null || filters.search) && (
                 <Button
                   onClick={clearFilters}
-                  className="h-10 w-10 min-w-[40px] sm:w-auto sm:px-4 flex items-center justify-center gap-2 text-slate-600 font-semibold text-[14px] bg-slate-50 border-none rounded-xl hover:text-blue-600 transition-all"
-                  icon={<RotateCcw size={16} />}
+                  className="h-9 w-9 min-w-[36px] sm:h-10 sm:w-auto sm:px-4 flex items-center justify-center gap-2 text-slate-500 font-medium text-[13px] bg-slate-50 border-none rounded-xl hover:text-blue-600 transition-all"
+                  icon={<RotateCcw size={14} />}
                 >
                   <span className="hidden sm:inline whitespace-nowrap">Làm mới</span>
                 </Button>
@@ -690,52 +698,53 @@ const UserManagement = () => {
         onCancel={() => setIsDeleteModalOpen(false)}
         footer={null}
         centered
-        width={480}
+        width={isMobile ? "92%" : 480}
         closable={false}
         className="premium-delete-modal"
+        bodyStyle={{ padding: isMobile ? "20px" : "32px" }}
       >
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <h3 className="text-[24px] font-bold text-slate-900 leading-tight">Xóa người dùng</h3>
-            <p className="text-[15px] text-slate-500 leading-relaxed font-medium">
-              Thao tác này sẽ xóa vĩnh viễn tài khoản người dùng và tất cả dữ liệu liên quan. Hành động này không thể hoàn tác.
+        <div className={isMobile ? "space-y-4" : "space-y-6"}>
+          <div className="space-y-1">
+            <h3 className={`${isMobile ? "text-[18px]" : "text-[24px]"} font-bold text-slate-900 leading-tight`}>Xóa người dùng</h3>
+            <p className={`${isMobile ? "text-[13px]" : "text-[15px]"} text-slate-500 leading-relaxed font-medium`}>
+              Thao tác này sẽ xóa vĩnh viễn tài khoản người dùng và tất cả dữ liệu liên quan.
             </p>
           </div>
 
-          <div className="space-y-4">
+          <div className={isMobile ? "space-y-3" : "space-y-4"}>
             <div className="space-y-2">
-              <label className="text-[15px] font-semibold text-slate-700">
-                Nhập tên khách hàng để xác nhận: <span className="text-red-500">"{deletingUser?.customerName}"</span>
+              <label className={`${isMobile ? "text-[13px]" : "text-[15px]"} font-semibold text-slate-700`}>
+                Xác nhận tên: <span className="text-red-500">"{deletingUser?.customerName}"</span>
               </label>
               <Input
                 value={deleteConfirmText}
                 onChange={(e) => setDeleteConfirmText(e.target.value)}
                 placeholder="Nhập tên chính xác..."
-                className="h-11 rounded-xl border-slate-200 focus:border-red-500 focus:ring-red-100 font-medium text-[14px]"
+                className={`${isMobile ? "h-9 text-[13px]" : "h-11 text-[14px]"} rounded-xl border-slate-200 focus:border-red-500 focus:ring-red-100 font-medium`}
               />
             </div>
 
-            <div className="flex items-start gap-4 p-4 bg-red-50 rounded-xl border border-red-100">
-              <div className="w-6 h-6 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0">
-                <AlertTriangle size={14} strokeWidth={2.5} />
+            <div className={`flex items-start gap-3 ${isMobile ? "p-3" : "p-4"} bg-red-50 rounded-xl border border-red-100`}>
+              <div className="w-5 h-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0 mt-0.5">
+                <AlertTriangle size={12} strokeWidth={2.5} />
               </div>
-              <p className="text-[15px] font-medium text-red-800 leading-relaxed">
-                Cảnh báo: Việc xóa "{deletingUser?.customerName}" sẽ loại bỏ toàn bộ lịch sử giao dịch và tài khoản đăng nhập của người dùng này.
+              <p className={`${isMobile ? "text-[12px]" : "text-[15px]"} font-medium text-red-800 leading-relaxed`}>
+                Cảnh báo: Dữ liệu giao dịch và tài khoản sẽ bị loại bỏ hoàn toàn.
               </p>
             </div>
           </div>
 
-          <div className="flex gap-3 pt-2">
+          <div className="flex gap-2 pt-1">
             <button
               onClick={() => setIsDeleteModalOpen(false)}
-              className="flex-1 h-12 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium text-[15px] hover:bg-slate-50 transition-colors"
+              className={`flex-1 ${isMobile ? "h-10 text-[13px]" : "h-12 text-[15px]"} rounded-xl border border-slate-200 bg-white text-slate-700 font-medium hover:bg-slate-50 transition-colors`}
             >
               Hủy bỏ
             </button>
             <button
               onClick={confirmDelete}
               disabled={deleteConfirmText !== deletingUser?.customerName}
-              className={`flex-[1.5] h-12 rounded-xl font-medium text-[15px] shadow-lg shadow-red-100 transition-all ${deleteConfirmText === deletingUser?.customerName
+              className={`flex-[1.5] ${isMobile ? "h-10 text-[13px]" : "h-12 text-[15px]"} rounded-xl font-medium shadow-lg shadow-red-100 transition-all ${deleteConfirmText === deletingUser?.customerName
                 ? "bg-red-600 text-white hover:bg-red-700"
                 : "bg-slate-100 text-slate-400 cursor-not-allowed border-none shadow-none"
                 }`}

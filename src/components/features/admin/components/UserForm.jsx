@@ -1,5 +1,5 @@
 import { Modal, Form, Input, Select } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { User, UserCircle, Mail, Phone, Users, Power, Lock } from "lucide-react";
 
 const { Option } = Select;
@@ -15,6 +15,15 @@ const PrefixSelect = ({ icon: Icon, children, ...props }) => (
 
 const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
   const [form] = Form.useForm();
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const isMobile = windowWidth < 640;
 
   useEffect(() => {
     if (open) {
@@ -47,74 +56,77 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
   return (
     <Modal
       title={
-        <div className="py-2">
-          <h3 className="text-[18px] font-semibold text-slate-900 leading-tight">
+        <div className={isMobile ? "py-1" : "py-2"}>
+          <h3 className={`${isMobile ? "text-[16px]" : "text-[18px]"} font-semibold text-slate-900 leading-tight`}>
             {initialValues ? "Cập nhật người dùng" : "Thêm người dùng mới"}
           </h3>
         </div>
       }
       open={open}
       onCancel={onCancel}
-      width={600}
+      width={isMobile ? "94%" : 600}
       className="!max-w-[95vw]"
       centered
       footer={[
         <button
           key="cancel"
           onClick={onCancel}
-          className="h-10 px-6 rounded-xl font-medium text-[14px] text-slate-600 border border-slate-200 bg-white mr-3"
+          className={`${isMobile ? "h-9 px-4 text-[13px]" : "h-10 px-6 text-[14px]"} rounded-xl font-medium text-slate-600 border border-slate-200 bg-white mr-2 sm:mr-3`}
         >
           Hủy
         </button>,
         <button
           key="submit"
           onClick={handleSubmit}
-          className="h-10 px-6 rounded-xl bg-slate-900 border-none font-semibold text-[14px] text-white"
+          className={`${isMobile ? "h-9 px-4 text-[13px]" : "h-10 px-6 text-[14px]"} rounded-xl bg-slate-900 border-none font-semibold text-white`}
         >
           {initialValues ? "Cập nhật" : "Tạo tài khoản"}
         </button>
       ]}
+      bodyStyle={{ padding: isMobile ? "0 12px 16px 12px" : "0 24px 24px 24px" }}
     >
-      <Form form={form} layout="vertical" className="pt-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2">
+      <Form form={form} layout="vertical" className={isMobile ? "pt-3" : "pt-6"}>
+        <div className={`grid grid-cols-1 md:grid-cols-2 ${isMobile ? "gap-x-4 gap-y-0.5" : "gap-x-6 gap-y-1"}`}>
           <Form.Item
             name="customerName"
-            label={<span className="text-[13px] font-semibold text-slate-700">Họ tên</span>}
+            label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>Họ tên</span>}
             rules={[{ required: true, message: "Vui lòng nhập họ tên!" }]}
-            className={!initialValues ? "md:col-span-1" : "md:col-span-1"}
+            className={(!initialValues ? "md:col-span-1" : "md:col-span-1") + (isMobile ? " mb-2.5" : " mb-4")}
           >
             <Input
-              prefix={<User size={18} className="text-slate-400 mr-2" />}
+              prefix={<User size={isMobile ? 15 : 18} className="text-slate-400 mr-2" />}
               placeholder="Nhập họ tên"
-              className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-200 focus:border-blue-500 font-medium text-[14px]"
+              className={`${isMobile ? "h-9 text-[13px]" : "h-10 text-[14px]"} px-3 bg-white border-slate-200 rounded-xl font-medium shadow-sm focus:border-blue-500`}
             />
           </Form.Item>
 
           {!initialValues ? (
             <Form.Item
               name="username"
-              label={<span className="text-[13px] font-semibold text-slate-700">Tên đăng nhập</span>}
+              label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>Tên đăng nhập</span>}
               rules={[
                 { required: true, message: "Vui lòng nhập tên người dùng!" },
-                { min: 3, message: "Tên người dùng phải có ít nhất 3 ký tự!" },
+                { min: 3, message: "Tên người dùng có ít nhất 3 ký tự!" },
               ]}
+              className={isMobile ? "mb-2.5" : "mb-4"}
             >
               <Input
-                prefix={<UserCircle size={18} className="text-slate-400 mr-2" />}
+                prefix={<UserCircle size={isMobile ? 15 : 18} className="text-slate-400 mr-2" />}
                 placeholder="Nhập tên đăng nhập"
-                className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-200 focus:border-blue-500 font-medium text-[14px]"
+                className={`${isMobile ? "h-9 text-[13px]" : "h-10 text-[14px]"} px-3 bg-white border-slate-200 rounded-xl font-medium shadow-sm focus:border-blue-500`}
               />
             </Form.Item>
           ) : (
             <Form.Item
               name="email"
-              label={<span className="text-[13px] font-semibold text-slate-700">Email</span>}
+              label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>Email</span>}
               rules={[{ type: "email", message: "Email không hợp lệ!" }]}
+              className={isMobile ? "mb-2.5" : "mb-4"}
             >
               <Input
-                prefix={<Mail size={18} className="text-slate-400 mr-2" />}
+                prefix={<Mail size={isMobile ? 15 : 18} className="text-slate-400 mr-2" />}
                 placeholder="Nhập email liên hệ"
-                className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-200 focus:border-blue-500 font-medium text-[14px]"
+                className={`${isMobile ? "h-9 text-[13px]" : "h-10 text-[14px]"} px-3 bg-white border-slate-200 rounded-xl font-medium shadow-sm focus:border-blue-500`}
               />
             </Form.Item>
           )}
@@ -122,20 +134,21 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
           {!initialValues && (
             <Form.Item
               name="email"
-              label={<span className="text-[13px] font-semibold text-slate-700">Email</span>}
+              label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>Email</span>}
               rules={[{ type: "email", message: "Email không hợp lệ!" }]}
+              className={isMobile ? "mb-2.5" : "mb-4"}
             >
               <Input
-                prefix={<Mail size={18} className="text-slate-400 mr-2" />}
+                prefix={<Mail size={isMobile ? 15 : 18} className="text-slate-400 mr-2" />}
                 placeholder="Nhập email liên hệ"
-                className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-200 focus:border-blue-500 font-medium text-[14px]"
+                className={`${isMobile ? "h-9 text-[13px]" : "h-10 text-[14px]"} px-3 bg-white border-slate-200 rounded-xl font-medium shadow-sm focus:border-blue-500`}
               />
             </Form.Item>
           )}
 
           <Form.Item
             name="phone"
-            label={<span className="text-[13px] font-semibold text-slate-700">Số điện thoại</span>}
+            label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>Số điện thoại</span>}
             rules={[
               { required: true, message: "Vui lòng nhập số điện thoại!" },
               {
@@ -143,87 +156,94 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
                 message: "Số điện thoại không hợp lệ!",
               },
             ]}
+            className={isMobile ? "mb-2.5" : "mb-4"}
           >
             <Input
-              prefix={<Phone size={18} className="text-slate-400 mr-2" />}
+              prefix={<Phone size={isMobile ? 15 : 18} className="text-slate-400 mr-2" />}
               placeholder="Nhập số điện thoại"
-              className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-200 focus:border-blue-500 font-medium text-[14px]"
+              className={`${isMobile ? "h-9 text-[13px]" : "h-10 text-[14px]"} px-3 bg-white border-slate-200 rounded-xl font-medium shadow-sm focus:border-blue-500`}
             />
           </Form.Item>
 
-          <Form.Item
-            name="role"
-            label={<span className="text-[13px] font-semibold text-slate-700">Vai trò</span>}
-            rules={[{ required: true, message: "Vui lòng chọn vai trò!" }]}
-          >
-            <PrefixSelect
-              icon={Users}
-              placeholder="Chọn vai trò hệ thống"
-              className="h-10 text-[14px] font-medium rounded-xl border-slate-200 hover:border-slate-200"
+          <div className={`grid ${isMobile ? "grid-cols-2 gap-2.5" : "grid-cols-1"}`}>
+            <Form.Item
+              name="role"
+              label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>Vai trò</span>}
+              rules={[{ required: true, message: "Vui lòng chọn vai trò!" }]}
+              className={isMobile ? "mb-2.5" : "mb-4"}
             >
-              {roles?.map((role) => (
-                <Option key={role.value} value={role.value}>
-                  <span className="text-[14px] font-medium">{role.label}</span>
-                </Option>
-              ))}
-            </PrefixSelect>
-          </Form.Item>
+              <PrefixSelect
+                icon={Users}
+                placeholder="Chọn vai trò"
+                className={`${isMobile ? "h-9 text-[12px]" : "h-10 text-[14px]"} font-medium rounded-xl border-slate-200`}
+              >
+                {roles?.map((role) => (
+                  <Option key={role.value} value={role.value}>
+                    <span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-medium`}>{role.label}</span>
+                  </Option>
+                ))}
+              </PrefixSelect>
+            </Form.Item>
 
-          <Form.Item
-            name="active"
-            label={<span className="text-[13px] font-semibold text-slate-700">Trạng thái</span>}
-            rules={[{ required: true, message: "Vui lòng chọn trạng thái!" }]}
-          >
-            <PrefixSelect
-              icon={Power}
-              placeholder="Trạng thái tài khoản"
-              className="h-10 text-[14px] font-medium rounded-xl border-slate-200 hover:border-slate-200"
+            <Form.Item
+              name="active"
+              label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>Trạng thái</span>}
+              rules={[{ required: true, message: "Vui lòng chọn trạng thái!" }]}
+              className={isMobile ? "mb-2.5" : "mb-4"}
             >
-              <Option value={true}><span className="text-[14px] font-medium text-slate-700">Hoạt động</span></Option>
-              <Option value={false}><span className="text-[14px] font-medium text-slate-700">Vô hiệu hóa</span></Option>
-            </PrefixSelect>
-          </Form.Item>
+              <PrefixSelect
+                icon={Power}
+                placeholder="Trạng thái"
+                className={`${isMobile ? "h-9 text-[12px]" : "h-10 text-[14px]"} font-medium rounded-xl border-slate-200`}
+              >
+                <Option value={true}><span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-medium text-slate-700`}>Bật</span></Option>
+                <Option value={false}><span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-medium text-slate-700`}>Tắt</span></Option>
+              </PrefixSelect>
+            </Form.Item>
+          </div>
 
           {!initialValues && (
-            <>
+            <div className={`grid ${isMobile ? "grid-cols-1" : "grid-cols-1 md:col-span-2 md:grid-cols-2 gap-x-6"}`}>
               <Form.Item
                 name="password"
-                label={<span className="text-[13px] font-semibold text-slate-700">Mật khẩu khởi tạo</span>}
+                label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>Mật khẩu</span>}
                 rules={[
                   { required: true, message: "Vui lòng nhập mật khẩu!" },
-                  { min: 6, message: "Mật khẩu phải có ít nhất 6 ký tự!" },
+                  { min: 6, message: "Mật khẩu ít nhất 6 ký tự!" },
                 ]}
+                className={isMobile ? "mb-2.5" : "mb-4"}
               >
                 <Input.Password
-                  prefix={<Lock size={18} className="text-slate-400 mr-2" />}
+                  prefix={<Lock size={isMobile ? 15 : 18} className="text-slate-400 mr-2" />}
                   placeholder="Nhập mật khẩu"
-                  className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-200 focus:border-blue-500 font-medium text-[14px]"
+                  className={`${isMobile ? "h-9 text-[13px]" : "h-10 text-[14px]"} px-3 bg-white border-slate-200 rounded-xl font-medium shadow-sm focus:border-blue-500`}
                 />
               </Form.Item>
 
               <Form.Item
                 name="confirmPassword"
-                label={<span className="text-[13px] font-semibold text-slate-700">Xác nhận mật khẩu</span>}
+                label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>Xác nhận</span>}
                 dependencies={['password']}
                 rules={[
-                  { required: true, message: "Vui lòng xác minh mật khẩu!" },
+                  { required: true, message: "Vui lòng xác minh!" },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
                       if (!value || getFieldValue('password') === value) {
                         return Promise.resolve();
                       }
-                      return Promise.reject(new Error('Mật khẩu xác thực không khớp!'));
+                      return Promise.reject(new Error('Mật khẩu không khớp!'));
                     },
                   }),
                 ]}
+                className={isMobile ? "mb-2.5" : "mb-4"}
               >
                 <Input.Password
-                  prefix={<Lock size={18} className="text-slate-400 mr-2" />}
+                  prefix={<Lock size={isMobile ? 15 : 18} className="text-slate-400 mr-2" />}
                   placeholder="Nhập lại mật khẩu"
-                  className="h-10 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-200 focus:border-blue-500 font-medium text-[14px]"
+                  className={`${isMobile ? "h-9 text-[13px]" : "h-10 text-[14px]"} px-3 bg-white border-slate-200 rounded-xl font-medium shadow-sm focus:border-blue-500`}
                 />
               </Form.Item>
-            </>
+            </div>
           )}
         </div>
       </Form>
