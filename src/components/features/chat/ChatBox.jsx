@@ -119,7 +119,7 @@ const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
       const fileUrl = response.data;
       const isVideo = file.type.startsWith('video/');
       const isImage = file.type.startsWith('image/');
-      
+
       let messageContent = "Đã gửi một tệp 📄";
       if (isImage) messageContent = "Đã gửi một hình ảnh 📸";
       else if (isVideo) messageContent = "Đã gửi một video 🎥";
@@ -154,11 +154,11 @@ const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
 
   return (
     <div className="fixed bottom-6 right-6 z-[100]">
-      <input 
-        type="file" 
-        ref={fileInputRef} 
-        onChange={handleFileChange} 
-        className="hidden" 
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        className="hidden"
         accept="image/*,video/*"
       />
       <AnimatePresence mode="wait">
@@ -168,15 +168,15 @@ const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
             initial={{ opacity: 0, scale: 0.5, y: 100, x: 50, originX: 1, originY: 1 }}
             animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
             exit={{ opacity: 0, scale: 0.5, y: 100, x: 50, transition: { duration: 0.3 } }}
-            className="bg-white w-[320px] sm:w-[380px] h-[500px] rounded-[32px] shadow-[0_20px_60px_rgba(0,0,0,0.15)] border border-slate-100 flex flex-col overflow-hidden"
+            className="bg-white w-[calc(100vw-48px)] sm:w-[380px] h-[min(600px,calc(90vh))] rounded-[32px] shadow-[0_20px_60px_rgba(0,0,0,0.15)] border border-slate-100 flex flex-col overflow-hidden"
           >
             {/* Header */}
             <div className="bg-[#E9DCD6] p-5 flex items-center justify-between text-slate-800 border-b border-black/5">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full border border-black/10 overflow-hidden flex items-center justify-center bg-white">
-                  <img 
-                    src={boss} 
-                    alt="Boss" 
+                  <img
+                    src={boss}
+                    alt="Boss"
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -226,14 +226,33 @@ const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
                             }`}
                         >
                           {msg.imageUrl && (
-                            <div className="mb-2 max-w-[200px] rounded-xl overflow-hidden cursor-pointer hover:opacity-90 transition-opacity bg-black/5">
+                            <div className="mb-2 max-w-[240px] rounded-xl overflow-hidden cursor-pointer hover:opacity-90 transition-opacity">
                               <a href={msg.imageUrl} target="_blank" rel="noopener noreferrer">
-                                <img src={msg.imageUrl} alt="attachment" className="w-full h-auto object-cover rounded-lg" />
+                                {msg.imageUrl.toLowerCase().match(/\.(printable|jpg|jpeg|png|gif|webp|heic)$/) ? (
+                                  <img src={msg.imageUrl} alt="attachment" className="w-full h-auto object-cover rounded-lg shadow-sm" />
+                                ) : (
+                                  <div className={`p-4 flex items-center gap-3 rounded-xl ${msg.senderId === currentUserId ? 'bg-black/10' : 'bg-white shadow-sm'}`}>
+                                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${msg.senderId === currentUserId ? 'bg-white/40' : 'bg-blue-50'}`}>
+                                      <FiPaperclip size={20} className={msg.senderId === currentUserId ? 'text-slate-700' : 'text-blue-500'} />
+                                    </div>
+                                    <div className="flex-1 overflow-hidden">
+                                      <p className="text-[13px] font-bold truncate text-slate-700">
+                                        {msg.content.includes("Đã gửi một tệp") ? "Tài liệu / Tệp tin" : msg.content.replace("Đã gửi tệp: ", "").replace(" 📄", "")}
+                                      </p>
+                                      <p className="text-[13px] opacity-60 truncate">Nhấn để tải về</p>
+                                    </div>
+                                  </div>
+                                )}
                               </a>
                             </div>
                           )}
                           <div className="break-words">
-                            {msg.content !== "Đã gửi một hình ảnh 📸" && msg.content}
+                            {(!msg.imageUrl || (
+                              !msg.content.includes("Đã gửi một hình ảnh") &&
+                              !msg.content.includes("Đã gửi một video") &&
+                              !msg.content.includes("Đã gửi một tệp") &&
+                              !msg.content.includes("Đã gửi tệp:")
+                            )) && msg.content}
                           </div>
                         </div>
                       </div>

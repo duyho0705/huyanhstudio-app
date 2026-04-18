@@ -255,7 +255,7 @@ const NewNavbar = () => {
                                 {user && (
                                     <div className="px-3 mt-6">
                                         <div className="px-4 py-1 mb-2">
-                                            <p className="text-[11px] font-bold text-gray-400 tracking-wider">Tài khoản</p>
+                                            <p className="text-[13px] font-medium text-slate-500">Tài khoản</p>
                                         </div>
                                         <button
                                             onClick={() => { setActiveModal("account"); setIsMobileMenuOpen(false); }}
