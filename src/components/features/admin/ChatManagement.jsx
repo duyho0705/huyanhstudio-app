@@ -720,11 +720,11 @@ const ChatManagement = () => {
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                            className="relative w-full max-w-lg bg-white rounded-[32px] shadow-2xl overflow-hidden flex flex-col max-h-[80vh]"
+                            className="relative w-full max-w-lg bg-white rounded-3xl sm:rounded-[32px] shadow-2xl overflow-hidden flex flex-col max-h-[85vh] sm:max-h-[80vh]"
                         >
-                            <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-white sticky top-0 z-10">
+                            <div className="p-4 sm:p-6 border-b border-slate-100 flex items-center justify-between bg-white sticky top-0 z-10">
                                 <div>
-                                    <h3 className="text-[18px] font-bold text-slate-800">Quản lý tin mẫu</h3>
+                                    <h3 className="text-[17px] sm:text-[18px] font-bold text-slate-800">Quản lý tin mẫu</h3>
                                 </div>
                                 <button
                                     onClick={() => setIsTemplateModalOpen(false)}
@@ -734,7 +734,7 @@ const ChatManagement = () => {
                                 </button>
                             </div>
 
-                            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+                            <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-3 sm:space-y-4">
                                 {quickReplies.map((template, idx) => (
                                     <div
                                         key={idx}
@@ -742,7 +742,7 @@ const ChatManagement = () => {
                                             setNewTemplate(template);
                                             setEditingIndex(idx);
                                         }}
-                                        className={`group p-4 border rounded-2xl flex items-start gap-4 transition-all cursor-pointer ${editingIndex === idx
+                                        className={`group p-3 sm:p-4 border rounded-2xl flex items-start gap-3 sm:gap-4 transition-all cursor-pointer ${editingIndex === idx
                                             ? 'bg-blue-50 border-blue-400 ring-2 ring-blue-500/20'
                                             : 'bg-slate-50 border-slate-100 hover:border-blue-200 hover:bg-blue-50/30'
                                             }`}
@@ -771,11 +771,11 @@ const ChatManagement = () => {
                                 )}
                             </div>
 
-                            <div className="p-6 border-t border-slate-100 bg-slate-50/50">
-                                <div className="flex gap-3">
+                            <div className="p-4 sm:p-6 border-t border-slate-100 bg-slate-50/50">
+                                <div className="flex gap-2 sm:gap-3">
                                     <textarea
-                                        placeholder="Nhập nội dung tin mẫu mới..."
-                                        className="flex-1 bg-white border border-slate-200 rounded-2xl px-4 py-3 text-[16px] focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none resize-none transition-all shadow-sm"
+                                        placeholder="Nhập nội dung tin mẫu..."
+                                        className="flex-1 bg-white border border-slate-200 rounded-xl sm:rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 text-[14px] sm:text-[16px] focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none resize-none transition-all shadow-sm"
                                         rows="2"
                                         value={newTemplate}
                                         onChange={(e) => setNewTemplate(e.target.value)}
@@ -783,13 +783,13 @@ const ChatManagement = () => {
                                     <button
                                         onClick={handleAddTemplate}
                                         disabled={!newTemplate.trim()}
-                                        className={`w-12 h-12 rounded-2xl text-white flex items-center justify-center shadow-lg transition-all shrink-0 active:scale-95 ${editingIndex !== null
+                                        className={`w-11 h-11 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl text-white flex items-center justify-center shadow-lg transition-all shrink-0 active:scale-95 ${editingIndex !== null
                                             ? 'bg-green-500 shadow-green-500/30 hover:bg-green-600'
                                             : 'bg-blue-500 shadow-blue-500/30 hover:bg-blue-600'
                                             } disabled:bg-slate-300 disabled:shadow-none`}
                                         title={editingIndex !== null ? "Lưu thay đổi" : "Thêm mới"}
                                     >
-                                        {editingIndex !== null ? <FiCheck size={24} /> : <FiPlus size={24} />}
+                                        {editingIndex !== null ? <FiCheck size={20} className="sm:size-[24px]" /> : <FiPlus size={20} className="sm:size-[24px]" />}
                                     </button>
                                 </div>
                             </div>

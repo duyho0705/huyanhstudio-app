@@ -37,8 +37,6 @@ const ServiceForm = ({
       } else {
         form.setFieldsValue({
           active: true,
-          icon: "Mic",
-          unit: "/ gói",
           buttonText: "Đăng ký ngay",
           featured: false,
           benefitsList: []
@@ -147,7 +145,7 @@ const ServiceForm = ({
                 />
               </Form.Item>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4">
                 <Form.Item
                   name="price"
                   label={<span className="text-[12px] sm:text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><DollarSign size={14} className="text-blue-500" /> Giá trị</span>}
@@ -162,39 +160,7 @@ const ServiceForm = ({
                     placeholder="Giá tiền"
                   />
                 </Form.Item>
-
-                <Form.Item
-                  name="unit"
-                  label={<span className="text-[12px] sm:text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><Tag size={14} className="text-blue-500" /> Đơn vị</span>}
-                  initialValue="/ gói"
-                  className="!mb-0"
-                >
-                  <Select className="h-10 select-custom-xl rounded-xl" variant="filled">
-                    <Option value="/ gói">/ gói</Option>
-                    <Option value="/ bài">/ bài</Option>
-                    <Option value="/ giờ">/ giờ</Option>
-                    <Option value="/ người">/ người</Option>
-                    <Option value="">Không có</Option>
-                  </Select>
-                </Form.Item>
               </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                <Form.Item
-                  name="icon"
-                  label={<span className="text-[12px] sm:text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2 font-sans italic text-slate-400">Biểu tượng hiển thị</span>}
-                  className="!mb-0"
-                >
-                  <Select className="h-10 select-custom-xl rounded-xl" variant="filled" placeholder="Chọn icon">
-                    <Option value="Mic"><div className="flex items-center gap-2 font-medium"><Mic size={14} /> Micro</div></Option>
-                    <Option value="Music"><div className="flex items-center gap-2 font-medium"><Music size={14} /> Nốt nhạc</div></Option>
-                    <Option value="Star"><div className="flex items-center gap-2 font-medium"><Star size={14} /> Ngôi sao</div></Option>
-                    <Option value="Camera"><div className="flex items-center gap-2 font-medium"><Camera size={14} /> Camera</div></Option>
-                    <Option value="Video"><div className="flex items-center gap-2 font-medium"><Video size={14} /> Video</div></Option>
-                    <Option value="Zap"><div className="flex items-center gap-2 font-medium"><Zap size={14} /> Tia sét</div></Option>
-                    <Option value="Heart"><div className="flex items-center gap-2 font-medium"><Heart size={14} /> Trái tim</div></Option>
-                  </Select>
-                </Form.Item>
 
                 <Form.Item
                   label={<span className="text-[12px] sm:text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2">Gói nổi bật</span>}
@@ -207,7 +173,6 @@ const ServiceForm = ({
                     </Form.Item>
                   </div>
                 </Form.Item>
-              </div>
 
               <div className="grid grid-cols-1 pt-2">
                 <Form.Item

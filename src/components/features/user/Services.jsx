@@ -111,9 +111,8 @@ const Services = () => {
                 {service.description}
               </p>
 
-              <div className="mb-6 sm:mb-10">
+              <div className="mb-6 sm:mb-10 text-center sm:text-left">
                 <span className="text-2xl sm:text-4xl font-black text-[#35104C]">{formatPrice(service.price)}</span>
-                <span className="text-gray-400 font-bold ml-1 sm:ml-2 text-sm">/ {service.unit || 'gói'}</span>
               </div>
 
               <div className="space-y-2.5 sm:space-y-4 mb-6 sm:mb-12 flex-1">

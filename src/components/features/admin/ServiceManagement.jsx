@@ -181,9 +181,6 @@ const ServiceManagement = () => {
 
         return (
           <div className="flex items-center gap-3">
-            <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${record.featured ? "bg-amber-100 text-amber-600" : "bg-blue-50 text-blue-600"}`}>
-              <IconComponent size={18} />
-            </div>
             <div className="flex flex-col">
               <span className="text-slate-900 font-semibold text-[14px] leading-tight flex items-center gap-1.5">
                 {name}
@@ -193,21 +190,19 @@ const ServiceManagement = () => {
                   </Tooltip>
                 )}
               </span>
-              <span className="text-[11px] font-bold text-slate-400  mt-0.5">{record.buttonText || "Đăng ký ngay"}</span>
             </div>
           </div>
         )
       },
     },
     {
-      title: <span className="text-[13px] font-semibold text-slate-600">Đơn giá (VNĐ)</span>,
+      title: <span className="text-[13px] font-semibold text-slate-600">Đơn giá</span>,
       dataIndex: "price",
       key: "price",
       width: 180,
-      render: (price, record) => (
+      render: (price) => (
         <div className="flex items-baseline gap-1.5">
-          <span className="text-slate-900 font-bold text-[15px]">{price?.toLocaleString("vi-VN")}</span>
-          <span className="text-slate-400 font-medium text-[12px]">{record.unit}</span>
+          <span className="text-slate-900 font-medium text-[13px]">{price?.toLocaleString("vi-VN")}</span>
         </div>
       ),
     },
@@ -347,13 +342,9 @@ const ServiceManagement = () => {
             ) : (Array.isArray(services) && services.length > 0) ? (
               <div className="md:hidden grid grid-cols-2 gap-2.5 p-2.5">
                 {services.map((svc) => {
-                  const IconComponent = { Mic, Music, Star, Camera, Video, Zap, Heart }[svc.icon] || Briefcase;
                   return (
                     <div key={svc.id} className="bg-white p-3 rounded-2xl border border-slate-200 shadow-sm flex flex-col h-full hover:border-blue-200 transition-all">
                       <div className="flex items-center gap-2 mb-2">
-                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${svc.featured ? "bg-amber-100 text-amber-600" : "bg-blue-50 text-blue-600"}`}>
-                          <IconComponent size={14} />
-                        </div>
                         <div className="min-w-0 flex-1">
                           <h4 className="text-[12px] font-bold text-slate-900 truncate flex items-center gap-1">
                             {svc.name}
@@ -364,8 +355,7 @@ const ServiceManagement = () => {
 
                       <div className="flex-1 space-y-2">
                         <div className="flex flex-wrap items-baseline gap-1">
-                          <span className="text-slate-900 font-bold text-[14px]">{svc.price?.toLocaleString("vi-VN")}</span>
-                          <span className="text-slate-600 font-medium text-[12px]">{svc.unit}</span>
+                          <span className="text-slate-900 font-bold text-[14px]">{svc.price?.toLocaleString("vi-VN")} đ</span>
                         </div>
 
                         <div className="flex items-center justify-between py-1.5 border-y border-slate-50">
