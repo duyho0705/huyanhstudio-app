@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiMessageCircle, FiX, FiSend, FiUser, FiClock } from 'react-icons/fi';
+import { FiMessageCircle, FiX, FiSend, FiUser, FiClock, FiPlus, FiSmile, FiPaperclip } from 'react-icons/fi';
 import { AuthContext } from '../../../api/AuthContext';
 import { db } from '../../../api/firebase';
+import axiosClient from '../../../api/axiosClient';
 import {
   collection,
   addDoc,
@@ -14,11 +15,15 @@ import {
   doc
 } from 'firebase/firestore';
 
+import boss from '../../../assets/boss.png';
+
 const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
   const { user } = useContext(AuthContext);
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
+  const [uploading, setUploading] = useState(false);
   const scrollRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   const currentUserId = user?.email || user?.username || user?.id || user?.customerName;
 
@@ -94,10 +99,68 @@ const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
     }
   };
 
+  const handleFileClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file || !currentUserId || uploading) return;
+
+    setUploading(true);
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await axiosClient.post('/api/media/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
+      const fileUrl = response.data;
+      const isVideo = file.type.startsWith('video/');
+      const isImage = file.type.startsWith('image/');
+      
+      let messageContent = "Đã gửi một tệp 📄";
+      if (isImage) messageContent = "Đã gửi một hình ảnh 📸";
+      else if (isVideo) messageContent = "Đã gửi một video 🎥";
+
+      const chatMessage = {
+        senderId: currentUserId,
+        receiverId: 'admin',
+        content: messageContent,
+        imageUrl: fileUrl,
+        timestamp: serverTimestamp(),
+      };
+
+      await addDoc(collection(db, 'chat_rooms', currentUserId, 'messages'), chatMessage);
+      await setDoc(doc(db, 'chat_list', currentUserId), {
+        userId: currentUserId,
+        userName: user.customerName || currentUserId,
+        lastMessage: messageContent,
+        timestamp: serverTimestamp(),
+        unread: true
+      });
+
+    } catch (err) {
+      console.error('Error uploading file:', err);
+      alert("Gửi tệp thất bại. Vui lòng thử lại!");
+    } finally {
+      setUploading(false);
+      e.target.value = null;
+    }
+  };
+
   if (!user) return null;
 
   return (
     <div className="fixed bottom-6 right-6 z-[100]">
+      <input 
+        type="file" 
+        ref={fileInputRef} 
+        onChange={handleFileChange} 
+        className="hidden" 
+        accept="image/*,video/*"
+      />
       <AnimatePresence mode="wait">
         {isOpen ? (
           <motion.div
@@ -108,10 +171,14 @@ const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
             className="bg-white w-[320px] sm:w-[380px] h-[500px] rounded-[32px] shadow-[0_20px_60px_rgba(0,0,0,0.15)] border border-slate-100 flex flex-col overflow-hidden"
           >
             {/* Header */}
-            <div className="bg-[#35104C] p-5 flex items-center justify-between text-white">
+            <div className="bg-[#E9DCD6] p-5 flex items-center justify-between text-slate-800 border-b border-black/5">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
-                  <FiUser className="text-white" size={20} />
+                <div className="w-10 h-10 rounded-full border border-black/10 overflow-hidden flex items-center justify-center bg-white">
+                  <img 
+                    src={boss} 
+                    alt="Boss" 
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div>
                   <h3 className="font-bold text-[17px]">Hỗ trợ trực tuyến</h3>
@@ -122,7 +189,7 @@ const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
                   e.stopPropagation();
                   onToggle(false);
                 }}
-                className="hover:bg-white/10 p-2 rounded-full transition-colors"
+                className="hover:bg-black/5 p-2 rounded-full transition-colors text-slate-600"
               >
                 <FiX size={20} />
               </button>
@@ -132,78 +199,99 @@ const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
             <div ref={scrollRef} className="flex-1 overflow-y-auto p-5 space-y-4 bg-slate-50/30">
               {messages.length === 0 && (
                 <div className="text-center py-10 opacity-30">
-                  <FiMessageCircle size={32} className="mx-auto mb-3 text-[#35104C]" />
-                  <p className="text-xs font-bold text-[#35104C]">Để lại lời nhắn, tư vấn viên sẽ phản hồi bạn ngay!</p>
+                  <FiMessageCircle size={32} className="mx-auto mb-3 text-[#E9DCD6]" />
+                  <p className="text-xs font-bold text-slate-600">Để lại lời nhắn, tư vấn viên sẽ phản hồi bạn ngay!</p>
                 </div>
               )}
-              {messages.map((msg, idx) => (
-                <div key={idx} className={`flex ${msg.senderId === currentUserId ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`flex flex-col ${msg.senderId === currentUserId ? 'items-end' : 'items-start'} max-w-[85%]`}>
-                    <div
-                      className={`px-4 py-2.5 rounded-2xl text-[15px] leading-relaxed shadow-sm ${msg.senderId === currentUserId
-                        ? 'bg-[#35104C] text-white rounded-tr-none'
-                        : 'bg-white text-slate-700 border border-slate-100 rounded-tl-none'
-                        }`}
-                    >
-                      {msg.imageUrl && (
-                        <div className="mb-2 max-w-[200px] rounded-xl overflow-hidden cursor-pointer hover:opacity-90 transition-opacity bg-black/5">
-                          <a href={msg.imageUrl} target="_blank" rel="noopener noreferrer">
-                            <img src={msg.imageUrl} alt="attachment" className="w-full h-auto object-cover rounded-lg" />
-                          </a>
+              {messages.map((msg, idx) => {
+                const prevMsg = messages[idx - 1];
+                const showTimeSeparator = !prevMsg ||
+                  (new Date(msg.timestamp).getTime() - new Date(prevMsg.timestamp).getTime() > 20 * 60 * 1000);
+
+                return (
+                  <div key={idx} className="space-y-4">
+                    {showTimeSeparator && (
+                      <div className="flex justify-center mb-6 mt-2">
+                        <span className="text-[12px] font-medium text-slate-500">
+                          {formatMessageTime(msg.timestamp)}
+                        </span>
+                      </div>
+                    )}
+                    <div className={`flex ${msg.senderId === currentUserId ? 'justify-end' : 'justify-start'}`}>
+                      <div className={`flex flex-col ${msg.senderId === currentUserId ? 'items-end' : 'items-start'} max-w-[85%]`}>
+                        <div
+                          className={`px-4 py-2.5 rounded-[22px] text-[15px] leading-relaxed shadow-sm ${msg.senderId === currentUserId
+                            ? 'bg-[#E9DCD6] text-slate-800 rounded-tr-none'
+                            : 'bg-[#F0F0F0] text-slate-700 rounded-tl-none'
+                            }`}
+                        >
+                          {msg.imageUrl && (
+                            <div className="mb-2 max-w-[200px] rounded-xl overflow-hidden cursor-pointer hover:opacity-90 transition-opacity bg-black/5">
+                              <a href={msg.imageUrl} target="_blank" rel="noopener noreferrer">
+                                <img src={msg.imageUrl} alt="attachment" className="w-full h-auto object-cover rounded-lg" />
+                              </a>
+                            </div>
+                          )}
+                          <div className="break-words">
+                            {msg.content !== "Đã gửi một hình ảnh 📸" && msg.content}
+                          </div>
                         </div>
-                      )}
-                      <div className="flex flex-wrap items-end gap-3">
-                          <span className="flex-1 max-w-full break-words">
-                              {msg.content !== "Đã gửi một hình ảnh 📸" && msg.content}
-                          </span>
-                          <span className={`text-[10px] sm:text-[11px] mt-1 shrink-0 ${msg.senderId === currentUserId ? 'text-white/70' : 'text-slate-400'}`}>
-                              {formatMessageTime(msg.timestamp)}
-                          </span>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* Input Form */}
-            <form onSubmit={handleSendMessage} className="p-3 bg-white border-t border-slate-100 flex items-center gap-2">
-              <button
-                  type="button"
-                  className="w-8 h-8 rounded-full bg-[#35104C] hover:bg-[#4a166a] text-white flex items-center justify-center transition-all shrink-0 shadow-sm"
-              >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-              </button>
-              
-              <div className="flex-1 relative flex items-center bg-slate-100 rounded-full px-2 shadow-inner border border-slate-200/50">
-                <input
-                  type="text"
-                  placeholder="Nhập nội dung..."
-                  className="w-full pl-3 pr-10 py-2 bg-transparent border-none text-[14px] focus:ring-0 outline-none placeholder:text-slate-500 text-slate-800"
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                />
-                
-                <div className="absolute right-1">
-                    <button 
-                        type="button"
-                        className="w-7 h-7 rounded-full hover:bg-slate-200/80 text-[#35104C] flex items-center justify-center transition-all"
-                    >
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2" stroke="white" strokeWidth="2" strokeLinecap="round" fill="none"></path><circle cx="9" cy="9" r="1.5" fill="white"></circle><circle cx="15" cy="9" r="1.5" fill="white"></circle></svg>
-                    </button>
+            <form onSubmit={handleSendMessage} className="p-3 bg-white border-t border-slate-100 flex flex-col gap-2">
+              {uploading && (
+                <div className="flex items-center gap-2 px-2 py-1 bg-blue-50 text-blue-600 rounded-lg animate-pulse mb-1">
+                  <div className="w-3 h-3 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                  <span className="text-[11px] font-bold">Đang tải tệp lên...</span>
                 </div>
-              </div>
+              )}
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleFileClick}
+                  disabled={uploading}
+                  className="w-10 h-10 rounded-full bg-[#E9DCD6] text-slate-700 flex items-center justify-center shadow-sm shrink-0 active:scale-95 disabled:opacity-50"
+                >
+                  <FiPlus size={20} />
+                </button>
 
-              <button
-                type="submit"
-                disabled={!inputValue.trim()}
-                className={`w-9 h-9 rounded-full flex items-center justify-center transition-all shrink-0 ${!inputValue.trim()
-                        ? "text-slate-300 pointer-events-none"
-                        : "text-[#35104C] hover:bg-slate-100 active:scale-95"
+                <div className="flex-1 relative flex items-center bg-slate-100 rounded-full px-2 shadow-inner border border-slate-200/50">
+                  <input
+                    type="text"
+                    placeholder="Nhập nội dung..."
+                    className="w-full pl-3 pr-10 py-2 bg-transparent border-none text-[14px] focus:ring-0 outline-none placeholder:text-slate-500 text-slate-800"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    disabled={uploading}
+                  />
+
+                  <div className="absolute right-1">
+                    <button
+                      type="button"
+                      className="w-7 h-7 rounded-full hover:bg-slate-200/80 text-slate-500 flex items-center justify-center transition-all"
+                    >
+                      <FiSmile size={20} />
+                    </button>
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={!inputValue.trim() || uploading}
+                  className={`w-9 h-9 rounded-full flex items-center justify-center transition-all shrink-0 ${!inputValue.trim() || uploading
+                    ? "text-slate-300 pointer-events-none"
+                    : "text-slate-700 hover:bg-slate-100 active:scale-95"
                     }`}
-              >
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" className="ml-0.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </button>
+                >
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" className="ml-0.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                </button>
+              </div>
             </form>
           </motion.div>
         ) : !onlyWindow ? (
@@ -215,12 +303,12 @@ const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
             whileHover={{ scale: 1.1, rotate: 5 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => onToggle(true)}
-            className="bg-[#35104C] text-white w-14 h-14 rounded-full flex items-center justify-center shadow-[0_10px_30px_rgba(53,16,76,0.3)] relative group"
+            className="bg-[#E9DCD6] text-slate-700 w-14 h-14 rounded-full flex items-center justify-center shadow-[0_10px_30px_rgba(0,0,0,0.1)] border border-white relative group"
           >
             <FiMessageCircle size={28} className="group-hover:scale-110 transition-transform" />
             <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#6CD1FD] rounded-full border-4 border-white shadow-sm"></span>
 
-            <div className="absolute right-20 top-1/2 -translate-y-1/2 bg-[#35104C] text-white px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all pointer-events-none shadow-xl">
+            <div className="absolute right-20 top-1/2 -translate-y-1/2 bg-[#E9DCD6] text-slate-700 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all pointer-events-none shadow-xl border border-slate-200">
               Hỗ trợ trực tuyến
             </div>
           </motion.button>

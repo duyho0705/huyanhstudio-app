@@ -58,7 +58,7 @@ const AdminRevenueChart = () => {
       </div>
 
       <div className="h-[220px] sm:h-[280px] lg:h-[300px] w-full mt-2 sm:mt-4">
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
           <AreaChart
             data={data}
             margin={{ top: 10, right: 10, left: -20, bottom: 0 }}

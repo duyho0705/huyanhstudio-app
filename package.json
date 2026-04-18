@@ -12,6 +12,7 @@
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",
     "@stomp/stompjs": "^7.3.0",
+    "@supabase/supabase-js": "^2.103.3",
     "antd": "^5.27.3",
     "axios": "^1.13.2",
     "dayjs": "^1.11.20",

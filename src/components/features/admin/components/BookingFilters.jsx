@@ -77,6 +77,7 @@ const BookingFilters = ({
             className="flex-1 xl:w-[130px] h-9 xl:h-10 rounded-xl"
             allowClear
             dropdownStyle={{ borderRadius: '12px' }}
+            popupMatchSelectWidth={false}
           >
             {bookingStatuses.map((s) => (
               <Option key={s.value} value={s.value}>

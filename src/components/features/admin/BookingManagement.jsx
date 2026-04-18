@@ -444,6 +444,7 @@ const BookingManagement = () => {
               onChange={(val) => handleStatusUpdate(record.id, val)}
               className="w-full select-custom-sm"
               dropdownStyle={{ borderRadius: '12px', padding: '4px', border: '1px solid #f1f5f9' }}
+              popupMatchSelectWidth={false}
             >
               {bookingStatuses.map((s) => (
                 <Option key={s.value} value={s.value}>
@@ -638,6 +639,7 @@ const BookingManagement = () => {
                         size="small"
                         bordered={false}
                         dropdownStyle={{ borderRadius: '12px' }}
+                        popupMatchSelectWidth={false}
                       >
                         {bookingStatuses.map((s) => (
                           <Option key={s.value} value={s.value}>

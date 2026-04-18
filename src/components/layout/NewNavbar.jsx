@@ -219,8 +219,8 @@ const NewNavbar = () => {
                                                 to={link.to}
                                                 onClick={() => setIsMobileMenuOpen(false)}
                                                 className={`flex items-center px-4 py-3 rounded-xl text-[15px] font-semibold transition-all ${location.pathname === link.to
-                                                        ? "bg-[#6CD1FD]/10 text-[#35104C]"
-                                                        : "text-gray-600 hover:bg-gray-50 hover:text-[#35104C]"
+                                                    ? "bg-[#6CD1FD]/10 text-[#35104C]"
+                                                    : "text-gray-600 hover:bg-gray-50 hover:text-[#35104C]"
                                                     }`}
                                             >
                                                 {link.label}
@@ -328,7 +328,7 @@ const NewNavbar = () => {
                 closable={false}
                 width={800}
                 centered
-                destroyOnClose
+                destroyOnHidden
                 className="user-profile-modal"
             >
                 <div className="pt-4">
@@ -344,7 +344,7 @@ const NewNavbar = () => {
                 closable={false}
                 width={1000}
                 centered
-                destroyOnClose
+                destroyOnHidden
             >
                 <div className="pt-4 max-h-[70vh] overflow-y-auto custom-scrollbar">
                     <BookingProfile />
@@ -359,7 +359,7 @@ const NewNavbar = () => {
                 closable={false}
                 width={500}
                 centered
-                destroyOnClose
+                destroyOnHidden
             >
                 <div className="pt-4">
                     <ChangePassword />

@@ -24,7 +24,7 @@ import ChatBox from "./components/features/chat/ChatBox";
 import AIAudioEnhancerModal from "./components/features/ai/AIAudioEnhancerModal";
 import { AnimatePresence, motion, useSpring, useMotionValue } from "framer-motion";
 import { FaMagic, FaPlay, FaRobot } from "react-icons/fa";
-import { FiZap, FiGrid, FiMessageCircle, FiX } from "react-icons/fi";
+import { FiZap, FiGrid, FiMessageCircle, FiX, FiMusic } from "react-icons/fi";
 import { useState, useEffect, useRef, useContext } from "react";
 
 
@@ -41,11 +41,11 @@ const pageTransition = {
 };
 
 // --- PERSISTENT MUSIC PLAYER UI ---
-const MiniMusicPlayer = ({ isPlaying, setIsPlaying }) => {
+const MiniMusicPlayer = ({ isPlaying, onToggle }) => {
   return (
     <div
-      className="fixed sm:top-[120px] left-4 sm:left-6 z-[90] hidden sm:flex items-center gap-2 sm:gap-4 bg-white/10 backdrop-blur-xl p-2 sm:p-2.5 px-3 sm:px-4 rounded-full border border-white/20 shadow-2xl group hover:bg-white/20 transition-all cursor-pointer"
-      onClick={() => setIsPlaying(!isPlaying)}
+      className="fixed bottom-24 left-4 sm:top-[120px] sm:left-6 sm:bottom-auto z-[90] flex items-center gap-2 sm:gap-4 bg-white/10 backdrop-blur-xl p-2 sm:p-2.5 px-3 sm:px-4 rounded-full border border-white/20 shadow-2xl group hover:bg-white/20 transition-all cursor-pointer"
+      onClick={onToggle}
     >
       {/* Visualizer and Logic only, sound comes from Global Source */}
       <div className="relative w-9 h-9 sm:w-12 sm:h-12 flex items-center justify-center">
@@ -127,25 +127,35 @@ function AppContent() {
     window.onYouTubeIframeAPIReady = () => {
       if (playerRef.current) return;
       playerRef.current = new window.YT.Player('hb-music-engine', {
-        height: '180',
-        width: '320',
-        videoId: 'e5Td3zrVdX4',
+        height: '1',
+        width: '1',
+        videoId: 'l4Pkem30Q60',
         playerVars: {
           'autoplay': 0,
           'controls': 0,
           'loop': 1,
-          'playlist': 'e5Td3zrVdX4',
+          'playlist': 'l4Pkem30Q60',
           'enablejsapi': 1,
           'origin': window.location.origin,
           'modestbranding': 1,
           'rel': 0,
-          'mute': 0,
-          'host': 'https://www.youtube-nocookie.com'
+          'mute': 0
         },
         events: {
+          'onReady': (event) => {
+             // Player is ready
+          },
           'onStateChange': (event) => {
             if (event.data === window.YT.PlayerState.ENDED) {
               event.target.playVideo();
+            }
+            // Nếu bị ngắt quãng ngoài ý muốn (do trình duyệt hoặc lỗi mạng) khi đang bật nhạc
+            if (event.data === window.YT.PlayerState.PAUSED && isMusicPlaying) {
+               setTimeout(() => {
+                 if (playerRef.current && typeof playerRef.current.playVideo === 'function') {
+                    playerRef.current.playVideo();
+                 }
+               }, 100);
             }
           }
         }
@@ -158,30 +168,31 @@ function AppContent() {
     }
   }, []);
 
-  // Control playback based on state
-  useEffect(() => {
-    if (playerRef.current && playerRef.current.playVideo) {
-      if (isMusicPlaying) {
-        playerRef.current.playVideo();
-      } else {
-        playerRef.current.pauseVideo();
-      }
+  // Global Function for reliable playback control
+  const togglePlayback = () => {
+    if (!playerRef.current || typeof playerRef.current.playVideo !== 'function') return;
+    
+    if (!isMusicPlaying) {
+      playerRef.current.playVideo();
+      setIsMusicPlaying(true);
+    } else {
+      playerRef.current.pauseVideo();
+      setIsMusicPlaying(false);
     }
-  }, [isMusicPlaying]);
+  };
 
   // Listen for toggleMusic event from sidebar menu
   useEffect(() => {
-    const handleToggleMusic = () => setIsMusicPlaying(prev => !prev);
-    window.addEventListener('toggleMusic', handleToggleMusic);
-    return () => window.removeEventListener('toggleMusic', handleToggleMusic);
-  }, []);
+    window.addEventListener('toggleMusic', togglePlayback);
+    return () => window.removeEventListener('toggleMusic', togglePlayback);
+  }, [isMusicPlaying]);
 
   return (
     <>
       <ScrollToHash />
 
       {/* ROCK-SOLID GLOBAL MUSIC ENGINE - Anti-throttle configuration */}
-      <div className="fixed top-0 left-0 w-1 h-1 opacity-[0.01] pointer-events-none z-[-1] overflow-hidden">
+      <div className="fixed -left-[3000px] top-0 w-[320px] h-[180px] pointer-events-none z-[-100] overflow-hidden">
         <div id="hb-music-engine"></div>
       </div>
 
@@ -344,9 +355,26 @@ function AppContent() {
                 transition={{ duration: 0.3 }}
                 className="flex items-center gap-3"
               >
-                <span className="bg-[#35104C]/70 backdrop-blur-lg text-white px-3 py-1.5 rounded-lg text-[14px] font-bold shadow-xl border border-white/10">Hỗ trợ</span>
+                <span className="bg-[#35104C]/70 backdrop-blur-lg text-white px-3 py-1.5 rounded-lg text-[14px] font-bold shadow-xl border border-white/10">Hỗ trợ & Nhạc</span>
+                
+                {/* Music Toggle in Hub */}
                 <button
-                  onClick={() => setIsChatOpen(true)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    togglePlayback();
+                  }}
+                  title={isMusicPlaying ? "Tắt nhạc" : "Bật nhạc"}
+                  className={`w-12 h-12 ${isMusicPlaying ? 'bg-sky text-[#35104C]' : 'bg-[#35104C]/40 text-white'} backdrop-blur-xl border border-white/20 rounded-full flex items-center justify-center shadow-xl hover:bg-[#6CD1FD] hover:text-[#35104C] transition-all active:scale-90`}
+                >
+                  <FiMusic size={20} className={isMusicPlaying ? "animate-pulse" : ""} />
+                </button>
+
+                {/* Chat Button */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsChatOpen(true);
+                  }}
                   className="w-12 h-12 bg-[#35104C]/40 backdrop-blur-xl border border-white/20 rounded-full flex items-center justify-center text-white shadow-xl hover:bg-[#6CD1FD] hover:text-[#35104C] transition-all active:scale-90"
                 >
                   <FiMessageCircle size={20} />
@@ -376,13 +404,11 @@ function AppContent() {
             onlyWindow={true}
           />
 
-          {/* Music Player UI - Only visible on Home Page */}
-          {!isAdminRoute && location.pathname === "/" && (
-            <MiniMusicPlayer
-              isPlaying={isMusicPlaying}
-              setIsPlaying={setIsMusicPlaying}
-            />
-          )}
+          {/* Music Player UI - Global Visibility */}
+          <MiniMusicPlayer
+            isPlaying={isMusicPlaying}
+            onToggle={togglePlayback}
+          />
 
 
           <AIAudioEnhancerModal

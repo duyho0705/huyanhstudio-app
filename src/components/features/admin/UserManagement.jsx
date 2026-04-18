@@ -417,90 +417,90 @@ const UserManagement = () => {
 
       {/* 2. Main Data Section */}
       <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-[32px] border border-slate-200 shadow-sm space-y-6">
-        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-5">
+        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 border-b border-slate-50 pb-2">
           <h2 className="text-[18px] sm:text-[20px] font-bold text-slate-800 whitespace-nowrap flex items-center gap-3">
             <div className="w-1.5 h-6 sm:h-8 bg-blue-600 rounded-full"></div>
             Danh sách người dùng
           </h2>
 
-          <div className="flex flex-col gap-2.5 w-full xl:w-auto">
-            {/* ROW 1: Search + Add Button */}
-            <div className="flex items-center gap-2 w-full">
+          <div className="flex flex-col xl:flex-row items-stretch xl:items-center gap-2 xl:gap-3 w-full xl:w-auto flex-1 justify-end">
+            <div className="w-full xl:max-w-[280px]">
               <Input
                 placeholder="Tìm tài khoản..."
                 prefix={<Search size={14} className="text-slate-400" />}
-                className="h-9 sm:h-10 flex-1 border-slate-200 rounded-xl text-[13px] sm:text-[14px] font-medium text-slate-900 shadow-sm hover:border-blue-400 focus:border-blue-500 placeholder:text-slate-400"
+                className="h-9 xl:h-10 w-full border-slate-200 rounded-xl text-[13px] xl:text-[14px] font-medium text-slate-900 shadow-sm hover:border-blue-400 focus:border-blue-500 placeholder:text-slate-400"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 allowClear
               />
-              <Button
-                onClick={handleCreate}
-                className="h-9 sm:h-10 px-3 sm:px-5 bg-slate-900 border-none rounded-xl font-bold text-[13px] sm:text-[14px] text-white shadow-md flex items-center gap-1.5 hover:bg-slate-800 transition-all"
-              >
-                <Plus size={16} strokeWidth={3} />
-                <span className="hidden sm:inline">Thêm mới</span>
-                <span className="sm:hidden">Thêm</span>
-              </Button>
             </div>
 
-            {/* ROW 2: Filters + Refresh */}
-            <div className="flex items-center gap-2 w-full">
-              <Select
-                placeholder={
-                  <div className="flex items-center gap-2">
-                    <Shield size={13} className="text-slate-400" />
-                    <span className="font-medium text-slate-500 text-[13px]">Vai trò</span>
-                  </div>
-                }
-                value={filters.role}
-                onChange={(val) => handleFilterChange("role", val)}
-                className="h-9 sm:h-10 flex-1 sm:w-[140px] sm:flex-none custom-select-premium compact-select"
-                allowClear
-                dropdownStyle={{ borderRadius: '15px', padding: '8px' }}
-              >
-                {roles.map(r => (
-                  <Option key={r.value} value={r.value}>
-                    <div className="flex items-center gap-2 py-1">
-                      <div className={`w-2 h-2 rounded-full ${r.value === 'ROLE_ADMIN' ? 'bg-red-500' : 'bg-slate-400'}`}></div>
-                      <span className="font-medium text-slate-700 text-[13px]">{r.label}</span>
+            <div className="flex flex-col sm:flex-row items-stretch gap-2">
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                <Select
+                  placeholder={
+                    <div className="flex items-center gap-2">
+                      <Shield size={13} className="text-slate-400" />
+                      <span className="font-medium text-slate-500 text-[13px]">Vai trò</span>
                     </div>
-                  </Option>
-                ))}
-              </Select>
+                  }
+                  value={filters.role}
+                  onChange={(val) => handleFilterChange("role", val)}
+                  className="h-9 xl:h-10 flex-1 sm:w-[140px] custom-select-premium compact-select"
+                  allowClear
+                  dropdownStyle={{ borderRadius: '15px', padding: '8px' }}
+                  popupMatchSelectWidth={false}
+                >
+                  {roles.map(r => (
+                    <Option key={r.value} value={r.value}>
+                      <div className="flex items-center gap-2 py-1">
+                        <div className={`w-2 h-2 rounded-full ${r.value === 'ROLE_ADMIN' ? 'bg-red-500' : 'bg-slate-400'}`}></div>
+                        <span className="font-medium text-slate-700 text-[13px]">{r.label}</span>
+                      </div>
+                    </Option>
+                  ))}
+                </Select>
 
-              <Select
-                placeholder={
-                  <div className="flex items-center gap-2">
-                    <Settings size={13} className="text-slate-400" />
-                    <span className="font-medium text-slate-500 text-[13px]">Trạng thái</span>
-                  </div>
-                }
-                value={filters.status}
-                onChange={(val) => handleFilterChange("status", val)}
-                className="h-9 sm:h-10 flex-1 sm:w-[140px] sm:flex-none custom-select-premium compact-select"
-                allowClear
-                dropdownStyle={{ borderRadius: '15px', padding: '8px' }}
-              >
-                {statusOptions.map(s => (
-                  <Option key={s.value.toString()} value={s.value}>
-                    <div className="flex items-center gap-2 py-1">
-                      <div className={`w-2 h-2 rounded-full ${s.value ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                      <span className="font-medium text-slate-700 text-[13px]">{s.label}</span>
+                <Select
+                  placeholder={
+                    <div className="flex items-center gap-2">
+                      <Settings size={13} className="text-slate-400" />
+                      <span className="font-medium text-slate-500 text-[13px]">Trạng thái</span>
                     </div>
-                  </Option>
-                ))}
-              </Select>
+                  }
+                  value={filters.status}
+                  onChange={(val) => handleFilterChange("status", val)}
+                  className="h-9 xl:h-10 flex-1 sm:w-[140px] custom-select-premium compact-select"
+                  allowClear
+                  dropdownStyle={{ borderRadius: '15px', padding: '8px' }}
+                  popupMatchSelectWidth={false}
+                >
+                  {statusOptions.map(s => (
+                    <Option key={s.value.toString()} value={s.value}>
+                      <div className="flex items-center gap-2 py-1">
+                        <div className={`w-2 h-2 rounded-full ${s.value ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                        <span className="font-medium text-slate-700 text-[13px]">{s.label}</span>
+                      </div>
+                    </Option>
+                  ))}
+                </Select>
 
-              {(filters.role !== null || filters.status !== null || filters.search) && (
                 <Button
                   onClick={clearFilters}
-                  className="h-9 w-9 min-w-[36px] sm:h-10 sm:w-auto sm:px-4 flex items-center justify-center gap-2 text-slate-500 font-medium text-[13px] bg-slate-50 border-none rounded-xl hover:text-blue-600 transition-all"
+                  className="h-9 w-9 xl:h-10 sm:w-auto sm:px-3 flex items-center justify-center gap-2 text-slate-500 font-medium text-[13px] bg-white border border-slate-200 rounded-xl hover:text-blue-600 transition-all p-0"
                   icon={<RotateCcw size={14} />}
                 >
                   <span className="hidden sm:inline whitespace-nowrap">Làm mới</span>
                 </Button>
-              )}
+
+                <Button
+                  onClick={handleCreate}
+                  className="h-9 w-9 xl:h-10 xl:w-auto sm:px-4 bg-slate-900 border-none rounded-xl font-bold text-[13px] xl:text-[14px] text-white shadow-md flex items-center justify-center gap-1.5 hover:bg-slate-800 transition-all p-0 sm:p-auto"
+                >
+                  <Plus size={16} strokeWidth={3} className="text-white" />
+                  <span className="hidden sm:inline text-white">Thêm mới</span>
+                </Button>
+              </div>
             </div>
           </div>
         </div>
