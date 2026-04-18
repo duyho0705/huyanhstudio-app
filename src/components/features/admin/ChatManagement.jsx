@@ -243,19 +243,24 @@ const ChatManagement = () => {
         e.preventDefault();
         if ((!inputValue.trim() && !selectedImage) || !selectedUser) return;
 
-        let imageUrl = null;
-        let finalMessage = inputValue.trim();
+        const messageToSend = inputValue.trim();
+        const imageToUpload = selectedImage; // Store current selection
+        
+        setInputValue("");
+        clearImagePreview();
 
-        if (selectedImage) {
+        let imageUrl = null;
+        let finalMessage = messageToSend;
+
+        if (imageToUpload) {
             setUploadingImage(true);
             setUploadProgress(0);
 
             try {
                 const formData = new FormData();
-                formData.append('file', selectedImage);
+                formData.append('file', imageToUpload);
                 formData.append('userId', selectedUser);
 
-                // Gửi qua Server Java của bạn (Không set Content-Type để axios tự xử lý boundary)
                 const response = await axiosClient.post('/media/upload-chat', formData, {
                     headers: { 'Content-Type': undefined },
                     onUploadProgress: (progressEvent) => {
@@ -265,7 +270,7 @@ const ChatManagement = () => {
                 });
 
                 if (response.data && response.data.code === "UPLOAD_SUCCESS") {
-                    imageUrl = response.data.data; // Server Java trả về link Supabase
+                    imageUrl = response.data.data;
                 } else if (response.code === "UPLOAD_SUCCESS") {
                     imageUrl = response.data;
                 } else {
@@ -273,17 +278,19 @@ const ChatManagement = () => {
                 }
 
                 if (!finalMessage) {
-                    if (selectedImage.type.startsWith('image')) {
+                    if (imageToUpload.type.startsWith('image')) {
                         finalMessage = "Đã gửi một hình ảnh 📸";
-                    } else if (selectedImage.type.startsWith('video')) {
+                    } else if (imageToUpload.type.startsWith('video')) {
                         finalMessage = "Đã gửi một video 🎥";
                     } else {
-                        finalMessage = `Đã gửi tệp: ${selectedImage.name} 📄`;
+                        finalMessage = `Đã gửi tệp: ${imageToUpload.name} 📄`;
                     }
                 }
             } catch (error) {
                 console.error("Error uploading via backend:", error);
                 setUploadingImage(false);
+                setInputValue(messageToSend);
+                setSelectedImage(imageToUpload); // Restore preview
                 alert("Lỗi tải lên: " + (error.response?.data?.message || error.message));
                 return;
             }
@@ -298,19 +305,18 @@ const ChatManagement = () => {
         };
 
         try {
-            await addDoc(collection(db, "chat_rooms", selectedUser, "messages"), chatMessage);
-
-            await updateDoc(doc(db, "chat_list", selectedUser), {
-                lastMessage: finalMessage,
-                timestamp: serverTimestamp(),
-                unread: false
-            });
-
-            setInputValue("");
-            clearImagePreview();
+            await Promise.all([
+                addDoc(collection(db, "chat_rooms", selectedUser, "messages"), chatMessage),
+                updateDoc(doc(db, "chat_list", selectedUser), {
+                    lastMessage: finalMessage,
+                    timestamp: serverTimestamp(),
+                    unread: false
+                })
+            ]);
             setUploadingImage(false);
         } catch (err) {
             console.error("Error sending admin message:", err);
+            setInputValue(messageToSend); // Restore on error
             setUploadingImage(false);
         }
     };

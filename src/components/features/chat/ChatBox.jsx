@@ -75,27 +75,30 @@ const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
     e.preventDefault();
     if (!inputValue.trim() || !currentUserId) return;
 
+    const messageToSend = inputValue.trim();
+    setInputValue('');
+
     const chatMessage = {
       senderId: currentUserId,
       receiverId: 'admin',
-      content: inputValue,
+      content: messageToSend,
       timestamp: serverTimestamp(),
     };
 
     try {
-      await addDoc(collection(db, 'chat_rooms', currentUserId, 'messages'), chatMessage);
-
-      await setDoc(doc(db, 'chat_list', currentUserId), {
-        userId: currentUserId,
-        userName: user.customerName || currentUserId,
-        lastMessage: inputValue,
-        timestamp: serverTimestamp(),
-        unread: true
-      });
-
-      setInputValue('');
+      await Promise.all([
+        addDoc(collection(db, 'chat_rooms', currentUserId, 'messages'), chatMessage),
+        setDoc(doc(db, 'chat_list', currentUserId), {
+          userId: currentUserId,
+          userName: user.customerName || currentUserId,
+          lastMessage: messageToSend,
+          timestamp: serverTimestamp(),
+          unread: true
+        })
+      ]);
     } catch (err) {
       console.error('Error sending message:', err);
+      setInputValue(messageToSend); // Restore if failed
     }
   };
 
@@ -171,7 +174,7 @@ const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
             className="bg-white w-[calc(100vw-48px)] sm:w-[380px] h-[min(600px,calc(90vh))] rounded-[32px] shadow-[0_20px_60px_rgba(0,0,0,0.15)] border border-slate-100 flex flex-col overflow-hidden"
           >
             {/* Header */}
-            <div className="bg-[#E9DCD6] p-5 flex items-center justify-between text-slate-800 border-b border-black/5">
+            <div className="bg-[#E9DCD6] p-3 pt-2 pb-2 flex items-center justify-between text-slate-800 border-b border-black/5">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full border border-black/10 overflow-hidden flex items-center justify-center bg-white">
                   <img
@@ -181,7 +184,7 @@ const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
                   />
                 </div>
                 <div>
-                  <h3 className="font-bold text-[17px]">Hỗ trợ trực tuyến</h3>
+                  <h3 className="font-semibold text-[17px]">Hoàng Huy Anh</h3>
                 </div>
               </div>
               <button
@@ -219,42 +222,47 @@ const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
                     )}
                     <div className={`flex ${msg.senderId === currentUserId ? 'justify-end' : 'justify-start'}`}>
                       <div className={`flex flex-col ${msg.senderId === currentUserId ? 'items-end' : 'items-start'} max-w-[85%]`}>
-                        <div
-                          className={`px-4 py-2.5 rounded-[22px] text-[15px] leading-relaxed shadow-sm ${msg.senderId === currentUserId
-                            ? 'bg-[#E9DCD6] text-slate-800 rounded-tr-none'
-                            : 'bg-[#F0F0F0] text-slate-700 rounded-tl-none'
-                            }`}
-                        >
-                          {msg.imageUrl && (
-                            <div className="mb-2 max-w-[240px] rounded-xl overflow-hidden cursor-pointer hover:opacity-90 transition-opacity">
-                              <a href={msg.imageUrl} target="_blank" rel="noopener noreferrer">
-                                {msg.imageUrl.toLowerCase().match(/\.(printable|jpg|jpeg|png|gif|webp|heic)$/) ? (
-                                  <img src={msg.imageUrl} alt="attachment" className="w-full h-auto object-cover rounded-lg shadow-sm" />
-                                ) : (
-                                  <div className={`p-4 flex items-center gap-3 rounded-xl ${msg.senderId === currentUserId ? 'bg-black/10' : 'bg-white shadow-sm'}`}>
-                                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${msg.senderId === currentUserId ? 'bg-white/40' : 'bg-blue-50'}`}>
-                                      <FiPaperclip size={20} className={msg.senderId === currentUserId ? 'text-slate-700' : 'text-blue-500'} />
-                                    </div>
-                                    <div className="flex-1 overflow-hidden">
-                                      <p className="text-[13px] font-bold truncate text-slate-700">
-                                        {msg.content.includes("Đã gửi một tệp") ? "Tài liệu / Tệp tin" : msg.content.replace("Đã gửi tệp: ", "").replace(" 📄", "")}
-                                      </p>
-                                      <p className="text-[13px] opacity-60 truncate">Nhấn để tải về</p>
-                                    </div>
+                        {/* Standalone Media Message */}
+                        {msg.imageUrl && (
+                          <div className={`mb-1 overflow-hidden rounded-[22px] cursor-pointer hover:opacity-95 transition-all shadow-md ${msg.senderId === currentUserId ? 'rounded-tr-none' : 'rounded-tl-none'}`}>
+                            <a href={msg.imageUrl} target="_blank" rel="noopener noreferrer">
+                              {msg.imageUrl.toLowerCase().match(/\.(printable|jpg|jpeg|png|gif|webp|heic)$/) ? (
+                                <img src={msg.imageUrl} alt="attachment" className="max-w-full h-auto object-cover" />
+                              ) : (
+                                <div className={`p-4 flex items-center gap-3 min-w-[240px] ${msg.senderId === currentUserId ? 'bg-[#E9DCD6] text-slate-800' : 'bg-[#F0F0F0] text-slate-700'}`}>
+                                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${msg.senderId === currentUserId ? 'bg-white/40' : 'bg-blue-50'}`}>
+                                    <FiPaperclip size={20} className={msg.senderId === currentUserId ? 'text-slate-700' : 'text-blue-500'} />
                                   </div>
-                                )}
-                              </a>
+                                  <div className="flex-1 overflow-hidden">
+                                    <p className="text-[13px] font-bold truncate">
+                                      {msg.content.includes("Đã gửi một tệp") ? "Tài liệu / Tệp tin" : msg.content.replace("Đã gửi tệp: ", "").replace(" 📄", "")}
+                                    </p>
+                                    <p className="text-[11px] opacity-60">Nhấn để tải về</p>
+                                  </div>
+                                </div>
+                              )}
+                            </a>
+                          </div>
+                        )}
+
+                        {/* Text Content (only if not a system media message) */}
+                        {(!msg.imageUrl || (
+                          !msg.content.includes("Đã gửi một hình ảnh") &&
+                          !msg.content.includes("Đã gửi một video") &&
+                          !msg.content.includes("Đã gửi một tệp") &&
+                          !msg.content.includes("Đã gửi tệp:")
+                        )) && (
+                            <div
+                              className={`px-4 py-2.5 rounded-[22px] text-[15px] leading-relaxed shadow-sm ${msg.senderId === currentUserId
+                                ? 'bg-[#E9DCD6] text-slate-800 rounded-tr-none'
+                                : 'bg-[#F0F0F0] text-slate-700 rounded-tl-none'
+                                }`}
+                            >
+                              <div className="break-words">
+                                {msg.content}
+                              </div>
                             </div>
                           )}
-                          <div className="break-words">
-                            {(!msg.imageUrl || (
-                              !msg.content.includes("Đã gửi một hình ảnh") &&
-                              !msg.content.includes("Đã gửi một video") &&
-                              !msg.content.includes("Đã gửi một tệp") &&
-                              !msg.content.includes("Đã gửi tệp:")
-                            )) && msg.content}
-                          </div>
-                        </div>
                       </div>
                     </div>
                   </div>
