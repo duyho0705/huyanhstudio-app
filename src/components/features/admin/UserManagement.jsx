@@ -694,48 +694,48 @@ const UserManagement = () => {
         closable={false}
         className="premium-delete-modal"
       >
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           <div className="space-y-2">
-            <h3 className="text-[24px] font-bold text-slate-900 leading-tight">Xóa người dùng</h3>
-            <p className="text-[15px] text-slate-500 leading-relaxed font-medium">
+            <h3 className="text-[20px] sm:text-[24px] font-bold text-slate-900 leading-tight">Xóa người dùng</h3>
+            <p className="text-[14px] sm:text-[15px] text-slate-500 leading-relaxed font-medium">
               Thao tác này sẽ xóa vĩnh viễn tài khoản người dùng và tất cả dữ liệu liên quan. Hành động này không thể hoàn tác.
             </p>
           </div>
 
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-[15px] font-semibold text-slate-700">
+          <div className="space-y-3 sm:space-y-4">
+            <div className="space-y-1.5 sm:space-y-2">
+              <label className="text-[14px] sm:text-[15px] font-semibold text-slate-700">
                 Nhập tên khách hàng để xác nhận: <span className="text-red-500">"{deletingUser?.customerName}"</span>
               </label>
               <Input
                 value={deleteConfirmText}
                 onChange={(e) => setDeleteConfirmText(e.target.value)}
                 placeholder="Nhập tên chính xác..."
-                className="h-11 rounded-xl border-slate-200 focus:border-red-500 focus:ring-red-100 font-medium text-[14px]"
+                className="h-10 sm:h-11 rounded-xl border-slate-200 focus:border-red-500 focus:ring-red-100 font-medium text-[13px] sm:text-[14px]"
               />
             </div>
 
-            <div className="flex items-start gap-4 p-4 bg-red-50 rounded-xl border border-red-100">
-              <div className="w-6 h-6 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0">
-                <AlertTriangle size={14} strokeWidth={2.5} />
+            <div className="flex items-start gap-3 sm:gap-4 p-3 sm:p-4 bg-red-50 rounded-xl border border-red-100">
+              <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0 mt-0.5">
+                <AlertTriangle size={12} sm:size={14} strokeWidth={2.5} />
               </div>
-              <p className="text-[15px] font-medium text-red-800 leading-relaxed">
-                Cảnh báo: Việc xóa "{deletingUser?.customerName}" sẽ loại bỏ toàn bộ lịch sử giao dịch và tài khoản đăng nhập của người dùng này.
+              <p className="text-[13px] sm:text-[15px] font-medium text-red-800 leading-relaxed">
+                Cảnh báo: Việc xóa "{deletingUser?.customerName}" sẽ loại bỏ toàn bộ lịch sử giao dịch và tài khoản.
               </p>
             </div>
           </div>
 
-          <div className="flex gap-3 pt-2">
+          <div className="flex gap-2 pt-2">
             <button
               onClick={() => setIsDeleteModalOpen(false)}
-              className="flex-1 h-12 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium text-[15px] hover:bg-slate-50 transition-colors"
+              className="flex-1 h-9 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium text-[13px] hover:bg-slate-50 transition-colors"
             >
               Hủy bỏ
             </button>
             <button
               onClick={confirmDelete}
               disabled={deleteConfirmText !== deletingUser?.customerName}
-              className={`flex-[1.5] h-12 rounded-xl font-medium text-[15px] shadow-lg shadow-red-100 transition-all ${deleteConfirmText === deletingUser?.customerName
+              className={`flex-[1.5] h-9 rounded-xl font-medium text-[13px] shadow-lg shadow-red-100 transition-all ${deleteConfirmText === deletingUser?.customerName
                 ? "bg-red-600 text-white hover:bg-red-700"
                 : "bg-slate-100 text-slate-400 cursor-not-allowed border-none shadow-none"
                 }`}

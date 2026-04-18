@@ -201,6 +201,18 @@ body.ant-scrolling-effect {
   }
 }
 
+/* Premium Delete Modal styling */
+.premium-delete-modal .ant-modal-content {
+  border-radius: 28px !important;
+  padding: 40px !important;
+}
+
+@media (max-width: 640px) {
+  .premium-delete-modal .ant-modal-content {
+    padding: 20px !important;
+  }
+}
+
 /* Ant Modal responsive - prevent overflow */
 @media (max-width: 768px) {
   .ant-modal {
@@ -211,7 +223,7 @@ body.ant-scrolling-effect {
     top: 16px !important;
   }
 
-  .ant-modal:not(.premium-detail-modal) .ant-modal-content {
+  .ant-modal:not(.premium-detail-modal):not(.premium-delete-modal) .ant-modal-content {
     border-radius: 20px !important;
     padding: 20px !important;
   }

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Huy Anh Studio</string>
+    <string name="title_activity_main">Huy Anh Studio</string>
+    <string name="package_name">com.ha.hastudio</string>
+    <string name="custom_url_scheme">com.ha.hastudio</string>
+</resources>

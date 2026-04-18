@@ -23,35 +23,33 @@ const ServiceForm = ({
   confirmLoading,
 }) => {
   const [form] = Form.useForm();
-  const values = Form.useWatch([], form);
   const [isChanged, setIsChanged] = useState(false);
 
   useEffect(() => {
-    if (open && initialValues) {
-      form.setFieldsValue({
-        ...initialValues,
-        benefitsList:
-          initialValues.benefitsList ?? initialValues.benefits ?? [],
-        icon: initialValues.icon,
-      });
-      setIsChanged(false);
-    }
-
-    if (open && !initialValues) {
-      form.setFieldsValue({
-        active: true,
-        icon: "Mic",
-        unit: "/ gói",
-        buttonText: "Đăng ký ngay",
-        featured: false,
-        benefitsList: []
-      });
-      setIsChanged(true);
+    if (open) {
+      if (initialValues) {
+        form.setFieldsValue({
+          ...initialValues,
+          benefitsList: initialValues.benefitsList ?? initialValues.benefits ?? [],
+          icon: initialValues.icon,
+        });
+        setIsChanged(false);
+      } else {
+        form.setFieldsValue({
+          active: true,
+          icon: "Mic",
+          unit: "/ gói",
+          buttonText: "Đăng ký ngay",
+          featured: false,
+          benefitsList: []
+        });
+        setIsChanged(true);
+      }
     }
   }, [open, initialValues, form]);
 
-  useEffect(() => {
-    if (!initialValues || !values) {
+  const checkChanges = (changedValues, allValues) => {
+    if (!initialValues) {
       setIsChanged(true);
       return;
     }
@@ -78,11 +76,11 @@ const ServiceForm = ({
     ];
 
     const hasChanges = fields.some(
-      (key) => normalize(values[key]) !== normalize(original[key])
+      (key) => normalize(allValues[key]) !== normalize(original[key])
     );
 
     setIsChanged(hasChanges);
-  }, [values, initialValues]);
+  };
 
   const handleSubmit = async () => {
     try {
@@ -97,14 +95,10 @@ const ServiceForm = ({
     <Modal
       title={
         <div className="flex items-center gap-3 py-2">
-          <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
-            <Briefcase size={20} />
-          </div>
           <div>
             <h3 className="text-[18px] font-semibold text-slate-900 leading-tight">
               {initialValues ? "Cập nhật dịch vụ" : "Tạo dịch vụ mới"}
             </h3>
-            <p className="text-[13px] font-medium text-slate-500 mt-0.5">Quản lý cấu trúc & giá dịch vụ</p>
           </div>
         </div>
       }
@@ -114,32 +108,34 @@ const ServiceForm = ({
       width={900}
       className="!max-w-[95vw]"
       centered
-      footer={[
-        <button
-          key="cancel"
-          onClick={onCancel}
-          className="h-10 px-6 rounded-xl font-medium text-[14px] text-slate-600 border border-slate-200 bg-white mr-3"
-        >
-          Hủy
-        </button>,
-        <button
-          key="submit"
-          onClick={handleSubmit}
-          disabled={confirmLoading || (initialValues && !isChanged)}
-          className={`h-10 px-6 rounded-xl bg-slate-900 border-none font-semibold text-[14px] text-white ${(confirmLoading || (initialValues && !isChanged)) ? "opacity-50 cursor-not-allowed" : ""}`}
-        >
-          {confirmLoading ? "Đang xử lý..." : (initialValues ? "Cập nhật" : "Tạo dịch vụ")}
-        </button>
-      ]}
+      footer={
+        <div className="flex flex-col-reverse sm:flex-row items-center justify-end gap-3 sm:gap-1 p-2">
+          <button
+            key="cancel"
+            onClick={onCancel}
+            className="w-full sm:w-auto h-10 px-8 rounded-xl font-medium text-[14px] text-slate-600 border border-slate-200 bg-white sm:mr-3"
+          >
+            Hủy
+          </button>
+          <button
+            key="submit"
+            onClick={handleSubmit}
+            disabled={confirmLoading || (initialValues && !isChanged)}
+            className={`w-full sm:w-auto h-10 px-8 rounded-xl bg-slate-900 border-none font-semibold text-[14px] text-white ${(confirmLoading || (initialValues && !isChanged)) ? "opacity-50 cursor-not-allowed" : ""} shadow-lg shadow-slate-200 transition-all active:scale-[0.98]`}
+          >
+            {confirmLoading ? "Đang xử lý..." : (initialValues ? "Cập nhật" : "Tạo dịch vụ")}
+          </button>
+        </div>
+      }
     >
-      <Form form={form} layout="vertical" className="pt-6">
+      <Form form={form} layout="vertical" onValuesChange={checkChanges} className="pt-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-10 gap-y-6">
           {/* LEFT COLUMN */}
           <div className="space-y-6">
             <div className="p-5 bg-slate-50 rounded-2xl border border-slate-100 space-y-4">
               <Form.Item
                 name="name"
-                label={<span className="text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><Briefcase size={14} className="text-blue-500" /> Tên dịch vụ</span>}
+                label={<span className="text-[12px] sm:text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><Briefcase size={14} className="text-blue-500" /> Tên dịch vụ</span>}
                 rules={[
                   { required: true, message: "Vui lòng nhập tên dịch vụ!" },
                 ]}
@@ -151,10 +147,10 @@ const ServiceForm = ({
                 />
               </Form.Item>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Form.Item
                   name="price"
-                  label={<span className="text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><DollarSign size={14} className="text-blue-500" /> Giá trị</span>}
+                  label={<span className="text-[12px] sm:text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><DollarSign size={14} className="text-blue-500" /> Giá trị</span>}
                   rules={[{ required: true, message: "Vui lòng nhập giá!" }]}
                   className="!mb-0"
                 >
@@ -169,7 +165,7 @@ const ServiceForm = ({
 
                 <Form.Item
                   name="unit"
-                  label={<span className="text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><Tag size={14} className="text-blue-500" /> Đơn vị</span>}
+                  label={<span className="text-[12px] sm:text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><Tag size={14} className="text-blue-500" /> Đơn vị</span>}
                   initialValue="/ gói"
                   className="!mb-0"
                 >
@@ -183,10 +179,10 @@ const ServiceForm = ({
                 </Form.Item>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 pt-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                 <Form.Item
                   name="icon"
-                  label={<span className="text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2 font-sans italic text-slate-400">Biểu tượng hiển thị</span>}
+                  label={<span className="text-[12px] sm:text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2 font-sans italic text-slate-400">Biểu tượng hiển thị</span>}
                   className="!mb-0"
                 >
                   <Select className="h-10 select-custom-xl rounded-xl" variant="filled" placeholder="Chọn icon">
@@ -201,11 +197,11 @@ const ServiceForm = ({
                 </Form.Item>
 
                 <Form.Item
-                  label={<span className="text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2">Gói nổi bật</span>}
+                  label={<span className="text-[12px] sm:text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2">Gói nổi bật</span>}
                   className="!mb-0"
                 >
                   <div className="h-10 px-4 bg-blue-50/50 border border-blue-100 rounded-xl flex items-center justify-between">
-                    <span className="text-[13px] font-bold text-blue-600 uppercase tracking-wider text-blue-600">Gợi ý chọn</span>
+                    <span className="text-[12px] sm:text-[13px] font-bold text-blue-600 uppercase tracking-wider">Gợi ý chọn</span>
                     <Form.Item name="featured" valuePropName="checked" noStyle>
                       <Switch size="small" />
                     </Form.Item>
@@ -230,12 +226,12 @@ const ServiceForm = ({
             <div className="grid grid-cols-1">
               <Form.Item
                 name="active"
-                label={<span className="text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2 text-slate-400">Trạng thái mở bán</span>}
+                label={<span className="text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2 text-slate-400">Trạng thái</span>}
                 initialValue={true}
               >
                 <Select className="h-10 select-custom-xl rounded-xl" variant="filled">
-                  <Option value={true}><span className="text-[14px] font-medium">Đang kinh doanh</span></Option>
-                  <Option value={false}><span className="text-[14px] font-medium">Tạm khóa/Bảo trì</span></Option>
+                  <Option value={true}><span className="text-[14px] font-medium">Hoạt động</span></Option>
+                  <Option value={false}><span className="text-[14px] font-medium">Ngừng hoạt động</span></Option>
                 </Select>
               </Form.Item>
             </div>
@@ -245,13 +241,13 @@ const ServiceForm = ({
           <div className="space-y-6">
             <Form.Item
               name="description"
-              label={<span className="text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><FileText size={14} className="text-blue-500" /> Mô tả chi tiết</span>}
+              label={<span className="text-[12px] sm:text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><FileText size={14} className="text-blue-500" /> Mô tả chi tiết</span>}
               rules={[{ required: true, message: "Vui lòng nhập mô tả!" }]}
             >
               <TextArea
-                className="p-3 bg-white border border-slate-200 rounded-xl focus:border-blue-500 hover:border-slate-200 font-medium min-h-[120px] text-[14px]"
+                className="p-3 bg-white border border-slate-200 rounded-xl focus:border-blue-500 hover:border-slate-200 font-medium min-h-[100px] sm:min-h-[120px] text-[14px]"
                 rows={4}
-                placeholder="Mô tả tóm tắt về dịch vụ để khách hàng dễ hiểu"
+                placeholder="Mô tả tóm tắt về dịch vụ..."
               />
             </Form.Item>
 

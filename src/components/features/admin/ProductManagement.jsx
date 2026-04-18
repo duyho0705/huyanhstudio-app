@@ -172,7 +172,7 @@ const ProductManagement = () => {
   };
 
   return (
-    <div className="space-y-10 animate-in fade-in duration-500">
+    <div className="space-y-6 sm:space-y-10 animate-in fade-in duration-500">
       {contextHolder}
 
       {/* Stats Section */}
@@ -342,48 +342,48 @@ const ProductManagement = () => {
         closable={false}
         className="premium-delete-modal"
       >
-        <div className="space-y-8">
-          <div className="space-y-3">
-            <h3 className="text-[26px] font-bold text-slate-900 leading-tight">Xóa sản phẩm</h3>
-            <p className="text-[15px] text-slate-500 leading-relaxed font-medium">
+        <div className="space-y-4 sm:space-y-8">
+          <div className="space-y-2 sm:space-y-3">
+            <h3 className="text-[20px] sm:text-[26px] font-bold text-slate-900 leading-tight">Xóa sản phẩm</h3>
+            <p className="text-[14px] sm:text-[15px] text-slate-500 leading-relaxed font-medium">
               Thao tác này sẽ xóa vĩnh viễn sản phẩm và tất cả dữ liệu liên quan. Hành động này không thể hoàn tác.
             </p>
           </div>
 
-          <div className="space-y-6">
-            <div className="space-y-3">
-              <label className="text-[15px] font-semibold text-slate-700">
+          <div className="space-y-4 sm:space-y-6">
+            <div className="space-y-1.5 sm:space-y-3">
+              <label className="text-[14px] sm:text-[15px] font-semibold text-slate-700">
                 Nhập tên sản phẩm để xác nhận: <span className="text-red-500">"{selectedProduct?.title}"</span>
               </label>
               <Input
                 value={deleteConfirmText}
                 onChange={(e) => setDeleteConfirmText(e.target.value)}
                 placeholder="Nhập tên chính xác..."
-                className="h-12 rounded-xl border-slate-200 focus:border-red-500 focus:ring-red-100 font-medium text-[15px]"
+                className="h-10 sm:h-12 rounded-xl border-slate-200 focus:border-red-500 focus:ring-red-100 font-medium text-[13px] sm:text-[15px]"
               />
             </div>
 
-            <div className="flex items-start gap-4 p-5 bg-red-50 rounded-2xl border border-red-100">
-              <div className="w-7 h-7 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0">
-                <AlertTriangle size={16} strokeWidth={2.5} />
+            <div className="flex items-start gap-3 sm:gap-4 p-3 sm:p-5 bg-red-50 rounded-2xl border border-red-100">
+              <div className="w-5 h-5 sm:w-7 sm:h-7 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0">
+                <AlertTriangle size={12} sm:size={16} strokeWidth={2.5} />
               </div>
-              <p className="text-[15px] font-medium text-red-800 leading-relaxed">
-                Cảnh báo: Việc xóa "{selectedProduct?.title}" sẽ loại bỏ hoàn toàn file media và các thông tin liên quan khỏi thư viện.
+              <p className="text-[13px] sm:text-[15px] font-medium text-red-800 leading-relaxed">
+                Cảnh báo: Việc xóa "{selectedProduct?.title}" sẽ loại bỏ hoàn toàn file media và các thông tin liên quan.
               </p>
             </div>
           </div>
 
-          <div className="flex gap-4 pt-2">
+          <div className="flex gap-2 pt-2">
             <button
               onClick={() => setIsDeleteModalOpen(false)}
-              className="flex-1 h-13 py-3 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium text-[15px] hover:bg-slate-50 transition-colors"
+              className="flex-1 h-9 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium text-[13px] hover:bg-slate-50 transition-colors"
             >
               Hủy bỏ
             </button>
             <button
               onClick={confirmDelete}
               disabled={deleteConfirmText !== selectedProduct?.title}
-              className={`flex-[1.5] h-13 py-3 rounded-xl font-medium text-[15px] shadow-lg shadow-red-100 transition-all ${deleteConfirmText === selectedProduct?.title
+              className={`flex-[1.5] h-9 rounded-xl font-medium text-[13px] shadow-lg shadow-red-100 transition-all ${deleteConfirmText === selectedProduct?.title
                 ? "bg-red-600 text-white hover:bg-red-700"
                 : "bg-slate-100 text-slate-400 cursor-not-allowed border-none shadow-none"
                 }`}

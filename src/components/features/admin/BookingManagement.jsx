@@ -498,7 +498,7 @@ const BookingManagement = () => {
 
   return (
     <>
-      <div className="space-y-8 animate-in transition-all duration-500">
+      <div className="space-y-4 sm:space-y-8 animate-in transition-all duration-500">
         {messageContext}
 
       {/* Stats Section */}
@@ -727,32 +727,32 @@ const BookingManagement = () => {
         closable={false}
         className="premium-delete-modal"
       >
-        <div className={isMobile ? "space-y-4" : "space-y-6"}>
-          <div className="space-y-1">
-            <h3 className={`${isMobile ? "text-[18px]" : "text-[24px]"} font-bold text-slate-900 leading-tight`}>Xóa lịch thu âm</h3>
-            <p className={`${isMobile ? "text-[13px]" : "text-[15px]"} text-slate-500 leading-relaxed font-medium`}>
+        <div className="space-y-4 sm:space-y-6">
+          <div className="space-y-2">
+            <h3 className="text-[18px] sm:text-[24px] font-bold text-slate-900 leading-tight">Xóa lịch thu âm</h3>
+            <p className="text-[13px] sm:text-[15px] text-slate-500 leading-relaxed font-medium">
               Thao tác này sẽ xóa vĩnh viễn đơn đặt. Hành động này không thể hoàn tác.
             </p>
           </div>
 
-          <div className={isMobile ? "space-y-3" : "space-y-4"}>
+          <div className="space-y-3 sm:space-y-4">
             <div className="space-y-2">
-              <label className={`${isMobile ? "text-[13px]" : "text-[15px]"} font-medium text-slate-700`}>
+              <label className="text-[13px] sm:text-[15px] font-medium text-slate-700">
                 Mã xác nhận: <span className="text-red-500">"{selectedBooking?.bookingCode}"</span>
               </label>
               <Input
                 value={deleteConfirmText}
                 onChange={(e) => setDeleteConfirmText(e.target.value)}
                 placeholder="Nhập mã đơn..."
-                className={`${isMobile ? "h-9 text-[13px]" : "h-11 text-[14px]"} rounded-xl border-slate-200 focus:border-red-500 focus:ring-red-100 font-medium`}
+                className="h-9 sm:h-11 rounded-xl border-slate-200 focus:border-red-500 focus:ring-red-100 font-medium text-[13px] sm:text-[14px]"
               />
             </div>
 
-            <div className={`flex items-start gap-3 ${isMobile ? "p-3" : "p-4"} bg-red-50 rounded-xl border border-red-100`}>
+            <div className="flex items-start gap-3 p-3 sm:p-4 bg-red-50 rounded-xl border border-red-100">
               <div className="w-5 h-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0 mt-0.5">
                 <AlertTriangle size={12} strokeWidth={2.5} />
               </div>
-              <p className={`${isMobile ? "text-[12px]" : "text-[15px]"} font-medium text-red-800 leading-relaxed`}>
+              <p className="text-[12px] sm:text-[15px] font-medium text-red-800 leading-relaxed">
                 Cảnh báo: Việc xóa sẽ loại bỏ lịch trình và doanh thu.
               </p>
             </div>
@@ -761,14 +761,14 @@ const BookingManagement = () => {
           <div className="flex gap-2 pt-1">
             <button
               onClick={() => setIsDeleteModalOpen(false)}
-              className={`flex-1 ${isMobile ? "h-10 text-[13px]" : "h-12 text-[15px]"} rounded-xl border border-slate-200 bg-white text-slate-700 font-medium hover:bg-slate-50 transition-colors`}
+              className="flex-1 h-9 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium text-[13px] hover:bg-slate-50 transition-colors"
             >
               Hủy
             </button>
             <button
               onClick={confirmDelete}
               disabled={deleteConfirmText !== selectedBooking?.bookingCode}
-              className={`flex-[1.5] ${isMobile ? "h-10 text-[13px]" : "h-12 text-[15px]"} rounded-xl font-medium shadow-lg shadow-red-100 transition-all ${deleteConfirmText === selectedBooking?.bookingCode
+              className={`flex-[1.5] h-9 rounded-xl font-medium text-[13px] shadow-lg shadow-red-100 transition-all ${deleteConfirmText === selectedBooking?.bookingCode
                 ? "bg-red-600 text-white hover:bg-red-700"
                 : "bg-slate-100 text-slate-400 cursor-not-allowed border-none shadow-none"
                 }`}

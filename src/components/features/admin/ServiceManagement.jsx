@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { message, Table, Button, Tag, Switch, Tooltip, Modal, Input } from "antd";
 import {
   Plus,
@@ -168,7 +168,7 @@ const ServiceManagement = () => {
     }
   };
 
-  const columns = [
+  const columns = useMemo(() => [
     {
       title: <span className="text-[13px] font-semibold text-slate-600">Tên dịch vụ</span>,
       dataIndex: "name",
@@ -250,33 +250,33 @@ const ServiceManagement = () => {
     {
       title: <span className="text-[13px] font-semibold text-slate-600">Thao tác</span>,
       key: "actions",
-      width: 140,
-      align: "center",
+      fixed: "right",
+      width: 120,
       render: (_, record) => (
-        <div className="flex items-center justify-center gap-2">
-          <Button
-            type="text"
-            onClick={() => handleEdit(record)}
-            className="w-9 h-9 rounded-xl flex items-center justify-center text-amber-500 p-0"
-            title="Chỉnh sửa"
-          >
-            <Edit size={18} strokeWidth={2.5} />
-          </Button>
-          <Button
-            type="text"
-            onClick={() => handleDelete(record)}
-            className="w-9 h-9 rounded-xl flex items-center justify-center text-red-500 p-0"
-            title="Gỡ bỏ"
-          >
-            <Trash2 size={18} strokeWidth={2.5} />
-          </Button>
+        <div className="flex items-center gap-2">
+          <Tooltip title="Chỉnh sửa">
+            <button
+              onClick={() => handleEdit(record)}
+              className="w-10 h-10 rounded-xl bg-slate-50 text-slate-400 hover:bg-blue-50 hover:text-blue-600 flex items-center justify-center transition-all border border-slate-100"
+            >
+              <Edit size={16} />
+            </button>
+          </Tooltip>
+          <Tooltip title="Xóa dịch vụ">
+            <button
+              onClick={() => handleDelete(record)}
+              className="w-10 h-10 rounded-xl bg-slate-50 text-slate-400 hover:bg-red-50 hover:text-red-500 flex items-center justify-center transition-all border border-slate-100"
+            >
+              <Trash2 size={16} />
+            </button>
+          </Tooltip>
         </div>
       ),
     },
-  ];
+  ], [services, pagination.total, handleEdit, handleDelete, handleStatusToggle]);
 
   return (
-    <div className="space-y-10 animate-in fade-in duration-500">
+    <div className="space-y-6 sm:space-y-10 animate-in fade-in duration-200">
       {contextHolder}
 
       {/* Stats Summary Panel */}
@@ -284,14 +284,14 @@ const ServiceManagement = () => {
         {[
           { icon: <Gem className="w-5 h-5 sm:w-6 sm:h-6" />, label: "Cao cấp", value: services.filter(s => (s.price || 0) > 10000000).length, config: "bg-amber-50 text-amber-600 border-amber-100" },
           { icon: <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6" />, label: "Đang bán", value: services.filter(s => s.active).length, config: "bg-indigo-50 text-indigo-600 border-indigo-100" },
-          { icon: <Briefcase className="w-5 h-5 sm:w-6 sm:h-6" />, label: "Tổng dịch vụ", value: pagination.total, config: "bg-slate-50 text-slate-600 border-slate-100" }
+          { icon: <Briefcase className="w-5 h-5 sm:w-6 sm:h-6" />, label: "Tổng số", value: pagination.total, config: "bg-slate-50 text-slate-600 border-slate-100" }
         ].map((item, i) => (
           <div key={i} className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200/60 shadow-sm flex items-center gap-4 sm:gap-5 group">
             <div className={`w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-[20px] ${item.config} border-2 flex items-center justify-center shrink-0 shadow-sm`}>
               {item.icon}
             </div>
             <div>
-              <p className="text-sm sm:text-base font-semibold text-slate-500">{item.label}</p>
+              <p className="text-sm sm:text-base font-bold text-slate-500">{item.label}</p>
               <h4 className="text-xl sm:text-[28px] font-black text-slate-900 tracking-tight leading-none mt-1">{item.value}</h4>
             </div>
           </div>
@@ -345,38 +345,40 @@ const ServiceManagement = () => {
                 ))}
               </div>
             ) : (Array.isArray(services) && services.length > 0) ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 sm:p-6">
+              <div className="md:hidden grid grid-cols-2 gap-2.5 p-2.5">
                 {services.map((svc) => {
                   const IconComponent = { Mic, Music, Star, Camera, Video, Zap, Heart }[svc.icon] || Briefcase;
                   return (
-                    <div key={svc.id} className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${svc.featured ? "bg-amber-100 text-amber-600" : "bg-blue-50 text-blue-600"}`}>
-                          <IconComponent size={18} />
+                    <div key={svc.id} className="bg-white p-3 rounded-2xl border border-slate-200 shadow-sm flex flex-col h-full hover:border-blue-200 transition-all">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${svc.featured ? "bg-amber-100 text-amber-600" : "bg-blue-50 text-blue-600"}`}>
+                          <IconComponent size={14} />
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="text-[14px] font-semibold text-slate-900 truncate flex items-center gap-1.5">
+                        <div className="min-w-0 flex-1">
+                          <h4 className="text-[12px] font-bold text-slate-900 truncate flex items-center gap-1">
                             {svc.name}
-                            {svc.featured && <Star size={12} fill="currentColor" className="text-amber-500 shrink-0" />}
+                            {svc.featured && <Star size={10} fill="currentColor" className="text-amber-500 shrink-0" />}
                           </h4>
-                          <p className="text-[11px] font-bold text-slate-400 mt-0.5">{svc.buttonText || "Đăng ký ngay"}</p>
                         </div>
                       </div>
-                      <div className="flex items-center justify-between py-2 border-y border-slate-50">
-                        <div className="flex items-baseline gap-1.5">
-                          <span className="text-slate-900 font-bold text-[15px]">{svc.price?.toLocaleString("vi-VN")}</span>
-                          <span className="text-slate-400 font-medium text-[12px]">{svc.unit}</span>
+
+                      <div className="flex-1 space-y-2">
+                        <div className="flex flex-wrap items-baseline gap-1">
+                          <span className="text-slate-900 font-bold text-[14px]">{svc.price?.toLocaleString("vi-VN")}</span>
+                          <span className="text-slate-600 font-medium text-[12px]">{svc.unit}</span>
                         </div>
-                        <div className="flex items-center gap-2">
+
+                        <div className="flex items-center justify-between py-1.5 border-y border-slate-50">
                           <Switch checked={svc.active} onChange={(checked) => handleStatusToggle(svc.id, checked)} size="small" />
-                          <span className={`px-2 py-0.5 rounded-full text-[11px] font-semibold text-white ${svc.active ? "bg-green-500" : "bg-red-500"}`}>
+                          <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-bold text-white ${svc.active ? "bg-green-500" : "bg-red-500"}`}>
                             {svc.active ? "Mở" : "Khóa"}
                           </span>
                         </div>
                       </div>
-                      <div className="flex items-center justify-end gap-2">
-                        <Button type="text" onClick={() => handleEdit(svc)} className="w-9 h-9 rounded-xl flex items-center justify-center text-amber-500 p-0"><Edit size={18} strokeWidth={2.5} /></Button>
-                        <Button type="text" onClick={() => handleDelete(svc)} className="w-9 h-9 rounded-xl flex items-center justify-center text-red-500 p-0"><Trash2 size={18} strokeWidth={2.5} /></Button>
+
+                      <div className="flex items-center justify-end gap-1 mt-2.5 pt-1">
+                        <Button type="text" onClick={() => handleEdit(svc)} className="w-7 h-7 rounded-lg flex items-center justify-center text-amber-500 p-0 hover:bg-amber-50"><Edit size={14} /></Button>
+                        <Button type="text" onClick={() => handleDelete(svc)} className="w-7 h-7 rounded-lg flex items-center justify-center text-red-500 p-0 hover:bg-red-50"><Trash2 size={14} /></Button>
                       </div>
                     </div>
                   );
@@ -391,20 +393,20 @@ const ServiceManagement = () => {
           </div>
 
           {pagination.total > 0 && (
-            <div className="p-6 bg-slate-50/30 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-6">
-              <div className="px-3 py-1 bg-white border border-slate-100 rounded-xl text-[13px] font-medium text-slate-500 shadow-sm">Hiển thị
-                <span> {pagination.current} / {Math.ceil(pagination.total / (pagination.pageSize || 10))}</span>
+            <div className="p-4 sm:p-6 bg-slate-50/30 border-t border-slate-100 flex flex-row items-center justify-between gap-4">
+              <div className="px-2.5 py-1 sm:px-3 sm:py-1 bg-white border border-slate-100 rounded-xl text-[12px] sm:text-[13px] font-medium text-slate-500 shadow-sm">
+                Hiển thị <span className="font-bold text-slate-700">{pagination.current} / {Math.ceil(pagination.total / (pagination.pageSize || 10))}</span>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 sm:gap-2">
                 <Button
-                  className="h-9 w-9 flex items-center justify-center rounded-lg bg-white border-slate-200 text-slate-500 shadow-sm hover:border-blue-400 hover:text-blue-600 transition-all p-0"
+                  className="h-8 w-8 sm:h-9 sm:w-9 flex items-center justify-center rounded-lg bg-white border-slate-200 text-slate-500 shadow-sm hover:border-blue-400 hover:text-blue-600 transition-all p-0"
                   disabled={pagination.current === 1}
                   onClick={() => handleTableChange({ current: pagination.current - 1, pageSize: pagination.pageSize })}
                   icon={<ChevronLeft size={16} />}
                 />
                 <Button
-                  className="h-9 w-9 flex items-center justify-center rounded-lg bg-white border-slate-200 text-slate-500 shadow-sm hover:border-blue-400 hover:text-blue-600 transition-all p-0"
+                  className="h-8 w-8 sm:h-9 sm:w-9 flex items-center justify-center rounded-lg bg-white border-slate-200 text-slate-500 shadow-sm hover:border-blue-400 hover:text-blue-600 transition-all p-0"
                   disabled={pagination.current >= Math.ceil(pagination.total / (pagination.pageSize || 10))}
                   onClick={() => handleTableChange({ current: pagination.current + 1, pageSize: pagination.pageSize })}
                   icon={<ChevronRight size={16} />}
@@ -424,52 +426,51 @@ const ServiceManagement = () => {
         closable={false}
         className="premium-delete-modal"
       >
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           <div className="space-y-2">
-            <h3 className="text-[24px] font-bold text-slate-900 leading-tight">Xóa dịch vụ</h3>
-            <p className="text-[15px] text-slate-500 leading-relaxed font-medium">
+            <h3 className="text-[20px] sm:text-[24px] font-bold text-slate-900 leading-tight">Xóa dịch vụ</h3>
+            <p className="text-[14px] sm:text-[15px] text-slate-500 leading-relaxed font-medium">
               Thao tác này sẽ xóa vĩnh viễn dịch vụ và tất cả dữ liệu liên quan. Hành động này không thể hoàn tác.
             </p>
           </div>
 
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-[15px] font-semibold text-slate-700">
+          <div className="space-y-3 sm:space-y-4">
+            <div className="space-y-1.5 sm:space-y-2">
+              <label className="text-[14px] sm:text-[15px] font-semibold text-slate-700">
                 Nhập tên dịch vụ để xác nhận: <span className="text-red-500">"{deletingService?.name}"</span>
               </label>
               <Input
                 value={deleteConfirmText}
                 onChange={(e) => setDeleteConfirmText(e.target.value)}
                 placeholder="Nhập tên chính xác..."
-                className="h-11 rounded-xl border-slate-200 focus:border-red-500 focus:ring-red-100 font-medium text-[14px]"
+                className="h-10 sm:h-11 rounded-xl border-slate-200 focus:border-red-500 focus:ring-red-100 font-medium text-[13px] sm:text-[14px]"
               />
             </div>
 
-            <div className="flex items-start gap-4 p-4 bg-red-50 rounded-xl border border-red-100">
-              <div className="w-6 h-6 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0">
-                <AlertTriangle size={14} strokeWidth={2.5} />
+            <div className="flex items-start gap-3 sm:gap-4 p-3 sm:p-4 bg-red-50 rounded-xl border border-red-100">
+              <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0">
+                <AlertTriangle size={12} sm:size={14} strokeWidth={2.5} />
               </div>
-              <p className="text-[15px] font-medium text-red-800 leading-relaxed">
-                Cảnh báo: Việc xóa "{deletingService?.name}" sẽ ảnh hưởng đến các dữ liệu booking trong lịch sử.
+              <p className="text-[13px] sm:text-[15px] font-medium text-red-800 leading-relaxed">
+                Cảnh báo: Việc xóa "{deletingService?.name}" sẽ ảnh hưởng đến lịch sử booking.
               </p>
             </div>
           </div>
 
-          <div className="flex gap-3 pt-2">
+          <div className="flex gap-2 pt-2">
             <button
               onClick={() => setIsDeleteModalOpen(false)}
-              className="flex-1 h-12 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium text-[15px] hover:bg-slate-50 transition-colors"
+              className="flex-1 h-9 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium text-[13px] hover:bg-slate-50 transition-colors"
             >
               Hủy bỏ
             </button>
             <button
               onClick={confirmDelete}
               disabled={deleteConfirmText !== deletingService?.name}
-              className={`flex-[1.5] h-12 rounded-xl font-medium text-[15px] shadow-lg shadow-red-100 transition-all ${
-                deleteConfirmText === deletingService?.name
-                  ? "bg-red-600 text-white hover:bg-red-700"
-                  : "bg-slate-100 text-slate-400 cursor-not-allowed border-none shadow-none"
-              }`}
+              className={`flex-[1.5] h-9 rounded-xl font-medium text-[13px] shadow-lg shadow-red-100 transition-all ${deleteConfirmText === deletingService?.name
+                ? "bg-red-600 text-white hover:bg-red-700"
+                : "bg-slate-100 text-slate-400 cursor-not-allowed border-none shadow-none"
+                }`}
             >
               Xác nhận xóa
             </button>

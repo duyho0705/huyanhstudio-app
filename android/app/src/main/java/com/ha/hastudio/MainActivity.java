@@ -1,0 +1,5 @@
+package com.ha.hastudio;
+
+import com.getcapacitor.BridgeActivity;
+
+public class MainActivity extends BridgeActivity {}
