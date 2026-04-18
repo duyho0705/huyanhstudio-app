@@ -355,7 +355,7 @@ const ServiceManagement = () => {
 
                       <div className="flex-1 space-y-2">
                         <div className="flex flex-wrap items-baseline gap-1">
-                          <span className="text-slate-900 font-bold text-[14px]">{svc.price?.toLocaleString("vi-VN")} đ</span>
+                          <span className="text-slate-900 font-bold text-[14px] center">{svc.price?.toLocaleString("vi-VN")}</span>
                         </div>
 
                         <div className="flex items-center justify-between py-1.5 border-y border-slate-50">

@@ -26,7 +26,7 @@ const Services = () => {
         } else if (Array.isArray(data)) {
           list = data;
         }
-        
+
         // Filter active services
         setServices(list.filter(s => s.active !== false));
       } catch (error) {
@@ -51,7 +51,7 @@ const Services = () => {
   const getIcon = (iconName) => iconMap[iconName] || <FiBriefcase />;
 
   const formatPrice = (price) => {
-    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+    return new Intl.NumberFormat('vi-VN').format(price);
   };
 
   if (loading && services.length === 0) {
@@ -101,13 +101,9 @@ const Services = () => {
                 </div>
               )}
 
-              <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-[16px] sm:rounded-[24px] flex items-center justify-center text-2xl sm:text-3xl mb-4 sm:mb-8 ${service.featured ? 'bg-[#35104C] text-white shadow-xl' : 'bg-[#6CD1FD]/10 text-[#6CD1FD]'
-                }`}>
-                {getIcon(service.icon)}
-              </div>
 
               <h3 className="text-lg sm:text-2xl font-bold text-[#35104C] mb-2 sm:mb-3">{service.name}</h3>
-              <p className="text-gray-400 text-xs sm:text-sm font-medium mb-4 sm:mb-8 leading-relaxed">
+              <p className="text-slate-600 text-[13px] sm:text-[15px] font-medium mb-4 sm:mb-8 leading-relaxed">
                 {service.description}
               </p>
 
@@ -135,7 +131,7 @@ const Services = () => {
                 ? 'bg-[#35104C] text-white hover:bg-[#4a1c6a]'
                 : 'bg-gray-50 text-[#35104C] hover:bg-gray-100 border border-gray-200'
                 }`}>
-                {service.buttonText || (service.featured ? 'Bắt đầu ngay' : 'Đăng ký')}
+                {service.buttonText || "Chọn gói"}
               </button>
             </motion.div>
           ))

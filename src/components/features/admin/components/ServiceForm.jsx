@@ -37,7 +37,7 @@ const ServiceForm = ({
       } else {
         form.setFieldsValue({
           active: true,
-          buttonText: "Đăng ký ngay",
+          buttonText: "Chọn gói",
           featured: false,
           benefitsList: []
         });
