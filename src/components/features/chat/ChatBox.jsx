@@ -284,7 +284,7 @@ const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
                   <input
                     type="text"
                     placeholder="Nhập nội dung..."
-                    className="w-full pl-3 pr-10 py-2 bg-transparent border-none text-[14px] focus:ring-0 outline-none placeholder:text-slate-500 text-slate-800"
+                    className="w-full pl-3 pr-10 py-2.5 bg-transparent border-none text-[16px] focus:ring-0 outline-none placeholder:text-slate-500 text-slate-800"
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     disabled={uploading}

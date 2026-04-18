@@ -619,7 +619,7 @@ const ChatManagement = () => {
                                         <input
                                             type="text"
                                             placeholder={uploadingImage ? "Đang tải ảnh lên..." : "Để lại lời nhắn..."}
-                                            className="w-full pl-3 pr-10 py-2.5 sm:py-3 bg-transparent border-none text-[14px] sm:text-[15px] focus:ring-0 outline-none placeholder:text-slate-500 text-slate-800"
+                                            className="w-full pl-3 pr-10 py-2.5 sm:py-3 bg-transparent border-none text-[16px] focus:ring-0 outline-none placeholder:text-slate-500 text-slate-800"
                                             value={inputValue}
                                             onChange={(e) => setInputValue(e.target.value)}
                                             disabled={uploadingImage}
@@ -769,7 +769,7 @@ const ChatManagement = () => {
                                 <div className="flex gap-3">
                                     <textarea
                                         placeholder="Nhập nội dung tin mẫu mới..."
-                                        className="flex-1 bg-white border border-slate-200 rounded-2xl px-4 py-3 text-[14px] focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none resize-none transition-all shadow-sm"
+                                        className="flex-1 bg-white border border-slate-200 rounded-2xl px-4 py-3 text-[16px] focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none resize-none transition-all shadow-sm"
                                         rows="2"
                                         value={newTemplate}
                                         onChange={(e) => setNewTemplate(e.target.value)}
