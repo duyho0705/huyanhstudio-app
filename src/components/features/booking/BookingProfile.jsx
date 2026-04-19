@@ -8,11 +8,13 @@ import Modal from "../../layout/Modal";
 const BookingProfile = () => {
   const { user, loading } = useContext(AuthContext);
   const [bookings, setBookings] = useState([]);
+  const [isFetching, setIsFetching] = useState(true);
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
 
   const fetchData = async (pageNum) => {
+    setIsFetching(true);
     try {
       const res = await bookingApi.getBookingCustomer(pageNum, 10).catch(err => {
         console.error("Booking Profile API Error:", err);
@@ -37,6 +39,8 @@ const BookingProfile = () => {
     } catch (err) {
       console.error("Error fetching bookings:", err);
       setBookings([]);
+    } finally {
+      setIsFetching(false);
     }
   };
 
@@ -59,7 +63,7 @@ const BookingProfile = () => {
 
   const shortCode = (code) => code?.slice(-6);
 
-  if (loading) return <p className="text-center text-gray-400 py-8">Đang tải...</p>;
+  if (loading) return <p className="text-center text-gray-400 py-8">Đang tải hồ sơ...</p>;
 
   return (
     <div>
@@ -76,7 +80,11 @@ const BookingProfile = () => {
             </tr>
           </thead>
           <tbody>
-            {bookings.length > 0 ? (
+            {isFetching ? (
+              <tr>
+                <td colSpan="6" className="py-12 text-center text-gray-400">Đang tải lịch sử đặt lịch...</td>
+              </tr>
+            ) : bookings.length > 0 ? (
               bookings.map((b) => (
                 <tr key={b.bookingCode} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                   <td className="py-3 px-4 font-mono text-xs text-gray-500">{shortCode(b.bookingCode)}</td>
