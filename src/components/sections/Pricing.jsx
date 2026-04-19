@@ -1,9 +1,9 @@
 import { FaCheck } from "react-icons/fa";
 
 const plans = [
-  { name: "Recording", price: "299k/giờ", features: ["Phòng thu tiêu chuẩn", "Kỹ sư hỗ trợ", "Giao file raw"], value: "recording" },
-  { name: "Mixing Mastering", price: "499k/giờ", features: ["Thiết bị cao cấp", "Mix cơ bản", "Không giới hạn take"], value: "mixing", popular: true },
-  { name: "Phối Beat", price: "799k/bài", features: ["Master sáng rõ", "Chuẩn streaming", "2 lần revise"], value: "beat" },
+  { name: "Recording", price: "299.000", features: ["Phòng thu tiêu chuẩn", "Kỹ sư hỗ trợ", "Giao file raw"], value: "recording" },
+  { name: "Mixing Mastering", price: "499.000", features: ["Thiết thiết bị cao cấp", "Mix cơ bản", "Không giới hạn take"], value: "mixing", popular: true },
+  { name: "Phối Beat", price: "799.000", features: ["Master sáng rõ", "Chuẩn streaming", "2 lần revise"], value: "beat" },
 ];
 
 const Pricing = ({ onSelectService }) => {
