@@ -63,13 +63,6 @@ axiosClient.interceptors.response.use(
       !originalRequest.url.includes("/auth/refresh")
     ) {
       originalRequest._retry = true;
-      const refreshToken = localStorage.getItem("refreshToken");
-      if (!refreshToken) {
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        window.location.href = "/";
-        return Promise.reject(error);
-      }
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           subscribeTokenRefresh((token) => {
@@ -95,7 +88,6 @@ axiosClient.interceptors.response.use(
         return axiosClient(originalRequest);
       } catch (err) {
         localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
         onRefreshed(null);
         window.location.href = "/";
         return Promise.reject(err);
