@@ -395,24 +395,38 @@ const UserManagement = () => {
 
       {/* 1. Stats Section - Clean modern layout */}
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
-        {[
-          { icon: <Users size={22} />, label: "Tổng số", value: pagination.total, config: "text-indigo-600 bg-indigo-50" },
-          { icon: <UserCheck size={22} />, label: "Hoạt động", value: stats.active, config: "text-emerald-600 bg-emerald-50" },
-          { icon: <UserX size={22} />, label: "Đã khóa", value: stats.inactive, config: "text-rose-600 bg-rose-50" },
-          { icon: <ShieldCheck size={22} />, label: "Quản trị viên", value: stats.admin, config: "text-amber-600 bg-amber-50" }
-        ].map((item, i) => (
-          <div key={i} className="bg-white p-4 sm:p-5 rounded-[22px] sm:rounded-[24px] border border-slate-200 shadow-sm hover:shadow-md transition-all group relative overflow-hidden">
-            <div className="flex items-center justify-between relative z-10 w-full">
-              <div className="flex flex-col min-w-0">
-                <p className="text-[12px] sm:text-[14px] font-medium text-slate-500 mb-0.5 truncate">{item.label}</p>
-                <h3 className="text-xl sm:text-2xl font-black text-slate-900 m-0 leading-none">{item.value}</h3>
-              </div>
-              <div className={`w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-xl sm:rounded-2xl ${item.config} flex items-center justify-center transition-transform group-hover:scale-110 duration-500 relative z-10`}>
-                {item.icon}
+        {loading ? (
+          [1, 2, 3, 4].map((i) => (
+            <div key={i} className="bg-white p-4 sm:p-5 rounded-[22px] sm:rounded-[24px] border border-slate-200 shadow-sm animate-pulse">
+              <div className="flex items-center justify-between w-full">
+                <div className="flex flex-col space-y-2">
+                  <div className="h-4 w-16 bg-slate-100 rounded"></div>
+                  <div className="h-6 w-12 bg-slate-200 rounded"></div>
+                </div>
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-slate-100"></div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          [
+            { icon: <Users size={22} />, label: "Tổng số", value: pagination.total, config: "text-indigo-600 bg-indigo-50" },
+            { icon: <UserCheck size={22} />, label: "Hoạt động", value: stats.active, config: "text-emerald-600 bg-emerald-50" },
+            { icon: <UserX size={22} />, label: "Đã khóa", value: stats.inactive, config: "text-rose-600 bg-rose-50" },
+            { icon: <ShieldCheck size={22} />, label: "Quản trị viên", value: stats.admin, config: "text-amber-600 bg-amber-50" }
+          ].map((item, i) => (
+            <div key={i} className="bg-white p-4 sm:p-5 rounded-[22px] sm:rounded-[24px] border border-slate-200 shadow-sm hover:shadow-md transition-all group relative overflow-hidden">
+              <div className="flex items-center justify-between relative z-10 w-full">
+                <div className="flex flex-col min-w-0">
+                  <p className="text-[12px] sm:text-[14px] font-medium text-slate-500 mb-0.5 truncate">{item.label}</p>
+                  <h3 className="text-xl sm:text-2xl font-black text-slate-900 m-0 leading-none">{item.value}</h3>
+                </div>
+                <div className={`w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-xl sm:rounded-2xl ${item.config} flex items-center justify-center transition-transform group-hover:scale-110 duration-500 relative z-10`}>
+                  {item.icon}
+                </div>
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
       {/* 2. Main Data Section */}

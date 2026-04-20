@@ -104,10 +104,58 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-8 h-8 border-2 border-slate-200 border-t-slate-600 rounded-full animate-spin"></div>
-          <p className="text-sm text-slate-400">Đang tải...</p>
+      <div className="space-y-6 animate-pulse">
+        {/* Welcome header skeleton */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div className="space-y-2">
+            <div className="h-6 w-48 bg-slate-200 rounded-lg"></div>
+            <div className="h-4 w-32 bg-slate-100 rounded-lg"></div>
+          </div>
+          <div className="flex gap-2 overflow-x-auto pb-2 sm:pb-0">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="h-10 w-24 bg-slate-200 rounded-xl flex-shrink-0"></div>
+            ))}
+          </div>
+        </div>
+
+        {/* Stats Cards skeleton */}
+        <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="p-4 sm:p-6 rounded-[24px] bg-white border border-slate-100 h-32 sm:h-40">
+              <div className="flex justify-between mb-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-slate-100"></div>
+                <div className="w-4 h-4 bg-slate-50 rounded hidden sm:block"></div>
+              </div>
+              <div className="space-y-2">
+                <div className="h-8 w-16 bg-slate-200 rounded-lg"></div>
+                <div className="h-4 w-24 bg-slate-100 rounded-lg"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Charts row skeleton */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+          <div className="bg-white p-6 sm:p-8 rounded-[32px] border border-slate-100 h-[350px] sm:h-[450px]">
+            <div className="h-6 w-40 bg-slate-100 rounded-lg mb-8"></div>
+            <div className="w-full h-full bg-slate-50 rounded-2xl"></div>
+          </div>
+          <div className="bg-white p-6 sm:p-8 rounded-[32px] border border-slate-100 h-[350px] sm:h-[450px]">
+            <div className="h-6 w-40 bg-slate-100 rounded-lg mb-8"></div>
+            <div className="w-full h-full bg-slate-50 rounded-2xl"></div>
+          </div>
+        </div>
+
+        {/* Recent Bookings skeleton */}
+        <div className="bg-white rounded-[32px] border border-slate-100 h-80">
+          <div className="p-6 border-b border-slate-50">
+            <div className="h-6 w-48 bg-slate-100 rounded-lg"></div>
+          </div>
+          <div className="p-6 space-y-4">
+             {[1, 2, 3].map(i => (
+               <div key={i} className="h-12 w-full bg-slate-50 rounded-xl"></div>
+             ))}
+          </div>
         </div>
       </div>
     );

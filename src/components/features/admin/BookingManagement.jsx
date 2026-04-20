@@ -188,11 +188,21 @@ const BookingManagement = () => {
         ]);
 
         const getList = (res) => {
-          if (!res) return [];
-          if (Array.isArray(res)) return res;
-          if (res.list && Array.isArray(res.list)) return res.list;
-          if (res.content && Array.isArray(res.content)) return res.content;
-          if (res.data && Array.isArray(res.data)) return res.data;
+          // 1. Lấy dữ liệu từ Axios Response
+          const apiRes = res?.data || res;
+          if (!apiRes) return [];
+          
+          // 2. Chui vào trong ApiResponse.data nếu có
+          const mainData = apiRes.data !== undefined ? apiRes.data : apiRes;
+          
+          // 3. Nếu là mảng thì trả về luôn
+          if (Array.isArray(mainData)) return mainData;
+          
+          // 4. Nếu là PageResponse (có content hoặc list)
+          if (mainData?.content && Array.isArray(mainData.content)) return mainData.content;
+          if (mainData?.list && Array.isArray(mainData.list)) return mainData.list;
+          
+          // 5. Fallback cuối cùng
           return [];
         };
 
@@ -503,42 +513,56 @@ const BookingManagement = () => {
 
       {/* Stats Section */}
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-6">
-        {[
-          {
-            icon: <ShoppingBag className="w-5 h-5 text-indigo-600" strokeWidth={2} />,
-            label: "Tổng đơn",
-            value: globalStats.totalBookings,
-            config: "bg-indigo-50 border border-indigo-100"
-          },
-          {
-            icon: <Timer className="w-5 h-5 text-amber-600" strokeWidth={2} />,
-            label: "Sắp tới",
-            value: (globalStats.pendingBookings || 0) + (globalStats.confirmedBookings || 0),
-            config: "bg-amber-50 border border-amber-100"
-          },
-          {
-            icon: <CheckCircle2 className="w-5 h-5 text-emerald-600" strokeWidth={2} />,
-            label: "Xong",
-            value: globalStats.completedBookings,
-            config: "bg-emerald-50 border border-emerald-100"
-          },
-          {
-            icon: <XCircle className="w-5 h-5 text-rose-500" strokeWidth={2} />,
-            label: "Đã hủy",
-            value: globalStats.cancelledBookings,
-            config: "bg-rose-50 border border-rose-100"
-          }
-        ].map((item, i) => (
-          <div key={i} className="bg-white p-3 sm:p-5 rounded-2xl sm:rounded-[28px] border border-slate-200 shadow-sm flex items-center gap-3 sm:gap-4 transition-all hover:shadow-md group">
-            <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl ${item.config} flex items-center justify-center shrink-0`}>
-              {item.icon}
+        {loading ? (
+          [1, 2, 3, 4].map((i) => (
+            <div key={i} className="bg-white p-3 sm:p-5 rounded-2xl sm:rounded-[28px] border border-slate-200 shadow-sm animate-pulse">
+              <div className="flex items-center gap-3 sm:gap-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-slate-100 flex-shrink-0"></div>
+                <div className="flex flex-col space-y-2">
+                  <div className="h-4 w-16 bg-slate-100 rounded"></div>
+                  <div className="h-6 w-12 bg-slate-200 rounded"></div>
+                </div>
+              </div>
             </div>
-            <div className="min-w-0">
-              <h4 className="text-[12px] sm:text-[13px] font-medium text-slate-500 truncate">{item.label}</h4>
-              <p className="text-[18px] sm:text-[22px] font-bold text-slate-900 leading-none mt-0.5">{item.value}</p>
+          ))
+        ) : (
+          [
+            {
+              icon: <ShoppingBag className="w-5 h-5 text-indigo-600" strokeWidth={2} />,
+              label: "Tổng đơn",
+              value: globalStats.totalBookings,
+              config: "bg-indigo-50 border border-indigo-100"
+            },
+            {
+              icon: <Timer className="w-5 h-5 text-amber-600" strokeWidth={2} />,
+              label: "Sắp tới",
+              value: (globalStats.pendingBookings || 0) + (globalStats.confirmedBookings || 0),
+              config: "bg-amber-50 border border-amber-100"
+            },
+            {
+              icon: <CheckCircle2 className="w-5 h-5 text-emerald-600" strokeWidth={2} />,
+              label: "Xong",
+              value: globalStats.completedBookings,
+              config: "bg-emerald-50 border border-emerald-100"
+            },
+            {
+              icon: <XCircle className="w-5 h-5 text-rose-500" strokeWidth={2} />,
+              label: "Đã hủy",
+              value: globalStats.cancelledBookings,
+              config: "bg-rose-50 border border-rose-100"
+            }
+          ].map((item, i) => (
+            <div key={i} className="bg-white p-3 sm:p-5 rounded-2xl sm:rounded-[28px] border border-slate-200 shadow-sm flex items-center gap-3 sm:gap-4 transition-all hover:shadow-md group">
+              <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl ${item.config} flex items-center justify-center shrink-0`}>
+                {item.icon}
+              </div>
+              <div className="min-w-0">
+                <h4 className="text-[12px] sm:text-[13px] font-medium text-slate-500 truncate">{item.label}</h4>
+                <p className="text-[18px] sm:text-[22px] font-bold text-slate-900 leading-none mt-0.5">{item.value}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
 
       <div className="bg-white p-4 sm:p-8 rounded-[28px] sm:rounded-[32px] border-none sm:border border-slate-200 shadow-none sm:shadow-sm space-y-4 sm:space-y-6">
@@ -573,36 +597,56 @@ const BookingManagement = () => {
         </div>
 
 
-        <div className="sm:rounded-[28px] sm:border-2 sm:border-slate-200 overflow-hidden bg-white sm:shadow-inner">
+        <div className="sm:rounded-[28px] sm:border-2 sm:border-slate-200 overflow-hidden bg-white sm:shadow-inner relative">
           {/* Table View (shown from md/768px) */}
           <div className="hidden md:block">
-            <Table
-              rowSelection={rowSelection}
-              columns={columns}
-              dataSource={Array.isArray(bookings) ? bookings : []}
-              rowKey="id"
-              loading={loading}
-              pagination={false}
-              onChange={handleTableChange}
-              size={window.innerWidth < 1200 ? "small" : "default"}
-              className="custom-admin-table ant-table-custom ant-table-booking"
-              locale={{
-                emptyText: (
-                  <div className="py-20 flex flex-col items-center opacity-30">
-                    <SlidersHorizontal size={48} className="mb-4" />
-                    <span className="text-[15px] text-slate-600 font-medium ">Chưa có lịch thu âm nào</span>
+            {loading ? (
+              <div className="p-8 space-y-6">
+                <div className="flex gap-4 border-b border-slate-100 pb-4">
+                  {[1, 2, 3, 4, 5, 6].map(i => <div key={i} className="h-4 bg-slate-100 rounded flex-1 animate-pulse"></div>)}
+                </div>
+                {[1, 2, 3, 4, 5].map(i => (
+                  <div key={i} className="flex gap-4 items-center">
+                    <div className="h-10 bg-slate-50 rounded-xl flex-1 animate-pulse"></div>
                   </div>
-                )
-              }}
-            />
+                ))}
+              </div>
+            ) : (
+              <Table
+                rowSelection={rowSelection}
+                columns={columns}
+                dataSource={Array.isArray(bookings) ? bookings : []}
+                rowKey="id"
+                loading={false}
+                pagination={false}
+                onChange={handleTableChange}
+                size={window.innerWidth < 1200 ? "small" : "default"}
+                className="custom-admin-table ant-table-custom ant-table-booking"
+                locale={{
+                  emptyText: (
+                    <div className="py-20 flex flex-col items-center opacity-30">
+                      <SlidersHorizontal size={48} className="mb-4" />
+                      <span className="text-[15px] text-slate-600 font-medium ">Chưa có lịch thu âm nào</span>
+                    </div>
+                  )
+                }}
+              />
+            )}
           </div>
 
           {/* Mobile Card View (hidden from md/768px) */}
-          <div className="md:hidden">
+          <div className="md:hidden p-4">
             {loading ? (
-              <div className="grid grid-cols-2 gap-2.5">
-                {[1, 2, 3, 4].map(i => (
-                  <div key={i} className="h-44 bg-slate-50 rounded-2xl animate-pulse border border-slate-100"></div>
+              <div className="grid grid-cols-2 gap-3">
+                {[1, 2, 3, 4, 5, 6].map(i => (
+                  <div key={i} className="h-48 bg-slate-50 rounded-[24px] animate-pulse border border-slate-100 p-4 space-y-4">
+                    <div className="flex justify-between">
+                       <div className="h-4 w-20 bg-slate-200 rounded"></div>
+                       <div className="h-3 w-8 bg-slate-100 rounded"></div>
+                    </div>
+                    <div className="h-3 w-28 bg-slate-100 rounded pt-4"></div>
+                    <div className="mt-auto h-8 w-full bg-slate-200/50 rounded-xl"></div>
+                  </div>
                 ))}
               </div>
             ) : (Array.isArray(bookings) && bookings.length > 0) ? (

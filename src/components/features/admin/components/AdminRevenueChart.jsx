@@ -7,48 +7,59 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { TrendingUp, BarChart3 } from "lucide-react";
-
+import { CalendarDays } from "lucide-react";
 import { useEffect, useState } from "react";
 import AdminDropdown from "./AdminDropdown";
-
-const data = [
-  { name: "Mon", income: 4000 },
-  { name: "Tue", income: 3000 },
-  { name: "Wed", income: 2000 },
-  { name: "Thu", income: 2780 },
-  { name: "Fri", income: 1890 },
-  { name: "Sat", income: 2390 },
-  { name: "Sun", income: 3490 },
-];
+import statsApi from "../../../../api/statsApi";
 
 const timeframeOptions = [
   { value: "7days", label: "7 ngày gần nhất" },
-  { value: "month", label: "Tháng hiện tại" },
-  { value: "year", label: "Năm nay" },
+  { value: "month", label: "Tháng này" },
 ];
 
 const AdminRevenueChart = () => {
   const [timeframe, setTimeframe] = useState("7days");
+  const [chartData, setChartData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchTrendData();
+  }, [timeframe]);
+
+  const fetchTrendData = async () => {
+    try {
+      setLoading(true);
+      const response = await statsApi.getBookingTrend({ timeframe });
+      
+      const apiRes = response.data?.data || response.data || response;
+      
+      const mappedData = Array.isArray(apiRes) ? apiRes.map(item => ({
+        name: item.label,
+        bookings: item.count || 0
+      })) : [];
+      
+      setChartData(mappedData);
+    } catch (error) {
+      console.error("Error fetching booking trend:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="w-full">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-            <BarChart3 size={18} className="sm:w-5 sm:h-5" />
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+            <CalendarDays size={18} className="sm:w-5 sm:h-5" />
           </div>
           <div>
-            <h3 className="text-[15px] sm:text-[17px] font-semibold text-slate-900 leading-tight">Doanh thu & Kinh doanh</h3>
-            <p className="text-[12px] sm:text-[13px] font-medium text-slate-500 mt-0.5 hidden sm:block">Thống kê lưu lượng giao dịch tiền tệ</p>
+            <h3 className="text-[15px] sm:text-[17px] font-bold text-slate-900 leading-tight">Xu hướng đặt lịch</h3>
+            <p className="text-[12px] sm:text-[13px] font-medium text-slate-500 mt-0.5 hidden sm:block">Dữ liệu phân tích từ hệ thống</p>
           </div>
         </div>
         
         <div className="flex items-center gap-2 sm:gap-3">
-            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-green-50 rounded-lg text-green-600 text-[13px] font-semibold">
-                <TrendingUp size={16} />
-                +14.5% Tháng trước
-            </div>
             <AdminDropdown 
               options={timeframeOptions} 
               value={timeframe} 
@@ -58,62 +69,82 @@ const AdminRevenueChart = () => {
       </div>
 
       <div className="h-[220px] sm:h-[280px] lg:h-[300px] w-full mt-2 sm:mt-4">
-        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
-          <AreaChart
-            data={data}
-            margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
-          >
-            <defs>
-              <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#2563eb" stopOpacity={0.15} />
-                <stop offset="95%" stopColor="#2563eb" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <XAxis
-              dataKey="name"
-              stroke="#94a3b8"
-              fontSize={12}
-              fontWeight={500}
-              tickLine={false}
-              axisLine={false}
-              dy={10}
-            />
-            <YAxis
-              stroke="#94a3b8"
-              fontSize={12}
-              fontWeight={500}
-              tickLine={false}
-              axisLine={false}
-              tickFormatter={(value) => `${value}`}
-            />
-            <CartesianGrid
-              strokeDasharray="3 3"
-              vertical={false}
-              stroke="#f1f5f9"
-            />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: "rgba(255, 255, 255, 0.98)",
-                borderRadius: "12px",
-                border: "1px solid #e2e8f0",
-                boxShadow: "0 10px 15px -3px rgba(0,0,0,0.1)",
-                padding: "12px",
-              }}
-              itemStyle={{ color: "#0f172a", fontWeight: "600", fontSize: "14px" }}
-              labelStyle={{ color: "#64748b", fontWeight: "500", marginBottom: "4px" }}
-              cursor={{ stroke: '#cbd5e1', strokeWidth: 1, strokeDasharray: '4 4' }}
-            />
-            <Area
-              type="monotone"
-              dataKey="income"
-              stroke="#2563eb"
-              fillOpacity={1}
-              fill="url(#colorIncome)"
-              strokeWidth={3}
-              activeDot={{ r: 6, strokeWidth: 0, fill: '#2563eb' }}
-            />
-          </AreaChart>
-        </ResponsiveContainer>
+        {loading ? (
+          <div className="w-full h-full p-4 space-y-6">
+            <div className="h-full w-full bg-slate-50 border border-slate-100 rounded-[32px] relative overflow-hidden">
+               {/* Skeleton grid lines */}
+               {[1, 2, 3, 4].map(i => (
+                 <div key={i} className="absolute w-full h-[1px] bg-slate-200/40" style={{ top: `${i * 20}%` }}></div>
+               ))}
+               <div className="absolute inset-0 flex items-end px-4 pb-4">
+                  <div className="w-full h-[60%] bg-gradient-to-t from-purple-100/50 to-transparent rounded-t-3xl animate-pulse"></div>
+               </div>
+            </div>
+          </div>
+        ) : (
+          <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+            <AreaChart
+              data={chartData}
+              margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+            >
+              <defs>
+                <linearGradient id="colorBookings" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.2} />
+                  <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <XAxis
+                dataKey="name"
+                stroke="#94a3b8"
+                fontSize={11}
+                fontWeight={700}
+                tickLine={false}
+                axisLine={false}
+                dy={12}
+                interval={timeframe === "month" ? 6 : 0}
+              />
+              <YAxis
+                stroke="#94a3b8"
+                fontSize={11}
+                fontWeight={700}
+                tickLine={false}
+                axisLine={false}
+                allowDecimals={false}
+                tickFormatter={(value) => `${value}`}
+              />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                vertical={false}
+                stroke="#f1f5f9"
+              />
+              <Tooltip
+                content={({ active, payload, label }) => {
+                  if (active && payload && payload.length) {
+                    return (
+                      <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl shadow-2xl border border-slate-100 flex flex-col gap-1">
+                        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">{label}</p>
+                        <p className="text-[16px] font-black text-purple-600">
+                          {payload[0].value} đơn
+                        </p>
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
+                cursor={{ stroke: '#8b5cf6', strokeWidth: 2, strokeDasharray: '6 6' }}
+              />
+              <Area
+                type="monotone"
+                dataKey="bookings"
+                stroke="#8b5cf6"
+                fillOpacity={1}
+                fill="url(#colorBookings)"
+                strokeWidth={5}
+                activeDot={{ r: 7, strokeWidth: 0, fill: '#7c3aed' }}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        )}
       </div>
     </div>
   );

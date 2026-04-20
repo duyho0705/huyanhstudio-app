@@ -26,7 +26,8 @@ const AIAudioEnhancerModal = ({ isOpen, onClose }) => {
       setAnalysisResult(response.data || response);
     } catch (error) {
       console.error("Lỗi AI Analysis:", error);
-      alert("Hệ thống AI đang bận. Vui lòng cài đặt FFmpeg trên server hoặc thử lại sau.");
+      const errorMsg = error.response?.data?.message || error.message || "Hệ thống AI đang bận";
+      alert(`Lỗi: ${errorMsg}. Vui lòng kiểm tra FFmpeg trên server.`);
     } finally {
       setIsProcessing(false);
     }
@@ -39,7 +40,7 @@ const AIAudioEnhancerModal = ({ isOpen, onClose }) => {
   };
 
   const MetricCard = ({ icon: Icon, label, value, unit, color }) => (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col justify-between"
@@ -64,17 +65,17 @@ const AIAudioEnhancerModal = ({ isOpen, onClose }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-[#0A0510]/80 backdrop-blur-md"
+            className="absolute inset-0 bg-white/40 backdrop-blur-none"
           />
 
           <motion.div
             initial={{ scale: 0.95, opacity: 0, y: 30 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.95, opacity: 0, y: 30 }}
-            className="relative w-full max-w-3xl bg-[#120B1E] rounded-[40px] shadow-[0_0_80px_rgba(0,0,0,0.5)] border border-white/10 overflow-hidden"
+            className="relative w-full max-w-3xl bg-white rounded-[40px] shadow-[0_24px_80px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden"
           >
             {/* Background Glows */}
-            <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20">
+            <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-10">
               <div className="absolute -top-20 -left-20 w-80 h-80 bg-[#6CD1FD] rounded-full blur-[120px]" />
               <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-[#35104C] rounded-full blur-[120px]" />
             </div>
@@ -82,37 +83,37 @@ const AIAudioEnhancerModal = ({ isOpen, onClose }) => {
             <div className="relative z-10 p-8">
               <div className="flex justify-between items-center mb-8">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-[#6CD1FD] rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(108,209,253,0.4)]">
-                    <FiZap size={20} className="text-[#120B1E]" />
-                  </div>
                   <div>
-                    <h3 className="text-2xl font-black text-white leading-none">HASTUDIO <span className="text-[#6CD1FD]">AI</span></h3>
-                    <p className="text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] mt-1">Audio Intelligent Lab</p>
+                    <h3 className="text-2xl font-black text-[#35104C] leading-none tracking-tight">hastudio <span className="text-[#6CD1FD]">AI</span></h3>
                   </div>
                 </div>
-                <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-full transition-colors text-white/40">
-                  <FiX size={24} />
+                <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400 hover:text-gray-600">
+                  <FiX size={20} className="sm:w-6 sm:h-6" />
                 </button>
               </div>
 
               {!file && !isProcessing && (
-                <div className="text-center py-10">
+                <div className="text-center py-6 sm:py-8">
                   <motion.div
-                    whileHover={{ scale: 0.98, borderColor: "rgba(108,209,253,0.5)" }}
+                    whileHover={{ scale: 0.98 }}
                     onClick={() => fileInputRef.current.click()}
-                    className="border-2 border-dashed border-white/10 rounded-[40px] p-16 cursor-pointer bg-white/[0.02] hover:bg-[#6CD1FD]/5 transition-all group relative overflow-hidden"
+                    className="relative cursor-pointer rounded-[32px] sm:rounded-[40px] p-10 sm:p-14 group overflow-hidden bg-gradient-to-b from-gray-50/50 to-white border border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.03)] transition-all hover:shadow-[0_12px_40px_rgba(108,209,253,0.12)] hover:border-[#6CD1FD]/30"
                   >
+                    <div className="absolute inset-0 bg-[#6CD1FD]/0 group-hover:bg-[#6CD1FD]/[0.02] transition-colors duration-500"></div>
                     <input type="file" ref={fileInputRef} className="hidden" accept="audio/*" onChange={handleFileUpload} />
-                    <div className="relative z-10">
-                      <div className="w-20 h-20 rounded-3xl bg-white/5 flex items-center justify-center mx-auto mb-6 text-white/20 group-hover:text-[#6CD1FD] group-hover:bg-white/10 transition-all shadow-inner">
-                        <FiUploadCloud size={40} />
+                    <div className="relative z-10 flex flex-col items-center">
+                      <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-blue-50/50 flex items-center justify-center mb-6 text-blue-200 group-hover:text-[#6CD1FD] group-hover:scale-110 transition-all duration-500">
+                        <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white shadow-sm border border-gray-50 flex items-center justify-center">
+                          <FiMusic size={24} className="sm:w-7 sm:h-7" />
+                        </div>
                       </div>
-                      <h4 className="text-2xl font-black text-white mb-2">THẢ FILE ĐỂ PHÂN TÍCH</h4>
-                      <p className="text-white/40 text-[13px] font-medium max-w-xs mx-auto mb-8 tracking-wide">AI của chúng tôi sẽ đo đạc các chỉ số Loudness, Peak và dải tần của bản thu.</p>
-                      
-                      <div className="flex justify-center gap-4">
+                      <h4 className="text-[20px] sm:text-[22px] font-bold text-[#35104C] mb-3">Tải lên bản thu của bạn</h4>
+                      <p className="text-gray-500 text-[13px] sm:text-[14px] font-medium max-w-[280px] sm:max-w-sm mx-auto mb-6 leading-relaxed">
+                        Hãy để AI phân tích và đề xuất giải pháp âm thanh hoàn hảo cho tác phẩm của bạn.
+                      </p>
+                      <div className="flex items-center justify-center gap-2 text-[11px] sm:text-[12px] font-medium text-gray-400">
                         {['MP3', 'WAV', 'M4A'].map(ext => (
-                          <span key={ext} className="px-4 py-2 bg-white/5 rounded-xl text-[11px] font-black text-white/30 border border-white/5 uppercase tracking-widest">{ext}</span>
+                          <span key={ext} className="px-3 sm:px-4 py-1.5 bg-white rounded-full border border-gray-100 shadow-sm">{ext}</span>
                         ))}
                       </div>
                     </div>
@@ -128,91 +129,58 @@ const AIAudioEnhancerModal = ({ isOpen, onClose }) => {
                         key={i}
                         animate={{ height: [10, 40, 10] }}
                         transition={{ duration: 0.8, repeat: Infinity, delay: i * 0.05 }}
-                        className="w-2 bg-[#6CD1FD]/80 rounded-full"
+                        className="w-2 bg-[#35104C] rounded-full"
                       />
                     ))}
                   </div>
-                  <h4 className="text-xl font-black text-white mb-2 uppercase tracking-widest">Đang giải mã âm thanh...</h4>
+                  <h4 className="text-xl font-black text-[#35104C] mb-2 uppercase tracking-widest">Đang giải mã âm thanh...</h4>
                   <p className="text-[#6CD1FD] text-[11px] font-black uppercase tracking-[0.3em] animate-pulse">Running AI Engine v2.0</p>
                 </div>
               )}
 
               {analysisResult && (
                 <div className="space-y-6">
-                  {/* Analysis Header */}
-                  <div className="flex items-center justify-between p-6 bg-white/[0.03] rounded-[32px] border border-white/5">
+                  <div className="flex items-center justify-between p-6 bg-gray-50/50 rounded-[32px] border border-gray-100">
                     <div className="flex items-center gap-5">
-                      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#6CD1FD] to-[#35104C] flex items-center justify-center shadow-lg">
-                        <FiMusic size={24} className="text-white" />
+                      <div className="w-14 h-14 rounded-2xl bg-[#35104C] flex items-center justify-center shadow-lg">
+                        <FiMusic size={24} className="text-[#6CD1FD]" />
                       </div>
                       <div>
-                        <p className="text-white/30 text-[10px] font-bold uppercase tracking-widest mb-1">Source File</p>
-                        <h4 className="text-lg font-black text-white truncate max-w-[300px]">{file?.name}</h4>
+                        <h4 className="text-lg font-bold text-[#35104C] truncate max-w-[300px]">{file?.name}</h4>
                       </div>
                     </div>
-                    <button onClick={reset} className="px-6 py-3 bg-white/5 hover:bg-white/10 text-white font-bold text-xs rounded-xl transition-all uppercase tracking-widest">
+                    <button onClick={reset} className="px-6 py-3 bg-white border border-gray-200 hover:bg-gray-50 text-gray-600 font-semibold text-[15px] rounded-xl transition-all shadow-sm">
                       Thử file khác
                     </button>
                   </div>
 
-                  {/* Metrics Grid */}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <MetricCard 
-                      icon={FiActivity} 
-                      label="Loudness" 
-                      value={analysisResult.loudness} 
-                      unit="LUFS" 
-                      color="text-[#6CD1FD]" 
-                    />
-                    <MetricCard 
-                      icon={FiTriangle} 
-                      label="True Peak" 
-                      value={analysisResult.peak} 
-                      unit="dB" 
-                      color="text-red-400" 
-                    />
-                    <MetricCard 
-                      icon={FiBarChart2} 
-                      label="Dyn Range" 
-                      value={analysisResult.lra || analysisResult.dynamicRange} 
-                      unit="LU" 
-                      color="text-purple-400" 
-                    />
-                    <MetricCard 
-                      icon={FiZap} 
-                      label="Confidence" 
-                      value={98} 
-                      unit="%" 
-                      color="text-yellow-400" 
-                    />
+                    <MetricCard icon={FiActivity} label="Loudness" value={analysisResult.loudness} unit="LUFS" color="text-sky-500" />
+                    <MetricCard icon={FiTriangle} label="True Peak" value={analysisResult.peak} unit="dB" color="text-red-500" />
+                    <MetricCard icon={FiBarChart2} label="Dyn Range" value={analysisResult.lra || analysisResult.dynamicRange} unit="LU" color="text-purple-500" />
+                    <MetricCard icon={FiZap} label="Confidence" value={98} unit="%" color="text-yellow-500" />
                   </div>
 
-                  {/* AI Advice */}
-                  <div className="p-6 bg-[#6CD1FD]/10 border border-[#6CD1FD]/20 rounded-[32px] relative overflow-hidden group">
+                  <div className="p-6 bg-[#6CD1FD]/5 border border-[#6CD1FD]/20 rounded-[32px] relative overflow-hidden group">
                     <div className="flex gap-5 items-start relative z-10">
-                      <div className="w-12 h-12 rounded-2xl bg-[#6CD1FD] text-[#120B1E] flex items-center justify-center flex-shrink-0 shadow-[0_0_20px_rgba(108,209,253,0.3)]">
+                      <div className="w-12 h-12 rounded-2xl bg-[#35104C] text-[#6CD1FD] flex items-center justify-center flex-shrink-0 shadow-lg">
                         <FiInfo size={24} />
                       </div>
                       <div>
-                        <h5 className="text-[13px] font-black text-[#6CD1FD] uppercase tracking-widest mb-2">AI Diagnosis</h5>
-                        <p className="text-white/80 text-sm leading-relaxed font-medium">
+                        <p className="text-gray-600 text-sm leading-relaxed font-semibold">
                           {analysisResult.advice || "Dữ liệu đang được phân tích sâu hơn..."}
                         </p>
                       </div>
                     </div>
-                    <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                      <FiZap size={60} className="text-[#6CD1FD]" />
-                    </div>
                   </div>
 
                   <div className="pt-4">
-                    <button 
-                      onClick={() => window.location.href='/booking'}
-                      className="w-full py-5 bg-gradient-to-r from-[#6CD1FD] to-[#35104C] text-white rounded-[24px] font-black uppercase tracking-[0.2em] text-sm shadow-[0_10px_30px_rgba(108,209,253,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all"
+                    <button
+                      onClick={() => window.location.href = '/booking'}
+                      className="w-full py-5 bg-[#35104C] text-white rounded-[24px] font-semibold text-[15px] shadow-[0_10px_40px_rgba(53,16,76,0.2)] hover:bg-[#2a0d3d] hover:scale-[1.02] active:scale-[0.98] transition-all"
                     >
-                      Bắt đầu Mastering chuyên nghiệp ngay
+                      Bắt đầu thu âm chuyên nghiệp ngay
                     </button>
-                    <p className="text-center text-white/20 text-[10px] font-bold uppercase tracking-widest mt-4">Powered by Hastudio Intelligence Audio Engine</p>
                   </div>
                 </div>
               )}
@@ -225,4 +193,3 @@ const AIAudioEnhancerModal = ({ isOpen, onClose }) => {
 };
 
 export default AIAudioEnhancerModal;
-

@@ -21,15 +21,13 @@ const BookingProfile = () => {
         return { list: [], totalPages: 0 };
       });
 
-      const getList = (data) => {
-        if (!data) return [];
-        if (Array.isArray(data)) return data;
-        if (data.list && Array.isArray(data.list)) return data.list;
-        if (data.content && Array.isArray(data.content)) return data.content;
-        if (data.data) {
-          if (Array.isArray(data.data)) return data.data;
-          if (data.data.list && Array.isArray(data.data.list)) return data.data.list;
-        }
+      const getList = (res) => {
+        const apiRes = res?.data || res;
+        if (!apiRes) return [];
+        const mainData = apiRes.data !== undefined ? apiRes.data : apiRes;
+        if (Array.isArray(mainData)) return mainData;
+        if (mainData?.content && Array.isArray(mainData.content)) return mainData.content;
+        if (mainData?.list && Array.isArray(mainData.list)) return mainData.list;
         return [];
       };
 
@@ -61,9 +59,23 @@ const BookingProfile = () => {
     return <span className={`px-2.5 py-1 rounded-full text-[13px] font-semibold ${s.class}`}>{s.label}</span>;
   };
 
-  const shortCode = (code) => code?.slice(-6);
+  const SkeletonRow = () => (
+    <tr className="animate-pulse border-b border-gray-50">
+      <td className="py-4 px-4"><div className="h-3 w-12 bg-gray-200 rounded"></div></td>
+      <td className="py-4 px-4"><div className="h-4 w-24 bg-gray-200 rounded"></div></td>
+      <td className="py-4 px-4"><div className="h-3 w-32 bg-gray-200 rounded"></div></td>
+      <td className="py-4 px-4"><div className="h-3 w-28 bg-gray-200 rounded"></div></td>
+      <td className="py-4 px-4"><div className="h-6 w-20 bg-gray-200 rounded-full"></div></td>
+      <td className="py-4 px-4"><div className="h-8 w-8 bg-gray-100 rounded-lg"></div></td>
+    </tr>
+  );
 
-  if (loading) return <p className="text-center text-gray-400 py-8">Đang tải hồ sơ...</p>;
+  if (loading) return (
+    <div className="animate-pulse space-y-4 py-8">
+      <div className="h-8 w-48 bg-gray-200 rounded mx-auto mb-6"></div>
+      <div className="h-64 w-full bg-gray-100 rounded-xl"></div>
+    </div>
+  );
 
   return (
     <div>
@@ -81,16 +93,21 @@ const BookingProfile = () => {
           </thead>
           <tbody>
             {isFetching ? (
-              <tr>
-                <td colSpan="6" className="py-12 text-center text-gray-400">Đang tải lịch sử đặt lịch...</td>
-              </tr>
+              <>
+                <SkeletonRow />
+                <SkeletonRow />
+                <SkeletonRow />
+                <SkeletonRow />
+              </>
             ) : bookings.length > 0 ? (
               bookings.map((b) => (
                 <tr key={b.bookingCode} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                   <td className="py-3 px-4 font-mono text-xs text-gray-500">{shortCode(b.bookingCode)}</td>
                   <td className="py-3 px-4 font-medium text-gray-800">{b.customerName}</td>
                   <td className="py-3 px-4 text-gray-600">{b.recordDate}</td>
-                  <td className="py-3 px-4 text-gray-600">{b.services?.join(", ") || "N/A"}</td>
+                  <td className="py-3 px-4 text-gray-600">
+                    {b.services?.map(s => typeof s === 'string' ? s : s.name).join(", ") || "N/A"}
+                  </td>
                   <td className="py-3 px-4">{getStatus(b.status)}</td>
                   <td className="py-3 px-4">
                     <button className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors text-gray-400 hover:text-gray-700" onClick={() => setSelectedBooking(b)}>

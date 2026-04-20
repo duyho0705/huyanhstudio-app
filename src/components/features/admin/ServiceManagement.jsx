@@ -276,21 +276,33 @@ const ServiceManagement = () => {
 
       {/* Stats Summary Panel */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6">
-        {[
-          { icon: <Gem className="w-5 h-5 sm:w-6 sm:h-6" />, label: "Cao cấp", value: services.filter(s => (s.price || 0) > 10000000).length, config: "bg-amber-50 text-amber-600 border-amber-100" },
-          { icon: <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6" />, label: "Đang bán", value: services.filter(s => s.active).length, config: "bg-indigo-50 text-indigo-600 border-indigo-100" },
-          { icon: <Briefcase className="w-5 h-5 sm:w-6 sm:h-6" />, label: "Tổng số", value: pagination.total, config: "bg-slate-50 text-slate-600 border-slate-100" }
-        ].map((item, i) => (
-          <div key={i} className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200/60 shadow-sm flex items-center gap-4 sm:gap-5 group">
-            <div className={`w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-[20px] ${item.config} border-2 flex items-center justify-center shrink-0 shadow-sm`}>
-              {item.icon}
+        {loading ? (
+          [1, 2, 3].map((i) => (
+            <div key={i} className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200/60 shadow-sm animate-pulse flex items-center gap-4 sm:gap-5">
+              <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-[20px] bg-slate-100 border-2 border-slate-50"></div>
+              <div className="space-y-2">
+                <div className="h-4 w-16 bg-slate-50 rounded"></div>
+                <div className="h-7 w-12 bg-slate-100 rounded"></div>
+              </div>
             </div>
-            <div>
-              <p className="text-sm sm:text-base font-bold text-slate-500">{item.label}</p>
-              <h4 className="text-xl sm:text-[28px] font-black text-slate-900 tracking-tight leading-none mt-1">{item.value}</h4>
+          ))
+        ) : (
+          [
+            { icon: <Gem className="w-5 h-5 sm:w-6 sm:h-6" />, label: "Cao cấp", value: services.filter(s => (s.price || 0) > 10000000).length, config: "bg-amber-50 text-amber-600 border-amber-100" },
+            { icon: <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6" />, label: "Đang bán", value: services.filter(s => s.active).length, config: "bg-indigo-50 text-indigo-600 border-indigo-100" },
+            { icon: <Briefcase className="w-5 h-5 sm:w-6 sm:h-6" />, label: "Tổng số", value: pagination.total, config: "bg-slate-50 text-slate-600 border-slate-100" }
+          ].map((item, i) => (
+            <div key={i} className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200/60 shadow-sm flex items-center gap-4 sm:gap-5 group">
+              <div className={`w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-[20px] ${item.config} border-2 flex items-center justify-center shrink-0 shadow-sm`}>
+                {item.icon}
+              </div>
+              <div>
+                <p className="text-sm sm:text-base font-bold text-slate-500">{item.label}</p>
+                <h4 className="text-xl sm:text-[28px] font-black text-slate-900 tracking-tight leading-none mt-1">{item.value}</h4>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
 
       <div className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200/60 shadow-sm space-y-4 sm:space-y-6">
@@ -311,24 +323,33 @@ const ServiceManagement = () => {
         <div className="border border-slate-100 overflow-hidden bg-white shadow-sm rounded-2xl">
           {/* Table View (shown from md/768px) */}
           <div className="hidden md:block">
-            <Table
-              columns={columns}
-              dataSource={Array.isArray(services) ? services : []}
-              rowKey="id"
-              loading={loading}
-              pagination={false}
-              onChange={handleTableChange}
-              scroll={{ x: 1100 }}
-              className="ant-table-custom"
-              locale={{
-                emptyText: (
-                  <div className="py-24 flex flex-col items-center opacity-30">
-                    <Briefcase size={64} strokeWidth={1} className="mb-4" />
-                    <span className="text-sm font-bold ">Cơ sở dữ liệu dịch vụ trống</span>
-                  </div>
-                )
-              }}
-            />
+            {loading ? (
+              <div className="p-8 space-y-4">
+                <div className="h-10 w-full bg-slate-50 rounded-xl animate-pulse"></div>
+                {[1, 2, 3, 4, 5, 6, 7].map(i => (
+                  <div key={i} className="h-16 w-full bg-slate-50/50 rounded-xl animate-pulse border border-slate-50"></div>
+                ))}
+              </div>
+            ) : (
+              <Table
+                columns={columns}
+                dataSource={Array.isArray(services) ? services : []}
+                rowKey="id"
+                loading={false}
+                pagination={false}
+                onChange={handleTableChange}
+                scroll={{ x: 1100 }}
+                className="ant-table-custom"
+                locale={{
+                  emptyText: (
+                    <div className="py-24 flex flex-col items-center opacity-30">
+                      <Briefcase size={64} strokeWidth={1} className="mb-4" />
+                      <span className="text-sm font-bold ">Cơ sở dữ liệu dịch vụ trống</span>
+                    </div>
+                  )
+                }}
+              />
+            )}
           </div>
 
           {/* Mobile Card View (hidden from md/768px) */}

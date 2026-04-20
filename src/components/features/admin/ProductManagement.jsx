@@ -177,20 +177,32 @@ const ProductManagement = () => {
 
       {/* Stats Section */}
       <div className="grid grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-6">
-        {[
-          { icon: <LayoutGrid className="w-6 h-6 sm:w-8 sm:h-8 text-indigo-600" strokeWidth={1.5} />, label: "Tổng", value: stats.total, config: "bg-indigo-100 border border-indigo-200/60" },
-          { icon: <Video className="w-6 h-6 sm:w-8 sm:h-8 text-emerald-600" strokeWidth={1.5} />, label: "Video", value: stats.videos, config: "bg-emerald-100 border border-emerald-200/60" },
-        ].map((item, i) => (
-          <div key={i} className="bg-white p-3 sm:p-7 rounded-2xl border border-slate-300 shadow-sm flex flex-col sm:flex-row items-center sm:items-center gap-3 sm:gap-5 group text-center sm:text-left">
-            <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl ${item.config} flex items-center justify-center`}>
-              {item.icon}
+        {loading ? (
+          [1, 2].map((i) => (
+            <div key={i} className="bg-white p-3 sm:p-7 rounded-2xl border border-slate-300 shadow-sm animate-pulse flex items-center gap-3 sm:gap-5">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-slate-100"></div>
+              <div className="space-y-2">
+                <div className="h-4 w-16 bg-slate-50 rounded"></div>
+                <div className="h-6 w-12 bg-slate-100 rounded"></div>
+              </div>
             </div>
-            <div>
-              <h4 className="text-sm sm:text-base font-semibold text-slate-500 sm:text-slate-600 whitespace-nowrap">{item.label}</h4>
-              <p className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">{item.value}</p>
+          ))
+        ) : (
+          [
+            { icon: <LayoutGrid className="w-6 h-6 sm:w-8 sm:h-8 text-indigo-600" strokeWidth={1.5} />, label: "Tổng", value: stats.total, config: "bg-indigo-100 border border-indigo-200/60" },
+            { icon: <Video className="w-6 h-6 sm:w-8 sm:h-8 text-emerald-600" strokeWidth={1.5} />, label: "Video", value: stats.videos, config: "bg-emerald-100 border border-emerald-200/60" },
+          ].map((item, i) => (
+            <div key={i} className="bg-white p-3 sm:p-7 rounded-2xl border border-slate-300 shadow-sm flex flex-col sm:flex-row items-center sm:items-center gap-3 sm:gap-5 group text-center sm:text-left">
+              <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl ${item.config} flex items-center justify-center`}>
+                {item.icon}
+              </div>
+              <div>
+                <h4 className="text-sm sm:text-base font-semibold text-slate-500 sm:text-slate-600 whitespace-nowrap">{item.label}</h4>
+                <p className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">{item.value}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
 
       <div className="bg-white p-4 sm:p-8 rounded-[32px] border border-slate-300 shadow-sm space-y-6 sm:space-y-8">

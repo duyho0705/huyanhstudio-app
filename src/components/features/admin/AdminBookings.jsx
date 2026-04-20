@@ -24,11 +24,13 @@ const AdminBookings = () => {
   const abortControllerRef = useRef(null);
 
   const [page, setPage] = useState(0);
+  const [isFetching, setIsFetching] = useState(true);
   const [bookings, setBookings] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [selectedBooking, setSelectedBooking] = useState(null);
 
   const fetchData = async (pageNum) => {
+    setIsFetching(true);
     try {
       const res = await bookingApi.getBookingCustomer(pageNum, 5);
       const responseData = res.data?.data || res.data || res;
@@ -40,6 +42,8 @@ const AdminBookings = () => {
     } catch (err) {
       console.error("Error fetching bookings:", err);
       setBookings([]);
+    } finally {
+      setIsFetching(false);
     }
   };
 
@@ -82,39 +86,49 @@ const AdminBookings = () => {
 
   const getStatusStyles = (status) => {
     switch (status) {
-      case "CONFIRMED":
-        return "bg-blue-50 text-blue-600 border-blue-100";
-      case "PENDING":
-        return "bg-orange-50 text-orange-600 border-orange-100";
-      case "CANCELLED":
-        return "bg-red-50 text-red-600 border-red-100";
-      case "COMPLETED":
-        return "bg-green-50 text-green-600 border-green-100";
-      default:
-        return "bg-slate-50 text-slate-600 border-slate-100";
+      case "CONFIRMED": return "bg-blue-50 text-blue-600 border-blue-100";
+      case "PENDING": return "bg-orange-50 text-orange-600 border-orange-100";
+      case "CANCELLED": return "bg-red-50 text-red-600 border-red-100";
+      case "COMPLETED": return "bg-green-50 text-green-600 border-green-100";
+      default: return "bg-slate-50 text-slate-600 border-slate-100";
     }
   };
 
   const getStatusText = (status) => {
     switch (status) {
-      case "CONFIRMED":
-        return "Đã xác nhận";
-      case "PENDING":
-        return "Chờ xác nhận";
-      case "CANCELLED":
-        return "Đã hủy";
-      case "COMPLETED":
-        return "Hoàn thành";
-      default:
-        return "Không rõ";
+      case "CONFIRMED": return "Đã xác nhận";
+      case "PENDING": return "Chờ xác nhận";
+      case "CANCELLED": return "Đã hủy";
+      case "COMPLETED": return "Hoàn thành";
+      default: return "Không rõ";
     }
   };
 
   const shortCode = (code) => code?.slice(-6);
 
+  const BookingSkeleton = () => (
+    <div className="animate-pulse p-5 bg-white rounded-2xl border border-slate-100 flex items-center justify-between gap-4">
+      <div className="flex items-center gap-4">
+        <div className="w-12 h-12 rounded-xl bg-slate-100"></div>
+        <div className="space-y-2">
+          <div className="h-4 w-32 bg-slate-100 rounded"></div>
+          <div className="h-3 w-24 bg-slate-100 rounded"></div>
+        </div>
+      </div>
+      <div className="h-8 w-24 bg-slate-50 rounded-full"></div>
+    </div>
+  );
+
   return (
     <div className="space-y-6">
-      {bookings.length === 0 ? (
+      {isFetching ? (
+        <div className="space-y-4">
+          <BookingSkeleton />
+          <BookingSkeleton />
+          <BookingSkeleton />
+          <BookingSkeleton />
+        </div>
+      ) : bookings.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-slate-400 bg-slate-50/50 rounded-3xl border-2 border-dashed border-slate-200">
           <Calendar size={64} className="opacity-10 mb-4" />
           <p className="font-bold text-lg">Chưa có đặt lịch nào</p>
