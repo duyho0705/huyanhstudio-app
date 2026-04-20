@@ -3,7 +3,7 @@ import axios from "axios";
 // instance chính dùng cho hầu hết request
 const axiosClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
-  timeout: 10000,
+  timeout: 60000,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
@@ -13,7 +13,7 @@ const axiosClient = axios.create({
 // instance riêng để gọi refresh token (không gắn interceptor để tránh vòng lặp)
 const refreshClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
-  timeout: 10000,
+  timeout: 60000,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",

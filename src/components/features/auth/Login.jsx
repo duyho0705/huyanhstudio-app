@@ -88,7 +88,13 @@ const Login = ({ onClose, initialMode = "login" }) => {
         navigate("/admin");
       }
     } catch (err) {
-      showError("Tên đăng nhập hoặc mật khẩu không chính xác.");
+      if (err.code === "ECONNABORTED") {
+        showError("Server phản hồi chậm, vui lòng thử lại sau giây lát.");
+      } else if (err.response?.status === 401) {
+        showError("Tên đăng nhập hoặc mật khẩu không chính xác.");
+      } else {
+        showError("Đã có lỗi xảy ra. Vui lòng kiểm tra kết nối mạng.");
+      }
     } finally { setLoading(false); }
   };
 
