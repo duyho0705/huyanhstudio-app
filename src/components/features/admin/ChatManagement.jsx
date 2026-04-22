@@ -3,24 +3,19 @@ import {
     FiSend,
     FiUser,
     FiSearch,
-    FiClock,
-    FiMoreVertical,
     FiMessageCircle,
     FiArrowLeft,
-    FiImage,
-    FiX,
-    FiCheck,
-    FiSettings,
-    FiPlus,
-    FiTrash2
+    FiMoreVertical,
+    FiPlus
 } from "react-icons/fi";
 import { db } from "../../../api/firebase";
 import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, updateDoc, doc, writeBatch } from "firebase/firestore";
 import { motion, AnimatePresence } from "framer-motion";
-import axios from "axios";
 import axiosClient from "../../../api/axiosClient";
+import { useTranslation } from "react-i18next";
 
 const ChatManagement = () => {
+    const { t, i18n } = useTranslation();
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const [messages, setMessages] = useState([]);
@@ -28,13 +23,9 @@ const ChatManagement = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [showSidebar, setShowSidebar] = useState(true);
     const scrollRef = useRef(null);
-    const messagesEndRef = useRef(null);
     const fileInputRef = useRef(null);
-    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-    const commonEmojis = ["😀", "😂", "🥰", "🙏", "👍", "😭", "✨", "🔥", "💯", "🎉", "📸", "🎥", "🎤", "🎧", "🎶", "🌟", "💌", "💖", "🎊", "👋", "✨", "🎵", "🥰", "🍀"];
 
     const [uploadingImage, setUploadingImage] = useState(false);
-    const [uploadProgress, setUploadProgress] = useState(0);
     const [selectedImage, setSelectedImage] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(null);
 
@@ -45,9 +36,6 @@ const ChatManagement = () => {
         "Để setup đúng phong cách mong muốn, bạn gửi giúp mình vài ảnh mẫu minh họa nhé!",
         "Nếu cần hỗ trợ gấp, bạn có thể gọi qua Hotline ạ. Cảm ơn bạn đã tin chọn hastudio!"
     ]);
-    const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
-    const [newTemplate, setNewTemplate] = useState("");
-    const [editingIndex, setEditingIndex] = useState(null);
 
     const formatTime = (isoString) => {
         if (!isoString) return "";
@@ -58,11 +46,11 @@ const ChatManagement = () => {
         const diffInHours = Math.floor(diffInMins / 60);
         const diffInDays = Math.floor(diffInHours / 24);
 
-        if (diffInMins < 1) return "Vừa xong";
-        if (diffInMins < 60) return `${diffInMins} phút trước`;
-        if (diffInHours < 24) return `${diffInHours} giờ trước`;
-        if (diffInDays === 1) return "Hôm qua";
-        return date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' });
+        if (diffInMins < 1) return t('admin.chat.just_now');
+        if (diffInMins < 60) return `${diffInMins} ${t('admin.chat.mins_ago')}`;
+        if (diffInHours < 24) return `${diffInHours} ${t('admin.chat.hours_ago')}`;
+        if (diffInDays === 1) return t('admin.chat.yesterday');
+        return date.toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'vi-VN', { day: '2-digit', month: '2-digit' });
     };
 
     const formatMessageTime = (isoString) => {
@@ -75,24 +63,28 @@ const ChatManagement = () => {
         yesterday.setDate(yesterday.getDate() - 1);
         const isYesterday = date.getDate() === yesterday.getDate() && date.getMonth() === yesterday.getMonth() && date.getFullYear() === yesterday.getFullYear();
 
-        const timeStr = date.toLocaleTimeString('vi-VN', {
+        const timeStr = date.toLocaleTimeString(i18n.language === 'en' ? 'en-US' : 'vi-VN', {
             hour: '2-digit',
             minute: '2-digit',
             second: '2-digit',
             hour12: false
         });
 
-        if (isToday) return `hôm nay, ${timeStr}`;
-        if (isYesterday) return `hôm qua, ${timeStr}`;
+        if (isToday) return `${t('admin.chat.today')}, ${timeStr}`;
+        if (isYesterday) return `${t('admin.chat.yesterday')}, ${timeStr}`;
 
         const day = date.getDate();
         const month = date.getMonth() + 1;
         const year = date.getFullYear();
 
-        return `${timeStr} ${day} tháng ${month}, ${year}`;
+        if (i18n.language === 'en') {
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            return `${timeStr} ${monthNames[month - 1]} ${day}, ${year}`;
+        }
+
+        return `${timeStr} ${day} ${t('admin.chat.month')} ${month}, ${year}`;
     };
 
-    // 0. Listen to templates
     useEffect(() => {
         const unsubscribe = onSnapshot(doc(db, "settings", "chat_templates"), (snapshot) => {
             if (snapshot.exists()) {
@@ -102,47 +94,6 @@ const ChatManagement = () => {
         return () => unsubscribe();
     }, []);
 
-    const updateTemplates = async (newTemplates) => {
-        try {
-            await updateDoc(doc(db, "settings", "chat_templates"), {
-                templates: newTemplates
-            });
-        } catch (err) {
-            const { setDoc } = await import("firebase/firestore");
-            await setDoc(doc(db, "settings", "chat_templates"), {
-                templates: newTemplates
-            });
-        }
-    };
-
-    const handleAddTemplate = () => {
-        if (!newTemplate.trim()) return;
-
-        let updated;
-        if (editingIndex !== null) {
-            updated = [...quickReplies];
-            updated[editingIndex] = newTemplate.trim();
-            setEditingIndex(null);
-        } else {
-            updated = [...quickReplies, newTemplate.trim()];
-        }
-
-        setQuickReplies(updated);
-        updateTemplates(updated);
-        setNewTemplate("");
-    };
-
-    const handleDeleteTemplate = (index) => {
-        const updated = quickReplies.filter((_, i) => i !== index);
-        setQuickReplies(updated);
-        updateTemplates(updated);
-        if (editingIndex === index) {
-            setEditingIndex(null);
-            setNewTemplate("");
-        }
-    };
-
-    // 1. Listen to chat list (sidebar)
     useEffect(() => {
         const q = query(collection(db, "chat_list"), orderBy("timestamp", "desc"));
         const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -155,7 +106,6 @@ const ChatManagement = () => {
         return () => unsubscribe();
     }, []);
 
-    // 2. Listen to messages for selected user
     useEffect(() => {
         if (!selectedUser) return;
 
@@ -204,7 +154,7 @@ const ChatManagement = () => {
         if (!file) return;
         const MAX_FILE_SIZE = 10 * 1024 * 1024;
         if (file.size > MAX_FILE_SIZE) {
-            alert("Dung lượng tệp quá lớn! Vui lòng chọn tệp dưới 10MB.");
+            alert("File too large! Max 10MB.");
             return;
         }
         setSelectedImage(file);
@@ -237,43 +187,29 @@ const ChatManagement = () => {
 
         if (imageToUpload) {
             setUploadingImage(true);
-            setUploadProgress(0);
-
             try {
                 const formData = new FormData();
                 formData.append('file', imageToUpload);
                 formData.append('userId', selectedUser);
 
                 const response = await axiosClient.post('/media/upload-chat', formData, {
-                    headers: { 'Content-Type': undefined },
-                    onUploadProgress: (progressEvent) => {
-                        const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-                        setUploadProgress(progress);
-                    }
+                    headers: { 'Content-Type': undefined }
                 });
 
                 if (response.data && response.data.code === "UPLOAD_SUCCESS") {
                     imageUrl = response.data.data;
                 } else if (response.code === "UPLOAD_SUCCESS") {
                     imageUrl = response.data;
-                } else {
-                    throw new Error(response.message || "Lỗi từ Server");
                 }
 
                 if (!finalMessage) {
-                    if (imageToUpload.type.startsWith('image')) {
-                        finalMessage = "Đã gửi một hình ảnh 📸";
-                    } else if (imageToUpload.type.startsWith('video')) {
-                        finalMessage = "Đã gửi một video 🎥";
-                    } else {
-                        finalMessage = `Đã gửi tệp: ${imageToUpload.name} 📄`;
-                    }
+                    if (imageToUpload.type.startsWith('image')) finalMessage = "Sent an image 📸";
+                    else if (imageToUpload.type.startsWith('video')) finalMessage = "Sent a video 🎥";
+                    else finalMessage = `Sent a file: ${imageToUpload.name} 📄`;
                 }
             } catch (error) {
                 setUploadingImage(false);
                 setInputValue(messageToSend);
-                setSelectedImage(imageToUpload);
-                alert("Lỗi tải lên: " + (error.response?.data?.message || error.message));
                 return;
             }
         }
@@ -297,7 +233,6 @@ const ChatManagement = () => {
             ]);
             setUploadingImage(false);
         } catch (err) {
-            setInputValue(messageToSend);
             setUploadingImage(false);
         }
     };
@@ -309,18 +244,11 @@ const ChatManagement = () => {
 
     return (
         <div className="h-[calc(100vh-80px)] w-full bg-white flex overflow-hidden relative">
-            {/* Sidebar */}
-            <div className={`
-                ${showSidebar ? 'flex' : 'hidden'}
-                md:flex
-                w-full md:w-[320px] lg:w-[380px] 
-                border-r border-slate-100 flex-col bg-slate-50/30
-                absolute md:relative inset-0 z-20 md:z-auto
-            `}>
+            <div className={`${showSidebar ? 'flex' : 'hidden'} md:flex w-full md:w-[320px] lg:w-[380px] border-r border-slate-100 flex-col bg-slate-50/30 absolute md:relative inset-0 z-20 md:z-auto`}>
                 <div className="p-4 sm:p-6">
                     <div className="flex items-center justify-between mb-4 sm:mb-6">
                         <h2 className="text-[18px] sm:text-[20px] font-bold text-slate-800 flex items-center gap-2">
-                            <FiMessageCircle className="text-blue-500" /> Tin nhắn
+                            <FiMessageCircle className="text-blue-500" /> {t('admin.chat.title')}
                         </h2>
                     </div>
 
@@ -328,7 +256,7 @@ const ChatManagement = () => {
                         <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                         <input
                             type="text"
-                            placeholder="Tìm kiếm người dùng..."
+                            placeholder={t('admin.chat.search_placeholder')}
                             className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all shadow-sm"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
@@ -362,17 +290,10 @@ const ChatManagement = () => {
                                                     {formatTime(u.timestamp?.toDate()?.toISOString())}
                                                 </span>
                                             )}
-                                            {u.unreadCount > 0 ? (
-                                                <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center shadow-sm">
-                                                    {u.unreadCount > 99 ? '99+' : u.unreadCount}
-                                                </span>
-                                            ) : u.unread && (
-                                                <span className="w-2.5 h-2.5 bg-red-500 rounded-full ring-4 ring-white"></span>
-                                            )}
                                         </div>
                                     </div>
                                     <p className={`text-[12px] sm:text-[13px] truncate ${selectedUser === u.id ? 'text-white/80' : 'text-slate-400'}`}>
-                                        {u.lastMessage || "Chưa có tin nhắn"}
+                                        {u.lastMessage || t('admin.chat.no_messages')}
                                     </p>
                                 </div>
                             </button>
@@ -380,19 +301,13 @@ const ChatManagement = () => {
                     ) : (
                         <div className="text-center py-10 text-slate-400">
                             <FiSearch size={40} className="mx-auto mb-3 opacity-20" />
-                            <p className="text-sm">Không tìm thấy ai</p>
+                            <p className="text-sm">{t('admin.chat.no_users')}</p>
                         </div>
                     )}
                 </div>
             </div>
 
-            {/* Chat Area */}
-            <div className={`
-                ${!showSidebar ? 'flex' : 'hidden'}
-                md:flex
-                flex-1 flex-col bg-white min-w-0
-                absolute md:relative inset-0 z-10 md:z-auto
-            `}>
+            <div className={`${!showSidebar ? 'flex' : 'hidden'} md:flex flex-1 flex-col bg-white min-w-0 absolute md:relative inset-0 z-10 md:z-auto`}>
                 <AnimatePresence mode="wait">
                     {selectedUser ? (
                         <motion.div
@@ -403,13 +318,9 @@ const ChatManagement = () => {
                             transition={{ duration: 0.2 }}
                             className="flex-1 flex flex-col min-w-0 h-full"
                         >
-                            {/* Chat Header */}
                             <div className="p-4 sm:p-6 border-b border-slate-100 flex items-center justify-between bg-white/80 backdrop-blur-md sticky top-0 z-10">
                                 <div className="flex items-center gap-3 sm:gap-4">
-                                    <button
-                                        onClick={handleBackToList}
-                                        className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-500 md:hidden"
-                                    >
+                                    <button onClick={handleBackToList} className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-500 md:hidden">
                                         <FiArrowLeft size={20} />
                                     </button>
                                     <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
@@ -421,87 +332,41 @@ const ChatManagement = () => {
                                         </h3>
                                         <div className="flex items-center gap-2">
                                             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                                            <span className="text-[14px] sm:text-[14px] text-slate-600 font-medium">Đang hoạt động</span>
+                                            <span className="text-[14px] text-slate-600 font-medium">{t('admin.chat.active')}</span>
                                         </div>
                                     </div>
                                 </div>
-                                <button className="p-2 hover:bg-slate-100 rounded-xl transition-colors text-slate-400">
-                                    <FiMoreVertical size={20} />
-                                </button>
                             </div>
 
-                            {/* Messages Area - ZERO LATENCY FLEX REVERSE */}
                             <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 sm:p-8 flex flex-col-reverse bg-slate-50/30 scroll-smooth">
                                 <div className="h-2 shrink-0" />
                                 {[...messages].reverse().map((msg, idx) => {
                                     const reversedMsgs = [...messages].reverse();
                                     const olderMsg = reversedMsgs[idx + 1]; 
-                                    const showTimeSeparator = !olderMsg ||
-                                        (new Date(msg.timestamp).getTime() - new Date(olderMsg.timestamp).getTime() > 20 * 60 * 1000);
-
-                                    const isStandaloneCard = msg.imageUrl && (
-                                        msg.content === "Đã gửi một hình ảnh 📸" ||
-                                        msg.content === "Đã gửi một video 🎥" ||
-                                        msg.content.includes("Đã gửi tệp:") ||
-                                        !msg.content
-                                    );
+                                    const showTimeSeparator = !olderMsg || (new Date(msg.timestamp).getTime() - new Date(olderMsg.timestamp).getTime() > 20 * 60 * 1000);
 
                                     return (
                                         <div key={msg.id || idx} className="flex flex-col gap-4 mb-4">
                                             <div className={`flex ${msg.senderId === 'admin' ? 'justify-end' : 'justify-start'}`}>
                                                 <div className={`flex flex-col ${msg.senderId === 'admin' ? 'items-end' : 'items-start'} max-w-[85%] sm:max-w-[70%]`}>
-                                                    <div
-                                                        className={`rounded-2xl text-[14px] sm:text-[15px] leading-relaxed ${isStandaloneCard
-                                                            ? ""
-                                                            : `shadow-sm px-4 py-2.5 sm:px-5 sm:py-3 ${msg.senderId === 'admin'
-                                                                ? 'bg-[#E9DCD6] text-slate-800 rounded-tr-none'
-                                                                : 'bg-[#F0F0F0] text-slate-700 rounded-tl-none'
-                                                            }`
-                                                            }`}
-                                                    >
+                                                    <div className={`rounded-2xl text-[14px] sm:text-[15px] shadow-sm px-4 py-2.5 sm:px-5 sm:py-3 ${msg.senderId === 'admin' ? 'bg-[#E9DCD6] text-slate-800 rounded-tr-none' : 'bg-[#F0F0F0] text-slate-700 rounded-tl-none'}`}>
                                                         {msg.imageUrl && (
-                                                            <div className={`${!isStandaloneCard ? "mb-2" : ""} max-w-[280px] sm:max-w-[350px] rounded-2xl overflow-hidden cursor-pointer hover:opacity-95 transition-all shadow-md ring-1 ring-slate-100 bg-black/5`}>
-                                                                <a href={msg.imageUrl} target="_blank" rel="noopener noreferrer" className="block">
-                                                                    {msg.imageUrl.toLowerCase().match(/\.(mp4|mov|webm|quicktime)$/) || msg.content.includes("video") ? (
-                                                                        <video src={msg.imageUrl} className="w-full h-auto rounded-lg" />
-                                                                    ) : msg.imageUrl.toLowerCase().match(/\.(printable|jpg|jpeg|png|gif|webp|heic)$/) || msg.content.includes("hình ảnh") ? (
-                                                                        <img src={msg.imageUrl} alt="attachment" className="w-full h-auto object-cover rounded-lg" />
-                                                                    ) : (
-                                                                        <div className={`p-4 flex items-center gap-4 rounded-xl ${msg.senderId === 'admin' ? 'bg-blue-600 text-white' : 'bg-slate-100'}`}>
-                                                                            <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${msg.senderId === 'admin' ? 'bg-white/20' : 'bg-blue-50'}`}>
-                                                                                <FiMessageCircle size={22} className={msg.senderId === 'admin' ? 'text-white' : 'text-blue-500'} />
-                                                                            </div>
-                                                                            <div className="flex-1 overflow-hidden text-left">
-                                                                                <p className={`text-[13px] font-bold truncate ${msg.senderId === 'admin' ? 'text-white' : 'text-slate-700'}`}>
-                                                                                    {msg.content.includes("Đã gửi tệp:")
-                                                                                        ? msg.content.replace("Đã gửi tệp: ", "").replace(" 📄", "")
-                                                                                        : "Tài liệu / Tệp"}
-                                                                                </p>
-                                                                                <p className={`text-[11px] font-medium truncate ${msg.senderId === 'admin' ? 'text-blue-100' : 'text-slate-400'}`}>Nhấn để xem/tải về</p>
-                                                                            </div>
-                                                                        </div>
-                                                                    )}
-                                                                </a>
+                                                            <div className="mb-2 max-w-[280px] rounded-2xl overflow-hidden shadow-md">
+                                                                <img src={msg.imageUrl} alt="" className="w-full h-auto" />
                                                             </div>
                                                         )}
-                                                        <div className="break-words">
-                                                            {!isStandaloneCard && msg.content}
-                                                        </div>
+                                                        <div className="break-words">{msg.content}</div>
                                                     </div>
-                                                    {msg.senderId === 'admin' && idx === 0 && (
+                                                    {msg.senderId === 'admin' && (
                                                         <div className="mt-1 px-1">
-                                                            <span className="text-[12px] sm:text-[13px] font-medium text-slate-500">
-                                                                {msg.isRead ? "Đã xem" : "Đã gửi"}
-                                                            </span>
+                                                            <span className="text-[12px] font-medium text-slate-500">{msg.isRead ? t('admin.chat.read') : t('admin.chat.sent')}</span>
                                                         </div>
                                                     )}
                                                 </div>
                                             </div>
                                             {showTimeSeparator && (
                                                 <div className="flex justify-center my-4">
-                                                    <span className="text-[12px] sm:text-[13px] font-medium text-slate-500 bg-slate-100/50 px-3 py-1 rounded-full">
-                                                        {formatMessageTime(msg.timestamp)}
-                                                    </span>
+                                                    <span className="text-[12px] font-medium text-slate-500 bg-slate-100/50 px-3 py-1 rounded-full">{formatMessageTime(msg.timestamp)}</span>
                                                 </div>
                                             )}
                                         </div>
@@ -509,13 +374,12 @@ const ChatManagement = () => {
                                 })}
                             </div>
 
-                            {/* Quick Replies */}
-                            <div className="px-4 sm:px-6 py-2.5 bg-slate-50 flex items-center gap-2 overflow-x-auto border-t border-slate-100 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                            <div className="px-4 sm:px-6 py-2.5 bg-slate-50 flex items-center gap-2 overflow-x-auto border-t border-slate-100 scrollbar-hide">
                                 {quickReplies.map((reply, idx) => (
                                     <button
                                         key={idx}
                                         onClick={() => setInputValue(reply)}
-                                        className="whitespace-nowrap px-3.5 py-1.5 bg-white border border-slate-200 rounded-full text-[13px] font-medium text-slate-600 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all shadow-sm shrink-0"
+                                        className="whitespace-nowrap px-3.5 py-1.5 bg-white border border-slate-200 rounded-full text-[13px] font-medium text-slate-600 hover:bg-blue-50 transition-all shadow-sm shrink-0"
                                     >
                                         {reply.length > 35 ? reply.substring(0, 35) + '...' : reply}
                                     </button>
@@ -524,38 +388,26 @@ const ChatManagement = () => {
 
                             <div className="p-3 sm:p-4 bg-white border-t border-slate-100">
                                 <form onSubmit={handleSendMessage} className="flex gap-2 sm:gap-3 items-center">
-                                    <button
-                                        type="button"
-                                        onClick={() => fileInputRef.current?.click()}
-                                        className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-blue-500 hover:bg-blue-600 text-white flex items-center justify-center transition-all shrink-0 shadow-sm"
-                                    >
-                                        <FiPlus size={20} />
-                                    </button>
+                                    <button type="button" onClick={() => fileInputRef.current?.click()} className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-blue-500 text-white flex items-center justify-center shrink-0 shadow-sm"><FiPlus size={20} /></button>
                                     <input type="file" accept="*" hidden ref={fileInputRef} onChange={handleImageSelect} />
-                                    <div className="flex-1 relative flex items-center bg-slate-100 rounded-full px-2 shadow-inner border border-slate-200/50">
+                                    <div className="flex-1 bg-slate-100 rounded-full px-2 border border-slate-200/50">
                                         <input
                                             type="text"
-                                            placeholder={uploadingImage ? "Đang tải tệp..." : "Để lại lời nhắn..."}
-                                            className="w-full pl-3 pr-10 py-2.5 sm:py-3 bg-transparent border-none text-[16px] focus:ring-0 outline-none text-slate-800"
+                                            placeholder={uploadingImage ? t('admin.chat.sending') : t('admin.chat.placeholder')}
+                                            className="w-full pl-3 pr-4 py-2.5 sm:py-3 bg-transparent border-none text-[16px] outline-none text-slate-800"
                                             value={inputValue}
                                             onChange={(e) => setInputValue(e.target.value)}
                                             disabled={uploadingImage}
                                         />
                                     </div>
-                                    <button
-                                        type="submit"
-                                        disabled={uploadingImage || (!inputValue.trim() && !selectedImage)}
-                                        className="text-blue-500 disabled:text-slate-300"
-                                    >
-                                        <FiSend size={24} />
-                                    </button>
+                                    <button type="submit" disabled={uploadingImage || (!inputValue.trim() && !selectedImage)} className="text-blue-500 disabled:text-slate-300"><FiSend size={24} /></button>
                                 </form>
                             </div>
                         </motion.div>
                     ) : (
                         <div className="flex-1 flex flex-col items-center justify-center text-slate-400 bg-slate-50/20 h-full">
                             <FiMessageCircle size={60} className="mb-4 opacity-20" />
-                            <h3 className="text-xl font-bold text-slate-800">Chọn hội thoại</h3>
+                            <h3 className="text-xl font-bold text-slate-800">{t('admin.chat.select_convo')}</h3>
                         </div>
                     )}
                 </AnimatePresence>

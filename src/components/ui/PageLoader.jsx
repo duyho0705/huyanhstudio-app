@@ -35,13 +35,12 @@ const PageLoader = () => {
       </div>
 
       {/* Floating Spinner in corner to show progress */}
-      <div className="fixed bottom-10 right-10 flex items-center gap-3 bg-white px-5 py-3 rounded-full shadow-2xl border border-slate-100 z-50">
+      <div className="fixed bottom-10 right-10 flex items-center justify-center p-3 sm:p-4 bg-white rounded-2xl shadow-2xl border border-slate-100 z-50">
         <motion.div
            animate={{ rotate: 360 }}
            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
            className="w-5 h-5 rounded-full border-2 border-blue-500/20 border-t-blue-500"
         />
-        <span className="text-[12px] font-bold text-slate-400 tracking-wider uppercase">Loading</span>
       </div>
     </div>
   );

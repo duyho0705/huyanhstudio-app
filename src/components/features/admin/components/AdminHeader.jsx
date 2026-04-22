@@ -19,6 +19,8 @@ import {
   Zap,
 } from "lucide-react";
 
+import { removeVietnameseTones } from "../../../../utils/removeVietnameseTones";
+
 import AdminAccount from "../AdminAccount";
 import AdminBookings from "../AdminBookings";
 import AdminChangePassword from "../AdminChangePassword";
@@ -42,7 +44,8 @@ const AdminHeader = ({ toggleSidebar }) => {
   };
 
   const getUserName = () => {
-    return user?.customerName || "Administrator";
+    const name = user?.customerName || "Administrator";
+    return i18n.language === 'en' ? removeVietnameseTones(name) : name;
   };
 
   const getUserRole = () => {

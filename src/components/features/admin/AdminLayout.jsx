@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import AdminSidebar from "./components/AdminSidebar";
 import AdminHeader from "./components/AdminHeader";
@@ -21,6 +22,7 @@ const pageTransition = {
 };
 
 const AdminLayout = () => {
+  const { t } = useTranslation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
 
@@ -37,12 +39,12 @@ const AdminLayout = () => {
         client.subscribe("/topic/bookings", (message) => {
           const booking = JSON.parse(message.body);
           notification.success({
-            message: "🎉 CÓ LỊCH ĐẶT MỚI!",
+            message: `🎉 ${t('admin.header.notifications').toUpperCase()}!`,
             description: (
               <div>
-                <p>Khách hàng: <strong>{booking.customerName}</strong></p>
-                <p>Ngày thu: <strong>{booking.recordDate}</strong></p>
-                <p className="text-xs text-slate-400 mt-2">Mã: {booking.bookingCode?.slice(-8).toUpperCase()}</p>
+                <p>{t('admin.bookings.col_customer')}: <strong>{booking.customerName}</strong></p>
+                <p>{t('admin.bookings.expected_date')}: <strong>{booking.recordDate}</strong></p>
+                <p className="text-xs text-slate-400 mt-2">{t('admin.bookings.col_code')}: {booking.bookingCode?.slice(-8).toUpperCase()}</p>
               </div>
             ),
             placement: "bottomRight",
@@ -58,8 +60,8 @@ const AdminLayout = () => {
           // If current page is NOT chat, show notification
           if (!window.location.pathname.includes("/admin/chat")) {
             notification.info({
-              message: "💬 TIN NHẮN MỚI",
-              description: `Bạn có tin nhắn mới từ khách hàng.`,
+              message: `💬 ${t('admin.sidebar.chat').toUpperCase()}`,
+              description: t('admin.dashboard.recent_desc'),
               placement: "bottomRight",
               duration: 5,
             });
@@ -140,8 +142,8 @@ const AdminLayout = () => {
 
               // Show popup notification
               notification.info({
-                message: "Tin nhắn mới từ " + (data.userName || "Khách hàng"),
-                description: data.lastMessage || "Đã gửi 1 tin đính kèm",
+                message: `${t('admin.sidebar.chat')} : ` + (data.userName || t('admin.bookings.col_customer')),
+                description: data.lastMessage || "...",
                 placement: "topRight",
                 duration: 5,
                 className: "cursor-pointer",

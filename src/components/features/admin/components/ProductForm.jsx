@@ -1,10 +1,21 @@
 import { Modal, Form, Input, Radio, Upload, Progress, message } from "antd";
 import { useEffect, useState } from "react";
-import { Video, Youtube, CheckCircle, AlertCircle, Upload as UploadIcon, FileVideo, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../../../../api/firebase";
+import { 
+  Play, 
+  Video as VideoIcon, 
+  Youtube as YoutubeIcon, 
+  CheckCircle as CheckCircleIcon, 
+  AlertCircle as AlertCircleIcon, 
+  Upload as UploadIconLucide, 
+  FileVideo as FileVideoIcon, 
+  X as XIcon 
+} from "lucide-react";
 
 const ProductForm = ({ open, onCancel, onSubmit, initialValues }) => {
+  const { t } = useTranslation();
   const [form] = Form.useForm();
   const [sourceType, setSourceType] = useState("youtube");
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -51,14 +62,14 @@ const ProductForm = ({ open, onCancel, onSubmit, initialValues }) => {
       },
       (error) => {
         setIsUploading(false);
-        message.error("Tải lên thất bại: " + error.message);
+        message.error(t('common.error') + ": " + error.message);
         onError(error);
       },
       async () => {
         const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
         form.setFieldsValue({ videoUrl: downloadURL });
         setIsUploading(false);
-        message.success("Tải lên video thành công!");
+        message.success(t('common.update_success'));
         onSuccess("ok");
       }
     );
@@ -72,7 +83,7 @@ const ProductForm = ({ open, onCancel, onSubmit, initialValues }) => {
     if (fullUrl.includes("youtu.be/"))
       return fullUrl.split("youtu.be/")[1]?.split("?")[0];
     if (fullUrl.includes("youtube.com/embed/"))
-      return fullUrl.split("youtube.com/embed/")[1]?.split("?")[0];
+      return fullUrl.split("embed/")[1]?.split("?")[0];
     return null;
   };
 
@@ -81,7 +92,7 @@ const ProductForm = ({ open, onCancel, onSubmit, initialValues }) => {
       title={
         <div className="py-2">
           <h3 className="text-[20px] font-bold text-slate-900 leading-tight">
-            {initialValues ? "Cập nhật sản phẩm" : "Thêm sản phẩm mới"}
+            {initialValues ? t('admin.products.form_update') : t('admin.products.form_add')}
           </h3>
         </div>
       }
@@ -96,7 +107,7 @@ const ProductForm = ({ open, onCancel, onSubmit, initialValues }) => {
           onClick={onCancel}
           className="h-11 px-8 rounded-xl font-bold text-[14px] text-slate-600 border border-slate-200 bg-white mr-3 hover:bg-slate-50 transition-colors"
         >
-          Hủy
+          {t('common.cancel')}
         </button>,
         <button
           key="submit"
@@ -104,7 +115,7 @@ const ProductForm = ({ open, onCancel, onSubmit, initialValues }) => {
           disabled={isUploading}
           className={`h-11 px-8 rounded-xl bg-slate-900 border-none font-bold text-[14px] text-white transition-all active:scale-95 ${isUploading ? "opacity-50 cursor-not-allowed" : "hover:shadow-lg hover:shadow-slate-200"}`}
         >
-          {initialValues ? "Lưu thay đổi" : "Đăng sản phẩm"}
+          {initialValues ? t('common.update') : t('admin.products.add_btn')}
         </button>
       ]}
     >
@@ -115,24 +126,24 @@ const ProductForm = ({ open, onCancel, onSubmit, initialValues }) => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Form.Item
                 name="title"
-                label={<span className="text-[14px] font-bold text-slate-600">Tiêu đề sản phẩm</span>}
-                rules={[{ required: true, message: "Vui lòng nhập tiêu đề!" }]}
+                label={<span className="text-[14px] font-bold text-slate-600">{t('admin.products.form_title')}</span>}
+                rules={[{ required: true, message: t('common.error') }]}
                 className="mb-0"
               >
                 <Input
-                  placeholder="Nhập tên sản phẩm"
+                  placeholder={t('admin.products.form_title')}
                   className="h-11 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-200 focus:border-blue-500 font-medium"
                 />
               </Form.Item>
 
               <Form.Item
                 name="author"
-                label={<span className="text-[14px] font-bold text-slate-600">Tác giả</span>}
-                rules={[{ required: true, message: "Vui lòng nhập tên tác giả!" }]}
+                label={<span className="text-[14px] font-bold text-slate-600">{t('admin.products.form_author')}</span>}
+                rules={[{ required: true, message: t('common.error') }]}
                 className="mb-0"
               >
                 <Input
-                  placeholder="Nhập tên tác giả"
+                  placeholder={t('admin.products.form_author')}
                   className="h-11 px-4 bg-white border-slate-200 rounded-xl hover:border-slate-200 focus:border-blue-500 font-medium"
                 />
               </Form.Item>
@@ -141,7 +152,7 @@ const ProductForm = ({ open, onCancel, onSubmit, initialValues }) => {
             <div className="bg-slate-50 p-6 rounded-[24px] border border-slate-100 space-y-6">
               <div>
                 <label className="text-[14px] font-bold text-slate-600 flex items-center gap-2 mb-4">
-                  <Video size={18} className="text-blue-500" /> Chọn hình thức đăng Video
+                  <VideoIcon size={18} className="text-blue-500" /> {t('admin.dashboard.popular_title')}
                 </label>
 
                 <div className="w-full h-[60px] flex gap-2 relative bg-slate-200/50 p-1 rounded-2xl border border-slate-200/50">
@@ -155,8 +166,8 @@ const ProductForm = ({ open, onCancel, onSubmit, initialValues }) => {
                     className={`flex-1 h-full rounded-xl flex items-center justify-center cursor-pointer relative z-10 transition-colors duration-300 ${sourceType === 'youtube' ? 'text-red-600' : 'text-slate-500'}`}
                   >
                     <div className="flex flex-col items-center justify-center leading-none">
-                      <Youtube size={16} className="mb-0.5" />
-                      <span className="text-[12px] font-black uppercase tracking-tighter">Dùng Link YouTube</span>
+                      <YoutubeIcon size={16} className="mb-0.5" />
+                      <span className="text-[12px] font-black uppercase tracking-tighter">YouTube</span>
                     </div>
                   </div>
                   <div
@@ -164,8 +175,8 @@ const ProductForm = ({ open, onCancel, onSubmit, initialValues }) => {
                     className={`flex-1 h-full rounded-xl flex items-center justify-center cursor-pointer relative z-10 transition-colors duration-300 ${sourceType === 'upload' ? 'text-blue-600' : 'text-slate-500'}`}
                   >
                     <div className="flex flex-col items-center justify-center leading-none">
-                      <UploadIcon size={16} className="mb-0.5" />
-                      <span className="text-[12px] font-black uppercase tracking-tighter">Tải từ máy tính</span>
+                      <UploadIconLucide size={16} className="mb-0.5" />
+                      <span className="text-[12px] font-black uppercase tracking-tighter">{t('common.upload')}</span>
                     </div>
                   </div>
                 </div>
@@ -175,13 +186,13 @@ const ProductForm = ({ open, onCancel, onSubmit, initialValues }) => {
                 {sourceType === "youtube" ? (
                   <Form.Item
                     name="videoUrl"
-                    label={<span className="text-[13px] font-bold text-slate-500 tracking-tighter">Đường dẫn Video YouTube</span>}
-                    rules={[{ required: sourceType === "youtube", message: "Vui lòng nhập link Youtube" }]}
+                    label={<span className="text-[13px] font-bold text-slate-500 tracking-tighter">{t('admin.products.form_url')}</span>}
+                    rules={[{ required: sourceType === "youtube", message: t('common.error') }]}
                     className="mb-0"
                   >
                     <Input
-                      prefix={<Youtube size={16} className="text-red-500 mr-2" />}
-                      placeholder="Dán link (ví dụ: https://www.youtube.com/watch?v=...)"
+                      prefix={<YoutubeIcon size={16} className="text-red-500 mr-2" />}
+                      placeholder="YouTube Link"
                       className="h-11 px-4 bg-slate-50 border-none rounded-xl font-medium focus:bg-white hover:bg-slate-50"
                     />
                   </Form.Item>
@@ -189,7 +200,7 @@ const ProductForm = ({ open, onCancel, onSubmit, initialValues }) => {
                   <div className="space-y-4">
                     <Form.Item
                       name="videoUrl"
-                      rules={[{ required: sourceType === "upload", message: "Vui lòng tải video lên" }]}
+                      rules={[{ required: sourceType === "upload", message: t('common.error') }]}
                       className="mb-0"
                     >
                       <Upload.Dragger
@@ -203,10 +214,10 @@ const ProductForm = ({ open, onCancel, onSubmit, initialValues }) => {
                       >
                         <div className="py-6 flex flex-col items-center gap-2">
                           <div className="w-10 h-10 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                            <UploadIcon size={18} />
+                            <UploadIconLucide size={18} />
                           </div>
                           <div className="text-center">
-                            <p className="text-[12px] font-bold text-slate-700 m-0">Kéo thả tệp video</p>
+                            <p className="text-[12px] font-bold text-slate-700 m-0">{t('admin.products.form_url')}</p>
                             <p className="text-[10px] text-slate-400 mt-0.5">MP4, MOV</p>
                           </div>
                         </div>
@@ -216,7 +227,7 @@ const ProductForm = ({ open, onCancel, onSubmit, initialValues }) => {
                     {isUploading && (
                       <div className="p-3 bg-blue-50 rounded-xl border border-blue-100">
                         <div className="flex items-center justify-between mb-2 px-1">
-                          <span className="text-[11px] font-bold text-blue-700">Đang tải lên...</span>
+                          <span className="text-[11px] font-bold text-blue-700">{t('common.loading')}</span>
                           <span className="text-[11px] font-black text-blue-800">{uploadProgress}%</span>
                         </div>
                         <Progress percent={uploadProgress} showInfo={false} strokeColor="#3B82F6" strokeWidth={6} strokeLinecap="round" />
@@ -227,17 +238,17 @@ const ProductForm = ({ open, onCancel, onSubmit, initialValues }) => {
                       <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-100 flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center animate-pulse">
-                            <FileVideo size={16} />
+                            <FileVideoIcon size={16} />
                           </div>
                           <div className="overflow-hidden">
-                            <p className="text-[12px] font-bold text-emerald-900">Thành công</p>
+                            <p className="text-[12px] font-bold text-emerald-900">{t('common.success')}</p>
                           </div>
                         </div>
                         <button
                           onClick={() => form.setFieldsValue({ videoUrl: "" })}
                           className="p-2 rounded-full text-emerald-600"
                         >
-                          <X size={14} />
+                          <XIcon size={14} />
                         </button>
                       </div>
                     )}
@@ -263,9 +274,9 @@ const ProductForm = ({ open, onCancel, onSubmit, initialValues }) => {
 
                   return (
                     <div className="w-full space-y-4">
-                      <div className="flex items-center gap-2 text-[14px] font-bold text-slate-600 px-1">
-                        <CheckCircle size={14} className="text-emerald-500" />
-                        Kết quả
+                       <div className="flex items-center gap-2 text-[14px] font-bold text-slate-600 px-1">
+                        <CheckCircleIcon size={14} className="text-emerald-500" />
+                        Preview
                       </div>
                       
                       {videoId ? (
@@ -277,7 +288,7 @@ const ProductForm = ({ open, onCancel, onSubmit, initialValues }) => {
                           />
                           <div className="absolute inset-0 flex items-center justify-center">
                             <div className="w-14 h-14 rounded-full bg-red-600 text-white flex items-center justify-center shadow-2xl animate-pulse">
-                              <Youtube size={28} fill="white" />
+                              <YoutubeIcon size={28} fill="white" />
                             </div>
                           </div>
                         </div>
@@ -289,26 +300,26 @@ const ProductForm = ({ open, onCancel, onSubmit, initialValues }) => {
                            />
                            <div className="relative z-10 flex flex-col items-center">
                             <div className="w-16 h-16 rounded-full bg-blue-500 flex items-center justify-center mb-2 shadow-lg">
-                              <FileVideo size={32} />
+                              <FileVideoIcon size={32} />
                             </div>
-                            <span className="text-[14px] font-bold">Video đã sẵn sàng</span>
+                            <span className="text-[14px] font-bold">Ready</span>
                            </div>
                         </div>
                       ) : (
                         <div className="aspect-video rounded-2xl bg-white border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400 gap-3">
                            <div className="w-16 h-16 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100">
-                              <Video size={32} className="opacity-20" />
+                              <VideoIcon size={32} className="opacity-20" />
                            </div>
-                           <span className="text-[13px] font-medium italic">Vui lòng nhập nguồn video...</span>
+                           <span className="text-[13px] font-medium italic">Waiting for source...</span>
                         </div>
                       )}
 
                       <div className="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm mt-4">
                         <h4 className="text-[15px] font-bold text-slate-900 truncate">
-                          {getFieldValue("title") || "Tiêu đề sản phẩm"}
+                          {getFieldValue("title") || t('admin.products.form_title')}
                         </h4>
                         <p className="text-[12px] font-medium text-slate-500 mt-1">
-                          Tác giả: {getFieldValue("author") || "---"}
+                          {t('admin.products.author')}: {getFieldValue("author") || "---"}
                         </p>
                       </div>
                     </div>

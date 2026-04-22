@@ -51,6 +51,7 @@ import {
 } from "lucide-react";
 import { FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
 import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
 
 import bookingApi from "../../../api/bookingApi";
 import userApi from "../../../api/userApi";
@@ -61,20 +62,19 @@ import BookingForm from "./components/BookingForm";
 import BookingFilters from "./components/BookingFilters";
 import { useBookingManagement } from "./hooks/useBookingManagement";
 import statsApi from "../../../api/statsApi";
-import { useTranslation } from "react-i18next";
 import { removeVietnameseTones } from "../../../utils/removeVietnameseTones";
 
 const { Option } = Select;
 
-const bookingStatuses = [
-  { value: "PENDING", label: "Chờ xác nhận", color: "orange", classes: "bg-orange-500 text-white border-orange-600" },
-  { value: "CONFIRMED", label: "Đã xác nhận", color: "blue", classes: "bg-blue-600 text-white border-blue-700" },
-  { value: "COMPLETED", label: "Hoàn thành", color: "green", classes: "bg-emerald-600 text-white border-emerald-700" },
-  { value: "CANCELLED", label: "Đã hủy", color: "red", classes: "bg-red-600 text-white border-red-700" },
-];
-
 const BookingManagement = () => {
   const { t, i18n } = useTranslation();
+  
+  const bookingStatuses = [
+    { value: "PENDING", label: t('user.booking.statuses.PENDING'), color: "orange", classes: "bg-orange-500 text-white border-orange-600" },
+    { value: "CONFIRMED", label: t('user.booking.statuses.CONFIRMED'), color: "blue", classes: "bg-blue-600 text-white border-blue-700" },
+    { value: "COMPLETED", label: t('user.booking.statuses.COMPLETED'), color: "green", classes: "bg-emerald-600 text-white border-emerald-700" },
+    { value: "CANCELLED", label: t('user.booking.statuses.CANCELLED'), color: "red", classes: "bg-red-600 text-white border-red-700" },
+  ];
   const {
     bookings,
     loading,
@@ -779,21 +779,21 @@ const BookingManagement = () => {
       >
         <div className="space-y-4 sm:space-y-6">
           <div className="space-y-2">
-            <h3 className="text-[18px] sm:text-[24px] font-bold text-slate-900 leading-tight">Xóa lịch thu âm</h3>
+            <h3 className="text-[18px] sm:text-[24px] font-bold text-slate-900 leading-tight">{t('admin.bookings.delete_title')}</h3>
             <p className="text-[13px] sm:text-[15px] text-slate-500 leading-relaxed font-medium">
-              Thao tác này sẽ xóa vĩnh viễn đơn đặt. Hành động này không thể hoàn tác.
+              {t('admin.bookings.delete_desc')}
             </p>
           </div>
 
           <div className="space-y-3 sm:space-y-4">
             <div className="space-y-2">
               <label className="text-[13px] sm:text-[15px] font-medium text-slate-700">
-                Mã xác nhận: <span className="text-red-500">"{selectedBooking?.bookingCode}"</span>
+                {t('admin.bookings.confirm_code')}: <span className="text-red-500">"{selectedBooking?.bookingCode}"</span>
               </label>
               <Input
                 value={deleteConfirmText}
                 onChange={(e) => setDeleteConfirmText(e.target.value)}
-                placeholder="Nhập mã đơn..."
+                placeholder={t('admin.bookings.confirm_placeholder')}
                 className="h-9 sm:h-11 rounded-xl border-slate-200 focus:border-red-500 focus:ring-red-100 font-medium text-[13px] sm:text-[14px]"
               />
             </div>
@@ -803,7 +803,7 @@ const BookingManagement = () => {
                 <AlertTriangle size={12} strokeWidth={2.5} />
               </div>
               <p className="text-[12px] sm:text-[15px] font-medium text-red-800 leading-relaxed">
-                Cảnh báo: Việc xóa sẽ loại bỏ lịch trình và doanh thu.
+                {t('admin.bookings.delete_warning')}
               </p>
             </div>
           </div>
@@ -813,7 +813,7 @@ const BookingManagement = () => {
               onClick={() => setIsDeleteModalOpen(false)}
               className="flex-1 h-9 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium text-[13px] hover:bg-slate-50 transition-colors"
             >
-              Hủy
+              {t('common.cancel')}
             </button>
             <button
               onClick={confirmDelete}
@@ -823,7 +823,7 @@ const BookingManagement = () => {
                 : "bg-slate-100 text-slate-400 cursor-not-allowed border-none shadow-none"
                 }`}
             >
-              Xác nhận xóa
+              {t('admin.bookings.delete')}
             </button>
           </div>
         </div>
@@ -842,8 +842,8 @@ const BookingManagement = () => {
           <div className="w-16 h-16 bg-red-100 text-red-600 rounded-none flex items-center justify-center mx-auto mb-6">
             <Trash2 size={32} />
           </div>
-          <h3 className="text-xl font-black text-slate-900 mb-2">Xóa hàng loạt?</h3>
-          <p className="text-slate-500 text-sm font-medium mb-6">Bạn đang chuẩn bị xóa <strong>{selectedRowKeys.length}</strong> đơn hàng đã chọn.</p>
+          <h3 className="text-xl font-black text-slate-900 mb-2">{t('admin.bookings.delete')}?</h3>
+          <p className="text-slate-500 text-sm font-medium mb-6">{t('admin.bookings.delete_desc')}</p>
 
           <div className="max-h-60 overflow-y-auto pr-2 custom-scrollbar mb-8 space-y-2">
             {selectedRowKeys.map((key) => {
@@ -861,8 +861,8 @@ const BookingManagement = () => {
           </div>
 
           <div className="flex gap-3">
-            <Button onClick={() => setIsBulkDeleteModalOpen(false)} className="flex-1 h-12 rounded-none font-bold text-[10px]">Hủy bỏ</Button>
-            <Button onClick={confirmBulkDelete} danger type="primary" className="flex-1 h-12 rounded-none bg-red-600 border-none font-bold text-[10px]">Xóa {selectedRowKeys.length} đơn</Button>
+            <Button onClick={() => setIsBulkDeleteModalOpen(false)} className="flex-1 h-12 rounded-none font-bold text-[10px]">{t('common.cancel')}</Button>
+            <Button onClick={confirmBulkDelete} danger type="primary" className="flex-1 h-12 rounded-none bg-red-600 border-none font-bold text-[10px]">{t('admin.bookings.delete')} {selectedRowKeys.length} {t('admin.dashboard.unit_booking')}</Button>
           </div>
         </div>
       </Modal>
@@ -889,7 +889,7 @@ const BookingManagement = () => {
                 <div className="space-y-1.5 sm:space-y-2">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="px-2 py-0.5 bg-white border border-slate-200 text-slate-500 rounded-md text-[11px] sm:text-[12px] font-medium shadow-sm">
-                      Chi tiết đặt lịch
+                      {t('admin.bookings.detail_title')}
                     </span>
                     <span className="text-slate-300 font-bold">/</span>
                     <span className="text-slate-400 font-bold text-[10px] sm:text-[11px] truncate max-w-[120px] sm:max-w-none">
@@ -920,16 +920,16 @@ const BookingManagement = () => {
                 <div className="md:col-span-1 space-y-5 sm:space-y-8">
                   <section>
                     <h4 className="text-[13px] sm:text-[14px] font-medium text-slate-500 mb-2.5 sm:mb-3 flex items-center gap-2">
-                      <User size={16} className="sm:w-[18px] sm:h-[18px] text-blue-500" /> Liên hệ
+                      <User size={16} className="sm:w-[18px] sm:h-[18px] text-blue-500" /> {t('admin.bookings.detail_contact')}
                     </h4>
                     <div className="space-y-2.5 sm:space-y-3">
                       <div>
                         <p className="text-[13px] sm:text-[14px] font-medium text-slate-900 mb-0.5">{selectedDetailBooking.phone}</p>
-                        <p className="text-[11px] sm:text-[12px] font-medium text-slate-500">Số điện thoại</p>
+                        <p className="text-[11px] sm:text-[12px] font-medium text-slate-500">{t('admin.bookings.col_phone')}</p>
                       </div>
                       <div>
                         <p className="text-[13px] sm:text-[14px] font-medium text-slate-900 mb-0.5">{selectedDetailBooking.email || "Chưa cập nhật"}</p>
-                        <p className="text-[11px] sm:text-[12px] font-medium text-slate-500">Email liên lạc</p>
+                        <p className="text-[11px] sm:text-[12px] font-medium text-slate-500">{t('admin.bookings.detail_email')}</p>
                       </div>
                     </div>
                   </section>
@@ -938,7 +938,7 @@ const BookingManagement = () => {
 
                   <section>
                     <h4 className="text-[13px] sm:text-[14px] font-medium text-slate-500 mb-2.5 sm:mb-3 flex items-center gap-2">
-                      <Clock size={16} className="sm:w-[18px] sm:h-[18px] text-amber-500" /> Thời gian
+                      <Clock size={16} className="sm:w-[18px] sm:h-[18px] text-amber-500" /> {t('admin.bookings.detail_time')}
                     </h4>
                     <div className="bg-slate-50 p-3 sm:p-3.5 rounded-lg sm:rounded-xl border border-slate-100">
                       <div className="flex items-center gap-2 mb-1.5 sm:mb-2">
@@ -948,7 +948,7 @@ const BookingManagement = () => {
                         </p>
                       </div>
                       <p className="text-[12px] sm:text-[13px] font-medium text-slate-600 m-0 pl-3.5">
-                        Đặt lịch lúc: <span className="text-slate-600 ml-1">
+                        {t('admin.bookings.detail_booked_at')}: <span className="text-slate-600 ml-1">
                           {selectedDetailBooking.createdDate ? dayjs(selectedDetailBooking.createdDate).format("HH:mm:ss") : "---"}
                         </span>
                       </p>
@@ -962,21 +962,21 @@ const BookingManagement = () => {
                   <div className="grid grid-cols-2 gap-3 sm:gap-8">
                     <div className="bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden group">
                       <p className="text-[12px] sm:text-[14px] font-medium text-slate-500 mb-1 sm:mb-1.5 flex items-center gap-1.5 sm:gap-2">
-                        <CalendarDays size={13} className="sm:w-4 sm:h-4 text-blue-500" /> Ngày thu
+                        <CalendarDays size={13} className="sm:w-4 sm:h-4 text-blue-500" /> {t('admin.bookings.col_date')}
                       </p>
                       <p className="text-[15px] sm:text-[17px] font-medium text-slate-700">
                         {dayjs(selectedDetailBooking.recordDate).format("DD/MM/YYYY")}
                       </p>
                       {dayjs(selectedDetailBooking.recordDate).isBefore(dayjs(), 'day') ? (
-                        <span className="text-[11px] sm:text-[12px] font-bold text-red-500">Đã quá hạn</span>
+                        <span className="text-[11px] sm:text-[12px] font-bold text-red-500">{t('admin.bookings.detail_overdue')}</span>
                       ) : (
-                        <span className="text-[11px] sm:text-[12px] font-bold text-emerald-500">Sắp đến</span>
+                        <span className="text-[11px] sm:text-[12px] font-bold text-emerald-500">{t('admin.bookings.detail_upcoming')}</span>
                       )}
                     </div>
 
                     <div className="bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden group">
                       <p className="text-[12px] sm:text-[14px] font-medium text-slate-500 mb-1 sm:mb-1.5 flex items-center gap-1.5 sm:gap-2">
-                        <Home size={13} className="sm:w-4 sm:h-4 text-orange-500" /> Phòng thu
+                        <Home size={13} className="sm:w-4 sm:h-4 text-orange-500" /> {t('admin.bookings.form_studio')}
                       </p>
                       <p className="text-[15px] sm:text-[17px] font-medium text-slate-700">
                         {typeof selectedDetailBooking.studioRoom === "object" ? selectedDetailBooking.studioRoom?.studioName : selectedDetailBooking.studioRoom}
@@ -987,7 +987,7 @@ const BookingManagement = () => {
                   {/* Services List */}
                   <section>
                     <h4 className="text-[13px] sm:text-[15px] font-medium text-slate-600 mb-3 sm:mb-4 flex items-center gap-2">
-                      <Package size={18} className="sm:w-5 sm:h-5 text-indigo-500" /> Dịch vụ
+                      <Package size={18} className="sm:w-5 sm:h-5 text-indigo-500" /> {t('admin.bookings.col_service')}
                     </h4>
                     <div className="flex flex-wrap gap-1.5 sm:gap-2">
                       {Array.isArray(selectedDetailBooking.services)
@@ -1010,10 +1010,10 @@ const BookingManagement = () => {
                   {/* Notes */}
                   <section>
                     <h4 className="text-[13px] sm:text-[15px] font-medium text-slate-600 mb-3 sm:mb-4 flex items-center gap-2">
-                      <FileText size={18} className="sm:w-5 sm:h-5 text-slate-500" /> Ghi chú
+                      <FileText size={18} className="sm:w-5 sm:h-5 text-slate-500" /> {t('common.note')}
                     </h4>
                     <div className="p-4 sm:p-6 bg-slate-50 rounded-2xl sm:rounded-[20px] border-l-4 border-slate-900 text-[13px] sm:text-[15px] font-medium text-slate-600 leading-relaxed italic shadow-inner">
-                      {selectedDetailBooking.note || "Không có ghi chú"}
+                      {selectedDetailBooking.note || t('common.no_note')}
                     </div>
                   </section>
                 </div>
@@ -1027,7 +1027,7 @@ const BookingManagement = () => {
                   onClick={() => setIsDetailModalOpen(false)}
                   className="flex-1 md:flex-none h-10 sm:h-12 px-6 sm:px-10 rounded-xl bg-white border border-slate-300 font-bold text-[12px] sm:text-[13px] text-slate-700 shadow-sm hover:!bg-white hover:!text-slate-700 hover:!border-slate-300 transition-none"
                 >
-                  Đóng
+                  {t('common.close')}
                 </Button>
                 <Button
                   type="primary"
@@ -1037,7 +1037,7 @@ const BookingManagement = () => {
                   }}
                   className="flex-1 md:flex-none h-10 sm:h-12 px-5 sm:px-8 rounded-xl bg-slate-900 border-none font-medium text-[12px] sm:text-[14px] text-white shadow-lg shadow-slate-200 hover:!bg-slate-900 hover:!text-white transition-none active:scale-95"
                 >
-                  Chỉnh sửa lịch
+                  {t('admin.bookings.detail_edit')}
                 </Button>
               </div>
             </div>

@@ -88,7 +88,7 @@ const AdminRecentBookings = () => {
                     </span>
                     <div className="w-1 h-1 rounded-full bg-slate-200"></div>
                     <p className="text-[12px] font-medium truncate max-w-[200px]">
-                      {Array.isArray(booking.services) ? booking.services.join(", ") : "Dịch vụ thường"}
+                      {Array.isArray(booking.services) ? booking.services.join(", ") : t('admin.dashboard.standard_service')}
                     </p>
                   </div>
                 </div>

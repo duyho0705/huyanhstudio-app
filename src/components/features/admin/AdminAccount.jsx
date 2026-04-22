@@ -1,11 +1,12 @@
 import useAuthStore from "../../../stores/useAuthStore";
-import useAppStore from "../../../stores/useAppStore";
-import { useState, useEffect, useContext } from "react";
+import { useTranslation } from "react-i18next";
+import { useState, useEffect } from "react";
 import userApi from "../../../api/userApi.js";
-
-import { User, Mail, Phone, CheckCircle2, XCircle, AlertCircle } from "lucide-react";
+import { User, Mail, Phone, CheckCircle2, AlertCircle } from "lucide-react";
+import { removeVietnameseTones } from "../../../utils/removeVietnameseTones";
 
 const AdminAccount = ({ onClose, isOpen }) => {
+  const { t, i18n } = useTranslation();
   const user = useAuthStore(state => state.user);
   const loadProfile = useAuthStore(state => state.loadProfile);
 
@@ -33,10 +34,11 @@ const AdminAccount = ({ onClose, isOpen }) => {
       setEmail("");
       return;
     }
-    setCustomerName(user.customerName || "");
+    const name = user.customerName || "";
+    setCustomerName(i18n.language === 'en' ? removeVietnameseTones(name) : name);
     setPhone(user.phone || "");
     setEmail(user.email || "");
-  }, [user]);
+  }, [user, i18n.language]);
 
   useEffect(() => {
     if (notification.show && notification.type === "error") {
@@ -51,23 +53,23 @@ const AdminAccount = ({ onClose, isOpen }) => {
     const newErrors = {};
     const nameRegex = /^[\p{L}][\p{L}\s.'-]*[\p{L}]$/u;
     if (!customerName.trim()) {
-      newErrors.customerName = "Tên không được để trống";
+      newErrors.customerName = t('common.error');
     } else if (!nameRegex.test(customerName.trim())) {
-      newErrors.customerName = "Tên không hợp lệ";
+      newErrors.customerName = t('common.error');
     }
 
     const phoneRegex = /^(0[3|5|7|8|9])\d{8}$/;
     if (!phone.trim()) {
-      newErrors.phone = "Số điện thoại không được để trống";
+      newErrors.phone = t('common.error');
     } else if (!phoneRegex.test(phone)) {
-      newErrors.phone = "Số điện thoại không hợp lệ";
+      newErrors.phone = t('common.error');
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email.trim()) {
-      newErrors.email = "Email không được để trống";
+      newErrors.email = t('common.error');
     } else if (!emailRegex.test(email)) {
-      newErrors.email = "Email không hợp lệ";
+      newErrors.email = t('common.error');
     }
 
     setErrors(newErrors);
@@ -92,12 +94,12 @@ const AdminAccount = ({ onClose, isOpen }) => {
       });
       await loadProfile();
       if (onClose) {
-        onClose({ success: true, message: "Cập nhật thành công!" });
+        onClose({ success: true, message: t('common.update_success') });
       }
     } catch (err) {
       setNotification({
         show: true,
-        message: err.response?.data?.message || "Cập nhật thất bại!",
+        message: err.response?.data?.message || t('common.error'),
         type: "error",
       });
     } finally {
@@ -114,7 +116,7 @@ const AdminAccount = ({ onClose, isOpen }) => {
             {notification.type === "error" ? <AlertCircle size={20} className="sm:w-6 sm:h-6" /> : <CheckCircle2 size={20} className="sm:w-6 sm:h-6" />}
           </div>
           <div className="flex flex-col min-w-0">
-            <span className="text-[12px] sm:text-sm font-bold text-slate-900 truncate">{notification.type === "error" ? "Lỗi cập nhật" : "Thành công"}</span>
+            <span className="text-[12px] sm:text-sm font-bold text-slate-900 truncate">{notification.type === "error" ? t('common.error') : t('common.success')}</span>
             <span className="text-[11px] sm:text-xs text-slate-500 font-semibold truncate">{notification.message}</span>
           </div>
         </div>
@@ -125,7 +127,7 @@ const AdminAccount = ({ onClose, isOpen }) => {
           <div className="space-y-1.5 sm:space-y-2">
             <label className="flex items-center gap-2 text-[13px] sm:text-[15px] font-semibold text-slate-700 ml-1">
               <User size={16} className="sm:w-[18px] sm:h-[18px] text-blue-500" />
-              Tên tài khoản
+              {t('admin.users.form_name')}
             </label>
             <input
               type="text"
@@ -135,7 +137,7 @@ const AdminAccount = ({ onClose, isOpen }) => {
                 if (errors.customerName)
                   setErrors({ ...errors, customerName: null });
               }}
-              placeholder="Nhập tên"
+              placeholder={t('admin.users.form_name')}
               className={`w-full h-10 sm:h-12 px-4 sm:px-5 bg-slate-50 border rounded-xl focus:bg-white focus:ring-4 outline-none transition-all font-medium text-[13px] sm:text-base text-slate-900 ${errors.customerName ? "border-red-200 focus:ring-red-50 focus:border-red-400" : "border-slate-200 focus:ring-blue-50 focus:border-blue-400"
                 }`}
             />
@@ -147,7 +149,7 @@ const AdminAccount = ({ onClose, isOpen }) => {
           <div className="space-y-1.5 sm:space-y-2">
             <label className="flex items-center gap-2 text-[13px] sm:text-[15px] font-semibold text-slate-700 ml-1">
               <Phone size={16} className="sm:w-[18px] sm:h-[18px] text-blue-500" />
-              Số điện thoại
+              {t('admin.users.col_phone')}
             </label>
             <input
               type="tel"
@@ -156,7 +158,7 @@ const AdminAccount = ({ onClose, isOpen }) => {
                 setPhone(e.target.value);
                 if (errors.phone) setErrors({ ...errors, phone: null });
               }}
-              placeholder="Nhập SĐT"
+              placeholder={t('admin.users.col_phone')}
               className={`w-full h-10 sm:h-12 px-4 sm:px-5 bg-slate-50 border rounded-xl focus:bg-white focus:ring-4 outline-none transition-all font-medium text-[13px] sm:text-base text-slate-900 ${errors.phone ? "border-red-200 focus:ring-red-50 focus:border-red-400" : "border-slate-200 focus:ring-blue-50 focus:border-blue-400"
                 }`}
             />
@@ -168,12 +170,12 @@ const AdminAccount = ({ onClose, isOpen }) => {
           <label className="flex items-center justify-between text-[13px] sm:text-[15px] font-semibold text-slate-700 ml-1">
             <div className="flex items-center gap-2">
               <Mail size={16} className="sm:w-[18px] sm:h-[18px] text-blue-500" />
-              Email
+              {t('admin.users.col_email')}
             </div>
             {user?.isVerified && (
               <span className="px-2 py-0.5 bg-green-50 text-green-600 rounded-md text-[9px] sm:text-[10px] font-black uppercase tracking-wider flex items-center gap-1 border border-green-100">
                 <CheckCircle2 size={10} className="sm:w-3 sm:h-3" />
-                Đã xác thực
+                {t('user.account.verified')}
               </span>
             )}
           </label>
@@ -184,7 +186,7 @@ const AdminAccount = ({ onClose, isOpen }) => {
               setEmail(e.target.value);
               if (errors.email) setErrors({ ...errors, email: null });
             }}
-            placeholder="Nhập email"
+            placeholder="Email"
             className={`w-full h-10 sm:h-12 px-4 sm:px-5 bg-slate-50 border rounded-xl focus:bg-white focus:ring-4 outline-none transition-all font-medium text-[13px] sm:text-base text-slate-900 ${errors.email ? "border-red-200 focus:ring-red-50 focus:border-red-400" : "border-slate-200 focus:ring-blue-50 focus:border-blue-400"
               }`}
           />
@@ -201,7 +203,7 @@ const AdminAccount = ({ onClose, isOpen }) => {
           ) : (
             <CheckCircle2 size={20} />
           )}
-          {isSubmitting ? "Đang xử lý..." : "Lưu thay đổi"}
+          {isSubmitting ? t('common.loading') : t('admin.account.save_btn')}
         </button>
       </form>
     </div>

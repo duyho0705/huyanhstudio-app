@@ -1,6 +1,7 @@
 import { Modal, Form, Input, DatePicker, Select } from "antd";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -14,6 +15,7 @@ const BookingForm = ({
   services,
   studios,
 }) => {
+  const { t } = useTranslation();
   const [form] = Form.useForm();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
@@ -80,7 +82,7 @@ const BookingForm = ({
       title={
         <div className="flex items-center gap-2 py-1">
           <span className="text-[17px] sm:text-[20px] font-bold text-slate-800">
-            {initialValues ? "Cập nhật đặt lịch" : "Tạo đặt lịch mới"}
+            {initialValues ? t('admin.bookings.form_update') : t('admin.bookings.form_add')}
           </span>
         </div>
       }
@@ -93,14 +95,14 @@ const BookingForm = ({
           onClick={onCancel}
           className={`${isMobile ? "h-9 px-5 text-[13px]" : "h-11 px-8 text-[14px]"} rounded-xl font-medium text-slate-500 border border-slate-200 bg-white hover:bg-slate-50 transition-all mr-2`}
         >
-          Hủy
+          {t('common.cancel')}
         </button>,
         <button
           key="submit"
           onClick={handleSubmit}
           className={`${isMobile ? "h-9 px-6 text-[13px]" : "h-11 px-10 text-[14px]"} rounded-xl bg-slate-900 border-none font-medium text-white hover:bg-slate-800 transition-all shadow-md shadow-slate-200`}
         >
-          {initialValues ? "Cập nhật" : "Tạo ngay"}
+          {initialValues ? t('admin.bookings.form_submit_update') : t('admin.bookings.form_submit_add')}
         </button>
       ]}
       width={isMobile ? "95%" : 720}
@@ -116,12 +118,12 @@ const BookingForm = ({
       >
         <Form.Item
           name="customerName"
-          label={<span className="text-[13px] sm:text-[14px] font-medium text-slate-600">Họ và tên</span>}
-          rules={[{ required: true, message: "Nhập họ tên!" }]}
+          label={<span className="text-[13px] sm:text-[14px] font-medium text-slate-600">{t('admin.bookings.form_customer')}</span>}
+          rules={[{ required: true, message: t('admin.bookings.errors.name_required') }]}
           className={isMobile ? "mb-3" : "mb-5"}
         >
           <Input 
-            placeholder="Ví dụ: Nguyễn Văn A" 
+            placeholder={t('admin.bookings.form_customer_placeholder')} 
             className={`${isMobile ? "h-9 text-[13px]" : "h-11 text-[14px]"} rounded-xl border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-100 font-medium`}
           />
         </Form.Item>
@@ -129,30 +131,30 @@ const BookingForm = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
           <Form.Item
             name="phone"
-            label={<span className="text-[13px] sm:text-[14px] font-medium text-slate-600">Số điện thoại</span>}
+            label={<span className="text-[13px] sm:text-[14px] font-medium text-slate-600">{t('admin.bookings.form_phone')}</span>}
             rules={[
-              { required: true, message: "Nhập SĐT!" },
-              { pattern: /^[0-9]{10,11}$/, message: "SĐT không lệ!" },
+              { required: true, message: t('admin.bookings.errors.phone_required') },
+              { pattern: /^[0-9]{10,11}$/, message: t('admin.bookings.errors.phone_invalid') },
             ]}
             className={isMobile ? "mb-3" : "mb-5"}
           >
             <Input 
-              placeholder="09xx.xxx.xxx" 
+              placeholder={t('admin.bookings.form_phone_placeholder')} 
               className={`${isMobile ? "h-9 text-[13px]" : "h-11 text-[14px]"} rounded-xl border-slate-200 font-medium`}
             />
           </Form.Item>
 
           <Form.Item
             name="email"
-            label={<span className="text-[13px] sm:text-[14px] font-medium text-slate-600">Email</span>}
+            label={<span className="text-[13px] sm:text-[14px] font-medium text-slate-600">{t('admin.bookings.form_email')}</span>}
             rules={[
-              { required: true, message: "Nhập email!" },
-              { type: "email", message: "Email sai format!" },
+              { required: true, message: t('admin.bookings.errors.email_required') },
+              { type: "email", message: t('admin.bookings.errors.email_invalid') },
             ]}
             className={isMobile ? "mb-3" : "mb-5"}
           >
             <Input 
-              placeholder="example@gmail.com" 
+              placeholder={t('admin.bookings.form_email_placeholder')} 
               className={`${isMobile ? "h-9 text-[13px]" : "h-11 text-[14px]"} rounded-xl border-slate-200 font-medium`}
             />
           </Form.Item>
@@ -161,13 +163,14 @@ const BookingForm = ({
         <div className="grid grid-cols-2 gap-3 sm:gap-4">
           <Form.Item
             name="recordDate"
-            label={<span className="text-[13px] sm:text-[14px] font-medium text-slate-600">Ngày thu</span>}
-            rules={[{ required: true, message: "Chọn ngày!" }]}
+            label={<span className="text-[13px] sm:text-[14px] font-medium text-slate-600">{t('admin.bookings.form_date')}</span>}
+            rules={[{ required: true, message: t('admin.bookings.errors.date_required') }]}
             className={isMobile ? "mb-3" : "mb-5"}
           >
             <DatePicker
               format="DD/MM/YYYY"
               style={{ width: "100%" }}
+              placeholder={t('admin.bookings.form_date_placeholder')}
               className={`${isMobile ? "h-9 text-[13px]" : "h-11 text-[14px]"} rounded-xl border-slate-200 font-medium`}
               disabledDate={(current) => current && current <= dayjs().startOf('day')}
             />
@@ -175,12 +178,12 @@ const BookingForm = ({
 
           <Form.Item
             name="studioRoomId"
-            label={<span className="text-[13px] sm:text-[14px] font-medium text-slate-600">Phòng thu</span>}
-            rules={[{ required: true, message: "Chọn phòng!" }]}
+            label={<span className="text-[13px] sm:text-[14px] font-medium text-slate-600">{t('admin.bookings.form_studio')}</span>}
+            rules={[{ required: true, message: t('admin.bookings.errors.studio_required') }]}
             className={isMobile ? "mb-3" : "mb-5"}
           >
             <Select 
-              placeholder="Chọn phòng" 
+              placeholder={t('admin.bookings.form_studio_placeholder')} 
               className={`${isMobile ? "h-9 text-[13px]" : "h-11 text-[14px]"} rounded-xl border-slate-200 font-medium w-full`}
               dropdownStyle={{ borderRadius: '12px' }}
             >
@@ -195,13 +198,13 @@ const BookingForm = ({
 
         <Form.Item
           name="serviceIds"
-          label={<span className="text-[13px] sm:text-[14px] font-medium text-slate-600">Dịch vụ yêu cầu</span>}
-          rules={[{ required: true, message: "Chọn ít nhất 1 dịch vụ!" }]}
+          label={<span className="text-[13px] sm:text-[14px] font-medium text-slate-600">{t('admin.bookings.form_services')}</span>}
+          rules={[{ required: true, message: t('admin.bookings.errors.service_required') }]}
           className={isMobile ? "mb-3" : "mb-5"}
         >
           <Select 
             mode="multiple" 
-            placeholder="Chọn các dịch vụ..." 
+            placeholder={t('admin.bookings.form_services_placeholder')} 
             className={`${isMobile ? "min-h-[36px]" : "min-h-[44px]"} rounded-xl border-slate-200 font-medium w-full`}
             dropdownStyle={{ borderRadius: '12px' }}
             maxTagCount="responsive"
@@ -216,11 +219,11 @@ const BookingForm = ({
 
         <Form.Item
           name="note"
-          label={<span className="text-[13px] sm:text-[14px] font-medium text-slate-600">Ghi chú</span>}
+          label={<span className="text-[13px] sm:text-[14px] font-medium text-slate-600">{t('common.note')}</span>}
           className="mb-0"
         >
           <TextArea
-            placeholder="Yêu cầu đặc biệt nếu có..."
+            placeholder={t('admin.bookings.form_note_placeholder')}
             rows={isMobile ? 2 : 3}
             className="rounded-xl border-slate-200 font-medium text-[13px] sm:text-[14px]"
             style={{ maxHeight: 120, minHeight: isMobile ? 60 : 70 }}

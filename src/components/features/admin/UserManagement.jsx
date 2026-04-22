@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import {
   message,
   Table,
@@ -45,10 +46,12 @@ import {
 import { FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
 import dayjs from "dayjs";
 import UserForm from "./components/UserForm";
+import { removeVietnameseTones } from "../../../utils/removeVietnameseTones";
 
 const { Option } = Select;
 
 const UserManagement = () => {
+  const { t, i18n } = useTranslation();
   const [messageApi, messageContext] = message.useMessage();
 
   const [users, setUsers] = useState([]);
@@ -92,13 +95,13 @@ const UserManagement = () => {
   });
 
   const roles = [
-    { value: "ROLE_ADMIN", label: "Quản trị viên", color: "red", classes: "bg-red-50 text-red-600 border-red-100" },
-    { value: "ROLE_USER", label: "Khách hàng", color: "slate", classes: "bg-slate-50 text-slate-600 border-slate-100" },
+    { value: "ROLE_ADMIN", label: t('admin.users.roles.admin'), color: "red", classes: "bg-red-50 text-red-600 border-red-100" },
+    { value: "ROLE_USER", label: t('admin.users.roles.customer'), color: "slate", classes: "bg-slate-50 text-slate-600 border-slate-100" },
   ];
 
   const statusOptions = [
-    { value: true, label: "Đang hoạt động", color: "green", classes: "bg-green-50 text-green-600 shadow-green-100" },
-    { value: false, label: "Đã bị khóa", color: "red", classes: "bg-red-50 text-red-600 shadow-red-100" },
+    { value: true, label: t('admin.users.status_active'), color: "green", classes: "bg-green-50 text-green-600 shadow-green-100" },
+    { value: false, label: t('admin.users.status_locked'), color: "red", classes: "bg-red-50 text-red-600 shadow-red-100" },
   ];
 
   useEffect(() => {
@@ -158,7 +161,7 @@ const UserManagement = () => {
       }));
     } catch (error) {
       console.error("Error fetching users:", error);
-      messageApi.error("Không thể tải danh sách người dùng!");
+      messageApi.error(t('admin.users.errors.load_fail'));
     } finally {
       setLoading(false);
     }
@@ -211,13 +214,13 @@ const UserManagement = () => {
     if (!deletingUser) return;
     try {
       await userApi.admin.delete(deletingUser.id);
-      messageApi.success("Tài khoản đã được xóa vĩnh viễn!");
+      messageApi.success(t('common.update_success'));
       setIsDeleteModalOpen(false);
       setDeletingUser(null);
       fetchUsers();
     } catch (error) {
       console.error("Error deleting user:", error);
-      messageApi.error("Không thể xóa tài khoản này!");
+      messageApi.error(t('admin.users.errors.delete_fail'));
     }
   };
 
@@ -246,13 +249,13 @@ const UserManagement = () => {
       } else {
         await userApi.admin.create(payload);
         setIsFormModalOpen(false);
-        showNotification("success", "Tạo người dùng thành công!");
+        showNotification("success", t('common.create_success'));
       }
       fetchUsers();
     } catch (error) {
       console.error("Error saving user:", error);
       messageApi.error(
-        "Không thể lưu người dùng! " +
+        t('admin.users.errors.save_fail') + " " +
         (error.response?.data?.message || error.message)
       );
     }
@@ -273,16 +276,18 @@ const UserManagement = () => {
   const columns = useMemo(
     () => [
       {
-        title: <span className="text-[15px] font-medium text-slate-600">Khách hàng</span>,
+        title: <span className="text-[15px] font-medium text-slate-600">{t('admin.users.col_customer')}</span>,
         dataIndex: "customerName",
         key: "customerName",
         width: 200,
         render: (name) => (
-          <span className="text-slate-900 font-semibold text-[14px] leading-none mb-1">{name}</span>
+          <span className="text-slate-900 font-semibold text-[14px] leading-none mb-1">
+            {i18n.language === 'en' ? removeVietnameseTones(name) : name}
+          </span>
         ),
       },
       {
-        title: <span className="text-[15px] font-medium text-slate-600">Email</span>,
+        title: <span className="text-[15px] font-medium text-slate-600">{t('admin.users.col_email')}</span>,
         dataIndex: "email",
         key: "email",
         width: 220,
@@ -291,7 +296,7 @@ const UserManagement = () => {
         )
       },
       {
-        title: <span className="text-[15px] font-medium text-slate-600">Số điện thoại</span>,
+        title: <span className="text-[15px] font-medium text-slate-600">{t('admin.users.col_phone')}</span>,
         dataIndex: "phone",
         key: "phone",
         width: 150,
@@ -300,7 +305,7 @@ const UserManagement = () => {
         )
       },
       {
-        title: <span className="text-[15px] font-medium text-slate-600">Vai trò</span>,
+        title: <span className="text-[15px] font-medium text-slate-600">{t('admin.users.col_role')}</span>,
         dataIndex: "roles",
         key: "roles",
         width: 150,
@@ -330,26 +335,26 @@ const UserManagement = () => {
               placement="top"
             >
               <span className="text-slate-600 text-[14px] font-semibold cursor-pointer border-b border-dashed border-slate-400 pb-0.5 hover:text-blue-600 hover:border-blue-600 transition-colors">
-                Nhiều vai trò
+                {t('admin.users.multi_role')}
               </span>
             </Tooltip>
           );
         },
       },
       {
-        title: <span className="text-[15px] font-medium text-slate-600">Trạng thái</span>,
+        title: <span className="text-[15px] font-medium text-slate-600">{t('admin.users.col_status')}</span>,
         dataIndex: "active",
         key: "active",
         width: 140,
         render: (active) => (
           <span className={`px-2.5 py-1 rounded-full text-[13px] font-semibold text-white inline-block ${active ? "bg-green-500 shadow-sm shadow-green-200" : "bg-red-500 shadow-sm shadow-red-200"
             }`}>
-            {active ? "Hoạt động" : "Bị khóa"}
+            {active ? t('admin.users.status_active') : t('admin.users.status_locked')}
           </span>
         ),
       },
       {
-        title: <span className="text-[15px] font-medium text-slate-600">Ngày tạo</span>,
+        title: <span className="text-[15px] font-medium text-slate-600">{t('admin.users.col_created')}</span>,
         dataIndex: "createdAt",
         key: "createdAt",
         width: 140,
@@ -360,7 +365,7 @@ const UserManagement = () => {
         )
       },
       {
-        title: <span className="text-[15px] font-medium text-slate-600">Thao tác</span>,
+        title: <span className="text-[15px] font-medium text-slate-600">{t('admin.bookings.col_action')}</span>,
         key: "actions",
         width: 100,
         align: "center",
@@ -386,7 +391,7 @@ const UserManagement = () => {
         ),
       },
     ],
-    [pagination, roles]
+    [pagination, roles, i18n.language]
   );
 
   return (
@@ -409,10 +414,10 @@ const UserManagement = () => {
           ))
         ) : (
           [
-            { icon: <Users size={22} />, label: "Tổng số", value: pagination.total, config: "text-indigo-600 bg-indigo-50" },
-            { icon: <UserCheck size={22} />, label: "Hoạt động", value: stats.active, config: "text-emerald-600 bg-emerald-50" },
-            { icon: <UserX size={22} />, label: "Đã khóa", value: stats.inactive, config: "text-rose-600 bg-rose-50" },
-            { icon: <ShieldCheck size={22} />, label: "Quản trị viên", value: stats.admin, config: "text-amber-600 bg-amber-50" }
+            { icon: <Users size={22} />, label: t('admin.users.stats_total'), value: pagination.total, config: "text-indigo-600 bg-indigo-50" },
+            { icon: <UserCheck size={22} />, label: t('admin.users.stats_active'), value: stats.active, config: "text-emerald-600 bg-emerald-50" },
+            { icon: <UserX size={22} />, label: t('admin.users.stats_locked'), value: stats.inactive, config: "text-rose-600 bg-rose-50" },
+            { icon: <ShieldCheck size={22} />, label: t('admin.users.stats_admin'), value: stats.admin, config: "text-amber-600 bg-amber-50" }
           ].map((item, i) => (
             <div key={i} className="bg-white p-4 sm:p-5 rounded-[22px] sm:rounded-[24px] border border-slate-200 shadow-sm hover:shadow-md transition-all group relative overflow-hidden">
               <div className="flex items-center justify-between relative z-10 w-full">
@@ -434,13 +439,13 @@ const UserManagement = () => {
         <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 border-b border-slate-50 pb-2">
           <h2 className="text-[18px] sm:text-[20px] font-bold text-slate-800 whitespace-nowrap flex items-center gap-3">
             <div className="w-1.5 h-6 sm:h-8 bg-blue-600 rounded-full"></div>
-            Danh sách người dùng
+            {t('admin.users.title')}
           </h2>
 
           <div className="flex flex-col xl:flex-row items-stretch xl:items-center gap-2 xl:gap-3 w-full xl:w-auto flex-1 justify-end">
             <div className="w-full xl:max-w-[280px]">
               <Input
-                placeholder="Tìm tài khoản..."
+                placeholder={t('admin.users.search_placeholder')}
                 prefix={<Search size={14} className="text-slate-400" />}
                 className="h-9 xl:h-10 w-full border-slate-200 rounded-xl text-[13px] xl:text-[14px] font-medium text-slate-900 shadow-sm hover:border-blue-400 focus:border-blue-500 placeholder:text-slate-400"
                 value={searchTerm}
@@ -455,7 +460,7 @@ const UserManagement = () => {
                   placeholder={
                     <div className="flex items-center gap-2">
                       <Shield size={13} className="text-slate-400" />
-                      <span className="font-medium text-slate-500 text-[13px]">Vai trò</span>
+                      <span className="font-medium text-slate-500 text-[13px]">{t('admin.users.role_filter')}</span>
                     </div>
                   }
                   value={filters.role}
@@ -479,7 +484,7 @@ const UserManagement = () => {
                   placeholder={
                     <div className="flex items-center gap-2">
                       <Settings size={13} className="text-slate-400" />
-                      <span className="font-medium text-slate-500 text-[13px]">Trạng thái</span>
+                      <span className="font-medium text-slate-500 text-[13px]">{t('admin.users.status_filter')}</span>
                     </div>
                   }
                   value={filters.status}
@@ -504,7 +509,7 @@ const UserManagement = () => {
                   className="h-9 w-9 xl:h-10 sm:w-auto sm:px-3 flex items-center justify-center gap-2 text-slate-500 font-medium text-[13px] bg-white border border-slate-200 rounded-xl hover:text-blue-600 transition-all p-0"
                   icon={<RotateCcw size={14} />}
                 >
-                  <span className="hidden sm:inline whitespace-nowrap">Làm mới</span>
+                  <span className="hidden sm:inline whitespace-nowrap">{t('admin.users.reset_filters')}</span>
                 </Button>
 
                 <Button
@@ -512,7 +517,7 @@ const UserManagement = () => {
                   className="h-9 w-9 xl:h-10 xl:w-auto sm:px-4 bg-slate-900 border-none rounded-xl font-bold text-[13px] xl:text-[14px] text-white shadow-md flex items-center justify-center gap-1.5 hover:bg-slate-800 transition-all p-0 sm:p-auto"
                 >
                   <Plus size={16} strokeWidth={3} className="text-white" />
-                  <span className="hidden sm:inline text-white">Thêm mới</span>
+                  <span className="hidden sm:inline text-white">{t('admin.users.add_btn')}</span>
                 </Button>
               </div>
             </div>
@@ -548,7 +553,7 @@ const UserManagement = () => {
                   scroll={{ x: 1000 }}
                   size={window.innerWidth < 1200 ? "small" : "default"}
                   className="ant-table-premium"
-                  locale={{ emptyText: <div className="py-20 text-slate-600 font-bold italic">Dữ liệu trống</div> }}
+                  locale={{ emptyText: <div className="py-20 text-slate-600 font-bold italic">{t('admin.dashboard.no_records')}</div> }}
                 />
               </div>
 
@@ -565,7 +570,9 @@ const UserManagement = () => {
                         <div className={`absolute -top-1 -right-1 w-3 h-3 border-2 border-white rounded-full ${u.active ? "bg-green-500" : "bg-red-500"}`}></div>
                       </div>
                       <div className="min-w-0 flex-1">
-                        <h4 className="text-[12px] sm:text-[15px] font-bold text-slate-900 m-0 truncate leading-tight">{u.customerName}</h4>
+                        <h4 className="text-[12px] sm:text-[15px] font-bold text-slate-900 m-0 truncate leading-tight">
+                          {i18n.language === 'en' ? removeVietnameseTones(u.customerName) : u.customerName}
+                        </h4>
                         <div className="flex items-center gap-1 mt-0.5 sm:mt-1 opacity-70">
                           <Phone size={10} sm:size={13} className="text-indigo-600 shrink-0" />
                           <span className="text-[10px] sm:text-[12px] font-bold text-slate-500 truncate">{u.phone || "---"}</span>
@@ -593,7 +600,7 @@ const UserManagement = () => {
                     </div>
                   </div>
                 )) : (
-                  <div className="col-span-full py-16 text-center text-slate-300 font-bold italic bg-slate-50 rounded-[32px] border-2 border-dashed border-slate-200">Không có dữ liệu</div>
+                  <div className="col-span-full py-16 text-center text-slate-300 font-bold italic bg-slate-50 rounded-[32px] border-2 border-dashed border-slate-200">{t('admin.dashboard.no_records')}</div>
                 )}
               </div>
             </>
@@ -602,7 +609,7 @@ const UserManagement = () => {
           {/* Footer: Modern Pagination */}
           {pagination.total > 0 && (
             <div className="p-4 sm:p-6 bg-slate-50/30 border-t border-slate-100 flex flex-row items-center justify-between gap-4">
-              <div className="px-2.5 py-1 sm:px-3 bg-white border border-slate-100 rounded-xl text-[12px] sm:text-[13px] font-medium text-slate-500 shadow-sm">Hiển thị
+              <div className="px-2.5 py-1 sm:px-3 bg-white border border-slate-100 rounded-xl text-[12px] sm:text-[13px] font-medium text-slate-500 shadow-sm">{t('admin.bookings.display')}
                 <span className="font-bold text-slate-700"> {pagination.current} / {Math.ceil(pagination.total / (pagination.pageSize || 10))}</span>
               </div>
 
@@ -632,7 +639,7 @@ const UserManagement = () => {
             {notification.type === "success" ? <CheckCircle size={20} strokeWidth={2.5} /> : <XCircle size={20} strokeWidth={2.5} />}
           </div>
           <div className="pr-2 sm:pr-4 min-w-0">
-            <h5 className="font-black text-slate-900 tracking-wider text-[11px] sm:text-xs mb-1 truncate">{notification.type === "success" ? "Thành công" : "Có lỗi xảy ra"}</h5>
+            <h5 className="font-black text-slate-900 tracking-wider text-[11px] sm:text-xs mb-1 truncate">{notification.type === "success" ? t('common.success') : t('common.error')}</h5>
             <p className="text-[11px] sm:text-xs text-slate-500 font-bold mb-0 truncate">{notification.message}</p>
           </div>
         </div>
@@ -672,26 +679,28 @@ const UserManagement = () => {
                     ))}
                     <div className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full ${selectedDetailUser.active ? "bg-green-400 animate-pulse" : "bg-red-400"}`}></div>
                   </div>
-                  <h2 className="text-xl sm:text-4xl font-bold m-0">{selectedDetailUser.customerName}</h2>
+                  <h2 className="text-xl sm:text-4xl font-bold m-0">
+                    {i18n.language === 'en' ? removeVietnameseTones(selectedDetailUser.customerName) : selectedDetailUser.customerName}
+                  </h2>
                 </div>
               </div>
             </div>
             <div className="p-4 sm:p-10 grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-10">
               <div className="space-y-6 sm:space-y-8">
                 <div className="space-y-1">
-                  <p className="text-[10px] sm:text-[11px] font-black text-slate-400">Thông tin liên lạc</p>
+                  <p className="text-[10px] sm:text-[11px] font-black text-slate-400">{t('admin.users.detail_contact')}</p>
                   <div className="flex items-center gap-2.5 sm:gap-3 text-[14px] sm:text-[16px] font-bold text-slate-900"><Phone size={16} className="sm:w-[18px] sm:h-[18px] text-indigo-500" /> {selectedDetailUser.phone}</div>
                   <div className="flex items-center gap-2.5 sm:gap-3 text-[14px] sm:text-[16px] font-bold text-slate-900"><Mail size={16} className="sm:w-[18px] sm:h-[18px] text-indigo-500" /> {selectedDetailUser.email || "---"}</div>
                 </div>
               </div>
               <div className="bg-slate-50 p-4 sm:p-6 rounded-2xl sm:rounded-[24px] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
                 <div>
-                  <p className="text-[10px] sm:text-[11px] font-black text-slate-400 mb-1">Ngày gia nhập</p>
+                  <p className="text-[10px] sm:text-[11px] font-black text-slate-400 mb-1">{t('admin.users.detail_join')}</p>
                   <p className="text-[16px] sm:text-[18px] font-bold text-slate-900 m-0">{dayjs(selectedDetailUser.createdAt).format("DD/MM/YYYY")}</p>
                 </div>
                 <div className="flex gap-2 w-full sm:w-auto">
-                  <Button onClick={() => { setIsDetailModalOpen(false); handleEdit(selectedDetailUser); }} className="h-10 sm:h-12 px-4 sm:px-6 rounded-xl bg-indigo-600 text-white border-none font-bold text-[12px] sm:text-[13px] flex-1 sm:flex-none">Cập nhật</Button>
-                  <Button onClick={() => setIsDetailModalOpen(false)} className="h-10 sm:h-12 px-4 sm:px-6 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold text-[12px] sm:text-[13px] shadow-sm flex-1 sm:flex-none">Đóng</Button>
+                  <Button onClick={() => { setIsDetailModalOpen(false); handleEdit(selectedDetailUser); }} className="h-10 sm:h-12 px-4 sm:px-6 rounded-xl bg-indigo-600 text-white border-none font-bold text-[12px] sm:text-[13px] flex-1 sm:flex-none">{t('common.update')}</Button>
+                  <Button onClick={() => setIsDetailModalOpen(false)} className="h-10 sm:h-12 px-4 sm:px-6 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold text-[12px] sm:text-[13px] shadow-sm flex-1 sm:flex-none">{t('common.close')}</Button>
                 </div>
               </div>
             </div>
@@ -709,22 +718,20 @@ const UserManagement = () => {
         className="premium-delete-modal"
       >
         <div className="space-y-4 sm:space-y-6">
-          <div className="space-y-2">
-            <h3 className="text-[20px] sm:text-[24px] font-bold text-slate-900 leading-tight">Xóa người dùng</h3>
+            <h3 className="text-[20px] sm:text-[24px] font-bold text-slate-900 leading-tight">{t('admin.users.delete_title')}</h3>
             <p className="text-[14px] sm:text-[15px] text-slate-500 leading-relaxed font-medium">
-              Thao tác này sẽ xóa vĩnh viễn tài khoản người dùng và tất cả dữ liệu liên quan. Hành động này không thể hoàn tác.
+              {t('admin.users.delete_desc')}
             </p>
-          </div>
 
           <div className="space-y-3 sm:space-y-4">
             <div className="space-y-1.5 sm:space-y-2">
               <label className="text-[14px] sm:text-[15px] font-semibold text-slate-700">
-                Nhập tên khách hàng để xác nhận: <span className="text-red-500">"{deletingUser?.customerName}"</span>
+                {t('admin.users.delete_confirm_label')}: <span className="text-red-500">"{i18n.language === 'en' ? removeVietnameseTones(deletingUser?.customerName) : deletingUser?.customerName}"</span>
               </label>
               <Input
                 value={deleteConfirmText}
                 onChange={(e) => setDeleteConfirmText(e.target.value)}
-                placeholder="Nhập tên chính xác..."
+                placeholder={t('admin.bookings.confirm_placeholder')}
                 className="h-10 sm:h-11 rounded-xl border-slate-200 focus:border-red-500 focus:ring-red-100 font-medium text-[13px] sm:text-[14px]"
               />
             </div>
@@ -734,7 +741,7 @@ const UserManagement = () => {
                 <AlertTriangle size={12} sm:size={14} strokeWidth={2.5} />
               </div>
               <p className="text-[13px] sm:text-[15px] font-medium text-red-800 leading-relaxed">
-                Cảnh báo: Việc xóa "{deletingUser?.customerName}" sẽ loại bỏ toàn bộ lịch sử giao dịch và tài khoản.
+                {t('admin.users.delete_warning')}
               </p>
             </div>
           </div>
@@ -744,17 +751,17 @@ const UserManagement = () => {
               onClick={() => setIsDeleteModalOpen(false)}
               className="flex-1 h-9 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium text-[13px] hover:bg-slate-50 transition-colors"
             >
-              Hủy bỏ
+              {t('common.cancel')}
             </button>
             <button
               onClick={confirmDelete}
-              disabled={deleteConfirmText !== deletingUser?.customerName}
-              className={`flex-[1.5] h-9 rounded-xl font-medium text-[13px] shadow-lg shadow-red-100 transition-all ${deleteConfirmText === deletingUser?.customerName
+              disabled={deleteConfirmText !== (i18n.language === 'en' ? removeVietnameseTones(deletingUser?.customerName) : deletingUser?.customerName)}
+              className={`flex-[1.5] h-9 rounded-xl font-medium text-[13px] shadow-lg shadow-red-100 transition-all ${deleteConfirmText === (i18n.language === 'en' ? removeVietnameseTones(deletingUser?.customerName) : deletingUser?.customerName)
                 ? "bg-red-600 text-white hover:bg-red-700"
                 : "bg-slate-100 text-slate-400 cursor-not-allowed border-none shadow-none"
                 }`}
             >
-              Xác nhận xóa
+              {t('common.delete')}
             </button>
           </div>
         </div>

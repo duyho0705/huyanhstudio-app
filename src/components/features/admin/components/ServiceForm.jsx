@@ -10,6 +10,7 @@ import {
   Space,
 } from "antd";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Plus, Trash2, Briefcase, FileText, DollarSign, Activity, ListChecks, AlertCircle, Info, Star, Music, Camera, Video, Zap, Heart, Mic, Tag, MousePointer2 } from "lucide-react";
 import { Switch } from "antd";
 const { TextArea } = Input;
@@ -22,6 +23,7 @@ const ServiceForm = ({
   initialValues,
   confirmLoading,
 }) => {
+  const { t } = useTranslation();
   const [form] = Form.useForm();
   const [isChanged, setIsChanged] = useState(false);
 
@@ -95,7 +97,7 @@ const ServiceForm = ({
         <div className="flex items-center gap-3 py-2">
           <div>
             <h3 className="text-[18px] font-semibold text-slate-900 leading-tight">
-              {initialValues ? "Cập nhật dịch vụ" : "Tạo dịch vụ mới"}
+              {initialValues ? t('admin.services.form_update') : t('admin.services.form_add')}
             </h3>
           </div>
         </div>
@@ -113,7 +115,7 @@ const ServiceForm = ({
             onClick={onCancel}
             className="w-full sm:w-auto h-10 px-8 rounded-xl font-medium text-[14px] text-slate-600 border border-slate-200 bg-white sm:mr-3"
           >
-            Hủy
+            {t('common.cancel')}
           </button>
           <button
             key="submit"
@@ -121,7 +123,7 @@ const ServiceForm = ({
             disabled={confirmLoading || (initialValues && !isChanged)}
             className={`w-full sm:w-auto h-10 px-8 rounded-xl bg-slate-900 border-none font-semibold text-[14px] text-white ${(confirmLoading || (initialValues && !isChanged)) ? "opacity-50 cursor-not-allowed" : ""} shadow-lg shadow-slate-200 transition-all active:scale-[0.98]`}
           >
-            {confirmLoading ? "Đang xử lý..." : (initialValues ? "Cập nhật" : "Tạo dịch vụ")}
+            {confirmLoading ? t('common.loading') || "..." : (initialValues ? t('common.update') : t('admin.services.add_btn'))}
           </button>
         </div>
       }
@@ -133,23 +135,23 @@ const ServiceForm = ({
             <div className="p-5 bg-slate-50 rounded-2xl border border-slate-100 space-y-4">
               <Form.Item
                 name="name"
-                label={<span className="text-[12px] sm:text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><Briefcase size={14} className="text-blue-500" /> Tên dịch vụ</span>}
+                label={<span className="text-[12px] sm:text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><Briefcase size={14} className="text-blue-500" /> {t('admin.services.form_name')}</span>}
                 rules={[
-                  { required: true, message: "Vui lòng nhập tên dịch vụ!" },
+                  { required: true, message: t('admin.services.errors.name_required') },
                 ]}
                 className="!mb-0"
               >
                 <Input
                   className="h-10 px-4 bg-white border border-slate-200 rounded-xl focus:border-blue-500 hover:border-slate-200 font-medium text-[14px]"
-                  placeholder="Ví dụ: Quay phim phóng sự cưới"
+                  placeholder={t('admin.services.form_name')}
                 />
               </Form.Item>
 
               <div className="grid grid-cols-1 gap-4">
                 <Form.Item
                   name="price"
-                  label={<span className="text-[12px] sm:text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><DollarSign size={14} className="text-blue-500" /> Giá trị</span>}
-                  rules={[{ required: true, message: "Vui lòng nhập giá!" }]}
+                  label={<span className="text-[12px] sm:text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><DollarSign size={14} className="text-blue-500" /> {t('admin.services.form_price')}</span>}
+                  rules={[{ required: true, message: t('admin.services.errors.price_required') }]}
                   className="!mb-0"
                 >
                   <InputNumber
@@ -157,17 +159,17 @@ const ServiceForm = ({
                     min={0}
                     formatter={(v) => `${v}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                     parser={(v) => v.replace(/,/g, "")}
-                    placeholder="Giá tiền"
+                    placeholder={t('admin.services.form_price')}
                   />
                 </Form.Item>
               </div>
 
                 <Form.Item
-                  label={<span className="text-[12px] sm:text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2">Gói nổi bật</span>}
+                  label={<span className="text-[12px] sm:text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2">{t('admin.services.form_highlight')}</span>}
                   className="!mb-0"
                 >
                   <div className="h-10 px-4 bg-blue-50/50 border border-blue-100 rounded-xl flex items-center justify-between">
-                    <span className="text-[12px] sm:text-[13px] font-bold text-blue-600 uppercase tracking-wider">Gợi ý chọn</span>
+                    <span className="text-[12px] sm:text-[13px] font-bold text-blue-600 uppercase tracking-wider">{t('admin.dashboard.popular_title')}</span>
                     <Form.Item name="featured" valuePropName="checked" noStyle>
                       <Switch size="small" />
                     </Form.Item>
@@ -177,12 +179,12 @@ const ServiceForm = ({
               <div className="grid grid-cols-1 pt-2">
                 <Form.Item
                   name="buttonText"
-                  label={<span className="text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><MousePointer2 size={14} className="text-blue-500" /> Chữ trên nút</span>}
+                  label={<span className="text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><MousePointer2 size={14} className="text-blue-500" /> {t('admin.services.form_button_text')}</span>}
                   className="!mb-0"
                 >
                   <Input
                     className="h-10 px-4 bg-white border border-slate-200 rounded-xl focus:border-blue-500 hover:border-slate-200 font-medium text-[14px]"
-                    placeholder="VD: Đăng ký ngay, Bắt đầu..."
+                    placeholder={t('admin.services.form_button_text')}
                   />
                 </Form.Item>
               </div>
@@ -191,12 +193,12 @@ const ServiceForm = ({
             <div className="grid grid-cols-1">
               <Form.Item
                 name="active"
-                label={<span className="text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2 text-slate-400">Trạng thái</span>}
+                label={<span className="text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2 text-slate-400">{t('admin.services.form_status')}</span>}
                 initialValue={true}
               >
                 <Select className="h-10 select-custom-xl rounded-xl" variant="filled">
-                  <Option value={true}><span className="text-[14px] font-medium">Hoạt động</span></Option>
-                  <Option value={false}><span className="text-[14px] font-medium">Ngừng hoạt động</span></Option>
+                  <Option value={true}><span className="text-[14px] font-medium">{t('admin.services.status_active')}</span></Option>
+                  <Option value={false}><span className="text-[14px] font-medium">{t('admin.services.status_paused')}</span></Option>
                 </Select>
               </Form.Item>
             </div>
@@ -206,13 +208,13 @@ const ServiceForm = ({
           <div className="space-y-6">
             <Form.Item
               name="description"
-              label={<span className="text-[12px] sm:text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><FileText size={14} className="text-blue-500" /> Mô tả chi tiết</span>}
-              rules={[{ required: true, message: "Vui lòng nhập mô tả!" }]}
+              label={<span className="text-[12px] sm:text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><FileText size={14} className="text-blue-500" /> {t('admin.services.form_desc')}</span>}
+              rules={[{ required: true, message: t('admin.services.errors.desc_required') }]}
             >
               <TextArea
                 className="p-3 bg-white border border-slate-200 rounded-xl focus:border-blue-500 hover:border-slate-200 font-medium min-h-[100px] sm:min-h-[120px] text-[14px]"
                 rows={4}
-                placeholder="Mô tả tóm tắt về dịch vụ..."
+                placeholder={t('admin.services.form_desc')}
               />
             </Form.Item>
 
@@ -222,7 +224,7 @@ const ServiceForm = ({
                   <div className="flex justify-between items-center px-1 mb-2">
                     <label className="text-[13px] font-semibold text-slate-700 flex items-center gap-2">
                       <ListChecks size={14} className="text-blue-500" />
-                      Danh sách đặc quyền
+                      {t('admin.services.form_privileges')}
                     </label>
                     <button
                       type="button"
@@ -230,7 +232,7 @@ const ServiceForm = ({
                       className="px-3 py-1.5 bg-slate-100 text-slate-700 rounded-lg text-[12px] font-semibold flex items-center gap-1.5"
                     >
                       <Plus size={14} />
-                      Thêm
+                      {t('admin.services.add_privilege')}
                     </button>
                   </div>
 
@@ -240,11 +242,11 @@ const ServiceForm = ({
                         <Form.Item
                           {...rest}
                           name={name}
-                          rules={[{ required: true, message: "Vui lòng nhập nội dung!" }]}
+                          rules={[{ required: true, message: t('admin.services.errors.content_required') }]}
                           className="flex-1 !mb-0"
                         >
                           <Input
-                            placeholder="VD: Miễn phí flycam"
+                            placeholder={t('admin.services.form_privileges')}
                             className="h-10 px-4 bg-white border border-slate-200 rounded-xl focus:border-blue-500 hover:border-slate-200 font-medium text-[14px]"
                           />
                         </Form.Item>
@@ -261,7 +263,7 @@ const ServiceForm = ({
                     {fields.length === 0 && (
                       <div className="flex flex-col items-center justify-center py-8 bg-slate-50 rounded-xl border border-dashed border-slate-200 text-slate-400">
                         <AlertCircle size={24} className="mb-2 opacity-50" />
-                        <span className="text-[12px] font-medium">Chưa cấu hình đặc quyền</span>
+                        <span className="text-[12px] font-medium">{t('admin.services.empty_privileges')}</span>
                       </div>
                     )}
                   </div>

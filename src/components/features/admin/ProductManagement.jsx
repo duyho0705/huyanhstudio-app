@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { message, Button, Modal, Input, Pagination } from "antd";
 import {
   Edit,
@@ -25,6 +26,7 @@ import ProductForm from "./components/ProductForm";
 import dayjs from "dayjs";
 
 const ProductManagement = () => {
+  const { t } = useTranslation();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [pagination, setPagination] = useState({
@@ -45,7 +47,7 @@ const ProductManagement = () => {
 
   const stats = useMemo(() => ({
     total: pagination.total,
-    videos: products.length, // Just demo logic
+    videos: products.length, 
     latest: products[0]?.title || "N/A"
   }), [pagination.total, products]);
 
@@ -82,11 +84,11 @@ const ProductManagement = () => {
       });
     } catch (err) {
       console.error(err);
-      messageApi.error("Không thể tải danh sách sản phẩm!");
+      messageApi.error(t('admin.products.errors.load_fail'));
     } finally {
       setLoading(false);
     }
-  }, [pagination.current, pagination.pageSize, searchDebounce, messageApi]);
+  }, [pagination.current, pagination.pageSize, searchDebounce, messageApi, t]);
 
   useEffect(() => {
     fetchProducts();
@@ -121,13 +123,12 @@ const ProductManagement = () => {
     if (!selectedProduct?.id) return;
     try {
       await productApi.delete(selectedProduct.id);
-      messageApi.success("Xóa sản phẩm thành công!");
+      messageApi.success(t('common.delete_success'));
       setIsDeleteModalOpen(false);
       fetchProducts();
     } catch (error) {
       console.error("Error deleting product:", error);
-      const errorMsg =
-        error.response?.data?.message || "Không thể xóa sản phẩm!";
+      const errorMsg = error.response?.data?.message || t('admin.products.errors.delete_fail');
       messageApi.error(errorMsg);
     }
   };
@@ -136,21 +137,20 @@ const ProductManagement = () => {
     try {
       if (selectedProduct) {
         await productApi.update(selectedProduct.id, values);
-        messageApi.success("Cập nhật sản phẩm thành công!");
+        messageApi.success(t('common.update_success'));
       } else {
         const payload = {
           ...values,
           createdAt: new Date().toISOString(),
         };
         await productApi.create(payload);
-        messageApi.success("Tạo sản phẩm thành công!");
+        messageApi.success(t('common.create_success'));
       }
       setIsFormModalOpen(false);
       fetchProducts();
     } catch (error) {
       console.error("Error saving product:", error);
-      const errorMsg =
-        error.response?.data?.message || "Không thể lưu sản phẩm!";
+      const errorMsg = error.response?.data?.message || t('admin.products.errors.save_fail');
       messageApi.error(errorMsg);
     }
   };
@@ -161,12 +161,10 @@ const ProductManagement = () => {
     const v = full.match(/[?&]v=([^&]+)/);
     if (v) return `https://img.youtube.com/vi/${v[1]}/maxresdefault.jpg`;
     if (full.includes("youtu.be/")) {
-      return `https://img.youtube.com/vi/${full.split("youtu.be/")[1].split("?")[0]
-        }/maxresdefault.jpg`;
+      return `https://img.youtube.com/vi/${full.split("youtu.be/")[1].split("?")[0]}/maxresdefault.jpg`;
     }
     if (full.includes("youtube.com/embed/")) {
-      return `https://img.youtube.com/vi/${full.split("embed/")[1].split("?")[0]
-        }/maxresdefault.jpg`;
+      return `https://img.youtube.com/vi/${full.split("embed/")[1].split("?")[0]}/maxresdefault.jpg`;
     }
     return "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?q=80&w=2070&auto=format&fit=crop";
   };
@@ -189,8 +187,8 @@ const ProductManagement = () => {
           ))
         ) : (
           [
-            { icon: <LayoutGrid className="w-6 h-6 sm:w-8 sm:h-8 text-indigo-600" strokeWidth={1.5} />, label: "Tổng", value: stats.total, config: "bg-indigo-100 border border-indigo-200/60" },
-            { icon: <Video className="w-6 h-6 sm:w-8 sm:h-8 text-emerald-600" strokeWidth={1.5} />, label: "Video", value: stats.videos, config: "bg-emerald-100 border border-emerald-200/60" },
+            { icon: <LayoutGrid className="w-6 h-6 sm:w-8 sm:h-8 text-indigo-600" strokeWidth={1.5} />, label: t('admin.products.stats_total'), value: stats.total, config: "bg-indigo-100 border border-indigo-200/60" },
+            { icon: <Video className="w-6 h-6 sm:w-8 sm:h-8 text-emerald-600" strokeWidth={1.5} />, label: t('admin.products.stats_videos'), value: stats.videos, config: "bg-emerald-100 border border-emerald-200/60" },
           ].map((item, i) => (
             <div key={i} className="bg-white p-3 sm:p-7 rounded-2xl border border-slate-300 shadow-sm flex flex-col sm:flex-row items-center sm:items-center gap-3 sm:gap-5 group text-center sm:text-left">
               <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl ${item.config} flex items-center justify-center`}>
@@ -209,13 +207,13 @@ const ProductManagement = () => {
         <div className="flex flex-col lg:flex-row lg:items-center gap-4 pb-0 border-b border-slate-50">
           <h2 className="text-[17px] sm:text-[20px] font-bold text-slate-800 whitespace-nowrap mr-auto flex items-center gap-3">
             <div className="w-1.5 h-6 sm:h-8 bg-blue-600 rounded-full"></div>
-            Thư viện sản phẩm
+            {t('admin.products.title')}
           </h2>
 
           <div className="flex flex-wrap items-center gap-3">
             <div className="w-full sm:w-80 relative">
               <Input
-                placeholder="Truy vấn dữ liệu..."
+                placeholder={t('admin.products.search_placeholder')}
                 className="h-10 pl-10 pr-4 bg-white border border-slate-200 rounded-xl font-medium text-[14px] text-slate-700"
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
@@ -228,7 +226,7 @@ const ProductManagement = () => {
               className="h-10 px-6 bg-slate-900 border-none font-bold text-[13px] sm:text-[14px] flex items-center gap-2 !text-white rounded-xl w-full sm:w-auto justify-center"
             >
               <Plus size={16} strokeWidth={3} />
-              Đăng sản phẩm
+              {t('admin.products.add_btn')}
             </Button>
           </div>
         </div>
@@ -253,12 +251,12 @@ const ProductManagement = () => {
                     <Package size={48} strokeWidth={1} />
                   </div>
                   <h3 className="text-2xl font-black text-slate-900 mb-2">
-                    {searchText ? "Không tìm thấy dữ liệu" : "Trung tâm lưu trữ trống"}
+                    {searchText ? t('admin.products.empty_search') : t('admin.products.empty_library')}
                   </h3>
-                  <p className="text-[10px] font-black text-slate-400  max-w-xs text-center leading-relaxed">
+                  <p className="text-[14px] font-black text-slate-400 max-w-xs text-center leading-relaxed">
                     {searchText
-                      ? "Vui lòng kiểm tra lại từ khóa hoặc thay đổi tiêu chí tìm kiếm"
-                      : "Hệ thống chưa nhận được bản ghi sản phẩm nào từ bạn"}
+                      ? t('admin.products.empty_search_desc')
+                      : t('admin.products.empty_library_desc')}
                   </p>
                 </div>
               ) : (
@@ -283,7 +281,7 @@ const ProductManagement = () => {
                     <div className="p-6 flex-1 flex flex-col justify-between">
                       <div className="space-y-3">
                         <div className="flex items-center gap-2">
-                          <span className="text-[14px] font-semibold text-slate-600 truncate">Tác giả: {p.author || "Chưa cập nhật"}</span>
+                          <span className="text-[14px] font-semibold text-slate-600 truncate">{t('admin.products.author')}: {p.author || t('admin.products.not_updated')}</span>
                         </div>
                         <h3 className="font-semibold text-slate-900 text-[15px] leading-tight line-clamp-2 cursor-pointer">{p.title}</h3>
                       </div>
@@ -315,8 +313,8 @@ const ProductManagement = () => {
 
           {pagination.total > 0 && (
             <div className="p-6 bg-slate-50/30 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-6">
-              <div className="px-3 py-1 bg-white border border-slate-100 rounded-xl text-[13px] font-medium text-slate-500 shadow-sm">Hiển thị
-                <span> {pagination.current} / {Math.ceil(pagination.total / (pagination.pageSize || 10))}</span>
+              <div className="px-3 py-1 bg-white border border-slate-100 rounded-xl text-[13px] font-medium text-slate-500 shadow-sm">
+                <span>{t('admin.bookings.display')} {pagination.current} / {Math.ceil(pagination.total / (pagination.pageSize || 10))}</span>
               </div>
 
               <div className="flex items-center gap-2">
@@ -356,21 +354,21 @@ const ProductManagement = () => {
       >
         <div className="space-y-4 sm:space-y-8">
           <div className="space-y-2 sm:space-y-3">
-            <h3 className="text-[20px] sm:text-[26px] font-bold text-slate-900 leading-tight">Xóa sản phẩm</h3>
+            <h3 className="text-[20px] sm:text-[26px] font-bold text-slate-900 leading-tight">{t('admin.products.delete_title')}</h3>
             <p className="text-[14px] sm:text-[15px] text-slate-500 leading-relaxed font-medium">
-              Thao tác này sẽ xóa vĩnh viễn sản phẩm và tất cả dữ liệu liên quan. Hành động này không thể hoàn tác.
+              {t('admin.products.delete_desc')}
             </p>
           </div>
 
           <div className="space-y-4 sm:space-y-6">
             <div className="space-y-1.5 sm:space-y-3">
               <label className="text-[14px] sm:text-[15px] font-semibold text-slate-700">
-                Nhập tên sản phẩm để xác nhận: <span className="text-red-500">"{selectedProduct?.title}"</span>
+                {t('admin.products.delete_confirm_label')}: <span className="text-red-500">"{selectedProduct?.title}"</span>
               </label>
               <Input
                 value={deleteConfirmText}
                 onChange={(e) => setDeleteConfirmText(e.target.value)}
-                placeholder="Nhập tên chính xác..."
+                placeholder={t('admin.bookings.confirm_placeholder')}
                 className="h-10 sm:h-12 rounded-xl border-slate-200 focus:border-red-500 focus:ring-red-100 font-medium text-[13px] sm:text-[15px]"
               />
             </div>
@@ -380,7 +378,7 @@ const ProductManagement = () => {
                 <AlertTriangle size={12} sm:size={16} strokeWidth={2.5} />
               </div>
               <p className="text-[13px] sm:text-[15px] font-medium text-red-800 leading-relaxed">
-                Cảnh báo: Việc xóa "{selectedProduct?.title}" sẽ loại bỏ hoàn toàn file media và các thông tin liên quan.
+                {t('admin.products.delete_warning')}
               </p>
             </div>
           </div>
@@ -390,7 +388,7 @@ const ProductManagement = () => {
               onClick={() => setIsDeleteModalOpen(false)}
               className="flex-1 h-9 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium text-[13px] hover:bg-slate-50 transition-colors"
             >
-              Hủy bỏ
+              {t('common.cancel')}
             </button>
             <button
               onClick={confirmDelete}
@@ -400,7 +398,7 @@ const ProductManagement = () => {
                 : "bg-slate-100 text-slate-400 cursor-not-allowed border-none shadow-none"
                 }`}
             >
-              Xác nhận xóa sản phẩm
+              {t('common.delete')}
             </button>
           </div>
         </div>

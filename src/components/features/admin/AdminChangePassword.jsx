@@ -1,11 +1,11 @@
 import useAuthStore from "../../../stores/useAuthStore";
-import useAppStore from "../../../stores/useAppStore";
+import { useTranslation } from "react-i18next";
 import authApi from "../../../api/authApi";
-import { useState, useContext } from "react";
-
+import { useState } from "react";
 import { Lock, CheckCircle2, AlertCircle } from "lucide-react";
 
 const AdminChangePassword = ({ onClose }) => {
+  const { t } = useTranslation();
   const logout = useAuthStore(state => state.logout);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -26,10 +26,10 @@ const AdminChangePassword = ({ onClose }) => {
     setMessage({ type: "", text: "" });
 
     if (!oldPassword || !newPassword || !confirmedPassword) {
-      return showError("Vui lòng điền đầy đủ thông tin.");
+      return showError(t('common.error'));
     }
     if (newPassword !== confirmedPassword) {
-      return showError("Mật khẩu mới và xác nhận không khớp.");
+      return showError(t('user.password.errors.mismatch'));
     }
 
     try {
@@ -40,7 +40,7 @@ const AdminChangePassword = ({ onClose }) => {
         logout();
       }, 1500);
     } catch {
-      showError("Sai mật khẩu hiện tại.");
+      showError(t('common.error'));
     }
   };
 
@@ -54,7 +54,7 @@ const AdminChangePassword = ({ onClose }) => {
             <AlertCircle size={18} className="sm:w-5 sm:h-5" />
           </div>
           <div className="flex flex-col min-w-0">
-            <span className="text-[12px] sm:text-sm font-bold truncate">{message.type === "error" ? "Lỗi hệ thống" : "Thông báo"}</span>
+            <span className="text-[12px] sm:text-sm font-bold truncate">{message.type === "error" ? t('common.error') : t('common.success')}</span>
             <span className="text-[11px] sm:text-xs text-slate-500 truncate">{message.text}</span>
           </div>
         </div>
@@ -66,8 +66,8 @@ const AdminChangePassword = ({ onClose }) => {
             <div className="w-14 h-14 sm:w-20 sm:h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-xl shadow-green-200">
               <CheckCircle2 size={28} className="sm:w-10 sm:h-10 text-white" />
             </div>
-            <h3 className="text-lg sm:text-2xl font-black text-slate-900 mb-1.5 sm:mb-2">Đổi mật khẩu thành công!</h3>
-            <p className="text-[13px] sm:text-base text-slate-500 font-medium">Vui lòng đợi trong giây lát...</p>
+            <h3 className="text-lg sm:text-2xl font-black text-slate-900 mb-1.5 sm:mb-2">{t('user.password.success_title')}</h3>
+            <p className="text-[13px] sm:text-base text-slate-500 font-medium">{t('common.loading')}</p>
           </div>
         </div>
       )}
@@ -76,13 +76,13 @@ const AdminChangePassword = ({ onClose }) => {
         <div className="space-y-2">
           <label className="flex items-center gap-2 text-sm font-bold text-slate-700 ml-1">
             <Lock size={14} className="text-blue-500" />
-            Mật khẩu hiện tại
+            {t('user.password.current')}
           </label>
           <input
             type="password"
             value={oldPassword}
             onChange={(e) => setOldPassword(e.target.value)}
-            placeholder="Nhập mật khẩu hiện tại"
+            placeholder={t('user.password.current')}
             className="w-full h-10 sm:h-12 px-4 sm:px-5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-4 focus:ring-blue-100 focus:border-blue-400 outline-none transition-all font-medium text-[13px] sm:text-base text-slate-900"
           />
         </div>
@@ -90,13 +90,13 @@ const AdminChangePassword = ({ onClose }) => {
         <div className="space-y-2">
           <label className="flex items-center gap-2 text-sm font-bold text-slate-700 ml-1">
             <Lock size={14} className="text-blue-500" />
-            Mật khẩu mới
+            {t('user.password.new')}
           </label>
           <input
             type="password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            placeholder="Nhập mật khẩu mới"
+            placeholder={t('user.password.new')}
             className="w-full h-10 sm:h-12 px-4 sm:px-5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-4 focus:ring-blue-100 focus:border-blue-400 outline-none transition-all font-medium text-[13px] sm:text-base text-slate-900"
           />
         </div>
@@ -104,13 +104,13 @@ const AdminChangePassword = ({ onClose }) => {
         <div className="space-y-2">
           <label className="flex items-center gap-2 text-sm font-bold text-slate-700 ml-1">
             <Lock size={14} className="text-blue-500" />
-            Xác nhận mật khẩu mới
+            {t('user.password.confirm')}
           </label>
           <input
             type="password"
             value={confirmedPassword}
             onChange={(e) => setConfirmedPassword(e.target.value)}
-            placeholder="Nhập lại mật khẩu mới"
+            placeholder={t('user.password.confirm')}
             className="w-full h-10 sm:h-12 px-4 sm:px-5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-4 focus:ring-blue-100 focus:border-blue-400 outline-none transition-all font-medium text-[13px] sm:text-base text-slate-900"
           />
         </div>
@@ -120,7 +120,7 @@ const AdminChangePassword = ({ onClose }) => {
             className="w-full h-12 sm:h-14 bg-slate-900 text-white rounded-xl sm:rounded-2xl font-bold text-[13px] sm:text-sm hover:bg-slate-800 active:scale-95 transition-all shadow-xl shadow-slate-200 mt-2 sm:mt-4 flex items-center justify-center gap-2"
         >
           <CheckCircle2 size={16} className="sm:w-[18px] sm:h-[18px]" />
-          Xác nhận thay đổi
+          {t('common.update')}
         </button>
       </form>
     </div>

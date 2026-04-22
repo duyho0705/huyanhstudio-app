@@ -1,6 +1,8 @@
 import { Modal, Form, Input, Select } from "antd";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { User, UserCircle, Mail, Phone, Users, Power, Lock } from "lucide-react";
+import { removeVietnameseTones } from "../../../../utils/removeVietnameseTones";
 
 const { Option } = Select;
 
@@ -14,6 +16,7 @@ const PrefixSelect = ({ icon: Icon, children, ...props }) => (
 );
 
 const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
+  const { t, i18n } = useTranslation();
   const [form] = Form.useForm();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -31,7 +34,11 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
         const cleanValues = Object.entries(initialValues).reduce(
           (acc, [key, value]) => {
             if (value !== null && value !== undefined) {
-              acc[key] = value;
+              if (key === "customerName" && i18n.language === 'en') {
+                acc[key] = removeVietnameseTones(value);
+              } else {
+                acc[key] = value;
+              }
             }
             return acc;
           },
@@ -42,7 +49,7 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
         form.resetFields();
       }
     }
-  }, [open, initialValues, form]);
+  }, [open, initialValues, form, i18n.language]);
 
   const handleSubmit = () => {
     form
@@ -58,7 +65,7 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
       title={
         <div className={isMobile ? "py-1" : "py-2"}>
           <h3 className={`${isMobile ? "text-[16px]" : "text-[18px]"} font-semibold text-slate-900 leading-tight`}>
-            {initialValues ? "Cập nhật người dùng" : "Thêm người dùng mới"}
+            {initialValues ? t('admin.users.form_update') : t('admin.users.form_add')}
           </h3>
         </div>
       }
@@ -73,14 +80,14 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
           onClick={onCancel}
           className={`${isMobile ? "h-9 px-4 text-[13px]" : "h-10 px-6 text-[14px]"} rounded-xl font-medium text-slate-600 border border-slate-200 bg-white mr-2 sm:mr-3`}
         >
-          Hủy
+          {t('common.cancel')}
         </button>,
         <button
           key="submit"
           onClick={handleSubmit}
           className={`${isMobile ? "h-9 px-4 text-[13px]" : "h-10 px-6 text-[14px]"} rounded-xl bg-slate-900 border-none font-semibold text-white`}
         >
-          {initialValues ? "Cập nhật" : "Tạo tài khoản"}
+          {initialValues ? t('common.update') : t('admin.users.add_btn')}
         </button>
       ]}
       bodyStyle={{ padding: isMobile ? "0 12px 16px 12px" : "0 24px 24px 24px" }}
@@ -89,13 +96,13 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
         <div className={`grid grid-cols-1 md:grid-cols-2 ${isMobile ? "gap-x-4 gap-y-0.5" : "gap-x-6 gap-y-1"}`}>
           <Form.Item
             name="customerName"
-            label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>Họ tên</span>}
-            rules={[{ required: true, message: "Vui lòng nhập họ tên!" }]}
+            label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>{t('admin.users.form_name')}</span>}
+            rules={[{ required: true, message: t('common.error') }]}
             className={(!initialValues ? "md:col-span-1" : "md:col-span-1") + (isMobile ? " mb-2.5" : " mb-4")}
           >
             <Input
               prefix={<User size={isMobile ? 15 : 18} className="text-slate-400 mr-2" />}
-              placeholder="Nhập họ tên"
+              placeholder={t('admin.users.form_name')}
               className={`${isMobile ? "h-9 text-[13px]" : "h-10 text-[14px]"} px-3 bg-white border-slate-200 rounded-xl font-medium shadow-sm focus:border-blue-500`}
             />
           </Form.Item>
@@ -103,29 +110,29 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
           {!initialValues ? (
             <Form.Item
               name="username"
-              label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>Tên đăng nhập</span>}
+              label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>{t('admin.users.form_username')}</span>}
               rules={[
-                { required: true, message: "Vui lòng nhập tên người dùng!" },
-                { min: 3, message: "Tên người dùng có ít nhất 3 ký tự!" },
+                { required: true, message: t('common.error') },
+                { min: 3, message: t('common.error') },
               ]}
               className={isMobile ? "mb-2.5" : "mb-4"}
             >
               <Input
                 prefix={<UserCircle size={isMobile ? 15 : 18} className="text-slate-400 mr-2" />}
-                placeholder="Nhập tên đăng nhập"
+                placeholder={t('admin.users.form_username')}
                 className={`${isMobile ? "h-9 text-[13px]" : "h-10 text-[14px]"} px-3 bg-white border-slate-200 rounded-xl font-medium shadow-sm focus:border-blue-500`}
               />
             </Form.Item>
           ) : (
             <Form.Item
               name="email"
-              label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>Email</span>}
-              rules={[{ type: "email", message: "Email không hợp lệ!" }]}
+              label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>{t('admin.users.col_email')}</span>}
+              rules={[{ type: "email", message: t('common.error') }]}
               className={isMobile ? "mb-2.5" : "mb-4"}
             >
               <Input
                 prefix={<Mail size={isMobile ? 15 : 18} className="text-slate-400 mr-2" />}
-                placeholder="Nhập email liên hệ"
+                placeholder="Email"
                 className={`${isMobile ? "h-9 text-[13px]" : "h-10 text-[14px]"} px-3 bg-white border-slate-200 rounded-xl font-medium shadow-sm focus:border-blue-500`}
               />
             </Form.Item>
@@ -134,13 +141,13 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
           {!initialValues && (
             <Form.Item
               name="email"
-              label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>Email</span>}
-              rules={[{ type: "email", message: "Email không hợp lệ!" }]}
+              label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>{t('admin.users.col_email')}</span>}
+              rules={[{ type: "email", message: t('common.error') }]}
               className={isMobile ? "mb-2.5" : "mb-4"}
             >
               <Input
                 prefix={<Mail size={isMobile ? 15 : 18} className="text-slate-400 mr-2" />}
-                placeholder="Nhập email liên hệ"
+                placeholder="Email"
                 className={`${isMobile ? "h-9 text-[13px]" : "h-10 text-[14px]"} px-3 bg-white border-slate-200 rounded-xl font-medium shadow-sm focus:border-blue-500`}
               />
             </Form.Item>
@@ -148,19 +155,19 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
 
           <Form.Item
             name="phone"
-            label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>Số điện thoại</span>}
+            label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>{t('admin.users.col_phone')}</span>}
             rules={[
-              { required: true, message: "Vui lòng nhập số điện thoại!" },
+              { required: true, message: t('common.error') },
               {
                 pattern: /^[0-9]{10,11}$/,
-                message: "Số điện thoại không hợp lệ!",
+                message: t('common.error'),
               },
             ]}
             className={isMobile ? "mb-2.5" : "mb-4"}
           >
             <Input
               prefix={<Phone size={isMobile ? 15 : 18} className="text-slate-400 mr-2" />}
-              placeholder="Nhập số điện thoại"
+              placeholder={t('admin.users.col_phone')}
               className={`${isMobile ? "h-9 text-[13px]" : "h-10 text-[14px]"} px-3 bg-white border-slate-200 rounded-xl font-medium shadow-sm focus:border-blue-500`}
             />
           </Form.Item>
@@ -168,13 +175,13 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
           <div className={`grid ${isMobile ? "grid-cols-2 gap-2.5" : "grid-cols-1"}`}>
             <Form.Item
               name="role"
-              label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>Vai trò</span>}
-              rules={[{ required: true, message: "Vui lòng chọn vai trò!" }]}
+              label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>{t('admin.users.form_role')}</span>}
+              rules={[{ required: true, message: t('common.error') }]}
               className={isMobile ? "mb-2.5" : "mb-4"}
             >
               <PrefixSelect
                 icon={Users}
-                placeholder="Chọn vai trò"
+                placeholder={t('admin.users.form_role')}
                 className={`${isMobile ? "h-9 text-[12px]" : "h-10 text-[14px]"} font-medium rounded-xl border-slate-200`}
               >
                 {roles?.map((role) => (
@@ -187,17 +194,17 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
 
             <Form.Item
               name="active"
-              label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>Trạng thái</span>}
-              rules={[{ required: true, message: "Vui lòng chọn trạng thái!" }]}
+              label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>{t('admin.users.form_status')}</span>}
+              rules={[{ required: true, message: t('common.error') }]}
               className={isMobile ? "mb-2.5" : "mb-4"}
             >
               <PrefixSelect
                 icon={Power}
-                placeholder="Trạng thái"
+                placeholder={t('admin.users.form_status')}
                 className={`${isMobile ? "h-9 text-[12px]" : "h-10 text-[14px]"} font-medium rounded-xl border-slate-200`}
               >
-                <Option value={true}><span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-medium text-slate-700`}>Bật</span></Option>
-                <Option value={false}><span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-medium text-slate-700`}>Tắt</span></Option>
+                <Option value={true}><span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-medium text-slate-700`}>{t('common.active')}</span></Option>
+                <Option value={false}><span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-medium text-slate-700`}>{t('admin.users.status_locked')}</span></Option>
               </PrefixSelect>
             </Form.Item>
           </div>
@@ -206,32 +213,32 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
             <div className={`grid ${isMobile ? "grid-cols-1" : "grid-cols-1 md:col-span-2 md:grid-cols-2 gap-x-6"}`}>
               <Form.Item
                 name="password"
-                label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>Mật khẩu</span>}
+                label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>{t('admin.users.form_password')}</span>}
                 rules={[
-                  { required: true, message: "Vui lòng nhập mật khẩu!" },
-                  { min: 6, message: "Mật khẩu ít nhất 6 ký tự!" },
+                  { required: true, message: t('common.error') },
+                  { min: 6, message: t('common.error') },
                 ]}
                 className={isMobile ? "mb-2.5" : "mb-4"}
               >
                 <Input.Password
                   prefix={<Lock size={isMobile ? 15 : 18} className="text-slate-400 mr-2" />}
-                  placeholder="Nhập mật khẩu"
+                  placeholder={t('admin.users.form_password')}
                   className={`${isMobile ? "h-9 text-[13px]" : "h-10 text-[14px]"} px-3 bg-white border-slate-200 rounded-xl font-medium shadow-sm focus:border-blue-500`}
                 />
               </Form.Item>
 
               <Form.Item
                 name="confirmPassword"
-                label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>Xác nhận</span>}
+                label={<span className={`${isMobile ? "text-[12px]" : "text-[13px]"} font-semibold text-slate-700`}>{t('user.password.confirm')}</span>}
                 dependencies={['password']}
                 rules={[
-                  { required: true, message: "Vui lòng xác minh!" },
+                  { required: true, message: t('common.error') },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
                       if (!value || getFieldValue('password') === value) {
                         return Promise.resolve();
                       }
-                      return Promise.reject(new Error('Mật khẩu không khớp!'));
+                      return Promise.reject(new Error(t('user.password.errors.mismatch')));
                     },
                   }),
                 ]}
@@ -239,7 +246,7 @@ const UserForm = ({ open, onCancel, onSubmit, initialValues, roles }) => {
               >
                 <Input.Password
                   prefix={<Lock size={isMobile ? 15 : 18} className="text-slate-400 mr-2" />}
-                  placeholder="Nhập lại mật khẩu"
+                  placeholder={t('user.password.confirm')}
                   className={`${isMobile ? "h-9 text-[13px]" : "h-10 text-[14px]"} px-3 bg-white border-slate-200 rounded-xl font-medium shadow-sm focus:border-blue-500`}
                 />
               </Form.Item>

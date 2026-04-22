@@ -135,7 +135,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
           className="flex items-center gap-3.5 px-4 h-[48px] w-full rounded-xl text-red-500 hover:bg-red-50 transition-colors duration-200 font-bold text-[15px]"
         >
           <LogOut size={20} />
-          <span>{t('admin.sidebar.returns')}</span>
+          <span>{t('admin.header.logout')}</span>
         </button>
       </div>
     </aside>
