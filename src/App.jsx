@@ -215,8 +215,8 @@ function AppContent() {
 
       {!isAdminRoute && <NewNavbar />}
 
-      <Suspense fallback={<PageLoader />}>
-        {isAdminRoute ? (
+      {isAdminRoute ? (
+        <Suspense fallback={<PageLoader />}>
           <AnimatePresence mode="wait">
             <Routes location={location}>
               <Route
@@ -237,7 +237,9 @@ function AppContent() {
               <Route path="/oauth2/redirect" element={<OAuth2Callback />} />
             </Routes>
           </AnimatePresence>
-        ) : (
+        </Suspense>
+      ) : (
+        <Suspense fallback={null}>
           <StudioBackground>
             <AnimatePresence mode="wait">
               <Routes location={location} key={location.pathname}>
@@ -335,8 +337,8 @@ function AppContent() {
               </Routes>
             </AnimatePresence>
           </StudioBackground>
-        )}
-      </Suspense>
+        </Suspense>
+      )}
 
       <LoginModal
         isOpen={showLoginModal}
