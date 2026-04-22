@@ -257,7 +257,6 @@ class StorageService {
         // Nuclear option: clear everything
         localStorage.clear();
         sessionStorage.clear();
-        console.log("[StorageService] Cleared ALL localStorage and sessionStorage");
       } else {
         // Clear only app-specific localStorage items
         const keys = Object.keys(localStorage);

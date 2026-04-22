@@ -1,23 +1,50 @@
-import { useState, useEffect, useContext } from "react";
+import useAuthStore from "../../../stores/useAuthStore";
+import useAppStore from "../../../stores/useAppStore";
+import { useState, useEffect } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { LuCalendar } from "react-icons/lu";
-import { AuthContext } from "../../../api/AuthContext";
 import bookingApi from "../../../api/bookingApi";
 import Modal from "../../layout/Modal";
+import { useTranslation } from "react-i18next";
 
 const BookingProfile = () => {
-  const { user, loading } = useContext(AuthContext);
+  const { t, i18n } = useTranslation();
+  const user = useAuthStore(state => state.user);
+  const loading = useAuthStore(state => state.loading);
   const [bookings, setBookings] = useState([]);
   const [isFetching, setIsFetching] = useState(true);
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
 
+  const removeVietnameseTones = (str) => {
+    if (!str) return "";
+    str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+    str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+    str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+    str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+    str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+    str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+    str = str.replace(/đ/g, "d");
+    str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
+    str = str.replace(/È|É|Ẹ|Ẻ|Ẹ|Ẽ|Ê|B|Ế|Ệ|Ể|Ễ/g, "E");
+    str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
+    str = str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
+    str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
+    str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
+    str = str.replace(/Đ/g, "D");
+    str = str.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, "");
+    str = str.replace(/\u02C6|\u0306|\u031B/g, "");
+    return str;
+  };
+
+  const shortCode = (code) => code?.substring(0, 8).toUpperCase() || "N/A";
+
   const fetchData = async (pageNum) => {
     setIsFetching(true);
     try {
       const res = await bookingApi.getBookingCustomer(pageNum, 10).catch(err => {
-        console.error("Booking Profile API Error:", err);
+        // API Error
         return { list: [], totalPages: 0 };
       });
 
@@ -48,14 +75,14 @@ const BookingProfile = () => {
   }, [loading, user, page]);
 
   const statusMap = {
-    CONFIRMED: { label: "Đã xác nhận", class: "bg-blue-100 text-blue-700" },
-    PENDING: { label: "Chờ xác nhận", class: "bg-yellow-100 text-yellow-700" },
-    CANCELLED: { label: "Đã hủy", class: "bg-red-100 text-red-700" },
-    COMPLETED: { label: "Đã hoàn thành", class: "bg-emerald-500 text-white" },
+    CONFIRMED: { label: t('user.booking.statuses.CONFIRMED'), class: "bg-blue-100 text-blue-700" },
+    PENDING: { label: t('user.booking.statuses.PENDING'), class: "bg-yellow-100 text-yellow-700" },
+    CANCELLED: { label: t('user.booking.statuses.CANCELLED'), class: "bg-red-100 text-red-700" },
+    COMPLETED: { label: t('user.booking.statuses.COMPLETED'), class: "bg-emerald-500 text-white" },
   };
 
   const getStatus = (status) => {
-    const s = statusMap[status] || { label: "Không rõ", class: "bg-gray-100 text-gray-600" };
+    const s = statusMap[status] || { label: t('user.booking.statuses.UNKNOWN'), class: "bg-gray-100 text-gray-600" };
     return <span className={`px-2.5 py-1 rounded-full text-[13px] font-semibold ${s.class}`}>{s.label}</span>;
   };
 
@@ -83,11 +110,11 @@ const BookingProfile = () => {
         <table className="w-full text-sm">
           <thead>
             <tr className="bg-gray-50 border-b border-gray-100">
-              <th className="text-left py-3 px-4 font-semibold text-gray-600">Mã lịch</th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-600">Khách hàng</th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-600">Ngày thu</th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-600">Dịch vụ</th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-600">Trạng thái</th>
+              <th className="text-left py-3 px-4 font-semibold text-gray-600">{t('user.booking.order_id')}</th>
+              <th className="text-left py-3 px-4 font-semibold text-gray-600">{t('user.account.name')}</th>
+              <th className="text-left py-3 px-4 font-semibold text-gray-600">{t('user.booking.date')}</th>
+              <th className="text-left py-3 px-4 font-semibold text-gray-600">{t('common.services')}</th>
+              <th className="text-left py-3 px-4 font-semibold text-gray-600">{t('user.booking.status')}</th>
               <th className="py-3 px-4"></th>
             </tr>
           </thead>
@@ -103,7 +130,9 @@ const BookingProfile = () => {
               bookings.map((b) => (
                 <tr key={b.bookingCode} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                   <td className="py-3 px-4 font-mono text-xs text-gray-500">{shortCode(b.bookingCode)}</td>
-                  <td className="py-3 px-4 font-medium text-gray-800">{b.customerName}</td>
+                  <td className="py-3 px-4 font-medium text-gray-800">
+                    {i18n.language === 'en' ? removeVietnameseTones(b.customerName) : b.customerName}
+                  </td>
                   <td className="py-3 px-4 text-gray-600">{b.recordDate}</td>
                   <td className="py-3 px-4 text-gray-600">
                     {b.services?.map(s => typeof s === 'string' ? s : s.name).join(", ") || "N/A"}
@@ -123,7 +152,8 @@ const BookingProfile = () => {
                     <div className="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-300">
                       <LuCalendar size={24} />
                     </div>
-                    <p className="text-gray-400 font-medium">Bạn chưa từng đặt lịch thu âm</p>
+                    <p className="text-gray-400 font-medium">{t('user.booking.no_data')}</p>
+
                   </div>
                 </td>
               </tr>
@@ -133,9 +163,9 @@ const BookingProfile = () => {
 
         {totalPages > 1 && (
           <div className="flex items-center justify-center gap-3 py-4 border-t border-gray-100">
-            <button className="px-4 py-1.5 text-sm font-medium rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors disabled:opacity-50" onClick={() => setPage((p) => Math.max(0, p - 1))} disabled={page === 0}>Trước</button>
-            <span className="text-sm text-gray-500">Trang {page + 1} / {totalPages}</span>
-            <button className="px-4 py-1.5 text-sm font-medium rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors disabled:opacity-50" onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))} disabled={page === totalPages - 1}>Sau</button>
+            <button className="px-4 py-1.5 text-sm font-medium rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors disabled:opacity-50" onClick={() => setPage((p) => Math.max(0, p - 1))} disabled={page === 0}>{t('common.prev', 'Previous')}</button>
+            <span className="text-sm text-gray-500">{t('common.page', 'Page')} {page + 1} / {totalPages}</span>
+            <button className="px-4 py-1.5 text-sm font-medium rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors disabled:opacity-50" onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))} disabled={page === totalPages - 1}>{t('common.next', 'Next')}</button>
           </div>
         )}
       </div>
@@ -143,20 +173,22 @@ const BookingProfile = () => {
       <Modal
         isOpen={!!selectedBooking}
         onClose={() => setSelectedBooking(null)}
-        title="Chi tiết đặt lịch"
+        title={t('user.booking.view_detail')}
+
         content={selectedBooking && (
           <div className="flex flex-col gap-3" key={selectedBooking.bookingCode}>
             {[
-              ["Mã lịch", shortCode(selectedBooking.bookingCode)],
-              ["Khách hàng", selectedBooking.customerName],
-              ["Ngày thu", selectedBooking.recordDate],
-              ["Dịch vụ", selectedBooking.services.join(", ")],
-              ["Ghi chú", selectedBooking.note || "Không có ghi chú"],
-              ["Phòng", selectedBooking.studioRoom],
+              [t('user.booking.order_id'), shortCode(selectedBooking.bookingCode)],
+              [t('user.account.name'), i18n.language === 'en' ? removeVietnameseTones(selectedBooking.customerName) : selectedBooking.customerName],
+              [t('user.booking.date'), selectedBooking.recordDate],
+              [t('common.services', 'Services'), selectedBooking.services?.join(", ")],
+              [t('common.note', 'Note'), selectedBooking.note || t('common.no_note', 'No note')],
+              [t('common.studio_room', 'Studio Room'), selectedBooking.studioRoom],
             ].map(([label, val]) => (
               <p key={label} className="text-sm"><strong className="text-gray-800">{label}:</strong> <span className="text-gray-600">{val}</span></p>
             ))}
-            <p className="text-sm"><strong className="text-gray-800">Trạng thái:</strong> {getStatus(selectedBooking.status)}</p>
+            <p className="text-sm"><strong className="text-gray-800">{t('user.booking.status')}:</strong> {getStatus(selectedBooking.status)}</p>
+
           </div>
         )}
       />

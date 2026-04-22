@@ -31,7 +31,7 @@ const AdminLayout = () => {
     const client = new Client({
       webSocketFactory: () => new SockJS(WS_URL),
       onConnect: () => {
-        console.log("Admin Global Notification Connected");
+        // Connected
 
         // Listen for new bookings
         client.subscribe("/topic/bookings", (message) => {
@@ -135,7 +135,7 @@ const AdminLayout = () => {
                   }
                 });
               } catch (e) {
-                console.log("Audio skipped", e);
+                // Audio skipped
               }
 
               // Show popup notification

@@ -1,3 +1,6 @@
+import { useTranslation } from "react-i18next";
+import useAuthStore from "../../../../stores/useAuthStore";
+import useAppStore from "../../../../stores/useAppStore";
 import { useContext, useState } from "react";
 import { Dropdown, Modal } from "antd";
 import {
@@ -14,15 +17,16 @@ import {
   CheckCircle2,
   AlertCircle,
   Zap,
-
 } from "lucide-react";
-import { AuthContext } from "../../../../api/AuthContext";
+
 import AdminAccount from "../AdminAccount";
 import AdminBookings from "../AdminBookings";
 import AdminChangePassword from "../AdminChangePassword";
 
 const AdminHeader = ({ toggleSidebar }) => {
-  const { user, logout } = useContext(AuthContext);
+  const { t, i18n } = useTranslation();
+  const user = useAuthStore(state => state.user);
+  const logout = useAuthStore(state => state.logout);
 
   const [accountModal, setAccountModal] = useState(false);
   const [bookingsModal, setBookingsModal] = useState(false);
@@ -45,40 +49,40 @@ const AdminHeader = ({ toggleSidebar }) => {
     if (!user) return "Admin";
     const roles = Array.isArray(user.roles) ? user.roles : [user.role];
     if (roles.includes("ROLE_ADMIN")) return "";
-    if (roles.includes("ROLE_STAFF")) return "Nhân viên / Staff";
-    return "Người dùng";
+    if (roles.includes("ROLE_STAFF")) return "Staff";
+    return "";
   };
 
   const menuItems = [
     {
       key: "account",
-      label: <span className="text-[13px] sm:text-[14px] font-semibold">Hồ sơ cá nhân</span>,
+      label: <span className="text-[13px] sm:text-[14px] font-semibold">{t("admin.header.account")}</span>,
       icon: <UserCircle size={16} className="text-blue-500" />,
       onClick: () => setAccountModal(true),
     },
     {
       key: "bookings",
-      label: <span className="text-[13px] sm:text-[14px] font-semibold">Thông báo đặt lịch</span>,
+      label: <span className="text-[13px] sm:text-[14px] font-semibold">{t("admin.header.notifications")}</span>,
       icon: <Calendar size={16} className="text-blue-500" />,
       onClick: () => setBookingsModal(true),
     },
     {
       key: "change-password",
-      label: <span className="text-[13px] sm:text-[14px] font-semibold">Thiết lập mật khẩu</span>,
+      label: <span className="text-[13px] sm:text-[14px] font-semibold">{t("admin.header.change_password")}</span>,
       icon: <Lock size={16} className="text-blue-500" />,
       onClick: () => setPasswordModal(true),
     },
     { type: "divider" },
     {
       key: "home",
-      label: <span className="text-[13px] sm:text-[14px] font-semibold text-slate-600">Xem website chính</span>,
+      label: <span className="text-[13px] sm:text-[14px] font-semibold text-slate-600">{t("admin.header.returns")}</span>,
       icon: <Home size={16} className="text-slate-400" />,
       onClick: handleGoHome,
     },
     { type: "divider" },
     {
       key: "logout",
-      label: <span className="text-[13px] sm:text-[14px] font-semibold text-red-600">Thoát hệ thống</span>,
+      label: <span className="text-[13px] sm:text-[14px] font-semibold text-red-600">{t("admin.header.logout")}</span>,
       icon: <LogOut size={16} className="text-red-500" />,
       onClick: logout,
     },
@@ -111,8 +115,15 @@ const AdminHeader = ({ toggleSidebar }) => {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
-
-
+          
+          {/* Language Switcher */}
+          <button
+            onClick={() => i18n.changeLanguage(i18n.language === 'vi' ? 'en' : 'vi')}
+            className="hidden sm:flex items-center justify-center w-auto px-3 h-9 bg-[#35104C]/5 text-[13px] font-bold text-[#35104C] rounded-xl hover:bg-[#35104C]/10 transition-colors"
+          >
+            {i18n.language === 'vi' ? 'EN' : 'VI'}
+          </button>
+          
           <button className="w-9 h-9 sm:w-11 sm:h-11 flex items-center justify-center text-slate-400 rounded-none relative group">
             <Bell size={17} strokeWidth={2.5} />
             <span className="absolute top-2 right-2 sm:top-3 sm:right-3 w-2 h-2 bg-red-500 rounded-full border-2 border-white shadow-sm ring-2 ring-red-500/20"></span>
@@ -153,7 +164,11 @@ const AdminHeader = ({ toggleSidebar }) => {
             {notification.type === "success" ? <CheckCircle2 size={20} className="sm:w-6 sm:h-6" /> : <AlertCircle size={20} className="sm:w-6 sm:h-6" />}
           </div>
           <div className="min-w-0">
-            <h5 className="font-semibold text-slate-900 tracking-tight text-[11px] sm:text-xs mb-0.5 truncate">{notification.type === "success" ? "HOÀN TẤT THAO TÁC" : "CẢNH BÁO HỆ THỐNG"}</h5>
+            <h5 className="font-semibold text-slate-900 tracking-tight text-[11px] sm:text-xs mb-0.5 truncate">
+              {notification.type === "success" 
+                ? (i18n.language === 'en' ? "OPERATION COMPLETED" : "HOÀN TẤT THAO TÁC") 
+                : (i18n.language === 'en' ? "SYSTEM WARNING" : "CẢNH BÁO HỆ THỐNG")}
+            </h5>
             <p className="text-[11px] sm:text-xs text-slate-500 font-semibold truncate">{notification.message}</p>
           </div>
         </div>
@@ -173,7 +188,7 @@ const AdminHeader = ({ toggleSidebar }) => {
           <div className="flex items-center gap-3 sm:gap-4 mb-5 sm:mb-8">
             <div className="w-1.5 h-6 sm:h-8 bg-blue-600 rounded-full"></div>
             <div>
-              <h3 className="text-lg sm:text-xl font-semibold text-slate-900">Cập nhật hồ sơ</h3>
+              <h3 className="text-lg sm:text-xl font-semibold text-slate-900">{t('admin.header.update_profile')}</h3>
             </div>
           </div>
           <AdminAccount onClose={handleAccountClose} isOpen={accountModal} />
@@ -195,7 +210,7 @@ const AdminHeader = ({ toggleSidebar }) => {
             <div className="flex items-center gap-3 sm:gap-4">
               <div className="w-1.5 h-6 sm:h-8 bg-blue-600 rounded-full"></div>
               <div>
-                <h3 className="text-lg sm:text-xl font-semibold text-slate-900">Lịch sử hệ thống</h3>
+                <h3 className="text-lg sm:text-xl font-semibold text-slate-900">{t('admin.header.system_history')}</h3>
               </div>
             </div>
             <button onClick={() => setBookingsModal(false)} className="w-9 h-9 sm:w-10 sm:h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400">
@@ -220,7 +235,7 @@ const AdminHeader = ({ toggleSidebar }) => {
           <div className="flex items-center gap-3 sm:gap-4 mb-5 sm:mb-8">
             <div className="w-1.5 h-6 sm:h-8 bg-red-500 rounded-full"></div>
             <div>
-              <h3 className="text-lg sm:text-xl font-semibold text-slate-900">Bảo mật tài khoản</h3>
+              <h3 className="text-lg sm:text-xl font-semibold text-slate-900">{t('admin.header.security')}</h3>
             </div>
           </div>
           <AdminChangePassword onClose={() => setPasswordModal(false)} />

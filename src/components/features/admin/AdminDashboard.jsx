@@ -1,3 +1,6 @@
+import { useTranslation } from "react-i18next";
+import useAuthStore from "../../../stores/useAuthStore";
+import useAppStore from "../../../stores/useAppStore";
 import { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -19,14 +22,15 @@ import {
   TrendingUp,
   ArrowRight,
 } from "lucide-react";
-import { AuthContext } from "../../../api/AuthContext";
 import statsApi from "../../../api/statsApi";
 import AdminRevenueChart from "./components/AdminRevenueChart";
 import AdminRecentBookings from "./components/AdminRecentBookings";
 import AdminPopularServices from "./components/AdminPopularServices";
+import { removeVietnameseTones } from "../../../utils/removeVietnameseTones";
 
 const AdminDashboard = () => {
-  const { user } = useContext(AuthContext);
+  const { t, i18n } = useTranslation();
+  const user = useAuthStore(state => state.user);
   const [stats, setStats] = useState({
     totalBookings: 0,
     pendingBookings: 0,
@@ -59,35 +63,35 @@ const AdminDashboard = () => {
 
   const getGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return "Chào buổi sáng";
-    if (hour < 18) return "Chào buổi chiều";
-    return "Chào buổi tối";
+    if (hour < 12) return t('admin.dashboard.morning');
+    if (hour < 18) return t('admin.dashboard.afternoon');
+    return t('admin.dashboard.evening');
   };
 
   const cards = [
     {
-      title: "Tổng đặt lịch",
+      title: t('admin.dashboard.total'),
       value: stats.totalBookings,
       icon: <BarChart3 size={20} />,
       iconBg: "bg-[#35104C]/10 text-[#35104C]",
       link: "/admin/bookings",
     },
     {
-      title: "Chờ xác nhận",
+      title: t('admin.dashboard.pending'),
       value: stats.pendingBookings,
       icon: <Clock size={20} />,
       iconBg: "bg-amber-100 text-amber-600",
       link: "/admin/bookings?status=PENDING",
     },
     {
-      title: "Đã xác nhận",
+      title: t('admin.dashboard.confirmed'),
       value: stats.confirmedBookings,
       icon: <Calendar size={20} />,
       iconBg: "bg-violet-100 text-violet-600",
       link: "/admin/bookings?status=CONFIRMED",
     },
     {
-      title: "Hoàn thành",
+      title: t('admin.dashboard.completed'),
       value: stats.completedBookings,
       icon: <CheckCircle2 size={20} />,
       iconBg: "bg-emerald-100 text-emerald-600",
@@ -96,10 +100,10 @@ const AdminDashboard = () => {
   ];
 
   const quickLinks = [
-    { title: "Đặt lịch", icon: <CalendarPlus size={18} />, link: "/admin/bookings", color: "text-[#35104C]" },
-    { title: "Dịch vụ", icon: <Headset size={18} />, link: "/admin/services", color: "text-violet-600" },
-    { title: "Sản phẩm", icon: <ShoppingBag size={18} />, link: "/admin/products", color: "text-emerald-600" },
-    { title: "Người dùng", icon: <UserPlus size={18} />, link: "/admin/users", color: "text-amber-600" },
+    { title: t('admin.dashboard.quick_booking'), icon: <CalendarPlus size={18} />, link: "/admin/bookings", color: "text-[#35104C]" },
+    { title: t('admin.dashboard.quick_service'), icon: <Headset size={18} />, link: "/admin/services", color: "text-violet-600" },
+    { title: t('admin.dashboard.quick_product'), icon: <ShoppingBag size={18} />, link: "/admin/products", color: "text-emerald-600" },
+    { title: t('admin.dashboard.quick_user'), icon: <UserPlus size={18} />, link: "/admin/users", color: "text-amber-600" },
   ];
 
   if (loading) {
@@ -167,7 +171,9 @@ const AdminDashboard = () => {
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
           <h1 className="text-xl sm:text-[19px] font-medium text-slate-700 tracking-tight mb-1">
-            {getGreeting()}, <span className="font-medium text-black">{user?.customerName}</span>
+            {getGreeting()}, <span className="font-medium text-black">
+              {i18n.language === 'en' ? removeVietnameseTones(user?.customerName) : user?.customerName}
+            </span>
           </h1>
         </div>
         <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide w-full sm:w-auto">

@@ -2,9 +2,11 @@ import React, { useState, useEffect, useContext, memo, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { FiSearch, FiArrowRight, FiSend, FiMessageCircle, FiX, FiMinus, FiImage, FiCode, FiMusic, FiUser, FiLogOut, FiGrid } from "react-icons/fi";
-import { FaPlay, FaMicrophone, FaReact, FaFacebookF, FaTiktok, FaInstagram } from "react-icons/fa";
+import { FaPlay, FaMicrophone, FaHeadphones, FaReact, FaFacebookF, FaTiktok, FaInstagram } from "react-icons/fa";
 import { SiThreads } from "react-icons/si";
-import { AuthContext } from "../../api/AuthContext";
+import { useTranslation } from "react-i18next";
+import useAuthStore from "../../stores/useAuthStore";
+import useAppStore from "../../stores/useAppStore";
 import productApi from "../../api/productApi";
 import phongthuImg from "../../assets/phongthu.png";
 import section3_anh1 from "../../assets/section3_anh1.webp";
@@ -125,7 +127,9 @@ const FloatingMusicElements = () => {
 
 
 const NewLandingPage = () => {
-  const { user, logout, setShowLoginModal } = useContext(AuthContext);
+  const { t } = useTranslation();
+  const { user, logout } = useAuthStore();
+  const setShowLoginModal = useAppStore(state => state.setShowLoginModal);
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
 
@@ -180,11 +184,9 @@ const NewLandingPage = () => {
               className="text-[32px] leading-[1.1] md:text-[72px] md:leading-[1.02] font-bold tracking-tighter text-[#35104C] mb-6 md:mb-8"
               style={{ fontFamily: '"Poppins", sans-serif' }}
             >
-              Transform your <span className="relative inline-block text-[#6CD1FD]">
-                voice
-              </span>
-              <br />
-              into a Masterpiece
+              {t('hero.title')} <span className="relative inline-block text-[#6CD1FD]">
+                {t('hero.subtitle').split(' ')[0]}
+              </span> {t('hero.subtitle').substring(t('hero.subtitle').indexOf(' ') + 1)}
             </h1>
 
             <motion.p
@@ -193,8 +195,7 @@ const NewLandingPage = () => {
               transition={{ delay: 0.5, duration: 0.8 }}
               className="text-[16px] md:text-[23px] font-medium text-[#35104C]/80 mb-8 md:mb-10 max-w-[850px] mx-auto tracking-tight leading-relaxed px-2 md:px-0"
             >
-              Phòng thu âm chuyên nghiệp với công nghệ hiện đại. <br />
-              Nơi chắp cánh cho giọng hát của bạn.
+              {t('hero.desc')}
             </motion.p>
 
             <motion.button
@@ -203,9 +204,9 @@ const NewLandingPage = () => {
                 if (user) navigate("/booking");
                 else setShowLoginModal(true, "signup");
               }}
-              className="px-8 py-4 md:px-12 md:py-5 bg-[#6CD1FD] text-white rounded-full text-[16px] md:text-[20px] font-bold mb-4 md:mb-10 shadow-xl shadow-sky/10 active:scale-95"
+              className="px-14 py-3 md:px-20 md:py-4 bg-[#6CD1FD] text-white rounded-full text-[16px] md:text-[20px] font-semibold mb-4 md:mb-10 shadow-xl shadow-sky/10 active:scale-95"
             >
-              Đặt lịch thu âm ngay
+              {t('hero.cta')}
             </motion.button>
 
             {/* Product Hunt Badge */}
@@ -217,10 +218,10 @@ const NewLandingPage = () => {
             >
               <div className="flex items-center gap-3 sm:gap-4 px-5 sm:px-8 py-2 sm:py-2.5 bg-white border border-[#f0d9c4] rounded-full shadow-sm">
                 <div className="text-xl sm:text-2xl text-[#e8762b]">
-                  <FaMicrophone />
+                  <FaHeadphones />
                 </div>
                 <div className="text-left">
-                  <p className="text-[13px] sm:text-[16px] font-semibold text-[#e8762b] leading-tight">Phong cách - Sáng tạo - Năng lượng</p>
+                  <p className="text-[13px] sm:text-[16px] font-semibold text-[#e8762b] leading-tight">{t('hero.badge')}</p>
                 </div>
               </div>
             </motion.div>
@@ -264,7 +265,7 @@ const NewLandingPage = () => {
           >
             <div className="absolute inset-0 bg-[#ff99ed]/20 -rotate-2 blur-3xl transform scale-150"></div>
             <h2 className="text-[24px] sm:text-[28px] md:text-[48px] font-bold tracking-tight text-[#35104C] relative" style={{ fontFamily: '"Poppins", sans-serif' }}>
-              hastudio qua từng khung hình
+              {t('landing.gallery_title')}
             </h2>
           </motion.div>
 
@@ -408,7 +409,7 @@ const NewLandingPage = () => {
       {/* --- SECTION 2: CUSTOMIZATION TOOLS --- */}
       <section
         className="pb-10 md:pb-32 pt-16 md:pt-32 px-4 md:px-6 bg-[#F0EBE8] mt-8 sm:-mt-[160px] md:-mt-[220px] relative z-20 shadow-[0_-30px_60px_rgba(0,0,0,0.03)]"
-        style={{ 
+        style={{
           borderTopLeftRadius: '50% 60px',
           borderTopRightRadius: '50% 60px',
           borderBottomLeftRadius: '50% 60px',
@@ -426,7 +427,7 @@ const NewLandingPage = () => {
               className="text-[28px] sm:text-[36px] md:text-[48px] font-bold tracking-tight text-[#35104C] relative px-2"
               style={{ fontFamily: '"Poppins", sans-serif' }}
             >
-              tận hưởng âm nhạc, trọn vẹn cảm xúc
+              {t('landing.customization_title')}
             </motion.h2>
           </div>
 
@@ -434,26 +435,26 @@ const NewLandingPage = () => {
             {[
               {
                 label: "Âm thanh chi tiết",
-                title: "Tối giản hay cầu kỳ? Bạn quyết định",
-                desc: "Tùy chỉnh độ dày của nhạc cụ, giọng hát để tạo nên một bản phối hoàn hảo.",
+                title: t('landing.tools.tool1_title'),
+                desc: t('landing.tools.tool1_desc'),
                 img: decor1
               },
               {
                 label: "a dạng phong cách",
-                title: "Mọi phong cách nhạc đều được đáp ứng",
-                desc: "Từ Pop, Ballad đến Rock hay EDM, đội ngũ của chúng tôi luôn sẵn sàng.",
+                title: t('landing.tools.tool2_title'),
+                desc: t('landing.tools.tool2_desc'),
                 img: decor2
               },
               {
                 label: "Bảng màu cảm xúc",
-                title: "Khám phá sắc thái âm nhạc mới",
-                desc: "Thay đổi màu sắc âm thanh thông qua các thiết bị analog hiện đại.",
+                title: t('landing.tools.tool3_title'),
+                desc: t('landing.tools.tool3_desc'),
                 img: decor3
               },
               {
                 label: "Quy trình chuyên nghiệp",
-                title: "Từ phác thảo đến hoàn thiện",
-                desc: "Chúng tôi đồng hành cùng bạn từ lúc thu demo cho đến bản Master chuẩn.",
+                title: t('landing.tools.tool4_title'),
+                desc: t('landing.tools.tool4_desc'),
                 img: decor4
               }
             ].map((tool, i) => (
@@ -494,7 +495,7 @@ const NewLandingPage = () => {
               }}
               className="px-8 py-3 sm:px-12 sm:py-4 bg-[#6CD1FD] text-[#35104C] rounded-full font-bold text-[14px] sm:text-[17px] shadow-lg active:scale-95 transition-all"
             >
-              Xem bảng giá dịch vụ
+              {t('landing.price_btn')}
             </motion.button>
           </div>
         </div>
@@ -514,7 +515,7 @@ const NewLandingPage = () => {
                 viewport={{ once: true }}
                 className="text-[28px] sm:text-[36px] font-bold tracking-tight text-[#35104C] leading-[1.1] mb-3" style={{ fontFamily: '"Poppins", sans-serif' }}
               >
-                đa dạng phong cách
+                {t('landing.styles_title')}
               </motion.h2>
               <motion.p
                 initial={{ opacity: 0 }}
@@ -523,7 +524,7 @@ const NewLandingPage = () => {
                 transition={{ delay: 0.3 }}
                 className="text-[15px] text-gray-500 mb-6"
               >
-                Luôn cập nhật những xu hướng âm thanh mới nhất
+                {t('landing.styles_desc')}
               </motion.p>
             </div>
 
@@ -584,7 +585,7 @@ const NewLandingPage = () => {
                 whileTap={{ scale: 0.95 }}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-[#6CD1FD] text-[#35104C] rounded-full font-bold text-[14px] shadow-lg shadow-sky/20 transition-all active:scale-95"
               >
-                <FaMicrophone className="text-base" /> Khám phá phòng thu ngay
+                <FaMicrophone className="text-base" /> {t('landing.explore_studio')}
               </motion.button>
             </div>
           </div>
@@ -656,7 +657,7 @@ const NewLandingPage = () => {
                   viewport={{ once: true }}
                   className="text-[48px] font-bold tracking-tight text-[#35104C] leading-[1.1] mb-6" style={{ fontFamily: '"Poppins", sans-serif' }}
                 >
-                  Đa dạng phong cách
+                  {t('landing.styles_title')}
                 </motion.h2>
                 <motion.p
                   initial={{ opacity: 0 }}
@@ -665,13 +666,13 @@ const NewLandingPage = () => {
                   transition={{ delay: 0.5 }}
                   className="text-[17px] mb-8"
                 >
-                  Luôn cập nhật những xu hướng âm thanh mới nhất
+                  {t('landing.styles_desc')}
                 </motion.p>
                 <motion.button
                   whileTap={{ scale: 0.95 }}
                   className="inline-flex items-center gap-3 px-10 py-4 bg-[#6CD1FD] text-[#35104C] rounded-full font-bold text-[20px] shadow-lg shadow-sky/20 transition-all active:scale-95"
                 >
-                  <FaMicrophone className="text-xl" /> Khám phá phòng thu ngay
+                  <FaMicrophone className="text-xl" /> {t('landing.explore_studio')}
                 </motion.button>
               </div>
 
@@ -691,7 +692,7 @@ const NewLandingPage = () => {
             className="text-[28px] sm:text-[36px] md:text-[48px] font-bold text-[#35104C] mb-4 md:mb-6 leading-tight px-2"
             style={{ fontFamily: '"Poppins", sans-serif' }}
           >
-            ghi dấu ấn cùng hastudio
+            {t('landing.leave_mark_title')}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0 }}
@@ -700,7 +701,7 @@ const NewLandingPage = () => {
             transition={{ delay: 0.3 }}
             className="text-[16px] sm:text-[18px] md:text-[20px] mb-4 max-w-3xl mx-auto leading-relaxed px-4"
           >
-            Nơi khơi nguồn cảm hứng và hiện thực hóa mọi ý tưởng âm nhạc. Hastudio tự hào là cộng sự tin cậy trên con đường nghệ thuật của bạn.
+            {t('landing.leave_mark_desc')}
           </motion.p>
           <motion.p
             initial={{ opacity: 0 }}
@@ -708,7 +709,7 @@ const NewLandingPage = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.5 }}
             className="text-[15px] sm:text-[16px] md:text-[18px] font-bold text-[#35104C] mb-4 px-4"
-          >Mỗi bản ghi là một câu chuyện, mỗi dự án là một kiệt tác.</motion.p>
+          >{t('landing.leave_mark_quote')}</motion.p>
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6 lg:gap-12">
             {/* Card 1: Music App UI - Coral/Red */}
@@ -843,19 +844,19 @@ const NewLandingPage = () => {
             {/* Left side */}
             <div className="max-w-[480px]">
               <p className="text-[15px] md:text-[17px] text-[#35104C]/60 mb-2 md:mb-3 flex items-center gap-2">
-                Đăng ký nhận tin <FiSend className="text-[#6CD1FD] text-lg md:text-xl" />
+                {t('newsletter.badge')} <FiSend className="text-[#6CD1FD] text-lg md:text-xl" />
               </p>
-              <h2 className="text-[24px] md:text-[38px] font-semibold text-[#35104C] leading-[1.15]" style={{ fontFamily: '"Poppins", sans-serif' }}>Nhận thông báo về các ưu đãi và dự án mới nhất!</h2>
+              <h2 className="text-[24px] md:text-[38px] font-semibold text-[#35104C] leading-[1.15]" style={{ fontFamily: '"Poppins", sans-serif' }}>{t('newsletter.title')}</h2>
             </div>
 
             {/* Right side - Form */}
             <div className="w-full lg:w-[380px] flex flex-col gap-4">
-              <input type="text" placeholder="Họ và tên" className="px-6 py-4 rounded-xl bg-white border border-gray-200 w-full outline-none focus:ring-2 ring-[#6CD1FD]/30 transition-all text-[15px]" />
-              <input type="email" placeholder="Địa chỉ email" className="px-6 py-4 rounded-xl bg-white border border-gray-200 w-full outline-none focus:ring-2 ring-[#6CD1FD]/30 transition-all text-[15px]" />
+              <input type="text" placeholder={t('newsletter.name_placeholder')} className="px-6 py-4 rounded-xl bg-white border border-gray-200 w-full outline-none focus:ring-2 ring-[#6CD1FD]/30 transition-all text-[15px]" />
+              <input type="email" placeholder={t('newsletter.email_placeholder')} className="px-6 py-4 rounded-xl bg-white border border-gray-200 w-full outline-none focus:ring-2 ring-[#6CD1FD]/30 transition-all text-[15px]" />
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 className="px-10 py-4 bg-[#6CD1FD] text-[#35104C] rounded-full font-bold text-[15px] w-fit mt-1 shadow-lg shadow-sky/20"
-              >Đăng ký ngay</motion.button>
+              >{t('newsletter.btn')}</motion.button>
             </div>
           </div>
         </motion.div>
@@ -894,34 +895,34 @@ const NewLandingPage = () => {
             {/* Link Columns */}
             <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 md:gap-10 w-full">
               <div>
-                <h4 className="font-bold text-[#35104C] text-[15px] sm:text-[17px] mb-4 sm:mb-6">hastudio</h4>
+                <h4 className="font-bold text-[#35104C] text-[15px] sm:text-[17px] mb-4 sm:mb-6">{t('footer.col1_title')}</h4>
                 <ul className="space-y-2 sm:space-y-3 text-[14px] sm:text-[17px] text-[#35104C]">
-                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">Bảng giá</li>
-                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors" onClick={() => setShowLoginModal(true, "signup")}>Đăng ký</li>
+                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">{t('footer.links.pricing')}</li>
+                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors" onClick={() => setShowLoginModal(true, "signup")}>{t('footer.links.register')}</li>
                 </ul>
               </div>
               <div>
-                <h4 className="font-bold text-[#35104C] text-[15px] sm:text-[17px] mb-4 sm:mb-6">Công ty</h4>
+                <h4 className="font-bold text-[#35104C] text-[15px] sm:text-[17px] mb-4 sm:mb-6">{t('footer.col2_title')}</h4>
                 <ul className="space-y-2 sm:space-y-3 text-[14px] sm:text-[17px] text-[#35104C]">
-                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">Về chúng tôi</li>
-                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">Tuyển dụng</li>
-                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">Tư liệu truyền thông</li>
+                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">{t('footer.links.about')}</li>
+                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">{t('footer.links.careers')}</li>
+                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">{t('footer.links.press')}</li>
                 </ul>
               </div>
               <div>
-                <h4 className="font-bold text-[#35104C] text-[15px] sm:text-[17px] mb-4 sm:mb-6">Hỗ trợ</h4>
+                <h4 className="font-bold text-[#35104C] text-[15px] sm:text-[17px] mb-4 sm:mb-6">{t('footer.col3_title')}</h4>
                 <ul className="space-y-2 sm:space-y-3 text-[14px] sm:text-[17px] text-[#35104C]">
-                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">Cộng đồng</li>
-                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">Liên hệ</li>
-                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">Chứng nhận</li>
-                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">Bảo mật</li>
+                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">{t('footer.links.community')}</li>
+                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">{t('footer.links.contact')}</li>
+                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">{t('footer.links.cert')}</li>
+                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">{t('footer.links.privacy')}</li>
                 </ul>
               </div>
               <div>
-                <h4 className="font-bold text-[#35104C] text-[15px] sm:text-[17px] mb-4 sm:mb-6">Thành viên</h4>
+                <h4 className="font-bold text-[#35104C] text-[15px] sm:text-[17px] mb-4 sm:mb-6">{t('footer.col4_title')}</h4>
                 <ul className="space-y-2 sm:space-y-3 text-[14px] sm:text-[17px] text-[#35104C]">
-                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">Dự án miễn phí</li>
-                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">Glyphy</li>
+                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">{t('footer.links.free_projects')}</li>
+                  <li className="cursor-pointer hover:text-[#6CD1FD] transition-colors">{t('footer.links.glyphy')}</li>
                 </ul>
               </div>
             </div>
@@ -929,7 +930,7 @@ const NewLandingPage = () => {
 
           {/* Copyright */}
           <div className="pt-2 border-t border-gray-100 lg:border-none text-center lg:text-left mt-8 lg:mt-0">
-            <p className="text-[13px] text-slate-600">Được phát triển bởi <a href="https://www.facebook.com/HOVANDUYIT" target="_blank" rel="noopener noreferrer" className="font-bold hover:text-[#6CD1FD] transition-colors">Hồ Văn Duy</a></p>
+            <p className="text-[13px] text-slate-600">{t('footer.developed_by')} <a href="https://www.facebook.com/HOVANDUYIT" target="_blank" rel="noopener noreferrer" className="font-bold hover:text-[#6CD1FD] transition-colors">{t('footer.developer_name')}</a></p>
           </div>
         </div>
       </footer>

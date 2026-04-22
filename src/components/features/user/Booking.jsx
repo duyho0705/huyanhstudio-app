@@ -1,3 +1,5 @@
+import useAuthStore from "../../../stores/useAuthStore";
+import useAppStore from "../../../stores/useAppStore";
 import { useState, useEffect, useContext } from "react";
 import { motion } from "framer-motion";
 import { FiCalendar, FiUser, FiPhone, FiCheckCircle, FiLoader, FiMusic, FiMapPin, FiMail, FiLayout } from "react-icons/fi";
@@ -6,10 +8,10 @@ import dayjs from "dayjs";
 import serviceApi from "../../../api/serviceApi";
 import studioRoomApi from "../../../api/studioRoomApi";
 import bookingApi from "../../../api/bookingApi";
-import { AuthContext } from "../../../api/AuthContext";
+
 
 const Booking = () => {
-    const { user } = useContext(AuthContext);
+    const user = useAuthStore(state => state.user);
     const [services, setServices] = useState([]);
     const [studios, setStudios] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -48,11 +50,9 @@ const Booking = () => {
         try {
             const [serviceRes, studioRes] = await Promise.all([
                 serviceApi.getAll().catch(err => {
-                    console.error("Booking Page - Services API Error:", err);
                     return { list: [] };
                 }),
                 studioRoomApi.getAll().catch(err => {
-                    console.error("Booking Page - Studios API Error:", err);
                     return { list: [] };
                 })
             ]);
@@ -73,18 +73,13 @@ const Booking = () => {
             const validServices = getList(serviceRes);
             const validStudios = getList(studioRes);
 
-            console.log("Customer Booking - Services found:", validServices.length);
-            console.log("Customer Booking - Studios found:", validStudios.length);
-
             setServices(validServices);
             setStudios(validStudios);
 
-            // Default to the first studio room
             if (validStudios.length > 0) {
                 setFormData(prev => ({ ...prev, studioRoomId: validStudios[0].id }));
             }
         } catch (err) {
-            console.error("Critical error in fetchData:", err);
             setServices([]);
             setStudios([]);
         } finally {
@@ -116,7 +111,7 @@ const Booking = () => {
         try {
             const payload = {
                 customerName: formData.customerName,
-                phone: formData.phoneNumber.replace(/\D/g, ""), // Sanitize phone
+                phone: formData.phoneNumber.replace(/\D/g, ""), 
                 email: formData.email,
                 recordDate: formData.bookingDate.format("YYYY-MM-DD"),
                 studioRoomId: Number(formData.studioRoomId),
@@ -128,7 +123,6 @@ const Booking = () => {
             await bookingApi.create(payload);
             setSuccess(true);
         } catch (err) {
-            console.error(err);
             alert("Có lỗi xảy ra khi gửi yêu cầu. Vui lòng liên hệ hotline!");
         } finally {
             setSubmitting(false);
@@ -176,9 +170,7 @@ const Booking = () => {
                 className="max-w-5xl mx-auto shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] rounded-[20px] sm:rounded-[32px] overflow-hidden bg-white border border-gray-100"
             >
                 <div className="grid grid-cols-1 lg:grid-cols-12 min-h-max">
-                    {/* Left Sidebar */}
                     <div className="lg:col-span-4 bg-[#311142] p-5 sm:p-8 flex flex-col justify-between relative overflow-hidden">
-                        {/* Decorative background elements */}
                         <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
                         <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#6CD1FD]/10 rounded-full -ml-16 -mb-16 blur-2xl"></div>
 
@@ -228,10 +220,8 @@ const Booking = () => {
                         </div>
                     </div>
 
-                    {/* Right Form */}
                     <div className="lg:col-span-8 p-4 sm:p-6 lg:p-10 bg-white">
                         <form onSubmit={handleSubmit} className="space-y-4">
-                            {/* Row 1: Full Name */}
                             <div className="space-y-1.5">
                                 <label className="text-[15px] font-semibold text-slate-600 px-1">Họ và tên <span className="text-red-400">*</span></label>
                                 <div className="relative group">
@@ -252,7 +242,6 @@ const Booking = () => {
                                 </div>
                             </div>
 
-                            {/* Row 2: Phone and Email */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
                                 <div className="space-y-1.5">
                                     <label className="text-[15px] font-semibold text-slate-600 px-1">Số điện thoại <span className="text-red-400">*</span></label>
@@ -320,7 +309,6 @@ const Booking = () => {
                                     }
                                 }}
                             >
-                                {/* Row 3: Service and Studio Room */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
                                     <div className="space-y-1.5">
                                         <label className="text-[15px] font-semibold text-slate-600 px-1">Dịch vụ <span className="text-red-400">*</span></label>
@@ -367,7 +355,6 @@ const Booking = () => {
                                     </div>
                                 </div>
 
-                                {/* Row 4: Date */}
                                 <div className="space-y-1.5 mt-4">
                                     <label className="text-[15px] font-semibold text-slate-600 px-1">Ngày thu <span className="text-red-400">*</span></label>
                                     <div className="relative group">
@@ -392,7 +379,6 @@ const Booking = () => {
                                 </div>
                             </ConfigProvider>
 
-                            {/* Row 5: Note */}
                             <div className="space-y-1.5">
                                 <label className="text-[15px] font-semibold text-slate-600 px-1">Ghi chú</label>
                                 <textarea
@@ -404,7 +390,6 @@ const Booking = () => {
                                 ></textarea>
                             </div>
 
-                            {/* consultation request */}
                             <div className="flex items-center gap-3 px-2 py-2">
                                 <label className="flex items-center gap-3 cursor-pointer group">
                                     <div className="relative">
@@ -451,7 +436,6 @@ const Booking = () => {
                 .pl-13 { padding-left: 3.25rem; }
                 .py-4.5 { padding-top: 1.125rem; padding-bottom: 1.125rem; }
                 
-                /* Override default browser autofill styles */
                 input:-webkit-autofill,
                 input:-webkit-autofill:hover, 
                 input:-webkit-autofill:focus, 
@@ -464,7 +448,6 @@ const Booking = () => {
                     -webkit-box-shadow: 0 0 0 30px #ffffff inset !important;
                 }
 
-                /* Custom styles to hide native icons and show ours */
                 .custom-date-input::-webkit-calendar-picker-indicator {
                     opacity: 0;
                     cursor: pointer;
@@ -474,7 +457,6 @@ const Booking = () => {
                     height: 100%;
                 }
 
-                /* Custom Ant Design overrides to match our UI */
                 .custom-antd-select .ant-select-selector,
                 .custom-antd-select-with-icon .ant-select-selector,
                 .custom-antd-datepicker,
@@ -517,4 +499,3 @@ const Booking = () => {
 };
 
 export default Booking;
-

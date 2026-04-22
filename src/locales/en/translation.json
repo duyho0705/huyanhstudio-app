@@ -1,0 +1,215 @@
+{
+  "translation": {
+    "common": {
+      "welcome": "Welcome to hastudio",
+      "login": "Login",
+      "register": "Sign Up Free",
+      "home": "Home",
+      "products": "Products",
+      "services": "Services & Pricing",
+      "booking": "Book a Session",
+      "about": "About Us",
+      "logout": "Logout",
+      "music_on": "Music On",
+      "music_off": "Music Off",
+      "prev": "Previous",
+      "next": "Next",
+      "page": "Page",
+      "note": "Note",
+      "no_note": "No note",
+      "studio_room": "Studio Room"
+    },
+    "hero": {
+      "title": "Transform your voice",
+      "subtitle": "into a masterpiece",
+      "desc": "Professional recording studio with modern technology. The place that gives wings to your voice.",
+      "cta": "Book a Recording Now",
+      "badge": "Style - Creativity - Energy"
+    },
+    "admin": {
+      "sidebar": {
+        "dashboard": "Dashboard",
+        "bookings": "Bookings",
+        "products": "Products",
+        "services": "Services",
+        "users": "Users Management",
+        "chat": "Live Chat",
+        "returns": "Return to Website"
+      },
+      "header": {
+        "account": "Personal Profile",
+        "notifications": "Booking Notifications",
+        "change_password": "Password Settings",
+        "returns": "View Main Website",
+        "logout": "Log Out System",
+        "update_profile": "Update Profile",
+        "system_history": "System History",
+        "security": "Account Security"
+      },
+      "dashboard": {
+        "morning": "Good morning",
+        "afternoon": "Good afternoon",
+        "evening": "Good evening",
+        "total": "Total Bookings",
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "completed": "Completed",
+        "quick_booking": "Booking",
+        "quick_service": "Service",
+        "quick_product": "Product",
+        "quick_user": "User",
+        "trend_title": "Booking Trend",
+        "trend_desc": "System analysis data",
+        "trend_7days": "Last 7 days",
+        "trend_month": "This month",
+        "popular_title": "Current Services",
+        "popular_desc": "List of services operating at Studio",
+        "status_active": "Active",
+        "status_paused": "Paused",
+        "no_services": "No services available",
+        "recent_title": "Recent Requests",
+        "recent_desc": "Latest recording requests received",
+        "view_all": "View all",
+        "no_records": "No recent requests",
+        "expected_date": "Expected date",
+        "unit_booking": "bookings",
+        "price_agreement": "Negotiation"
+      },
+      "bookings": {
+        "title": "Recording Schedule",
+        "add_btn": "Add Booking",
+        "col_code": "Order ID",
+        "col_customer": "Customer",
+        "col_phone": "Phone",
+        "col_date": "Session Date",
+        "col_created": "Booked Date",
+        "col_service": "Requested Services",
+        "col_status": "Progress",
+        "col_action": "Actions",
+        "need_consult": "Needs Consultation",
+        "multi_service": "Multiple Services",
+        "empty": "No recording sessions found",
+        "display": "Showing",
+        "page_of": "page",
+        "stats_total": "Total Orders",
+        "stats_upcoming": "Upcoming",
+        "stats_completed": "Done",
+        "stats_cancelled": "Cancelled"
+      }
+    },
+    "nav": {
+      "greeting": "Hello",
+      "profile": "Personal Information",
+      "history": "Booking History",
+      "password": "Change Password",
+      "logout": "Logout",
+      "bg_music": "Background Music"
+    },
+    "landing": {
+      "gallery_title": "hastudio through each frame",
+      "customization_title": "enjoy music, complete emotions",
+      "styles_title": "diverse styles",
+      "styles_desc": "Forever updating the latest audio trends",
+      "explore_studio": "Explore the studio now",
+      "price_btn": "View service price list",
+      "leave_mark_title": "leave a mark with hastudio",
+      "leave_mark_desc": "Where inspiration starts and every musical idea is realized. Hastudio is proud to be your reliable partner on your artistic journey.",
+      "leave_mark_quote": "Every recording is a story, every project is a masterpiece.",
+      "tools": {
+        "tool1_title": "Minimalist or sophisticated? You decide",
+        "tool1_desc": "Customize instrument and vocal thickness to create a perfect mix.",
+        "tool2_title": "Every music style is met",
+        "tool2_desc": "From Pop, Ballad to Rock or EDM, our team is always ready.",
+        "tool3_title": "Discover new musical nuances",
+        "tool3_desc": "Change audio colors through modern analog devices.",
+        "tool4_title": "From sketch to completion",
+        "tool4_desc": "We accompany you from demo recording to standard Master."
+      }
+    },
+    "newsletter": {
+      "badge": "Newsletter Subscription",
+      "title": "Get notified about the latest offers and projects!",
+      "name_placeholder": "Full Name",
+      "email_placeholder": "Email Address",
+      "btn": "Subscribe Now"
+    },
+    "footer": {
+      "company_desc": "Professional recording studio.",
+      "col1_title": "hastudio",
+      "col2_title": "Company",
+      "col3_title": "Support",
+      "col4_title": "Members",
+      "links": {
+        "pricing": "Pricing",
+        "register": "Register",
+        "about": "About Us",
+        "careers": "Careers",
+        "press": "Press Kit",
+        "community": "Community",
+        "contact": "Contact",
+        "cert": "Certification",
+        "privacy": "Privacy",
+        "free_projects": "Free Projects",
+        "glyphy": "Glyphy"
+      },
+      "developed_by": "Developed by",
+      "developer_name": "Ho Van Duy"
+    },
+    "user": {
+      "account": {
+        "title": "Personal Information",
+        "name": "Username",
+        "phone": "Phone Number",
+        "email": "Email",
+        "verified": "Verified",
+        "unverified": "Unverified",
+        "save_btn": "Save Changes",
+        "update_success": "Update successful!",
+        "update_fail": "Update failed!",
+        "errors": {
+          "name_empty": "Name cannot be empty",
+          "name_invalid": "Name must only contain letters",
+          "phone_empty": "Phone number cannot be empty",
+          "phone_invalid": "Invalid phone number",
+          "email_empty": "Email cannot be empty",
+          "email_invalid": "Invalid email"
+        }
+      },
+      "booking": {
+        "title": "Booking History",
+        "no_data": "You have no bookings yet",
+        "order_id": "Order ID",
+        "date": "Booking Date",
+        "status": "Status",
+        "total": "Total Amount",
+        "view_detail": "View Details",
+        "statuses": {
+          "CONFIRMED": "Confirmed",
+          "PENDING": "Pending",
+          "CANCELLED": "Cancelled",
+          "COMPLETED": "Completed",
+          "UNKNOWN": "Unknown"
+        }
+      },
+      "password": {
+        "title": "Change Password",
+        "current": "Current Password",
+        "new": "New Password",
+        "confirm": "Confirm New Password",
+        "submit": "Confirm Changes",
+        "success": "Password changed successfully!",
+        "relogin": "Please log in again",
+        "placeholders": {
+          "current": "Enter current password",
+          "new": "Enter new password",
+          "confirm": "Re-enter new password"
+        },
+        "errors": {
+          "fill_all": "Please fill in all fields.",
+          "mismatch": "Passwords do not match.",
+          "wrong_current": "Incorrect current password."
+        }
+      }
+    }
+  }
+}

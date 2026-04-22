@@ -1,32 +1,38 @@
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import { AuthProvider } from "./api/AuthContext";
-import { AuthContext } from "./api/AuthContext";
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import ScrollToHash from "./api/utils/ScrollToHash";
+import { lazy, Suspense, useState, useEffect, useRef, useContext } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { FaPlay, FaRobot } from "react-icons/fa";
+import { FiZap, FiGrid, FiMessageCircle, FiX, FiMusic, FiGlobe } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
+
+// Components & UI
 import NewNavbar from "./components/layout/NewNavbar";
 import StudioBackground from "./components/layout/StudioBackground";
-import NewLandingPage from "./components/sections/NewLandingPage";
-import User from "./components/features/user/User";
-import AdminRoute from "./components/features/admin/AdminRoute";
-import AdminLayout from "./components/features/admin/AdminLayout";
-import AdminDashboard from "./components/features/admin/AdminDashboard";
-import BookingManagement from "./components/features/admin/BookingManagement";
-import ProductManagement from "./components/features/admin/ProductManagement";
-import ServiceManagement from "./components/features/admin/ServiceManagement";
-import UserManagement from "./components/features/admin/UserManagement";
-import ChatManagement from "./components/features/admin/ChatManagement";
-import ProductShowcase from "./components/features/user/ProductShowcase";
-import Services from "./components/features/user/Services";
-import AboutUs from "./components/features/user/AboutUs";
-import Booking from "./components/features/user/Booking";
-import OAuth2Callback from "./components/features/auth/OAuth2Callback";
-import LoginModal from "./components/features/auth/LoginModal";
+import PageLoader from "./components/ui/PageLoader";
+import ErrorBoundaryWrapper from "./components/ui/ErrorBoundaryWrapper";
 import ChatBox from "./components/features/chat/ChatBox";
+import LoginModal from "./components/features/auth/LoginModal";
 import AIAudioEnhancerModal from "./components/features/ai/AIAudioEnhancerModal";
-import { AnimatePresence, motion, useSpring, useMotionValue } from "framer-motion";
-import { FaMagic, FaPlay, FaRobot } from "react-icons/fa";
-import { FiZap, FiGrid, FiMessageCircle, FiX, FiMusic } from "react-icons/fi";
-import { useState, useEffect, useRef, useContext } from "react";
+import useAppStore from "./stores/useAppStore";
+import useAuthStore from "./stores/useAuthStore";
 
+// --- LAZY LOADING ROUTES (Enterprise Optimization) ---
+const NewLandingPage = lazy(() => import("./components/sections/NewLandingPage"));
+const User = lazy(() => import("./components/features/user/User"));
+const AdminRoute = lazy(() => import("./components/features/admin/AdminRoute"));
+const AdminLayout = lazy(() => import("./components/features/admin/AdminLayout"));
+const AdminDashboard = lazy(() => import("./components/features/admin/AdminDashboard"));
+const BookingManagement = lazy(() => import("./components/features/admin/BookingManagement"));
+const ProductManagement = lazy(() => import("./components/features/admin/ProductManagement"));
+const ServiceManagement = lazy(() => import("./components/features/admin/ServiceManagement"));
+const UserManagement = lazy(() => import("./components/features/admin/UserManagement"));
+const ChatManagement = lazy(() => import("./components/features/admin/ChatManagement"));
+const ProductShowcase = lazy(() => import("./components/features/user/ProductShowcase"));
+const Services = lazy(() => import("./components/features/user/Services"));
+const AboutUs = lazy(() => import("./components/features/user/AboutUs"));
+const Booking = lazy(() => import("./components/features/user/Booking"));
+const OAuth2Callback = lazy(() => import("./components/features/auth/OAuth2Callback"));
 
 const pageVariants = {
   initial: { opacity: 0, x: 20 },
@@ -42,6 +48,8 @@ const pageTransition = {
 
 // --- PERSISTENT MUSIC PLAYER UI ---
 const MiniMusicPlayer = ({ isPlaying, onToggle }) => {
+  const { t } = useTranslation();
+
   return (
     <div
       className="fixed bottom-24 left-4 sm:top-[120px] sm:left-6 sm:bottom-auto z-[90] flex items-center gap-2 sm:gap-4 bg-white/10 backdrop-blur-xl p-2 sm:p-2.5 px-3 sm:px-4 rounded-full border border-white/20 shadow-2xl group hover:bg-white/20 transition-all cursor-pointer"
@@ -80,7 +88,7 @@ const MiniMusicPlayer = ({ isPlaying, onToggle }) => {
       </div>
 
       <div className="flex-col hidden sm:flex">
-        <p className="text-[15px] font-semibold text-[#35104C] leading-none mb-1">Nhạc nền</p>
+        <p className="text-[15px] font-semibold text-[#35104C] leading-none mb-1">{t('nav.bg_music')}</p>
         <div className="flex items-center gap-1 h-2.5">
           {[...Array(5)].map((_, i) => (
             <motion.div
@@ -104,7 +112,11 @@ const MiniMusicPlayer = ({ isPlaying, onToggle }) => {
 };
 
 function AppContent() {
-  const { showLoginModal, setShowLoginModal } = useContext(AuthContext);
+  const { t } = useTranslation();
+  const showLoginModal = useAppStore(state => state.showLoginModal);
+  const setShowLoginModal = useAppStore(state => state.setShowLoginModal);
+  const loadProfile = useAuthStore(state => state.loadProfile);
+  
   const [isAIModalOpen, setIsAIModalOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isHubHovered, setIsHubHovered] = useState(false);
@@ -112,6 +124,11 @@ function AppContent() {
   const playerRef = useRef(null);
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith("/admin");
+
+  // --- MOUNT/AUTH SETUP ---
+  useEffect(() => {
+    loadProfile();
+  }, [loadProfile]);
 
   // --- YOUTUBE API SETUP ---
   useEffect(() => {
@@ -198,126 +215,128 @@ function AppContent() {
 
       {!isAdminRoute && <NewNavbar />}
 
-      {isAdminRoute ? (
-        <AnimatePresence mode="wait">
-          <Routes location={location}>
-            <Route
-              path="/admin"
-              element={
-                <AdminRoute>
-                  <AdminLayout />
-                </AdminRoute>
-              }
-            >
-              <Route index element={<AdminDashboard />} />
-              <Route path="bookings" element={<BookingManagement />} />
-              <Route path="products" element={<ProductManagement />} />
-              <Route path="services" element={<ServiceManagement />} />
-              <Route path="users" element={<UserManagement />} />
-              <Route path="chat" element={<ChatManagement />} />
-            </Route>
-            <Route path="/oauth2/redirect" element={<OAuth2Callback />} />
-          </Routes>
-        </AnimatePresence>
-      ) : (
-        <StudioBackground>
+      <Suspense fallback={<PageLoader />}>
+        {isAdminRoute ? (
           <AnimatePresence mode="wait">
-            <Routes location={location} key={location.pathname}>
+            <Routes location={location}>
               <Route
-                path="/"
+                path="/admin"
                 element={
-                  <motion.div
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    variants={pageVariants}
-                    transition={pageTransition}
-                    className="w-full"
-                  >
-                    <NewLandingPage />
-                  </motion.div>
+                  <AdminRoute>
+                    <AdminLayout />
+                  </AdminRoute>
                 }
-              />
-              <Route
-                path="/user"
-                element={
-                  <motion.div
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    variants={pageVariants}
-                    transition={pageTransition}
-                    className="w-full"
-                  >
-                    <User />
-                  </motion.div>
-                }
-              />
-              <Route
-                path="/services"
-                element={
-                  <motion.div
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    variants={pageVariants}
-                    transition={pageTransition}
-                    className="w-full"
-                  >
-                    <Services />
-                  </motion.div>
-                }
-              />
-              <Route
-                path="/about"
-                element={
-                  <motion.div
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    variants={pageVariants}
-                    transition={pageTransition}
-                    className="w-full"
-                  >
-                    <AboutUs />
-                  </motion.div>
-                }
-              />
-              <Route
-                path="/products"
-                element={
-                  <motion.div
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    variants={pageVariants}
-                    transition={pageTransition}
-                    className="w-full"
-                  >
-                    <ProductShowcase />
-                  </motion.div>
-                }
-              />
-              <Route
-                path="/booking"
-                element={
-                  <motion.div
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    variants={pageVariants}
-                    transition={pageTransition}
-                    className="w-full"
-                  >
-                    <Booking />
-                  </motion.div>
-                }
-              />
+              >
+                <Route index element={<AdminDashboard />} />
+                <Route path="bookings" element={<BookingManagement />} />
+                <Route path="products" element={<ProductManagement />} />
+                <Route path="services" element={<ServiceManagement />} />
+                <Route path="users" element={<UserManagement />} />
+                <Route path="chat" element={<ChatManagement />} />
+              </Route>
               <Route path="/oauth2/redirect" element={<OAuth2Callback />} />
             </Routes>
           </AnimatePresence>
-        </StudioBackground>
-      )}
+        ) : (
+          <StudioBackground>
+            <AnimatePresence mode="wait">
+              <Routes location={location} key={location.pathname}>
+                <Route
+                  path="/"
+                  element={
+                    <motion.div
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      variants={pageVariants}
+                      transition={pageTransition}
+                      className="w-full"
+                    >
+                      <NewLandingPage />
+                    </motion.div>
+                  }
+                />
+                <Route
+                  path="/user"
+                  element={
+                    <motion.div
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      variants={pageVariants}
+                      transition={pageTransition}
+                      className="w-full"
+                    >
+                      <User />
+                    </motion.div>
+                  }
+                />
+                <Route
+                  path="/services"
+                  element={
+                    <motion.div
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      variants={pageVariants}
+                      transition={pageTransition}
+                      className="w-full"
+                    >
+                      <Services />
+                    </motion.div>
+                  }
+                />
+                <Route
+                  path="/about"
+                  element={
+                    <motion.div
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      variants={pageVariants}
+                      transition={pageTransition}
+                      className="w-full"
+                    >
+                      <AboutUs />
+                    </motion.div>
+                  }
+                />
+                <Route
+                  path="/products"
+                  element={
+                    <motion.div
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      variants={pageVariants}
+                      transition={pageTransition}
+                      className="w-full"
+                    >
+                      <ProductShowcase />
+                    </motion.div>
+                  }
+                />
+                <Route
+                  path="/booking"
+                  element={
+                    <motion.div
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      variants={pageVariants}
+                      transition={pageTransition}
+                      className="w-full"
+                    >
+                      <Booking />
+                    </motion.div>
+                  }
+                />
+                <Route path="/oauth2/redirect" element={<OAuth2Callback />} />
+              </Routes>
+            </AnimatePresence>
+          </StudioBackground>
+        )}
+      </Suspense>
 
       <LoginModal
         isOpen={showLoginModal}
@@ -363,7 +382,7 @@ function AppContent() {
                     e.stopPropagation();
                     togglePlayback();
                   }}
-                  title={isMusicPlaying ? "Tắt nhạc" : "Bật nhạc"}
+                  title={isMusicPlaying ? t('common.music_off', 'Music Off') : t('common.music_on', 'Music On')}
                   className={`w-12 h-12 ${isMusicPlaying ? 'bg-sky text-[#35104C]' : 'bg-[#35104C]/40 text-white'} backdrop-blur-xl border border-white/20 rounded-full flex items-center justify-center shadow-xl hover:bg-[#6CD1FD] hover:text-[#35104C] transition-all active:scale-90`}
                 >
                   <FiMusic size={20} className={isMusicPlaying ? "animate-pulse" : ""} />
@@ -425,11 +444,11 @@ function AppContent() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <AuthProvider>
+    <ErrorBoundaryWrapper>
+      <BrowserRouter>
         <AppContent />
-      </AuthProvider>
-    </BrowserRouter>
+      </BrowserRouter>
+    </ErrorBoundaryWrapper>
   );
 }
 

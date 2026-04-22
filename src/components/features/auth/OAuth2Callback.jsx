@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useContext } from "react";
-import { AuthContext } from "../../../api/AuthContext";
+import useAuthStore from "../../../stores/useAuthStore";
 
 const OAuth2Callback = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { login } = useContext(AuthContext);
-  // const [status, setStatus] = useState("processing");
+  const login = useAuthStore(state => state.login);
+  const [status, setStatus] = useState("processing");
 
   useEffect(() => {
     const handleCallback = async () => {

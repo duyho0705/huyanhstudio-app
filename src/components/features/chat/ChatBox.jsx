@@ -1,7 +1,9 @@
+import useAuthStore from "../../../stores/useAuthStore";
+import useAppStore from "../../../stores/useAppStore";
 import { useState, useEffect, useRef, useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiMessageCircle, FiX, FiSend, FiUser, FiClock, FiPlus, FiSmile, FiPaperclip } from 'react-icons/fi';
-import { AuthContext } from '../../../api/AuthContext';
+
 import { db } from '../../../api/firebase';
 import axiosClient from '../../../api/axiosClient';
 import {
@@ -18,7 +20,7 @@ import {
 import boss from '../../../assets/boss.png';
 
 const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
-  const { user } = useContext(AuthContext);
+  const user = useAuthStore(state => state.user);
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [uploading, setUploading] = useState(false);

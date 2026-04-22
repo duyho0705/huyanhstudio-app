@@ -1,0 +1,215 @@
+{
+  "translation": {
+    "common": {
+      "welcome": "Chào mừng đến với hastudio",
+      "login": "Đăng nhập",
+      "register": "Đăng ký miễn phí",
+      "home": "Trang chủ",
+      "products": "Sản phẩm",
+      "services": "Dịch vụ & Bảng giá",
+      "booking": "Đặt lịch",
+      "about": "Về chúng tôi",
+      "logout": "Đăng xuất",
+      "music_on": "Bật nhạc",
+      "music_off": "Tắt nhạc",
+      "prev": "Trước",
+      "next": "Sau",
+      "page": "Trang",
+      "note": "Ghi chú",
+      "no_note": "Không có ghi chú",
+      "studio_room": "Phòng thu"
+    },
+    "hero": {
+      "title": "Biến giọng hát của bạn",
+      "subtitle": "thành một kiệt tác",
+      "desc": "Phòng thu âm chuyên nghiệp với công nghệ hiện đại. Nơi chắp cánh cho giọng hát của bạn.",
+      "cta": "Đặt lịch thu âm ngay",
+      "badge": "Phong cách - Sáng tạo - Năng lượng"
+    },
+    "admin": {
+      "sidebar": {
+        "dashboard": "Tổng quan",
+        "bookings": "Lịch hẹn",
+        "products": "Sản phẩm",
+        "services": "Dịch vụ",
+        "users": "Người dùng",
+        "chat": "Tin nhắn",
+        "returns": "Trở về Website"
+      },
+      "header": {
+        "account": "Hồ sơ cá nhân",
+        "notifications": "Thông báo đặt lịch",
+        "change_password": "Thiết lập mật khẩu",
+        "returns": "Xem website chính",
+        "logout": "Thoát hệ thống",
+        "update_profile": "Cập nhật hồ sơ",
+        "system_history": "Lịch sử hệ thống",
+        "security": "Bảo mật tài khoản"
+      },
+      "dashboard": {
+        "morning": "Chào buổi sáng",
+        "afternoon": "Chào buổi chiều",
+        "evening": "Chào buổi tối",
+        "total": "Tổng đặt lịch",
+        "pending": "Chờ xác nhận",
+        "confirmed": "Đã xác nhận",
+        "completed": "Hoàn thành",
+        "quick_booking": "Đặt lịch",
+        "quick_service": "Dịch vụ",
+        "quick_product": "Sản phẩm",
+        "quick_user": "Người dùng",
+        "trend_title": "Xu hướng đặt lịch",
+        "trend_desc": "Dữ liệu phân tích từ hệ thống",
+        "trend_7days": "7 ngày gần nhất",
+        "trend_month": "Tháng này",
+        "popular_title": "Dịch vụ hiện có",
+        "popular_desc": "Danh sách dịch vụ đang vận hành tại Studio",
+        "status_active": "Đang hoạt động",
+        "status_paused": "Tạm dừng",
+        "no_services": "Chưa có dịch vụ nào",
+        "recent_title": "Yêu cầu gần đây",
+        "recent_desc": "Các lịch thu âm mới được gửi tới",
+        "view_all": "Xem tất cả",
+        "no_records": "Chưa có bản ghi mới",
+        "expected_date": "Ngày thu dự kiến",
+        "unit_booking": "đơn",
+        "price_agreement": "Thỏa thuận"
+      },
+      "bookings": {
+        "title": "Lịch thu âm",
+        "add_btn": "Thêm lịch",
+        "col_code": "Mã đơn",
+        "col_customer": "Khách hàng",
+        "col_phone": "Số điện thoại",
+        "col_date": "Ngày thu",
+        "col_created": "Ngày đặt",
+        "col_service": "Dịch vụ yêu cầu",
+        "col_status": "Tiến độ",
+        "col_action": "Thao tác",
+        "need_consult": "Cần tư vấn",
+        "multi_service": "Nhiều dịch vụ",
+        "empty": "Chưa có lịch thu âm nào",
+        "display": "Hiển thị",
+        "page_of": "trang",
+        "stats_total": "Tổng đơn",
+        "stats_upcoming": "Sắp tới",
+        "stats_completed": "Xong",
+        "stats_cancelled": "Đã hủy"
+      }
+    },
+    "nav": {
+      "greeting": "Xin chào",
+      "profile": "Thông tin cá nhân",
+      "history": "Lịch sử đặt lịch",
+      "password": "Đổi mật khẩu",
+      "logout": "Đăng xuất",
+      "bg_music": "Nhạc nền"
+    },
+    "landing": {
+      "gallery_title": "hastudio qua từng khung hình",
+      "customization_title": "tận hưởng âm nhạc, trọn vẹn cảm xúc",
+      "styles_title": "đa dạng phong cách",
+      "styles_desc": "Luôn cập nhật những xu hướng âm thanh mới nhất",
+      "explore_studio": "Khám phá phòng thu ngay",
+      "price_btn": "Xem bảng giá dịch vụ",
+      "leave_mark_title": "ghi dấu ấn cùng hastudio",
+      "leave_mark_desc": "Nơi khơi nguồn cảm hứng và hiện thực hóa mọi ý tưởng âm nhạc. Hastudio tự hào là cộng sự tin cậy trên con đường nghệ thuật của bạn.",
+      "leave_mark_quote": "Mỗi bản ghi là một câu chuyện, mỗi dự án là một kiệt tác.",
+      "tools": {
+        "tool1_title": "Tối giản hay cầu kỳ? Bạn quyết định",
+        "tool1_desc": "Tùy chỉnh độ dày của nhạc cụ, giọng hát để tạo nên một bản phối hoàn hảo.",
+        "tool2_title": "Mọi phong cách nhạc đều được đáp ứng",
+        "tool2_desc": "Từ Pop, Ballad đến Rock hay EDM, đội ngũ của chúng tôi luôn sẵn sàng.",
+        "tool3_title": "Khám phá sắc thái âm nhạc mới",
+        "tool3_desc": "Thay đổi màu sắc âm thanh thông qua các thiết bị analog hiện đại.",
+        "tool4_title": "Từ phác thảo đến hoàn thiện",
+        "tool4_desc": "Chúng tôi đồng hành cùng bạn từ lúc thu demo cho đến bản Master chuẩn."
+      }
+    },
+    "newsletter": {
+      "badge": "Đăng ký nhận tin",
+      "title": "Nhận thông báo về các ưu đãi và dự án mới nhất!",
+      "name_placeholder": "Họ và tên",
+      "email_placeholder": "Địa chỉ email",
+      "btn": "Đăng ký ngay"
+    },
+    "footer": {
+      "company_desc": "Phòng thu âm chuyên nghiệp.",
+      "col1_title": "hastudio",
+      "col2_title": "Công ty",
+      "col3_title": "Hỗ trợ",
+      "col4_title": "Thành viên",
+      "links": {
+        "pricing": "Bảng giá",
+        "register": "Đăng ký",
+        "about": "Về chúng tôi",
+        "careers": "Tuyển dụng",
+        "press": "Tư liệu truyền thông",
+        "community": "Cộng đồng",
+        "contact": "Liên hệ",
+        "cert": "Chứng nhận",
+        "privacy": "Bảo mật",
+        "free_projects": "Dự án miễn phí",
+        "glyphy": "Glyphy"
+      },
+      "developed_by": "Được phát triển bởi",
+      "developer_name": "Hồ Văn Duy"
+    },
+    "user": {
+      "account": {
+        "title": "Thông tin cá nhân",
+        "name": "Tên người dùng",
+        "phone": "Số điện thoại",
+        "email": "Email",
+        "verified": "Đã xác thực",
+        "unverified": "Chưa xác thực",
+        "save_btn": "Lưu thay đổi",
+        "update_success": "Cập nhật thành công!",
+        "update_fail": "Cập nhật thất bại!",
+        "errors": {
+          "name_empty": "Tên không được để trống",
+          "name_invalid": "Tên chỉ được chứa chữ cái",
+          "phone_empty": "Số điện thoại không được để trống",
+          "phone_invalid": "Số điện thoại không hợp lệ",
+          "email_empty": "Email không được để trống",
+          "email_invalid": "Email không hợp lệ"
+        }
+      },
+      "booking": {
+        "title": "Lịch sử đặt lịch",
+        "no_data": "Bạn chưa có lịch đặt nào",
+        "order_id": "Mã đơn hàng",
+        "date": "Ngày đặt",
+        "status": "Trạng thái",
+        "total": "Tổng tiền",
+        "view_detail": "Xem chi tiết",
+        "statuses": {
+          "CONFIRMED": "Đã xác nhận",
+          "PENDING": "Chờ xác nhận",
+          "CANCELLED": "Đã hủy",
+          "COMPLETED": "Đã hoàn thành",
+          "UNKNOWN": "Không rõ"
+        }
+      },
+      "password": {
+        "title": "Đổi mật khẩu",
+        "current": "Mật khẩu hiện tại",
+        "new": "Mật khẩu mới",
+        "confirm": "Xác nhận mật khẩu mới",
+        "submit": "Xác nhận thay đổi",
+        "success": "Đổi mật khẩu thành công!",
+        "relogin": "Vui lòng đăng nhập lại",
+        "placeholders": {
+          "current": "Nhập mật khẩu hiện tại",
+          "new": "Nhập mật khẩu mới",
+          "confirm": "Nhập lại mật khẩu mới"
+        },
+        "errors": {
+          "fill_all": "Vui lòng điền đầy đủ thông tin.",
+          "mismatch": "Mật khẩu mới và xác nhận mật khẩu không khớp.",
+          "wrong_current": "Sai mật khẩu hiện tại."
+        }
+      }
+    }
+  }
+}

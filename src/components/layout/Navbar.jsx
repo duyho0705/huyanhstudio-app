@@ -1,14 +1,15 @@
+import useAuthStore from "../../stores/useAuthStore";
+import useAppStore from "../../stores/useAppStore";
 import logoImg from "../../assets/logo.png";
 import { FaUser } from "react-icons/fa6";
 import { useContext, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import LoginModal from "../features/auth/LoginModal";
-import { AuthContext } from "../../api/AuthContext";
 
 const OFFSET = 100;
 
 const Navbar = () => {
-  const { user } = useContext(AuthContext);
+  const user = useAuthStore(state => state.user);
   const navigate = useNavigate();
   const location = useLocation();
   const [open, setOpen] = useState(false);

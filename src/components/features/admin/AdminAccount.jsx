@@ -1,10 +1,13 @@
+import useAuthStore from "../../../stores/useAuthStore";
+import useAppStore from "../../../stores/useAppStore";
 import { useState, useEffect, useContext } from "react";
 import userApi from "../../../api/userApi.js";
-import { AuthContext } from "../../../api/AuthContext.jsx";
+
 import { User, Mail, Phone, CheckCircle2, XCircle, AlertCircle } from "lucide-react";
 
 const AdminAccount = ({ onClose, isOpen }) => {
-  const { user, loadProfile } = useContext(AuthContext);
+  const user = useAuthStore(state => state.user);
+  const loadProfile = useAuthStore(state => state.loadProfile);
 
   const [customerName, setCustomerName] = useState("");
   const [phone, setPhone] = useState("");

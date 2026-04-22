@@ -1,10 +1,12 @@
+import useAuthStore from "../../../stores/useAuthStore";
+import useAppStore from "../../../stores/useAppStore";
 import authApi from "../../../api/authApi";
 import { useState, useContext } from "react";
-import { AuthContext } from "../../../api/AuthContext";
+
 import { Lock, CheckCircle2, AlertCircle } from "lucide-react";
 
 const AdminChangePassword = ({ onClose }) => {
-  const { logout } = useContext(AuthContext);
+  const logout = useAuthStore(state => state.logout);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmedPassword, setConfirmedPassword] = useState("");

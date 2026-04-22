@@ -1,9 +1,10 @@
+import useAuthStore from "../../../stores/useAuthStore";
+import useAppStore from "../../../stores/useAppStore";
 import { TbLogout } from "react-icons/tb";
 import { MdLockOutline } from "react-icons/md";
 import { LuCalendar } from "react-icons/lu";
 import { FaUser } from "react-icons/fa6";
 import { useContext, useState, useEffect } from "react";
-import { AuthContext } from "../../../api/AuthContext";
 import Account from "./Account";
 import BookingProfile from "../booking/BookingProfile";
 import ChangePassword from "./ChangePassword";
@@ -18,7 +19,7 @@ const menuItems = [
 const User = () => {
   const [activeOption, setActiveOption] = useState("account");
   const [openDropdown, setOpenDropdown] = useState(false);
-  const { logout } = useContext(AuthContext);
+  const logout = useAuthStore(state => state.logout);
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
 

@@ -11,16 +11,18 @@ import { CalendarDays } from "lucide-react";
 import { useEffect, useState } from "react";
 import AdminDropdown from "./AdminDropdown";
 import statsApi from "../../../../api/statsApi";
-
-const timeframeOptions = [
-  { value: "7days", label: "7 ngày gần nhất" },
-  { value: "month", label: "Tháng này" },
-];
+import { useTranslation } from "react-i18next";
 
 const AdminRevenueChart = () => {
+  const { t, i18n } = useTranslation();
   const [timeframe, setTimeframe] = useState("7days");
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const timeframeOptions = [
+    { value: "7days", label: t('admin.dashboard.trend_7days') },
+    { value: "month", label: t('admin.dashboard.trend_month') },
+  ];
 
   useEffect(() => {
     fetchTrendData();
@@ -33,8 +35,18 @@ const AdminRevenueChart = () => {
       
       const apiRes = response.data?.data || response.data || response;
       
+      const dayMap = {
+        "Thứ Hai": "Mon",
+        "Thứ Ba": "Tue",
+        "Thứ Tư": "Wed",
+        "Thứ Năm": "Thu",
+        "Thứ Sáu": "Fri",
+        "Thứ Bảy": "Sat",
+        "Chủ Nhật": "Sun"
+      };
+
       const mappedData = Array.isArray(apiRes) ? apiRes.map(item => ({
-        name: item.label,
+        name: i18n.language === 'en' ? (dayMap[item.label] || item.label) : item.label,
         bookings: item.count || 0
       })) : [];
       
@@ -54,8 +66,8 @@ const AdminRevenueChart = () => {
             <CalendarDays size={18} className="sm:w-5 sm:h-5" />
           </div>
           <div>
-            <h3 className="text-[15px] sm:text-[17px] font-bold text-slate-900 leading-tight">Xu hướng đặt lịch</h3>
-            <p className="text-[12px] sm:text-[13px] font-medium text-slate-500 mt-0.5 hidden sm:block">Dữ liệu phân tích từ hệ thống</p>
+            <h3 className="text-[15px] sm:text-[17px] font-bold text-slate-900 leading-tight">{t('admin.dashboard.trend_title')}</h3>
+            <p className="text-[12px] sm:text-[13px] font-medium text-slate-500 mt-0.5 hidden sm:block">{t('admin.dashboard.trend_desc')}</p>
           </div>
         </div>
         
@@ -82,7 +94,7 @@ const AdminRevenueChart = () => {
             </div>
           </div>
         ) : (
-          <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+          <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
             <AreaChart
               data={chartData}
               margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
@@ -124,7 +136,7 @@ const AdminRevenueChart = () => {
                       <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl shadow-2xl border border-slate-100 flex flex-col gap-1">
                         <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">{label}</p>
                         <p className="text-[16px] font-black text-purple-600">
-                          {payload[0].value} đơn
+                          {payload[0].value} {t('admin.dashboard.unit_booking')}
                         </p>
                       </div>
                     );

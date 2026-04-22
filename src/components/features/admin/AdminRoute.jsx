@@ -1,13 +1,15 @@
+import useAuthStore from "../../../stores/useAuthStore";
+import useAppStore from "../../../stores/useAppStore";
 import { useContext } from "react";
 import { Navigate } from "react-router-dom";
-import { AuthContext } from "../../../api/AuthContext";
 
 /**
  * Protected route component for admin-only access
  * Redirects non-admin users to home page
  */
 const AdminRoute = ({ children }) => {
-  const { user, loading } = useContext(AuthContext);
+  const user = useAuthStore(state => state.user);
+  const loading = useAuthStore(state => state.loading);
 
   if (loading) {
     return (

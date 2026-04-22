@@ -61,6 +61,8 @@ import BookingForm from "./components/BookingForm";
 import BookingFilters from "./components/BookingFilters";
 import { useBookingManagement } from "./hooks/useBookingManagement";
 import statsApi from "../../../api/statsApi";
+import { useTranslation } from "react-i18next";
+import { removeVietnameseTones } from "../../../utils/removeVietnameseTones";
 
 const { Option } = Select;
 
@@ -72,6 +74,7 @@ const bookingStatuses = [
 ];
 
 const BookingManagement = () => {
+  const { t, i18n } = useTranslation();
   const {
     bookings,
     loading,
@@ -299,7 +302,7 @@ const BookingManagement = () => {
         await bookingApi.admin.update(selectedBooking.id, payload);
         setNotification({
           show: true,
-          message: `Cập nhật thành công ${selectedBooking.bookingCode} - ${selectedBooking.customerName}`,
+          message: `${t('common.update_success', 'Cập nhật thành công')} ${selectedBooking.bookingCode} - ${selectedBooking.customerName}`,
           type: "success",
         });
       } else {
@@ -309,8 +312,7 @@ const BookingManagement = () => {
         const customerName = newData?.customerName || "";
         setNotification({
           show: true,
-          message: `Tạo đặt lịch thành công ${bookingCode} ${customerName ? " - " + customerName : ""
-            }`,
+          message: `${t('common.create_success', 'Tạo đặt lịch thành công')} ${bookingCode} ${customerName ? " - " + customerName : ""}`,
           type: "success",
         });
       }
@@ -343,7 +345,7 @@ const BookingManagement = () => {
   const columns = useMemo(
     () => [
       {
-        title: <span className="text-[15px] font-medium text-slate-600">Mã đơn</span>,
+        title: <span className="text-[15px] font-medium text-slate-600">{t('admin.bookings.col_code')}</span>,
         dataIndex: "bookingCode",
         key: "shortCode",
         width: 120,
@@ -354,23 +356,25 @@ const BookingManagement = () => {
         ),
       },
       {
-        title: <span className="text-[15px] font-medium text-slate-600">Khách hàng</span>,
+        title: <span className="text-[15px] font-medium text-slate-600">{t('admin.bookings.col_customer')}</span>,
         dataIndex: "customerName",
         key: "customerName",
         width: 200,
         render: (name, record) => (
           <div className="flex flex-col">
-            <span className="text-slate-900 font-medium text-[14px] tracking-tight leading-none mb-1">{name}</span>
+            <span className="text-slate-900 font-medium text-[14px] tracking-tight leading-none mb-1">
+              {i18n.language === 'en' ? removeVietnameseTones(name) : name}
+            </span>
             {record.needConsultation && (
               <span className="text-[10px] font-bold text-amber-500 flex items-center gap-1">
-                <AlertCircle size={10} /> Cần tư vấn
+                <AlertCircle size={10} /> {t('admin.bookings.need_consult')}
               </span>
             )}
           </div>
         ),
       },
       {
-        title: <span className="text-[15px] font-medium text-slate-600">Số điện thoại</span>,
+        title: <span className="text-[15px] font-medium text-slate-600">{t('admin.bookings.col_phone')}</span>,
         dataIndex: "phone",
         key: "phone",
         width: 150,
@@ -381,7 +385,7 @@ const BookingManagement = () => {
         ),
       },
       {
-        title: <span className="text-[15px] font-medium text-slate-600">Ngày thu</span>,
+        title: <span className="text-[15px] font-medium text-slate-600">{t('admin.bookings.col_date')}</span>,
         dataIndex: "recordDate",
         key: "recordDate",
         width: 130,
@@ -392,7 +396,7 @@ const BookingManagement = () => {
         ),
       },
       {
-        title: <span className="text-[15px] font-medium text-slate-600">Ngày đặt</span>,
+        title: <span className="text-[15px] font-medium text-slate-600">{t('admin.bookings.col_created')}</span>,
         dataIndex: "createdDate",
         key: "createdDate",
         width: 140,
@@ -403,7 +407,7 @@ const BookingManagement = () => {
         ),
       },
       {
-        title: <span className="text-[15px] font-medium text-slate-600">Dịch vụ yêu cầu</span>,
+        title: <span className="text-[15px] font-medium text-slate-600">{t('admin.bookings.col_service')}</span>,
         dataIndex: "services",
         key: "services",
         width: 240,
@@ -428,7 +432,7 @@ const BookingManagement = () => {
                 placement="topLeft"
               >
                 <span className="text-blue-600 text-[14px] font-medium cursor-pointer border-b border-dashed border-blue-400 pb-0.5 hover:text-blue-700 hover:border-blue-700 transition-colors">
-                  Nhiều dịch vụ
+                  {t('admin.bookings.multi_service')}
                 </span>
               </Tooltip>
             );
@@ -443,7 +447,7 @@ const BookingManagement = () => {
         },
       },
       {
-        title: <span className="text-[15px] font-medium text-slate-600">Tiến độ</span>,
+        title: <span className="text-[15px] font-medium text-slate-600">{t('admin.bookings.col_status')}</span>,
         dataIndex: "status",
         key: "status",
         width: 180,
@@ -469,7 +473,7 @@ const BookingManagement = () => {
         },
       },
       {
-        title: <span className="text-[15px] font-medium text-slate-600">Thao tác</span>,
+        title: <span className="text-[15px] font-medium text-slate-600">{t('admin.bookings.col_action')}</span>,
         key: "actions",
         width: 140,
         align: "center",
@@ -503,7 +507,7 @@ const BookingManagement = () => {
         ),
       },
     ],
-    [allServices, staffList, updateBookingStatus, assignStaff, handleEdit, openDeleteModal]
+    [allServices, staffList, updateBookingStatus, assignStaff, handleEdit, openDeleteModal, i18n.language]
   );
 
   return (
@@ -529,25 +533,25 @@ const BookingManagement = () => {
           [
             {
               icon: <ShoppingBag className="w-5 h-5 text-indigo-600" strokeWidth={2} />,
-              label: "Tổng đơn",
+              label: t('admin.bookings.stats_total'),
               value: globalStats.totalBookings,
               config: "bg-indigo-50 border border-indigo-100"
             },
             {
               icon: <Timer className="w-5 h-5 text-amber-600" strokeWidth={2} />,
-              label: "Sắp tới",
+              label: t('admin.bookings.stats_upcoming'),
               value: (globalStats.pendingBookings || 0) + (globalStats.confirmedBookings || 0),
               config: "bg-amber-50 border border-amber-100"
             },
             {
               icon: <CheckCircle2 className="w-5 h-5 text-emerald-600" strokeWidth={2} />,
-              label: "Xong",
+              label: t('admin.bookings.stats_completed'),
               value: globalStats.completedBookings,
               config: "bg-emerald-50 border border-emerald-100"
             },
             {
               icon: <XCircle className="w-5 h-5 text-rose-500" strokeWidth={2} />,
-              label: "Đã hủy",
+              label: t('admin.bookings.stats_cancelled'),
               value: globalStats.cancelledBookings,
               config: "bg-rose-50 border border-rose-100"
             }
@@ -569,7 +573,7 @@ const BookingManagement = () => {
         <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 border-b border-slate-50 pb-2">
           <h2 className="text-[17px] sm:text-[20px] font-bold text-slate-800 whitespace-nowrap flex items-center gap-2.5">
             <div className="w-1 h-5 sm:h-8 bg-blue-600 rounded-full"></div>
-            Lịch thu âm
+            {t('admin.bookings.title')}
           </h2>
 
           <div className="flex flex-col sm:flex-row items-center gap-3 w-full xl:w-auto">
@@ -589,7 +593,7 @@ const BookingManagement = () => {
                   className="h-9 w-9 sm:w-auto sm:px-4 bg-slate-900 border-none font-medium text-[13px] flex items-center justify-center gap-2 !text-white hover:!bg-slate-800 rounded-xl transition-all p-0 shadow-lg shadow-slate-200"
                 >
                   <Plus size={16} strokeWidth={3} className="text-white" />
-                  <span className="hidden sm:inline text-white">Thêm lịch</span>
+                  <span className="hidden sm:inline text-white">{t('admin.bookings.add_btn')}</span>
                 </Button>
               </BookingFilters>
             </div>
@@ -626,7 +630,7 @@ const BookingManagement = () => {
                   emptyText: (
                     <div className="py-20 flex flex-col items-center opacity-30">
                       <SlidersHorizontal size={48} className="mb-4" />
-                      <span className="text-[15px] text-slate-600 font-medium ">Chưa có lịch thu âm nào</span>
+                      <span className="text-[15px] text-slate-600 font-medium ">{t('admin.bookings.empty')}</span>
                     </div>
                   )
                 }}
@@ -655,7 +659,9 @@ const BookingManagement = () => {
                   <div key={booking.id} className="bg-white p-3 rounded-[20px] border border-slate-100 shadow-sm flex flex-col h-full hover:border-blue-200 transition-all">
                     <div className="flex items-start justify-between gap-1 mb-1.5">
                       <div className="flex-1 min-w-0">
-                        <h4 className="text-[13px] font-bold text-slate-900 truncate tracking-tight">{booking.customerName}</h4>
+                        <h4 className="text-[13px] font-bold text-slate-900 truncate tracking-tight">
+                          {i18n.language === 'en' ? removeVietnameseTones(booking.customerName) : booking.customerName}
+                        </h4>
                         <p className="text-[10px] font-medium text-slate-500 mt-0.5">{booking.phone}</p>
                       </div>
                       <div className="px-1 py-0.5 bg-slate-50 text-slate-400 rounded text-[9px] font-medium shrink-0">
@@ -670,7 +676,7 @@ const BookingManagement = () => {
                       </div>
                       {booking.needConsultation && (
                         <div className="flex items-center gap-1 px-1.5 py-0.5 bg-amber-50 text-amber-600 rounded text-[9px] font-bold uppercase w-fit">
-                          <span>Cần tư vấn</span>
+                          <span>{t('admin.bookings.need_consult')}</span>
                         </div>
                       )}
                     </div>
@@ -731,7 +737,7 @@ const BookingManagement = () => {
           {pagination.total > 0 && (
             <div className="p-4 sm:p-6 bg-slate-50/20 border-t border-slate-100 flex items-center justify-between">
               <div className="text-[12px] sm:text-[13px] font-medium text-slate-500">
-                Hiển thị <span className="text-slate-900">{pagination.current} / {Math.ceil(pagination.total / (pagination.pageSize || 10))}</span> trang
+                {t('admin.bookings.display')} <span className="text-slate-900">{pagination.current} / {Math.ceil(pagination.total / (pagination.pageSize || 10))}</span> {t('admin.bookings.page_of')}
               </div>
 
               <div className="flex items-center gap-2">
@@ -891,7 +897,7 @@ const BookingManagement = () => {
                     </span>
                   </div>
                   <h2 className="text-lg sm:text-3xl font-bold text-slate-900 mb-0">
-                    {selectedDetailBooking.customerName}
+                    {i18n.language === 'en' ? removeVietnameseTones(selectedDetailBooking.customerName) : selectedDetailBooking.customerName}
                   </h2>
                 </div>
 

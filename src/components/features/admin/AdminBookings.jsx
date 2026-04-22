@@ -1,5 +1,6 @@
+import useAuthStore from "../../../stores/useAuthStore";
+import useAppStore from "../../../stores/useAppStore";
 import { useState, useEffect, useContext, useRef } from "react";
-import { AuthContext } from "../../../api/AuthContext";
 import bookingApi from "../../../api/bookingApi";
 import TokenService from "../../../api/tokenService";
 import {
@@ -20,7 +21,7 @@ import {
 import { Modal, Descriptions, Tag as AntTag, Button } from "antd";
 
 const AdminBookings = () => {
-  const { user } = useContext(AuthContext);
+  const user = useAuthStore(state => state.user);
   const abortControllerRef = useRef(null);
 
   const [page, setPage] = useState(0);

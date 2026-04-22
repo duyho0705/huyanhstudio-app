@@ -1,4 +1,7 @@
+import useAuthStore from "../../../../stores/useAuthStore";
+import useAppStore from "../../../../stores/useAppStore";
 import { NavLink, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   LayoutDashboard,
   CalendarDays,
@@ -9,44 +12,45 @@ import {
   Music2,
   LogOut
 } from "lucide-react";
-import { useContext } from "react";
-import { AuthContext } from "../../../../api/AuthContext";
+
+
 
 const AdminSidebar = ({ isOpen, onClose }) => {
-  const { logout } = useContext(AuthContext);
+  const { t } = useTranslation();
+  const logout = useAuthStore(state => state.logout);
   const location = useLocation();
 
   const menuItems = [
     {
       path: "/admin",
       icon: <LayoutDashboard size={22} />,
-      label: "Bảng điều khiển",
+      label: t('admin.sidebar.dashboard'),
       end: true,
     },
     {
       path: "/admin/chat",
       icon: <MessageCircle size={22} />,
-      label: "Tin nhắn",
+      label: t('admin.sidebar.chat'),
     },
     {
       path: "/admin/bookings",
       icon: <CalendarDays size={22} />,
-      label: "Lịch thu âm",
+      label: t('admin.sidebar.bookings'),
     },
     {
       path: "/admin/products",
       icon: <Package size={22} />,
-      label: "Kho sản phẩm",
+      label: t('admin.sidebar.products'),
     },
     {
       path: "/admin/services",
       icon: <Layers size={22} />,
-      label: "Gói dịch vụ",
+      label: t('admin.sidebar.services'),
     },
     {
       path: "/admin/users",
       icon: <Users size={22} />,
-      label: "Người dùng",
+      label: t('admin.sidebar.users'),
     },
   ];
 
@@ -131,7 +135,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
           className="flex items-center gap-3.5 px-4 h-[48px] w-full rounded-xl text-red-500 hover:bg-red-50 transition-colors duration-200 font-bold text-[15px]"
         >
           <LogOut size={20} />
-          <span>Đăng xuất</span>
+          <span>{t('admin.sidebar.returns')}</span>
         </button>
       </div>
     </aside>

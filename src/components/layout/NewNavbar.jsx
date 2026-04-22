@@ -1,16 +1,20 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FiSearch, FiX, FiUser, FiGrid, FiChevronDown, FiLogOut, FiCalendar, FiLock, FiMenu, FiMusic } from "react-icons/fi";
-import { FaPlay, FaPause } from "react-icons/fa";
+import { FiSearch, FiX, FiUser, FiGrid, FiChevronDown, FiLogOut, FiCalendar, FiLock, FiMenu, FiMusic, FiGlobe, FiMic } from "react-icons/fi";
+import { FaPlay, FaPause, FaUserCircle } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
-import { AuthContext } from "../../api/AuthContext";
 import { Modal } from "antd";
+import { useTranslation } from "react-i18next";
 import Account from "../features/user/Account";
 import BookingProfile from "../features/booking/BookingProfile";
 import ChangePassword from "../features/user/ChangePassword";
+import useAuthStore from "../../stores/useAuthStore";
+import useAppStore from "../../stores/useAppStore";
 
 const NewNavbar = () => {
-    const { user, setShowLoginModal, logout } = useContext(AuthContext);
+    const { t, i18n } = useTranslation();
+    const { user, loading, logout } = useAuthStore();
+    const setShowLoginModal = useAppStore(state => state.setShowLoginModal);
     const [scrolled, setScrolled] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -40,23 +44,49 @@ const NewNavbar = () => {
         return () => { document.body.style.overflow = ''; };
     }, [isMobileMenuOpen]);
 
-    const navLinkClass = "relative py-1 group transition-all duration-300";
+    const navLinkClass = "relative py-1 group transition-all duration-300 whitespace-nowrap";
     const underlineClass = "absolute -bottom-0.5 left-0 w-0 h-0.5 bg-[#35104C] transition-all duration-300 group-hover:w-full rounded-full";
 
     const mobileNavLinks = [
-        { to: "/products", label: "Sản phẩm" },
-        { to: "/services", label: "Dịch vụ & Bảng giá" },
-        { to: "/booking", label: "Đặt lịch" },
-        { to: "/about", label: "Về chúng tôi" },
+        { to: "/products", label: t('common.products') },
+        { to: "/services", label: t('common.services') },
+        { to: "/booking", label: t('common.booking') },
+        { to: "/about", label: t('common.about') },
     ];
+
+    const toggleLanguage = () => {
+        i18n.changeLanguage(i18n.language === 'vi' ? 'en' : 'vi');
+    };
+
+    const removeVietnameseTones = (str) => {
+        if (!str) return "";
+        str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+        str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+        str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+        str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+        str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+        str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+        str = str.replace(/đ/g, "d");
+        str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
+        str = str.replace(/È|É|Ẹ|Ẻ|Ẹ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
+        str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
+        str = str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
+        str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
+        str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
+        str = str.replace(/Đ/g, "D");
+        // Combining Diacritical Marks
+        str = str.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, ""); 
+        str = str.replace(/\u02C6|\u0306|\u031B/g, ""); 
+        return str;
+    };
 
     return (
         <>
             <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 px-4 sm:px-8 py-3 sm:py-3.5 ${scrolled ? "bg-white/90 backdrop-blur-lg shadow-md border-b border-gray-100" : "bg-transparent"
                 }`}>
-                <div className="grid grid-cols-3 items-center max-w-[1400px] mx-auto">
+                <div className="flex items-center justify-between max-w-[1400px] mx-auto relative">
                     {/* Left Column - Desktop nav links */}
-                    <div className="flex items-center gap-10">
+                    <div className="flex-1 flex items-center gap-6 sm:gap-8">
                         {/* Hamburger button - Mobile only */}
                         <button
                             className="lg:hidden flex items-center justify-center w-10 h-10 rounded-xl text-[#35104C] hover:bg-black/5 transition-all"
@@ -65,25 +95,29 @@ const NewNavbar = () => {
                             <FiMenu size={22} />
                         </button>
 
-                        <div className="hidden lg:flex items-center gap-8 text-[17px] font-semibold text-[#35104C]">
+                        <div className="hidden lg:flex items-center gap-6 xl:gap-8 text-[15px] xl:text-[17px] font-semibold text-[#35104C]">
                             <Link to="/products" className={navLinkClass}>
-                                Sản phẩm
+                                {t('common.products')}
                                 <span className={underlineClass}></span>
                             </Link>
                             <Link to="/services" className={navLinkClass}>
-                                Dịch vụ & Bảng giá
+                                {t('common.services')}
                                 <span className={underlineClass}></span>
                             </Link>
                             <Link to="/booking" className={navLinkClass}>
-                                Đặt lịch
+                                {t('common.booking')}
                                 <span className={underlineClass}></span>
                             </Link>
-                            <FiSearch className="text-xl cursor-pointer transition-colors hover:text-[#6CD1FD]" />
+                            <Link to="/about" className={navLinkClass}>
+                                {t('common.about')}
+                                <span className={underlineClass}></span>
+                            </Link>
+                            {/* <FiSearch className="text-xl cursor-pointer transition-colors hover:text-[#6CD1FD]" /> */}
                         </div>
                     </div>
 
-                    {/* Logo (Center Column) */}
-                    <div className="flex justify-center translate-y-1">
+                    {/* Logo (Center Column) - Absolute centered to maintain design balance */}
+                    <div className="absolute left-1/2 -translate-x-1/2 translate-y-1 z-10 px-4 bg-transparent">
                         <Link to="/" className="flex items-center gap-1.5 sm:gap-2 group">
                             <div className="relative w-7 h-7 sm:w-8 sm:h-8">
                                 <div className="absolute inset-0 bg-brand-orange rounded-sm rotate-12 transition-transform"></div>
@@ -95,26 +129,33 @@ const NewNavbar = () => {
                     </div>
 
                     {/* Right Column */}
-                    <div className="flex items-center justify-end gap-8">
-                        <div className="hidden lg:flex items-center gap-8 text-[17px] font-semibold text-[#35104C]">
-                            <Link to="/about" className={navLinkClass}>
-                                Về chúng tôi
-                                <span className={underlineClass}></span>
-                            </Link>
-                            {!user ? (
+                    <div className="flex-1 flex items-center justify-end gap-4 xl:gap-6">
+                        {/* Language Switcher */}
+                        <button
+                            onClick={toggleLanguage}
+                            className="hidden lg:flex items-center gap-2 text-[15px] font-bold text-[#35104C] hover:text-[#6CD1FD] transition-colors"
+                        >
+                            <FiGlobe size={18} />
+                            {i18n.language === 'vi' ? 'EN' : 'VI'}
+                        </button>
+                        <div className="hidden lg:flex items-center gap-6 xl:gap-8 text-[15px] xl:text-[17px] font-semibold text-[#35104C]">
+
+                            {loading ? (
+                                <div className="h-10 w-32 bg-gray-100/50 animate-pulse rounded-xl"></div>
+                            ) : !user ? (
                                 <div className="flex items-center gap-8">
                                     <button
                                         onClick={() => setShowLoginModal(true, "login")}
                                         className={`${navLinkClass} font-bold`}
                                     >
-                                        Đăng nhập
+                                        {t('common.login')}
                                         <span className={underlineClass}></span>
                                     </button>
                                     <button
                                         onClick={() => setShowLoginModal(true, "register")}
                                         className="bg-[#6CD1FD] text-white px-8 py-2.5 rounded-full font-bold shadow-lg shadow-[#6CD1FD]/20 hover:shadow-xl hover:shadow-[#6CD1FD]/40 active:scale-95 transition-all"
                                     >
-                                        Đăng ký
+                                        {t('common.register')}
                                     </button>
                                 </div>
                             ) : (
@@ -124,8 +165,8 @@ const NewNavbar = () => {
                                         onBlur={() => setTimeout(() => setIsDropdownOpen(false), 200)}
                                         className="flex items-center gap-2 h-10 px-4 rounded-xl border border-gray-200 bg-white text-[15px] font-semibold text-[#35104C] hover:border-[#6CD1FD] hover:bg-slate-50 transition-all shadow-sm"
                                     >
-                                        <FiUser className="text-[#6CD1FD]" size={18} />
-                                        <span className="whitespace-nowrap">Xin chào, {user.customerName || user.email || "bạn"}</span>
+                                        <FaUserCircle className="text-[#35104C]" size={20} />
+                                        <span className="whitespace-nowrap">{t('nav.greeting')}, {i18n.language === 'en' ? removeVietnameseTones(user.customerName || user.email) : (user.customerName || user.email || "bạn")}</span>
                                         <FiChevronDown className={`ml-1 transition-transform ${isDropdownOpen ? "-rotate-180" : ""}`} />
                                     </button>
 
@@ -135,26 +176,26 @@ const NewNavbar = () => {
                                                 onClick={() => { setActiveModal("account"); setIsDropdownOpen(false); }}
                                                 className="w-full flex items-center gap-3 px-4 py-2.5 text-[15px] text-gray-700 hover:bg-[#6CD1FD]/5 hover:text-[#35104C] transition-colors text-left font-semibold"
                                             >
-                                                <FiUser size={18} className="text-gray-400" /> Thông tin cá nhân
+                                                <FiUser size={18} className="text-gray-400" /> {t('nav.profile')}
                                             </button>
                                             <button
                                                 onClick={() => { setActiveModal("booking"); setIsDropdownOpen(false); }}
                                                 className="w-full flex items-center gap-3 px-4 py-2.5 text-[15px] text-gray-700 hover:bg-[#6CD1FD]/5 hover:text-[#35104C] transition-colors text-left font-semibold"
                                             >
-                                                <FiCalendar size={18} className="text-gray-400" /> Lịch sử đặt lịch
+                                                <FiCalendar size={18} className="text-gray-400" /> {t('nav.history')}
                                             </button>
                                             <button
                                                 onClick={() => { setActiveModal("password"); setIsDropdownOpen(false); }}
                                                 className="w-full flex items-center gap-3 px-4 py-2.5 text-[15px] text-gray-700 hover:bg-[#6CD1FD]/5 hover:text-[#35104C] transition-colors text-left font-semibold"
                                             >
-                                                <FiLock size={18} className="text-gray-400" /> Đổi mật khẩu
+                                                <FiLock size={18} className="text-gray-400" /> {t('nav.password')}
                                             </button>
                                             <div className="h-px bg-gray-100 my-2"></div>
                                             <button
                                                 onMouseDown={(e) => { e.preventDefault(); logout(); setIsDropdownOpen(false); }}
                                                 className="w-full flex items-center gap-3 px-4 py-2.5 text-[15px] text-red-500 hover:bg-red-50 transition-colors text-left font-semibold"
                                             >
-                                                <FiLogOut size={18} className="text-red-400" /> Đăng xuất
+                                                <FiLogOut size={18} className="text-red-400" /> {t('nav.logout')}
                                             </button>
                                         </div>
                                     )}
@@ -261,19 +302,19 @@ const NewNavbar = () => {
                                             onClick={() => { setActiveModal("account"); setIsMobileMenuOpen(false); }}
                                             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[15px] font-semibold text-gray-600 hover:bg-gray-50 transition-all"
                                         >
-                                            <FiUser size={16} className="text-gray-400" /> Thông tin cá nhân
+                                            <FiUser size={16} className="text-gray-400" /> {t('user.account.title')}
                                         </button>
                                         <button
                                             onClick={() => { setActiveModal("booking"); setIsMobileMenuOpen(false); }}
                                             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[15px] font-semibold text-gray-600 hover:bg-gray-50 transition-all"
                                         >
-                                            <FiCalendar size={16} className="text-gray-400" /> Lịch sử đặt lịch
+                                            <FiCalendar size={16} className="text-gray-400" /> {t('user.booking.title')}
                                         </button>
                                         <button
                                             onClick={() => { setActiveModal("password"); setIsMobileMenuOpen(false); }}
                                             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[15px] font-semibold text-gray-600 hover:bg-gray-50 transition-all"
                                         >
-                                            <FiLock size={16} className="text-gray-400" /> Đổi mật khẩu
+                                            <FiLock size={16} className="text-gray-400" /> {t('user.password.title')}
                                         </button>
                                     </div>
                                 )}
@@ -281,28 +322,30 @@ const NewNavbar = () => {
 
                             {/* Sidebar Footer */}
                             <div className="p-4 border-t border-gray-100">
-                                {!user ? (
+                                {loading ? (
+                                    <div className="w-full h-20 bg-gray-100 animate-pulse rounded-xl"></div>
+                                ) : !user ? (
                                     <div className="flex flex-col gap-2">
                                         <button
                                             onClick={() => { setShowLoginModal(true, "login"); setIsMobileMenuOpen(false); }}
                                             className="w-full py-3 rounded-xl border-2 border-[#35104C] text-[#35104C] font-bold text-[14px] hover:bg-[#35104C] hover:text-white transition-all"
                                         >
-                                            Đăng nhập
+                                            {t('common.login')}
                                         </button>
                                         <button
                                             onClick={() => { setShowLoginModal(true, "register"); setIsMobileMenuOpen(false); }}
                                             className="w-full py-3 rounded-xl bg-[#6CD1FD] text-white font-bold text-[14px] shadow-lg active:scale-95 transition-all"
                                         >
-                                            Đăng ký miễn phí
+                                            {t('common.register')}
                                         </button>
                                     </div>
                                 ) : (
                                     <div className="flex items-center gap-3">
                                         <div className="w-10 h-10 rounded-full bg-[#6CD1FD]/20 flex items-center justify-center">
-                                            <FiUser size={18} className="text-[#35104C]" />
+                                            <FaUserCircle size={20} className="text-[#35104C]" />
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <p className="text-[14px] font-bold text-[#35104C] truncate">{user.customerName || user.email || "Bạn"}</p>
+                                            <p className="text-[14px] font-bold text-[#35104C] truncate">{i18n.language === 'en' ? removeVietnameseTones(user.customerName || user.email) : (user.customerName || user.email || "Bạn")}</p>
                                             <p className="text-[12px] text-gray-400 truncate">{user.email}</p>
                                         </div>
                                         <button
@@ -321,7 +364,7 @@ const NewNavbar = () => {
 
             {/* Modals */}
             <Modal
-                title={<span className="text-lg font-bold text-[#35104C]">Thông tin cá nhân</span>}
+                title={<span className="text-lg font-bold text-[#35104C]">{t('user.account.title')}</span>}
                 open={activeModal === "account"}
                 onCancel={() => setActiveModal(null)}
                 footer={null}
@@ -337,7 +380,7 @@ const NewNavbar = () => {
             </Modal>
 
             <Modal
-                title={<span className="text-lg font-bold text-[#35104C]">Lịch sử đặt lịch</span>}
+                title={<span className="text-lg font-bold text-[#35104C]">{t('user.booking.title')}</span>}
                 open={activeModal === "booking"}
                 onCancel={() => setActiveModal(null)}
                 footer={null}
@@ -352,7 +395,7 @@ const NewNavbar = () => {
             </Modal>
 
             <Modal
-                title={<span className="text-lg font-bold text-[#35104C]">Đổi mật khẩu</span>}
+                title={<span className="text-lg font-bold text-[#35104C]">{t('user.password.title')}</span>}
                 open={activeModal === "password"}
                 onCancel={() => setActiveModal(null)}
                 footer={null}

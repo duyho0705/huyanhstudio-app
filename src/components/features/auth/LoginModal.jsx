@@ -1,9 +1,9 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect } from "react";
 import Login from "./Login";
-import { AuthContext } from "../../../api/AuthContext";
+import useAppStore from "../../../stores/useAppStore";
 
 const LoginModal = ({ isOpen, onClose }) => {
-  const { modalMode } = useContext(AuthContext);
+  const modalMode = useAppStore(state => state.modalMode);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "auto";

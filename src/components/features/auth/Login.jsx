@@ -1,17 +1,16 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { FaFacebookF } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { FiX, FiMail, FiLock, FiPhone, FiUser, FiArrowRight, FiEye, FiEyeOff, FiShield, FiKey } from "react-icons/fi";
+import { FiX, FiEye, FiEyeOff } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import authApi from "../../../api/authApi";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../../api/AuthContext";
-import userApi from "../../../api/userApi";
+import useAuthStore from "../../../stores/useAuthStore";
 import { auth, googleProvider, facebookProvider } from "../../../api/firebase";
 import { signInWithPopup } from "firebase/auth";
 
 const Login = ({ onClose, initialMode = "login" }) => {
-  const { login: loginContext } = useContext(AuthContext);
+  const loginContext = useAuthStore(state => state.login);
   const navigate = useNavigate();
   const [message, setMessage] = useState({ type: "", text: "" });
   const [isLogin, setIsLogin] = useState(initialMode === "login");

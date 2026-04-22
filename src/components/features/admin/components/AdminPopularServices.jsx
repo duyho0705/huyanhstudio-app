@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { Star } from "lucide-react";
 import serviceApi from "../../../../api/serviceApi";
+import { useTranslation } from "react-i18next";
 
 const AdminPopularServices = () => {
+  const { t } = useTranslation();
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -35,7 +37,7 @@ const AdminPopularServices = () => {
   }
 
   const formatPrice = (price) => {
-    if (!price) return "Thỏa thuận";
+    if (!price) return t('admin.dashboard.price_agreement');
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
   };
 
@@ -44,8 +46,8 @@ const AdminPopularServices = () => {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div>
-            <h3 className="text-[16px] font-bold text-slate-900 leading-tight">Dịch vụ hiện có</h3>
-            <p className="text-[14px] font-medium text-slate-400 mt-0.5">Danh sách dịch vụ đang vận hành tại Studio</p>
+            <h3 className="text-[16px] font-bold text-slate-900 leading-tight">{t('admin.dashboard.popular_title')}</h3>
+            <p className="text-[14px] font-medium text-slate-400 mt-0.5">{t('admin.dashboard.popular_desc')}</p>
           </div>
         </div>
       </div>
@@ -60,7 +62,7 @@ const AdminPopularServices = () => {
               <div className="flex items-center gap-2">
                 <div className={`w-1.5 h-1.5 rounded-full ${service.active ? 'bg-emerald-500' : 'bg-slate-300'}`}></div>
                 <span className="text-[14px] font-medium text-slate-500">
-                  {service.active ? 'Đang hoạt động' : 'Tạm dừng'}
+                  {service.active ? t('admin.dashboard.status_active') : t('admin.dashboard.status_paused')}
                 </span>
               </div>
             </div>
@@ -71,7 +73,7 @@ const AdminPopularServices = () => {
           </div>
         )) : (
           <div className="text-center py-10 text-slate-400 text-sm border-2 border-dashed border-slate-100 rounded-3xl">
-            Chưa có dịch vụ nào
+            {t('admin.dashboard.no_services')}
           </div>
         )}
       </div>
