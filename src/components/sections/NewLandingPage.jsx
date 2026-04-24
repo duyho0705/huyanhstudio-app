@@ -14,6 +14,9 @@ import section3_anh2 from "../../assets/section3_anh2.avif";
 import section3_anh3 from "../../assets/section3_anh3.jpg";
 import section3_anh4 from "../../assets/section3_anh4.jpg";
 import section3_anh5 from "../../assets/section3_anh5.webp";
+import highlight1 from "../../assets/highlight1.png";
+import highlight2 from "../../assets/highlight2.webp";
+import highlight3 from "../../assets/highlight3.png";
 
 // Local Background Ribbons with CSS animations (Persistent & localized)
 const BackgroundRibbons = memo(() => (
@@ -718,33 +721,14 @@ const NewLandingPage = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               whileHover={{ scale: 1.02 }}
-              className="bg-[#ff5a5a] rounded-[24px] sm:rounded-[32px] p-4 sm:p-8 md:p-10 min-h-[280px] sm:min-h-[360px] md:min-h-[440px] flex items-center justify-center relative overflow-hidden group cursor-pointer shadow-2xl shadow-red-500/20"
+              className="bg-[#ff5a5a] rounded-[24px] sm:rounded-[32px] min-h-[280px] sm:min-h-[360px] md:min-h-[440px] flex items-end justify-center relative overflow-hidden group cursor-pointer shadow-2xl shadow-red-500/20"
             >
-              {/* Abstract background shapes */}
-              <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-12 -mt-12 blur-xl sm:blur-2xl"></div>
-
-              <div className="relative z-10 w-full flex flex-col items-center">
-                <div className="w-[100px] sm:w-[140px] md:w-[160px] bg-white rounded-[16px] sm:rounded-[24px] p-3 sm:p-4 shadow-2xl transform rotate-[-2deg]">
-                  <div className="w-full aspect-square bg-[#35104C] rounded-lg sm:rounded-xl mb-2 sm:mb-3 overflow-hidden relative group-hover:scale-105 transition-transform duration-500">
-                    <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070&auto=format&fit=crop" alt="Song Cover" className="w-full h-full object-cover opacity-80" />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-6 h-6 sm:w-10 sm:h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center">
-                        <FaPlay className="text-white text-[10px] sm:text-base ml-0.5 sm:ml-1" />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="space-y-1 sm:space-y-1.5">
-                    <div className="h-1.5 sm:h-2 w-3/4 bg-[#35104C]/10 rounded-full"></div>
-                    <div className="h-1 sm:h-1.5 w-1/2 bg-[#35104C]/5 rounded-full"></div>
-                    <div className="pt-2 sm:pt-3 flex items-center justify-between">
-                      <div className="h-0.5 sm:h-1 w-full bg-gray-100 rounded-full relative overflow-hidden">
-                        <div className="absolute left-0 top-0 h-full w-1/3 bg-[#ff5a5a]"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <p className="mt-4 sm:mt-6 text-white font-bold text-[10px] sm:text-base opacity-90 text-center">Music App</p>
-              </div>
+              {/* Image filling the whole card */}
+              <img 
+                src={highlight1} 
+                alt="Highlight 1" 
+                className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+              />
             </motion.div>
 
             {/* Card 2: Album Cover - Yellow */}
@@ -754,21 +738,14 @@ const NewLandingPage = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
               whileHover={{ scale: 1.02 }}
-              className="bg-[#ffe24d] rounded-[24px] sm:rounded-[32px] p-4 sm:p-8 md:p-10 min-h-[280px] sm:min-h-[360px] md:min-h-[440px] flex items-center justify-center relative overflow-hidden cursor-pointer shadow-2xl shadow-yellow-500/20"
+              className="bg-[#ffe24d] rounded-[24px] sm:rounded-[32px] min-h-[280px] sm:min-h-[360px] md:min-h-[440px] flex items-end justify-center relative overflow-hidden group cursor-pointer shadow-2xl shadow-yellow-500/20"
             >
-              <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-black/5 rounded-full blur-2xl"></div>
-
-              <div className="relative z-10 w-full flex flex-col items-center">
-                <div className="w-[110px] sm:w-[160px] md:w-[180px] aspect-square bg-white rounded-lg p-1.5 sm:p-2 shadow-2xl transform rotate-[3deg] transition-transform duration-500 hover:rotate-0">
-                  <div className="w-full h-full border-[4px] sm:border-[8px] border-[#35104C] flex flex-col items-center justify-center p-2 sm:p-3 text-center">
-                    <p className="text-[6px] sm:text-[8px] uppercase tracking-[0.1em] font-bold text-[#35104C] mb-0.5 sm:mb-1">Original Motion Picture</p>
-                    <h3 className="text-[14px] sm:text-[24px] md:text-[28px] font-black text-[#35104C] leading-none mb-0.5 sm:mb-1" style={{ fontFamily: '"Poppins", sans-serif' }}>THE<br />SOUND</h3>
-                    <div className="w-4 sm:w-8 h-[1px] sm:h-[1.5px] bg-[#35104C] my-1 sm:my-3"></div>
-                    <p className="text-[6px] sm:text-[8px] uppercase tracking-[0.1em] font-medium text-[#35104C]">Recorded at HA</p>
-                  </div>
-                </div>
-                <p className="mt-4 sm:mt-6 text-[#35104C] font-bold text-[10px] sm:text-base opacity-80 text-center">Album Art</p>
-              </div>
+              {/* Image filling the whole card */}
+              <img 
+                src={highlight2} 
+                alt="Highlight 2" 
+                className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+              />
             </motion.div>
 
             {/* Card 3: Sound Wave - Gray/Purple */}
@@ -778,40 +755,14 @@ const NewLandingPage = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
               whileHover={{ scale: 1.02 }}
-              className="bg-[#2a2355] rounded-[24px] sm:rounded-[32px] p-4 sm:p-8 md:p-10 min-h-[280px] sm:min-h-[360px] md:min-h-[440px] flex items-center justify-center relative overflow-hidden cursor-pointer shadow-2xl shadow-purple-900/40"
+              className="bg-[#2a2355] rounded-[24px] sm:rounded-[32px] min-h-[280px] sm:min-h-[360px] md:min-h-[440px] flex items-end justify-center relative overflow-hidden group cursor-pointer shadow-2xl shadow-purple-900/40"
             >
-              {/* Grid background effect */}
-              <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '15px 15px' }}></div>
-
-              <div className="relative z-10 w-full flex flex-col items-center">
-                <div className="w-[120px] sm:w-[180px] md:w-[210px] h-[100px] sm:h-[150px] md:h-[180px] bg-white/5 backdrop-blur-md rounded-lg sm:rounded-xl border border-white/10 p-3 sm:p-5 flex flex-col justify-between overflow-hidden shadow-2xl">
-                  <div className="flex justify-between items-center mb-2 sm:mb-3">
-                    <div className="flex gap-0.5">
-                      <div className="w-1 h-1 rounded-full bg-red-500 animate-pulse"></div>
-                      <div className="w-1 h-1 rounded-full bg-yellow-500"></div>
-                      <div className="w-1 h-1 rounded-full bg-green-500"></div>
-                    </div>
-                    <span className="text-[6px] sm:text-[8px] text-white/40 font-mono tracking-widest uppercase">Mastering</span>
-                  </div>
-
-                  <div className="flex items-end justify-between h-12 sm:h-20 gap-0.5 sm:gap-1">
-                    {[...Array(12)].map((_, i) => (
-                      <motion.div
-                        key={i}
-                        animate={{ height: [10, Math.random() * 40 + 10, 10] }}
-                        transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.05 }}
-                        className="w-full bg-gradient-to-t from-[#6CD1FD] to-purple-400 rounded-full opacity-80"
-                      ></motion.div>
-                    ))}
-                  </div>
-
-                  <div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-white/5 flex justify-between">
-                    <div className="w-1/3 h-0.5 sm:h-1 bg-white/10 rounded-full"></div>
-                    <div className="w-1/4 h-0.5 sm:h-1 bg-[#6CD1FD]/40 rounded-full"></div>
-                  </div>
-                </div>
-                <p className="mt-4 sm:mt-6 text-white font-bold text-[10px] sm:text-base opacity-80 text-center">Audio Tools</p>
-              </div>
+              {/* Image filling the whole card */}
+              <img 
+                src={highlight3} 
+                alt="Highlight 3" 
+                className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+              />
             </motion.div>
           </div>
         </div>
