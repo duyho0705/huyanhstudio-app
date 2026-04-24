@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { FiSearch, FiX, FiUser, FiGrid, FiChevronDown, FiLogOut, FiCalendar, FiLock, FiMenu, FiMusic, FiGlobe, FiMic } from "react-icons/fi";
 import { FaPlay, FaPause, FaUserCircle } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
-import { Modal } from "antd";
+import { Modal, Dropdown } from "antd";
 import { useTranslation } from "react-i18next";
 import Account from "../features/user/Account";
 import BookingProfile from "../features/booking/BookingProfile";
@@ -131,13 +131,53 @@ const NewNavbar = () => {
                     {/* Right Column */}
                     <div className="flex-1 flex items-center justify-end gap-4 xl:gap-6">
                         {/* Language Switcher */}
-                        <button
-                            onClick={toggleLanguage}
-                            className="hidden lg:flex items-center gap-2 text-[15px] font-bold text-[#35104C] hover:text-[#6CD1FD] transition-colors"
+                        <Dropdown
+                            menu={{ 
+                                items: [
+                                    {
+                                        key: 'vi',
+                                        label: (
+                                            <div className="flex items-center gap-3 py-1">
+                                                <img 
+                                                    src="https://flagcdn.com/w40/vn.png" 
+                                                    alt="Vietnamese" 
+                                                    className="w-7 h-auto rounded-[3px] shadow-sm border border-gray-100" 
+                                                />
+                                                <span className="font-medium text-gray-700 text-[14px]">Tiếng Việt</span>
+                                            </div>
+                                        ),
+                                        onClick: () => i18n.changeLanguage('vi'),
+                                    },
+                                    {
+                                        key: 'en',
+                                        label: (
+                                            <div className="flex items-center gap-3 py-1">
+                                                <img 
+                                                    src="https://flagcdn.com/w40/us.png" 
+                                                    alt="English" 
+                                                    className="w-7 h-auto rounded-[3px] shadow-sm border border-gray-100" 
+                                                />
+                                                <span className="font-medium text-gray-700 text-[14px]">English</span>
+                                            </div>
+                                        ),
+                                        onClick: () => i18n.changeLanguage('en'),
+                                    },
+                                ] 
+                            }}
+                            trigger={['click']}
+                            placement="bottomRight"
+                            overlayClassName="[&_.ant-dropdown-menu]:!p-2 [&_.ant-dropdown-menu-item]:!rounded-xl [&_.ant-dropdown-menu-item]:!px-4 !min-w-[170px]"
                         >
-                            <FiGlobe size={18} />
-                            {i18n.language === 'vi' ? 'EN' : 'VI'}
-                        </button>
+                            <button
+                                className="hidden lg:flex items-center justify-center p-0 rounded-xl hover:bg-black/5 transition-all group"
+                            >
+                                <img 
+                                    src={i18n.language === 'vi' ? "https://flagcdn.com/w40/vn.png" : "https://flagcdn.com/w40/us.png"} 
+                                    alt="Selected Flag" 
+                                    className="w-8 h-auto rounded-[3px] shadow-sm" 
+                                />
+                            </button>
+                        </Dropdown>
                         <div className="hidden lg:flex items-center gap-6 xl:gap-8 text-[15px] xl:text-[17px] font-semibold text-[#35104C]">
 
                             {loading ? (
@@ -271,6 +311,29 @@ const NewNavbar = () => {
                                             </Link>
                                         </motion.div>
                                     ))}
+                                </div>
+                                
+                                {/* Language Selection in Sidebar */}
+                                <div className="px-3 mt-6">
+                                    <div className="px-4 py-1 mb-2">
+                                        <p className="text-[13px] font-medium text-slate-500">{t('common.language')}</p>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <button
+                                            onClick={() => { i18n.changeLanguage('vi'); setIsMobileMenuOpen(false); }}
+                                            className={`flex flex-col items-center gap-2 p-3 rounded-2xl transition-all border ${i18n.language === 'vi' ? 'bg-[#6CD1FD]/10 border-[#6CD1FD]/30 text-[#35104C]' : 'bg-gray-50 border-gray-100 text-gray-500'}`}
+                                        >
+                                            <img src="https://flagcdn.com/w80/vn.png" alt="VN" className="w-10 h-auto rounded-md shadow-sm" />
+                                            <span className="text-[13px] font-medium">Tiếng Việt</span>
+                                        </button>
+                                        <button
+                                            onClick={() => { i18n.changeLanguage('en'); setIsMobileMenuOpen(false); }}
+                                            className={`flex flex-col items-center gap-2 p-3 rounded-2xl transition-all border ${i18n.language === 'en' ? 'bg-[#6CD1FD]/10 border-[#6CD1FD]/30 text-[#35104C]' : 'bg-gray-50 border-gray-100 text-gray-500'}`}
+                                        >
+                                            <img src="https://flagcdn.com/w80/us.png" alt="EN" className="w-10 h-auto rounded-md shadow-sm" />
+                                            <span className="text-[13px] font-medium">English</span>
+                                        </button>
+                                    </div>
                                 </div>
 
                                 {/* Music Player Toggle in Sidebar */}

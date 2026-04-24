@@ -38,6 +38,10 @@ const AdminLayout = () => {
         // Listen for new bookings
         client.subscribe("/topic/bookings", (message) => {
           const booking = JSON.parse(message.body);
+          
+          // Dispatch global event for realtime updates in components
+          window.dispatchEvent(new CustomEvent("new-booking", { detail: booking }));
+
           notification.success({
             message: `🎉 ${t('admin.header.notifications').toUpperCase()}!`,
             description: (

@@ -31,7 +31,8 @@
       "loading": "Processing...",
       "success": "Success",
       "error": "Error occurred",
-      "upload": "Upload"
+      "upload": "Upload",
+      "language": "Language"
     },
     "hero": {
       "title": "Transform your voice",

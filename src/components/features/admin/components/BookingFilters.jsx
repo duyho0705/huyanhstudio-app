@@ -64,7 +64,7 @@ const BookingFilters = ({
                 : null
             }
             onChange={onDateRangeChange}
-            separator={<span className="text-slate-300 text-[10px]">{t('admin.bookings.to').toLowerCase()}</span>}
+            separator={<span className="text-slate-300 px-1">→</span>}
             placeholder={[t('admin.bookings.from'), t('admin.bookings.to')]}
             className="h-9 xl:h-10 w-full bg-white px-2 font-medium !rounded-xl border-slate-200 text-[13px]"
             suffixIcon={<CalendarDays size={13} className="text-slate-400" />}
@@ -78,7 +78,7 @@ const BookingFilters = ({
             onChange={(val) => onFilterChange("status", val)}
             className="flex-1 xl:w-[130px] h-9 xl:h-10 rounded-xl"
             allowClear
-            dropdownStyle={{ borderRadius: '12px' }}
+            styles={{ popup: { root: { borderRadius: '12px' } } }}
             popupMatchSelectWidth={false}
           >
             {bookingStatuses.map((s) => (

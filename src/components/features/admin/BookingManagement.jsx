@@ -220,6 +220,16 @@ const BookingManagement = () => {
     fetchInitialData();
   }, []);
 
+  // Realtime update listener
+  useEffect(() => {
+    const handleNewBooking = () => {
+      fetchBookings(true); // Silent refresh
+      fetchStats();
+    };
+
+    window.addEventListener("new-booking", handleNewBooking);
+    return () => window.removeEventListener("new-booking", handleNewBooking);
+  }, [fetchBookings, fetchStats]);
   useEffect(() => {
     if (selectedDetailBooking && isDetailModalOpen) {
       const updatedBooking = bookings.find(
@@ -290,7 +300,7 @@ const BookingManagement = () => {
       email: values.email,
       recordDate: values.recordDate,
       studioRoomId: values.studioRoomId,
-      serviceIds: values.serviceIds,
+      serviceId: values.serviceId,
       note: values.note || "",
     };
 
@@ -316,7 +326,7 @@ const BookingManagement = () => {
           type: "success",
         });
       }
-      fetchBookings();
+      fetchBookings(true);
       fetchStats();
     } catch (error) {
       const errorMsg = error.response?.data?.message || error.message;
@@ -408,40 +418,14 @@ const BookingManagement = () => {
       },
       {
         title: <span className="text-[15px] font-medium text-slate-600">{t('admin.bookings.col_service')}</span>,
-        dataIndex: "services",
-        key: "services",
+        dataIndex: "service",
+        key: "service",
         width: 240,
-        render: (svcs) => {
-          if (!svcs || (Array.isArray(svcs) && svcs.length === 0)) return <span className="text-slate-300 italic text-xs">N/A</span>;
-
-          const serviceList = Array.isArray(svcs) ? svcs : [svcs];
-
-          if (serviceList.length > 1) {
-            return (
-              <Tooltip
-                title={
-                  <div className="flex flex-col gap-1.5 p-1">
-                    {serviceList.map((n, i) => (
-                      <div key={i} className="flex items-center gap-2">
-                        <span className="text-white text-[13px] font-medium">{typeof n === 'string' ? n : n.name}</span>
-                      </div>
-                    ))}
-                  </div>
-                }
-                color="#0f172a"
-                placement="topLeft"
-              >
-                <span className="text-blue-600 text-[14px] font-medium cursor-pointer border-b border-dashed border-blue-400 pb-0.5 hover:text-blue-700 hover:border-blue-700 transition-colors">
-                  {t('admin.bookings.multi_service')}
-                </span>
-              </Tooltip>
-            );
-          }
-
-          const n = serviceList[0];
+        render: (service) => {
+          if (!service) return <span className="text-slate-300 italic text-xs">N/A</span>;
           return (
             <span className="text-slate-700 font-medium text-[14px]">
-              {typeof n === 'string' ? n : n.name}
+              {service}
             </span>
           );
         },
@@ -457,7 +441,7 @@ const BookingManagement = () => {
               value={status}
               onChange={(val) => handleStatusUpdate(record.id, val)}
               className="w-full select-custom-sm"
-              dropdownStyle={{ borderRadius: '12px', padding: '4px', border: '1px solid #f1f5f9' }}
+              styles={{ popup: { root: { borderRadius: '12px', padding: '4px', border: '1px solid #f1f5f9' } } }}
               popupMatchSelectWidth={false}
             >
               {bookingStatuses.map((s) => (
@@ -687,8 +671,8 @@ const BookingManagement = () => {
                         onChange={(val) => handleStatusUpdate(booking.id, val)}
                         className="w-full select-custom-xs status-select-mobile"
                         size="small"
-                        bordered={false}
-                        dropdownStyle={{ borderRadius: '12px' }}
+                        variant="borderless"
+                        styles={{ popup: { root: { borderRadius: '12px' } } }}
                         popupMatchSelectWidth={false}
                       >
                         {bookingStatuses.map((s) => (
@@ -758,6 +742,7 @@ const BookingManagement = () => {
             </div>
           )}
         </div>
+      </div>
       {/*** MODALS ***/}
       <BookingForm
         open={isFormModalOpen}
@@ -1044,7 +1029,6 @@ const BookingManagement = () => {
           </div>
         )}
       </Modal>
-      </div>
     </>
   );
 };

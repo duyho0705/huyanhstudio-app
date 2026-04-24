@@ -25,8 +25,8 @@ export const useBookingManagement = () => {
     fetchBookings();
   }, [pagination.current, pagination.pageSize, filters]);
 
-  const fetchBookings = useCallback(async () => {
-    setLoading(true);
+  const fetchBookings = useCallback(async (silent = false) => {
+    if (!silent) setLoading(true);
     try {
       const { search, fromDate, toDate, status, studioId } = filters;
       

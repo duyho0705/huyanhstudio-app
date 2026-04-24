@@ -120,12 +120,53 @@ const AdminHeader = ({ toggleSidebar }) => {
         <div className="flex items-center gap-2 sm:gap-3">
           
           {/* Language Switcher */}
-          <button
-            onClick={() => i18n.changeLanguage(i18n.language === 'vi' ? 'en' : 'vi')}
-            className="hidden sm:flex items-center justify-center w-auto px-3 h-9 bg-[#35104C]/5 text-[13px] font-bold text-[#35104C] rounded-xl hover:bg-[#35104C]/10 transition-colors"
+          <Dropdown
+            menu={{ 
+              items: [
+                {
+                  key: 'vi',
+                  label: (
+                    <div className="flex items-center gap-3 py-1">
+                      <img 
+                        src="https://flagcdn.com/w40/vn.png" 
+                        alt="Vietnamese" 
+                        className="w-7 h-auto rounded-[3px] shadow-sm border border-slate-100" 
+                      />
+                      <span className="font-medium text-slate-700 text-[14px]">Tiếng Việt</span>
+                    </div>
+                  ),
+                  onClick: () => i18n.changeLanguage('vi'),
+                },
+                {
+                  key: 'en',
+                  label: (
+                    <div className="flex items-center gap-3 py-1">
+                      <img 
+                        src="https://flagcdn.com/w40/us.png" 
+                        alt="English" 
+                        className="w-7 h-auto rounded-[3px] shadow-sm border border-slate-100" 
+                      />
+                      <span className="font-medium text-slate-700 text-[14px]">English</span>
+                    </div>
+                  ),
+                  onClick: () => i18n.changeLanguage('en'),
+                },
+              ] 
+            }}
+            trigger={['click']}
+            placement="bottomRight"
+            overlayClassName="[&_.ant-dropdown-menu]:!p-2 [&_.ant-dropdown-menu-item]:!rounded-xl [&_.ant-dropdown-menu-item]:!px-3 !min-w-[170px]"
           >
-            {i18n.language === 'vi' ? 'EN' : 'VI'}
-          </button>
+            <button
+              className="flex items-center justify-center h-10 w-10 bg-transparent border-none rounded-xl hover:bg-slate-50 transition-all group p-0"
+            >
+              <img 
+                src={i18n.language === 'vi' ? "https://flagcdn.com/w40/vn.png" : "https://flagcdn.com/w40/us.png"} 
+                alt="Selected Flag" 
+                className="w-8 h-auto rounded-[3px] shadow-sm" 
+              />
+            </button>
+          </Dropdown>
           
           <button className="w-9 h-9 sm:w-11 sm:h-11 flex items-center justify-center text-slate-400 rounded-none relative group">
             <Bell size={17} strokeWidth={2.5} />

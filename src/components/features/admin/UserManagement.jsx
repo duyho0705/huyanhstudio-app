@@ -467,7 +467,7 @@ const UserManagement = () => {
                   onChange={(val) => handleFilterChange("role", val)}
                   className="h-9 xl:h-10 flex-1 sm:w-[140px] custom-select-premium compact-select"
                   allowClear
-                  dropdownStyle={{ borderRadius: '15px', padding: '8px' }}
+                  styles={{ popup: { root: { borderRadius: '15px', padding: '8px' } } }}
                   popupMatchSelectWidth={false}
                 >
                   {roles.map(r => (
@@ -491,7 +491,7 @@ const UserManagement = () => {
                   onChange={(val) => handleFilterChange("status", val)}
                   className="h-9 xl:h-10 flex-1 sm:w-[140px] custom-select-premium compact-select"
                   allowClear
-                  dropdownStyle={{ borderRadius: '15px', padding: '8px' }}
+                  styles={{ popup: { root: { borderRadius: '15px', padding: '8px' } } }}
                   popupMatchSelectWidth={false}
                 >
                   {statusOptions.map(s => (

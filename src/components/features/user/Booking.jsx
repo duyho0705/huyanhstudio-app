@@ -19,7 +19,7 @@ const Booking = () => {
     const [success, setSuccess] = useState(false);
 
     const [formData, setFormData] = useState({
-        serviceIds: [],
+        serviceId: null,
         studioRoomId: null,
         bookingDate: null,
         customerName: "",
@@ -92,7 +92,7 @@ const Booking = () => {
         if (!formData.customerName?.trim()) newErrors.customerName = true;
         if (!formData.phoneNumber?.trim()) newErrors.phoneNumber = true;
         if (!formData.email?.trim()) newErrors.email = true;
-        if (!formData.serviceIds || formData.serviceIds.length === 0) newErrors.serviceIds = true;
+        if (!formData.serviceId) newErrors.serviceId = true;
         if (!formData.studioRoomId) newErrors.studioRoomId = true;
         if (!formData.bookingDate) newErrors.bookingDate = true;
 
@@ -115,7 +115,7 @@ const Booking = () => {
                 email: formData.email,
                 recordDate: formData.bookingDate.format("YYYY-MM-DD"),
                 studioRoomId: Number(formData.studioRoomId),
-                serviceIds: formData.serviceIds,
+                serviceId: formData.serviceId,
                 needConsultation: formData.needConsultation,
                 note: formData.note
             };
@@ -140,24 +140,98 @@ const Booking = () => {
 
     if (success) {
         return (
-            <div className="container-app py-32 flex flex-col items-center justify-center text-center">
+            <div className="container-app py-12 sm:py-24 flex items-center justify-center min-h-[70vh] relative overflow-hidden">
+                {/* Background Decorations */}
+                <div className="absolute top-1/4 left-10 w-64 h-64 bg-[#6CD1FD]/10 rounded-full blur-[120px] pointer-events-none"></div>
+                <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-[#35104C]/5 rounded-full blur-[120px] pointer-events-none"></div>
+
                 <motion.div
-                    initial={{ scale: 0.5, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    className="w-24 h-24 bg-[#6CD1FD]/20 text-[#6CD1FD] rounded-full flex items-center justify-center mb-8"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="max-w-4xl w-full grid grid-cols-1 lg:grid-cols-2 bg-white rounded-[40px] shadow-[0_40px_120px_-20px_rgba(53,16,76,0.15)] overflow-hidden border border-gray-100 relative z-10"
                 >
-                    <FiCheckCircle size={48} />
+                    {/* Visual Section */}
+                    <div className="bg-[#F8FAFC] p-8 sm:p-12 flex items-center justify-center relative overflow-hidden border-b lg:border-b-0 lg:border-r border-gray-100">
+                        <motion.div
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.3, type: "spring", stiffness: 100 }}
+                            className="relative z-10"
+                        >
+                            <img 
+                                src="/images/booking-success.png" 
+                                alt="Booking Success" 
+                                className="w-full max-w-[320px] drop-shadow-[0_20px_50px_rgba(108,209,253,0.3)]"
+                            />
+                        </motion.div>
+                        
+                        {/* Subtle Badge Removed */}
+                    </div>
+
+                    {/* Content Section */}
+                    <div className="p-8 sm:p-12 flex flex-col justify-center">
+                        <motion.div
+                            initial={{ x: -20, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            transition={{ delay: 0.2 }}
+                        >
+                            <span className="inline-block px-4 py-1.5 bg-[#6CD1FD]/10 text-[#6CD1FD] text-[11px] font-black rounded-full mb-6 uppercase tracking-widest border border-[#6CD1FD]/20">
+                                Ghi nhận thành công
+                            </span>
+                            <h2 className="text-3xl sm:text-4xl font-black text-[#35104C] leading-[1.1] mb-6">
+                                Tuyệt vời! <br /> <span className="text-[#6CD1FD]">Lịch của bạn</span> <br /> đã sẵn sàng.
+                            </h2>
+                        </motion.div>
+
+                        <div className="space-y-6 mb-10">
+                            <p className="text-gray-500 font-medium leading-relaxed text-[15px]">
+                                Chào <span className="text-[#35104C] font-bold">{formData.customerName}</span>, chúng tôi đã nhận được yêu cầu của bạn. Nhân viên tư vấn sẽ liên hệ sớm nhất để chốt lịch.
+                            </p>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="p-4 bg-[#F8FAFC] rounded-[24px] border border-gray-100 group hover:border-[#6CD1FD]/30 transition-colors">
+                                    <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Dịch vụ</div>
+                                    <div className="text-sm font-bold text-[#35104C] truncate">
+                                        {services.find(s => s.id === formData.serviceId)?.name || "Dịch vụ đã chọn"}
+                                    </div>
+                                </div>
+                                <div className="p-4 bg-[#F8FAFC] rounded-[24px] border border-gray-100 group hover:border-[#6CD1FD]/30 transition-colors">
+                                    <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Ngày hẹn</div>
+                                    <div className="text-sm font-bold text-[#35104C]">
+                                        {formData.bookingDate?.format("DD/MM/YYYY")}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col gap-3">
+                            <motion.button
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                onClick={() => {
+                                    setSuccess(false);
+                                    setFormData({
+                                        ...formData,
+                                        serviceId: null,
+                                        bookingDate: null,
+                                        note: "",
+                                        needConsultation: false
+                                    });
+                                }}
+                                className="w-full h-14 bg-[#35104C] text-white rounded-[20px] font-bold shadow-xl shadow-[#35104C]/20 hover:bg-[#6CD1FD] transition-all flex items-center justify-center gap-3 group"
+                            >
+                                ĐẶT LỊCH KHÁC
+                                <FiCalendar className="text-lg group-hover:rotate-12 transition-transform" />
+                            </motion.button>
+                            <button
+                                onClick={() => window.location.href = '/'}
+                                className="w-full py-3 text-gray-400 hover:text-[#35104C] font-bold transition-colors text-sm uppercase tracking-widest"
+                            >
+                                Quay lại trang chủ
+                            </button>
+                        </div>
+                    </div>
                 </motion.div>
-                <h2 className="text-3xl font-black text-[#35104C] mb-4 uppercase tracking-tight">Gửi yêu cầu thành công!</h2>
-                <p className="text-gray-500 max-w-md font-medium leading-relaxed">
-                    Huy Anh Studio đã nhận được yêu cầu đặt lịch của bạn. Chúng tôi sẽ sớm liên hệ qua số điện thoại <strong>{formData.phoneNumber}</strong> để xác nhận.
-                </p>
-                <button
-                    onClick={() => setSuccess(false)}
-                    className="mt-12 px-10 py-4 bg-[#35104C] text-white rounded-2xl font-black shadow-xl shadow-[#35104C]/20 hover:bg-[#6CD1FD] transition-all"
-                >
-                    ĐẶT LỊCH KHÁC
-                </button>
             </div>
         );
     }
@@ -231,7 +305,7 @@ const Booking = () => {
                                     <input
                                         required
                                         type="text"
-                                        placeholder="Nhập họ tên"
+                                        placeholder="Nhập tên"
                                         className={`w-full h-[48px] pl-13 pr-6 bg-white border ${errors.customerName ? "border-red-500" : "border-[#E2E8F0]"} rounded-full focus:bg-white focus:border-[#6CD1FD] focus:shadow-[0_0_0_4px_rgba(108,209,253,0.1)] outline-none font-medium text-slate-600 placeholder:text-gray-400/50 placeholder:font-medium placeholder:text-[15px] transition-all text-sm`}
                                         value={formData.customerName}
                                         onChange={(e) => {
@@ -317,18 +391,16 @@ const Booking = () => {
                                                 <FiMusic size={18} />
                                             </div>
                                             <Select
-                                                mode="multiple"
                                                 size="large"
-                                                status={errors.serviceIds ? "error" : ""}
+                                                status={errors.serviceId ? "error" : ""}
                                                 placeholder="Chọn dịch vụ"
-                                                className="w-full custom-antd-select-with-icon font-medium text-sm min-h-[48px]"
-                                                value={formData.serviceIds}
+                                                className="w-full custom-antd-select-with-icon font-medium text-sm h-[48px]"
+                                                value={formData.serviceId}
                                                 onChange={(val) => {
-                                                    setFormData({ ...formData, serviceIds: val });
-                                                    if (errors.serviceIds) setErrors({ ...errors, serviceIds: false });
+                                                    setFormData({ ...formData, serviceId: val });
+                                                    if (errors.serviceId) setErrors({ ...errors, serviceId: false });
                                                 }}
                                                 options={services.map(s => ({ value: s.id, label: s.name }))}
-                                                maxTagCount="responsive"
                                             />
                                         </div>
                                     </div>
@@ -345,6 +417,7 @@ const Booking = () => {
                                                 placeholder="Chọn phòng"
                                                 className="w-full custom-antd-select-with-icon font-medium text-sm h-[48px]"
                                                 value={formData.studioRoomId}
+                                                disabled={studios?.length <= 1}
                                                 onChange={(val) => {
                                                     setFormData({ ...formData, studioRoomId: val });
                                                     if (errors.studioRoomId) setErrors({ ...errors, studioRoomId: false });

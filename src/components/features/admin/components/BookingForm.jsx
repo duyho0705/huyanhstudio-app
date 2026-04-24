@@ -27,21 +27,23 @@ const BookingForm = ({
 
   useEffect(() => {
     if (open && initialValues) {
-      // Map services to IDs
-      let sourceServices = [];
-      if (Array.isArray(initialValues.services)) {
-        sourceServices = initialValues.services;
-      } else if (initialValues.services) {
-        sourceServices = [initialValues.services];
+      // Map serviceId
+      let serviceId = null;
+      if (initialValues.service) {
+        if (typeof initialValues.service === "object") {
+          serviceId = initialValues.service.id;
+        } else {
+          serviceId = initialValues.service;
+        }
+      } else if (initialValues.serviceId) {
+        serviceId = initialValues.serviceId;
+      } else if (Array.isArray(initialValues.services) && initialValues.services.length > 0) {
+        // Fallback for old data format
+        const firstSvc = initialValues.services[0];
+        serviceId = typeof firstSvc === "object" ? firstSvc.id : firstSvc;
       }
 
-      const serviceIds = sourceServices
-        .map((s) => {
-          if (typeof s === "object" && s !== null) return s.id;
-          return s;
-        })
-        .filter(Boolean)
-        .map(id => (!isNaN(id) && id !== "") ? Number(id) : id); // Only cast if numeric string
+      const finalServiceId = (serviceId && !isNaN(serviceId) && serviceId !== "") ? Number(serviceId) : serviceId;
 
       // Map studioRoomId
       const studioId = initialValues.studioRoomId || (initialValues.studioRoom?.id) || initialValues.studioRoom;
@@ -53,11 +55,14 @@ const BookingForm = ({
         email: initialValues.email,
         recordDate: initialValues.recordDate ? dayjs(initialValues.recordDate) : null,
         studioRoomId: finalStudioId || null,
-        serviceIds,
+        serviceId: finalServiceId || null,
         note: initialValues.note || "",
       });
     } else if (open) {
       form.resetFields();
+      if (studios?.length === 1) {
+        form.setFieldsValue({ studioRoomId: studios[0].id });
+      }
     }
   }, [open, initialValues, form, services, studios]);
 
@@ -160,7 +165,7 @@ const BookingForm = ({
           </Form.Item>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 sm:gap-4">
+        <div className={`grid ${studios?.length > 1 ? "grid-cols-2" : "grid-cols-1"} gap-3 sm:gap-4`}>
           <Form.Item
             name="recordDate"
             label={<span className="text-[13px] sm:text-[14px] font-medium text-slate-600">{t('admin.bookings.form_date')}</span>}
@@ -176,38 +181,38 @@ const BookingForm = ({
             />
           </Form.Item>
 
-          <Form.Item
-            name="studioRoomId"
-            label={<span className="text-[13px] sm:text-[14px] font-medium text-slate-600">{t('admin.bookings.form_studio')}</span>}
-            rules={[{ required: true, message: t('admin.bookings.errors.studio_required') }]}
-            className={isMobile ? "mb-3" : "mb-5"}
-          >
-            <Select 
-              placeholder={t('admin.bookings.form_studio_placeholder')} 
-              className={`${isMobile ? "h-9 text-[13px]" : "h-11 text-[14px]"} rounded-xl border-slate-200 font-medium w-full`}
-              dropdownStyle={{ borderRadius: '12px' }}
+          {studios?.length > 1 && (
+            <Form.Item
+              name="studioRoomId"
+              label={<span className="text-[13px] sm:text-[14px] font-medium text-slate-600">{t('admin.bookings.form_studio')}</span>}
+              rules={[{ required: true, message: t('admin.bookings.errors.studio_required') }]}
+              className={isMobile ? "mb-3" : "mb-5"}
             >
-              {studios?.map((studio) => (
-                <Option key={studio.id} value={studio.id}>
-                  {studio.studioName}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
+              <Select 
+                placeholder={t('admin.bookings.form_studio_placeholder')} 
+                className={`${isMobile ? "h-9 text-[13px]" : "h-11 text-[14px]"} rounded-xl border-slate-200 font-medium w-full`}
+                styles={{ popup: { root: { borderRadius: '12px' } } }}
+              >
+                {studios?.map((studio) => (
+                  <Option key={studio.id} value={studio.id}>
+                    {studio.studioName}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+          )}
         </div>
 
         <Form.Item
-          name="serviceIds"
+          name="serviceId"
           label={<span className="text-[13px] sm:text-[14px] font-medium text-slate-600">{t('admin.bookings.form_services')}</span>}
           rules={[{ required: true, message: t('admin.bookings.errors.service_required') }]}
           className={isMobile ? "mb-3" : "mb-5"}
         >
           <Select 
-            mode="multiple" 
             placeholder={t('admin.bookings.form_services_placeholder')} 
-            className={`${isMobile ? "min-h-[36px]" : "min-h-[44px]"} rounded-xl border-slate-200 font-medium w-full`}
-            dropdownStyle={{ borderRadius: '12px' }}
-            maxTagCount="responsive"
+            className={`${isMobile ? "h-9 text-[13px]" : "h-11 text-[14px]"} rounded-xl border-slate-200 font-medium w-full`}
+            styles={{ popup: { root: { borderRadius: '12px' } } }}
           >
             {services?.map((service) => (
               <Option key={service.id} value={service.id}>

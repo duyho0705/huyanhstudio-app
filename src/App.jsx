@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 import NewNavbar from "./components/layout/NewNavbar";
 import StudioBackground from "./components/layout/StudioBackground";
 import PageLoader from "./components/ui/PageLoader";
+import BrandLoader from "./components/ui/BrandLoader";
 import ErrorBoundaryWrapper from "./components/ui/ErrorBoundaryWrapper";
 import ChatBox from "./components/features/chat/ChatBox";
 import LoginModal from "./components/features/auth/LoginModal";
@@ -239,7 +240,7 @@ function AppContent() {
           </AnimatePresence>
         </Suspense>
       ) : (
-        <Suspense fallback={null}>
+        <Suspense fallback={<BrandLoader />}>
           <StudioBackground>
             <AnimatePresence mode="wait">
               <Routes location={location} key={location.pathname}>
