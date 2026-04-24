@@ -53,7 +53,7 @@ const MiniMusicPlayer = ({ isPlaying, onToggle }) => {
 
   return (
     <div
-      className="fixed bottom-24 left-4 sm:top-[120px] sm:left-6 sm:bottom-auto z-[90] flex items-center gap-2 sm:gap-4 bg-white/10 backdrop-blur-xl p-2 sm:p-2.5 px-3 sm:px-4 rounded-full border border-white/20 shadow-2xl group hover:bg-white/20 transition-all cursor-pointer"
+      className="hidden sm:flex fixed bottom-24 left-4 sm:top-[120px] sm:left-6 sm:bottom-auto z-[90] items-center gap-2 sm:gap-4 bg-white/10 backdrop-blur-xl p-2 sm:p-2.5 px-3 sm:px-4 rounded-full border border-white/20 shadow-2xl group hover:bg-white/20 transition-all cursor-pointer"
       onClick={onToggle}
     >
       {/* Visualizer and Logic only, sound comes from Global Source */}
@@ -361,12 +361,12 @@ function AppContent() {
                 transition={{ duration: 0.3, delay: 0.1 }}
                 className="flex items-center gap-3"
               >
-                <span className="bg-[#35104C]/70 backdrop-blur-lg text-white px-3 py-1.5 rounded-lg text-[14px] font-bold shadow-xl border border-white/10">AI hastudio</span>
+                <span className="bg-[#35104C]/70 backdrop-blur-lg text-white px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg text-[12px] sm:text-[14px] font-bold shadow-xl border border-white/10">AI hastudio</span>
                 <button
                   onClick={() => setIsAIModalOpen(true)}
-                  className="w-12 h-12 bg-[#35104C]/40 backdrop-blur-xl border border-white/20 rounded-full flex items-center justify-center text-[#6CD1FD] shadow-xl hover:bg-[#6CD1FD] hover:text-[#35104C] transition-all active:scale-90"
+                  className="w-10 h-10 sm:w-12 sm:h-12 bg-[#35104C]/40 backdrop-blur-xl border border-white/20 rounded-full flex items-center justify-center text-[#6CD1FD] shadow-xl hover:bg-[#6CD1FD] hover:text-[#35104C] transition-all active:scale-90"
                 >
-                  <FaRobot size={20} />
+                  <FaRobot className="text-[18px] sm:text-[20px]" />
                 </button>
               </motion.div>
 
@@ -377,7 +377,7 @@ function AppContent() {
                 transition={{ duration: 0.3 }}
                 className="flex items-center gap-3"
               >
-                <span className="bg-[#35104C]/70 backdrop-blur-lg text-white px-3 py-1.5 rounded-lg text-[14px] font-bold shadow-xl border border-white/10">Hỗ trợ & Nhạc</span>
+                <span className="bg-[#35104C]/70 backdrop-blur-lg text-white px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg text-[12px] sm:text-[14px] font-bold shadow-xl border border-white/10">Hỗ trợ & Nhạc</span>
                 
                 {/* Music Toggle in Hub */}
                 <button
@@ -386,9 +386,9 @@ function AppContent() {
                     togglePlayback();
                   }}
                   title={isMusicPlaying ? t('common.music_off', 'Music Off') : t('common.music_on', 'Music On')}
-                  className={`w-12 h-12 ${isMusicPlaying ? 'bg-sky text-[#35104C]' : 'bg-[#35104C]/40 text-white'} backdrop-blur-xl border border-white/20 rounded-full flex items-center justify-center shadow-xl hover:bg-[#6CD1FD] hover:text-[#35104C] transition-all active:scale-90`}
+                  className={`w-10 h-10 sm:w-12 sm:h-12 ${isMusicPlaying ? 'bg-sky text-[#35104C]' : 'bg-[#35104C]/40 text-white'} backdrop-blur-xl border border-white/20 rounded-full flex items-center justify-center shadow-xl hover:bg-[#6CD1FD] hover:text-[#35104C] transition-all active:scale-90`}
                 >
-                  <FiMusic size={20} className={isMusicPlaying ? "animate-pulse" : ""} />
+                  <FiMusic className={`text-[18px] sm:text-[20px] ${isMusicPlaying ? "animate-pulse" : ""}`} />
                 </button>
 
                 {/* Chat Button */}
@@ -397,9 +397,9 @@ function AppContent() {
                     e.stopPropagation();
                     setIsChatOpen(true);
                   }}
-                  className="w-12 h-12 bg-[#35104C]/40 backdrop-blur-xl border border-white/20 rounded-full flex items-center justify-center text-white shadow-xl hover:bg-[#6CD1FD] hover:text-[#35104C] transition-all active:scale-90"
+                  className="w-10 h-10 sm:w-12 sm:h-12 bg-[#35104C]/40 backdrop-blur-xl border border-white/20 rounded-full flex items-center justify-center text-white shadow-xl hover:bg-[#6CD1FD] hover:text-[#35104C] transition-all active:scale-90"
                 >
-                  <FiMessageCircle size={20} />
+                  <FiMessageCircle className="text-[18px] sm:text-[20px]" />
                 </button>
               </motion.div>
 
@@ -412,9 +412,9 @@ function AppContent() {
                 onMouseEnter={() => setIsHubHovered(true)}
                 animate={isHubHovered ? { rotate: 90, scale: 1.1 } : { rotate: 0, scale: 1 }}
                 whileTap={{ scale: 0.9 }}
-                className="w-14 h-14 bg-[#35104C] rounded-full flex items-center justify-center text-[#6CD1FD] shadow-2xl cursor-pointer border border-white/10 z-10"
+                className="w-12 h-12 sm:w-14 sm:h-14 bg-[#35104C] rounded-full flex items-center justify-center text-[#6CD1FD] shadow-2xl cursor-pointer border border-white/10 z-10"
               >
-                {isHubHovered ? <FiX size={24} /> : <FiGrid size={24} />}
+                {isHubHovered ? <FiX className="text-[20px] sm:text-[24px]" /> : <FiGrid className="text-[20px] sm:text-[24px]" />}
               </motion.button>
             </div>
           </div>

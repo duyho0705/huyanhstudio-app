@@ -70,18 +70,18 @@ const Services = () => {
   }
 
   return (
-    <div className="container-app pb-16 sm:pb-32 sm:pt-0">
-      <header className="mb-8 text-center">
+    <div className="container-app pb-16 sm:pb-32 pt-2 sm:pt-0 -mt-5 sm:mt-0">
+      <header className="hidden sm:block mb-8 text-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="inline-block px-4 py-1.5 rounded-full bg-[#35104C]/10 text-[#35104C] text-[16px] font-semibold mb-6"
+          className="hidden sm:inline-block px-4 py-1.5 rounded-full bg-[#35104C]/10 text-[#35104C] text-[16px] font-semibold mb-6"
         >
           Bảng giá Huy Anh Studio
         </motion.div>
       </header>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-10">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 lg:gap-10">
         {services.length > 0 ? (
           services.map((service, index) => (
             <motion.div
@@ -90,36 +90,36 @@ const Services = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 + 0.3 }}
               whileHover={{ y: -10 }}
-              className={`relative p-6 sm:p-8 lg:p-10 rounded-[20px] sm:rounded-[24px] bg-white transition-all duration-300 flex flex-col ${service.featured
-                ? 'ring-2 sm:ring-4 ring-[#6CD1FD] shadow-2xl shadow-[#6CD1FD]/20 sm:scale-105 z-10'
+              className={`relative p-3 sm:p-8 lg:p-10 rounded-[16px] sm:rounded-[24px] bg-white transition-all duration-300 flex flex-col ${service.featured
+                ? 'ring-1 sm:ring-4 ring-[#6CD1FD] shadow-2xl shadow-[#6CD1FD]/20 sm:scale-105 z-10'
                 : 'border border-gray-100 shadow-xl shadow-gray-200/50'
                 }`}
             >
               {service.featured && (
-                <div className="absolute -top-4 sm:-top-6 left-1/2 -translate-x-1/2 bg-[#6CD1FD] text-[#35104C] px-4 sm:px-6 py-1.5 sm:py-2 rounded-full text-[13px] sm:text-[15px] font-bold shadow-lg">
+                <div className="absolute -top-3 sm:-top-6 left-1/2 -translate-x-1/2 bg-[#6CD1FD] text-[#35104C] px-3 sm:px-6 py-1 sm:py-2 rounded-full text-[10px] sm:text-[15px] font-bold shadow-lg whitespace-nowrap">
                   Gợi ý
                 </div>
               )}
 
 
-              <h3 className="text-lg sm:text-2xl font-bold text-[#35104C] mb-2 sm:mb-3">{service.name}</h3>
-              <p className="text-slate-600 text-[13px] sm:text-[15px] font-medium mb-4 sm:mb-8 leading-relaxed">
+              <h3 className="text-[15px] sm:text-2xl font-bold text-[#35104C] mb-1 sm:mb-3 truncate">{service.name}</h3>
+              <p className="text-slate-600 text-[11px] sm:text-[15px] font-medium mb-3 sm:mb-8 leading-tight sm:leading-relaxed line-clamp-2 sm:line-clamp-none">
                 {service.description}
               </p>
 
-              <div className="mb-6 sm:mb-10 text-center sm:text-left">
-                <span className="text-2xl sm:text-4xl font-black text-[#35104C]">{formatPrice(service.price)}</span>
+              <div className="mb-4 sm:mb-10 text-center sm:text-left">
+                <span className="text-xl sm:text-4xl font-black text-[#35104C]">{formatPrice(service.price)}</span>
               </div>
 
               <div className="space-y-2.5 sm:space-y-4 mb-6 sm:mb-12 flex-1">
                 {(service.benefitsList && service.benefitsList.length > 0) ? (
                   service.benefitsList.map((benefit, i) => (
-                    <div key={i} className="flex items-center gap-2.5 sm:gap-4">
-                      <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${service.featured ? 'bg-[#6CD1FD] text-[#35104C]' : 'bg-green-50 text-green-500'
+                    <div key={i} className="flex items-center gap-2 sm:gap-4">
+                      <div className={`w-4 h-4 sm:w-6 sm:h-6 rounded-full flex items-center justify-center shrink-0 ${service.featured ? 'bg-[#6CD1FD] text-[#35104C]' : 'bg-green-50 text-green-500'
                         }`}>
-                        <FiCheck size={14} strokeWidth={4} />
+                        <FiCheck size={10} sm:size={14} strokeWidth={4} />
                       </div>
-                      <span className="text-[13px] sm:text-[15px] font-semibold text-gray-600">{benefit}</span>
+                      <span className="text-[11px] sm:text-[15px] font-semibold text-gray-600 truncate">{benefit}</span>
                     </div>
                   ))
                 ) : (
@@ -127,11 +127,11 @@ const Services = () => {
                 )}
               </div>
 
-              <button className={`w-full py-3.5 sm:py-5 rounded-[16px] sm:rounded-[24px] font-black text-base sm:text-lg transition-all active:scale-95 shadow-lg ${service.featured
+              <button className={`w-full py-2 sm:py-5 rounded-[12px] sm:rounded-[24px] font-black text-[13px] sm:text-lg transition-all active:scale-95 shadow-lg ${service.featured
                 ? 'bg-[#35104C] text-white hover:bg-[#4a1c6a]'
                 : 'bg-gray-50 text-[#35104C] hover:bg-gray-100 border border-gray-200'
                 }`}>
-                {service.buttonText || "Chọn gói"}
+                {service.buttonText === "Đăng ký ngay" ? "Chọn ngay" : (service.buttonText || "Chọn ngay")}
               </button>
             </motion.div>
           ))

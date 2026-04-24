@@ -158,7 +158,7 @@ const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
   if (!user) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-[100]">
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[100]">
       <input
         type="file"
         ref={fileInputRef}
@@ -173,12 +173,12 @@ const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
             initial={{ opacity: 0, scale: 0.5, y: 100, x: 50, originX: 1, originY: 1 }}
             animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
             exit={{ opacity: 0, scale: 0.5, y: 100, x: 50, transition: { duration: 0.3 } }}
-            className="bg-white w-[calc(100vw-48px)] sm:w-[380px] h-[min(600px,calc(90vh))] rounded-[32px] shadow-[0_20px_60px_rgba(0,0,0,0.15)] border border-slate-100 flex flex-col overflow-hidden"
+            className="bg-white w-[calc(100vw-32px)] sm:w-[380px] h-[calc(75vh)] sm:h-[600px] rounded-[24px] sm:rounded-[32px] shadow-[0_20px_60px_rgba(0,0,0,0.15)] border border-slate-100 flex flex-col overflow-hidden"
           >
             {/* Header */}
-            <div className="bg-[#E9DCD6] p-3 pt-2 pb-2 flex items-center justify-between text-slate-800 border-b border-black/5">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full border border-black/10 overflow-hidden flex items-center justify-center bg-white">
+            <div className="bg-[#E9DCD6] p-2 sm:p-3 flex items-center justify-between text-slate-800 border-b border-black/5">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-black/10 overflow-hidden flex items-center justify-center bg-white">
                   <img
                     src={boss}
                     alt="Boss"
@@ -186,7 +186,7 @@ const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
                   />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-[17px]">Hoàng Huy Anh</h3>
+                  <h3 className="font-semibold text-[15px] sm:text-[17px]">Hoàng Huy Anh</h3>
                 </div>
               </div>
               <button
@@ -255,7 +255,7 @@ const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
                           !msg.content.includes("Đã gửi tệp:")
                         )) && (
                             <div
-                              className={`px-4 py-2.5 rounded-[22px] text-[15px] leading-relaxed shadow-sm ${msg.senderId === currentUserId
+                              className={`px-3 py-2 sm:px-4 sm:py-2.5 rounded-[20px] sm:rounded-[22px] text-[14px] sm:text-[15px] leading-relaxed shadow-sm ${msg.senderId === currentUserId
                                 ? 'bg-[#E9DCD6] text-slate-800 rounded-tr-none'
                                 : 'bg-[#F0F0F0] text-slate-700 rounded-tl-none'
                                 }`}
@@ -294,7 +294,7 @@ const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
                   <input
                     type="text"
                     placeholder="Nhập nội dung..."
-                    className="w-full pl-3 pr-10 py-2.5 bg-transparent border-none text-[16px] focus:ring-0 outline-none placeholder:text-slate-500 text-slate-800"
+                    className="w-full pl-3 pr-8 sm:pr-10 py-2 sm:py-2.5 bg-transparent border-none text-[15px] sm:text-[16px] focus:ring-0 outline-none placeholder:text-slate-500 text-slate-800"
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     disabled={uploading}

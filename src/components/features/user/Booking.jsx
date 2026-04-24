@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 import serviceApi from "../../../api/serviceApi";
 import studioRoomApi from "../../../api/studioRoomApi";
 import bookingApi from "../../../api/bookingApi";
+import bookingImg from "../../../assets/booking.jpg";
 
 
 const Booking = () => {
@@ -111,7 +112,7 @@ const Booking = () => {
         try {
             const payload = {
                 customerName: formData.customerName,
-                phone: formData.phoneNumber.replace(/\D/g, ""), 
+                phone: formData.phoneNumber.replace(/\D/g, ""),
                 email: formData.email,
                 recordDate: formData.bookingDate.format("YYYY-MM-DD"),
                 studioRoomId: Number(formData.studioRoomId),
@@ -158,13 +159,13 @@ const Booking = () => {
                             transition={{ delay: 0.3, type: "spring", stiffness: 100 }}
                             className="relative z-10"
                         >
-                            <img 
-                                src="/images/booking-success.png" 
-                                alt="Booking Success" 
+                            <img
+                                src="/images/booking-success.png"
+                                alt="Booking Success"
                                 className="w-full max-w-[320px] drop-shadow-[0_20px_50px_rgba(108,209,253,0.3)]"
                             />
                         </motion.div>
-                        
+
                         {/* Subtle Badge Removed */}
                     </div>
 
@@ -237,19 +238,19 @@ const Booking = () => {
     }
 
     return (
-        <div className="container-app pb-16 pt-20 sm:pt-0 lg:-mt-4 px-3 sm:px-6">
+        <div className="container-app pb-12 sm:pb-16 sm:pt-0 lg:-mt-4 px-3 sm:px-6">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="max-w-5xl mx-auto shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] rounded-[20px] sm:rounded-[32px] overflow-hidden bg-white border border-gray-100"
+                className="max-w-5xl mx-auto"
             >
-                <div className="grid grid-cols-1 lg:grid-cols-12 min-h-max">
-                    <div className="lg:col-span-4 bg-[#311142] p-5 sm:p-8 flex flex-col justify-between relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
-                        <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#6CD1FD]/10 rounded-full -ml-16 -mb-16 blur-2xl"></div>
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-0 lg:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] lg:rounded-[32px] lg:overflow-hidden lg:bg-white lg:border lg:border-gray-100">
+                    <div className="lg:col-span-4 bg-[#311142] p-5 sm:p-10 lg:p-8 flex flex-col justify-between relative overflow-hidden rounded-[24px] lg:rounded-none shadow-xl lg:shadow-none">
+                        <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full -mr-12 -mt-12 blur-3xl"></div>
+                        <div className="absolute bottom-0 left-0 w-24 h-24 bg-[#6CD1FD]/10 rounded-full -ml-12 -mb-12 blur-2xl"></div>
 
                         <div className="relative z-10">
-                            <div className="text-white/60 text-[13px] sm:text-[15px] font-medium leading-relaxed mb-6 sm:mb-14 max-w-[240px]">
+                            <div className="text-white text-[13px] sm:text-[15px] font-medium leading-relaxed mb-4 sm:mb-10 lg:mb-14 max-w-none lg:max-w-[240px]">
                                 hastudio luôn lắng nghe quý khách hàng, luôn sẵn sàng hỗ trợ mọi yêu cầu của quý khách hàng! <br />Kính chúc quý khách hàng sẽ có những trải nghiệm tuyệt vời tại hastudio!
                                 <br />
                                 <br />
@@ -260,53 +261,34 @@ const Booking = () => {
                                     <li>Quý khách vui lòng chọn dịch vụ phù hợp</li>
                                 </ul>
                             </div>
+                        </div>
 
-                            <div className="space-y-4 sm:space-y-10">
-                                <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-[18px] bg-white/10 flex items-center justify-center text-[#6CD1FD] shadow-lg backdrop-blur-sm border border-white/5">
-                                        <FiPhone size={20} />
-                                    </div>
-                                    <div>
-                                        <div className="text-[15px] font-semibold text-white/40 mb-1">Liên hệ</div>
-                                        <div className="text-[17px] font-bold text-white">0359891654</div>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-[18px] bg-white/10 flex items-center justify-center text-[#6CD1FD] shadow-lg backdrop-blur-sm border border-white/5">
-                                        <FiMusic size={20} />
-                                    </div>
-                                    <div>
-                                        <div className="text-[15px] font-semibold text-white/40 mb-1">Giờ hoạt động</div>
-                                        <div className="text-[17px] font-bold text-white">08:00 - 22:00</div>
-                                    </div>
-                                </div>
+                        <div className="relative z-10 my-6 lg:my-8">
+                            <div className="aspect-video lg:aspect-[4/3] w-full rounded-[24px] overflow-hidden border border-white/10 shadow-2xl">
+                                <img
+                                    src={bookingImg}
+                                    alt="Booking Hastudio"
+                                    className="w-full h-full object-cover"
+                                />
                             </div>
                         </div>
 
-                        <div className="relative z-10 mt-6 sm:mt-12">
-                            <div className="p-6 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10">
-                                <div className="text-[15px]  font-semibold text-white/40 mb-2 flex items-center gap-2">
-                                    <FiMapPin className="text-[#6CD1FD]" /> Địa điểm
-                                </div>
-                                <div className="text-sm font-semibold text-white/90">79 Võ Thị Sáu, Phú Đông, Phú Yên, Đắk Lắk, Việt Nam</div>
-                            </div>
-                        </div>
                     </div>
 
-                    <div className="lg:col-span-8 p-4 sm:p-6 lg:p-10 bg-white">
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <div className="space-y-1.5">
-                                <label className="text-[15px] font-semibold text-slate-600 px-1">Họ và tên <span className="text-red-400">*</span></label>
+                    <div className="lg:col-span-8 p-4 sm:p-8 lg:p-10 bg-white rounded-[24px] lg:rounded-none shadow-xl lg:shadow-none">
+                        <form onSubmit={handleSubmit} className="space-y-2.5 sm:space-y-4">
+                            <div className="space-y-1">
+                                <label className="text-sm sm:text-[15px] font-semibold text-slate-600 px-1">Họ và tên <span className="text-red-400">*</span></label>
                                 <div className="relative group">
-                                    <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#6CD1FD] transition-colors">
-                                        <FiUser size={18} />
+                                    <div className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#6CD1FD] transition-colors">
+                                        <FiUser size={14} className="sm:hidden" />
+                                        <FiUser size={18} className="hidden sm:block" />
                                     </div>
                                     <input
                                         required
                                         type="text"
                                         placeholder="Nhập tên"
-                                        className={`w-full h-[48px] pl-13 pr-6 bg-white border ${errors.customerName ? "border-red-500" : "border-[#E2E8F0]"} rounded-full focus:bg-white focus:border-[#6CD1FD] focus:shadow-[0_0_0_4px_rgba(108,209,253,0.1)] outline-none font-medium text-slate-600 placeholder:text-gray-400/50 placeholder:font-medium placeholder:text-[15px] transition-all text-sm`}
+                                        className={`w-full h-[36px] sm:h-[48px] pl-10 sm:pl-13 pr-4 bg-white border ${errors.customerName ? "border-red-500" : "border-[#E2E8F0]"} rounded-full focus:bg-white focus:border-[#6CD1FD] focus:shadow-[0_0_0_4px_rgba(108,209,253,0.1)] outline-none font-medium text-slate-600 placeholder:text-gray-400/50 placeholder:font-medium placeholder:text-[12px] sm:placeholder:text-[15px] transition-all text-sm`}
                                         value={formData.customerName}
                                         onChange={(e) => {
                                             setFormData({ ...formData, customerName: e.target.value });
@@ -316,18 +298,19 @@ const Booking = () => {
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-                                <div className="space-y-1.5">
-                                    <label className="text-[15px] font-semibold text-slate-600 px-1">Số điện thoại <span className="text-red-400">*</span></label>
+                            <div className="grid grid-cols-2 gap-2.5 sm:gap-x-6 sm:gap-y-4">
+                                <div className="space-y-1">
+                                    <label className="text-sm sm:text-[15px] font-semibold text-slate-600 px-1">Số điện thoại <span className="text-red-400">*</span></label>
                                     <div className="relative group">
-                                        <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#6CD1FD] transition-colors">
-                                            <FiPhone size={18} />
+                                        <div className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#6CD1FD] transition-colors">
+                                            <FiPhone size={14} className="sm:hidden" />
+                                            <FiPhone size={18} className="hidden sm:block" />
                                         </div>
                                         <input
                                             required
                                             type="tel"
                                             placeholder="Nhập số điện thoại"
-                                            className={`w-full h-[48px] pl-13 pr-6 bg-white border ${errors.phoneNumber ? "border-red-500" : "border-[#E2E8F0]"} rounded-full focus:bg-white focus:border-[#6CD1FD] focus:shadow-[0_0_0_4px_rgba(108,209,253,0.1)] outline-none font-medium text-slate-600 placeholder:text-gray-400/50 placeholder:font-medium placeholder:text-[15px] transition-all text-sm`}
+                                            className={`w-full h-[36px] sm:h-[48px] pl-10 sm:pl-13 pr-4 bg-white border ${errors.phoneNumber ? "border-red-500" : "border-[#E2E8F0]"} rounded-full focus:bg-white focus:border-[#6CD1FD] focus:shadow-[0_0_0_4px_rgba(108,209,253,0.1)] outline-none font-medium text-slate-600 placeholder:text-gray-400/50 placeholder:font-medium placeholder:text-[12px] sm:placeholder:text-[15px] transition-all text-sm`}
                                             value={formData.phoneNumber}
                                             onChange={(e) => {
                                                 setFormData({ ...formData, phoneNumber: e.target.value });
@@ -337,17 +320,18 @@ const Booking = () => {
                                     </div>
                                 </div>
 
-                                <div className="space-y-1.5">
-                                    <label className="text-[15px] font-semibold text-slate-600 px-1">Email <span className="text-red-400">*</span></label>
+                                <div className="space-y-1">
+                                    <label className="text-sm sm:text-[15px] font-semibold text-slate-600 px-1">Email <span className="text-red-400">*</span></label>
                                     <div className="relative group">
-                                        <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#6CD1FD] transition-colors">
-                                            <FiMail size={18} />
+                                        <div className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#6CD1FD] transition-colors">
+                                            <FiMail size={14} className="sm:hidden" />
+                                            <FiMail size={18} className="hidden sm:block" />
                                         </div>
                                         <input
                                             required
                                             type="email"
                                             placeholder="Nhập email"
-                                            className={`w-full h-[48px] pl-13 pr-6 bg-white border ${errors.email ? "border-red-500" : "border-[#E2E8F0]"} rounded-full focus:bg-white focus:border-[#6CD1FD] focus:shadow-[0_0_0_4px_rgba(108,209,253,0.1)] outline-none font-medium text-slate-600 placeholder:text-gray-400/50 placeholder:font-medium placeholder:text-[15px] transition-all text-sm`}
+                                            className={`w-full h-[36px] sm:h-[48px] pl-10 sm:pl-13 pr-4 bg-white border ${errors.email ? "border-red-500" : "border-[#E2E8F0]"} rounded-full focus:bg-white focus:border-[#6CD1FD] focus:shadow-[0_0_0_4px_rgba(108,209,253,0.1)] outline-none font-medium text-slate-600 placeholder:text-gray-400/50 placeholder:font-medium placeholder:text-[12px] sm:placeholder:text-[15px] transition-all text-sm`}
                                             value={formData.email}
                                             onChange={(e) => {
                                                 setFormData({ ...formData, email: e.target.value });
@@ -364,6 +348,7 @@ const Booking = () => {
                                         colorPrimary: '#6CD1FD',
                                         borderRadius: 9999,
                                         controlHeightLG: 48,
+                                        controlHeight: 40,
                                         colorBorder: '#E2E8F0',
                                         colorBgContainer: '#ffffff',
                                         colorText: '#475569',
@@ -383,18 +368,19 @@ const Booking = () => {
                                     }
                                 }}
                             >
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-                                    <div className="space-y-1.5">
-                                        <label className="text-[15px] font-semibold text-slate-600 px-1">Dịch vụ <span className="text-red-400">*</span></label>
+                                <div className="grid grid-cols-2 gap-2.5 sm:gap-x-6 sm:gap-y-4">
+                                    <div className="space-y-1">
+                                        <label className="text-sm sm:text-[15px] font-semibold text-slate-600 px-1">Dịch vụ <span className="text-red-400">*</span></label>
                                         <div className="relative group">
-                                            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#6CD1FD] transition-colors pointer-events-none z-10">
-                                                <FiMusic size={18} />
+                                            <div className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#6CD1FD] transition-colors pointer-events-none z-10">
+                                                <FiMusic size={14} className="sm:hidden" />
+                                                <FiMusic size={18} className="hidden sm:block" />
                                             </div>
                                             <Select
                                                 size="large"
                                                 status={errors.serviceId ? "error" : ""}
                                                 placeholder="Chọn dịch vụ"
-                                                className="w-full custom-antd-select-with-icon font-medium text-sm h-[48px]"
+                                                className="w-full custom-antd-select-with-icon font-medium text-[12px] sm:text-sm h-[36px] sm:h-[48px]"
                                                 value={formData.serviceId}
                                                 onChange={(val) => {
                                                     setFormData({ ...formData, serviceId: val });
@@ -405,17 +391,18 @@ const Booking = () => {
                                         </div>
                                     </div>
 
-                                    <div className="space-y-1.5">
-                                        <label className="text-[15px] font-semibold text-slate-600 px-1">Phòng thu <span className="text-red-400">*</span></label>
+                                    <div className="space-y-1">
+                                        <label className="text-sm sm:text-[15px] font-semibold text-slate-600 px-1">Phòng thu <span className="text-red-400">*</span></label>
                                         <div className="relative group">
-                                            <div className="absolute left-5 top-[24px] -translate-y-1/2 text-gray-300 group-focus-within:text-[#6CD1FD] transition-colors pointer-events-none z-10">
-                                                <FiLayout size={18} />
+                                            <div className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#6CD1FD] transition-colors pointer-events-none z-10">
+                                                <FiLayout size={14} className="sm:hidden" />
+                                                <FiLayout size={18} className="hidden sm:block" />
                                             </div>
                                             <Select
                                                 size="large"
                                                 status={errors.studioRoomId ? "error" : ""}
                                                 placeholder="Chọn phòng"
-                                                className="w-full custom-antd-select-with-icon font-medium text-sm h-[48px]"
+                                                className="w-full custom-antd-select-with-icon font-medium text-[12px] sm:text-sm h-[36px] sm:h-[48px]"
                                                 value={formData.studioRoomId}
                                                 disabled={studios?.length <= 1}
                                                 onChange={(val) => {
@@ -428,11 +415,12 @@ const Booking = () => {
                                     </div>
                                 </div>
 
-                                <div className="space-y-1.5 mt-4">
-                                    <label className="text-[15px] font-semibold text-slate-600 px-1">Ngày thu <span className="text-red-400">*</span></label>
+                                <div className="space-y-1 mt-3 sm:mt-4">
+                                    <label className="text-sm sm:text-[15px] font-semibold text-slate-600 px-1">Ngày thu <span className="text-red-400">*</span></label>
                                     <div className="relative group">
-                                        <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#6CD1FD] transition-colors pointer-events-none z-10">
-                                            <FiCalendar size={18} />
+                                        <div className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#6CD1FD] transition-colors pointer-events-none z-10">
+                                            <FiCalendar size={14} className="sm:hidden" />
+                                            <FiCalendar size={18} className="hidden sm:block" />
                                         </div>
                                         <DatePicker
                                             format="DD/MM/YYYY"
@@ -440,7 +428,7 @@ const Booking = () => {
                                             status={errors.bookingDate ? "error" : ""}
                                             placeholder="Chọn ngày thu"
                                             suffixIcon={null}
-                                            className="w-full custom-antd-datepicker-with-icon font-medium text-sm h-[48px]"
+                                            className="w-full custom-antd-datepicker-with-icon font-medium text-[12px] sm:text-sm h-[36px] sm:h-[48px]"
                                             value={formData.bookingDate}
                                             onChange={(val) => {
                                                 setFormData({ ...formData, bookingDate: val });
@@ -452,12 +440,12 @@ const Booking = () => {
                                 </div>
                             </ConfigProvider>
 
-                            <div className="space-y-1.5">
-                                <label className="text-[15px] font-semibold text-slate-600 px-1">Ghi chú</label>
+                            <div className="space-y-1">
+                                <label className="text-sm sm:text-[15px] font-semibold text-slate-600 px-1">Ghi chú</label>
                                 <textarea
                                     rows="3"
                                     placeholder="Nhập ghi chú"
-                                    className="w-full px-6 py-3.5 bg-white border border-[#E2E8F0] rounded-[24px] focus:bg-white focus:border-[#6CD1FD] focus:shadow-[0_0_0_4px_rgba(108,209,253,0.1)] outline-none font-medium text-slate-600 transition-all resize-none text-sm placeholder:text-gray-400/50 placeholder:font-medium placeholder:text-[15px]"
+                                    className="w-full px-4 sm:px-6 py-2.5 sm:py-3.5 bg-white border border-[#E2E8F0] rounded-[20px] sm:rounded-[24px] focus:bg-white focus:border-[#6CD1FD] focus:shadow-[0_0_0_4px_rgba(108,209,253,0.1)] outline-none font-medium text-slate-600 transition-all resize-none text-sm placeholder:text-gray-400/50 placeholder:font-medium placeholder:text-[13px] sm:placeholder:text-[15px]"
                                     value={formData.note}
                                     onChange={(e) => setFormData({ ...formData, note: e.target.value })}
                                 ></textarea>
@@ -472,17 +460,16 @@ const Booking = () => {
                                             checked={formData.needConsultation}
                                             onChange={(e) => setFormData({ ...formData, needConsultation: e.target.checked })}
                                         />
-                                        <div className={`w-6 h-6 rounded-lg border-2 transition-all flex items-center justify-center ${
-                                            formData.needConsultation 
-                                            ? "bg-[#6CD1FD] border-[#6CD1FD] shadow-lg shadow-[#6CD1FD]/20" 
+                                        <div className={`w-6 h-6 rounded-lg border-2 transition-all flex items-center justify-center ${formData.needConsultation
+                                            ? "bg-[#6CD1FD] border-[#6CD1FD] shadow-lg shadow-[#6CD1FD]/20"
                                             : "border-slate-200 bg-white group-hover:border-slate-300"
-                                        }`}>
+                                            }`}>
                                             {formData.needConsultation && (
                                                 <FiCheckCircle className="text-white" size={14} />
                                             )}
                                         </div>
                                     </div>
-                                    <span className="text-[15px] font-semibold text-slate-600 transition-colors group-hover:text-slate-900">
+                                    <span className="text-sm sm:text-[15px] font-semibold text-slate-600 transition-colors group-hover:text-slate-900">
                                         Yêu cầu tư vấn qua điện thoại
                                     </span>
                                 </label>
@@ -492,7 +479,7 @@ const Booking = () => {
                                 whileTap={{ scale: 0.98 }}
                                 type="submit"
                                 disabled={submitting}
-                                className="w-full py-4 bg-[#6CD1FD] text-white rounded-full font-bold text-lg shadow-[0_15px_35px_-5px_rgba(108,209,253,0.5)] transition-all flex items-center justify-center gap-3 disabled:opacity-50 relative mt-2"
+                                className="w-full py-2 sm:py-3 bg-[#6CD1FD] text-white rounded-full font-bold text-[15px] sm:text-lg shadow-[0_15px_35px_-5px_rgba(108,209,253,0.5)] transition-all flex items-center justify-center gap-3 disabled:opacity-50 relative mt-2"
                             >
                                 <span className="relative z-10">
                                     {submitting ? "Đang xử lý..." : "Xác nhận đặt lịch"}
@@ -535,6 +522,7 @@ const Booking = () => {
                 .custom-antd-datepicker,
                 .custom-antd-datepicker-with-icon {
                     transition: all 0.3s;
+                    height: inherit !important;
                 }
                 .custom-antd-select.ant-select-focused .ant-select-selector,
                 .custom-antd-select-with-icon.ant-select-focused .ant-select-selector,
@@ -545,7 +533,13 @@ const Booking = () => {
                 }
                 .custom-antd-select-with-icon .ant-select-selector,
                 .custom-antd-datepicker-with-icon {
-                    padding-left: 3.25rem !important;
+                    padding-left: 2.5rem !important;
+                }
+                @media (min-width: 640px) {
+                    .custom-antd-select-with-icon .ant-select-selector,
+                    .custom-antd-datepicker-with-icon {
+                        padding-left: 3.25rem !important;
+                    }
                 }
                 .custom-antd-datepicker .ant-picker-input > input {
                     font-weight: 500;
@@ -554,8 +548,14 @@ const Booking = () => {
                 .custom-antd-select .ant-select-selection-placeholder,
                 .custom-antd-datepicker .ant-picker-input > input::placeholder {
                     font-weight: 500 !important;
-                    font-size: 15px !important;
+                    font-size: 12px !important;
                     color: rgba(156, 163, 175, 0.5) !important;
+                }
+                @media (min-width: 640px) {
+                    .custom-antd-select .ant-select-selection-placeholder,
+                    .custom-antd-datepicker .ant-picker-input > input::placeholder {
+                        font-size: 15px !important;
+                    }
                 }
 
                 @keyframes shine {

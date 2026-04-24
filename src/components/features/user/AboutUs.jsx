@@ -1,11 +1,13 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { FiCheckCircle } from "react-icons/fi";
+import booking1 from "../../../assets/booking1.jpg";
+import booking2 from "../../../assets/booking2.jpg";
 
 const AboutUs = () => {
   return (
-    <div className="container-app pb-16 sm:pb-32 sm:pt-8 px-3 sm:px-6">
-      <header className="mb-8 text-center">
+    <div className="container-app pb-16 sm:pb-32 sm:pt-8 px-3 sm:px-6 -mt-8 sm:mt-0">
+      <header className="hidden sm:block mb-8 text-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -38,13 +40,11 @@ const AboutUs = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-3 sm:gap-6 mt-6 sm:mt-12">
-              <div className="bg-[#35104C] p-4 sm:p-8 rounded-[16px] sm:rounded-[20px] text-white">
-                <div className="text-xl sm:text-3xl font-black mb-1">500+</div>
-                <div className="text-xs sm:text-sm font-medium opacity-70 italic">Dự án hoàn thành</div>
+              <div className="relative aspect-[4/3] sm:aspect-video rounded-[16px] sm:rounded-[20px] overflow-hidden group shadow-lg">
+                <img src={booking1} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Booking 1" />
               </div>
-              <div className="bg-[#6CD1FD] p-4 sm:p-8 rounded-[16px] sm:rounded-[20px] text-[#35104C]">
-                <div className="text-xl sm:text-3xl font-black mb-1">100%</div>
-                <div className="text-xs sm:text-sm font-medium opacity-70 italic">Hài lòng</div>
+              <div className="relative aspect-[4/3] sm:aspect-video rounded-[16px] sm:rounded-[20px] overflow-hidden group shadow-lg">
+                <img src={booking2} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Booking 2" />
               </div>
             </div>
           </div>
