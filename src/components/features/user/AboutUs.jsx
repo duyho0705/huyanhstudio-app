@@ -1,10 +1,12 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { FiCheckCircle } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 import booking1 from "../../../assets/booking1.jpg";
 import booking2 from "../../../assets/booking2.jpg";
 
 const AboutUs = () => {
+  const { t } = useTranslation();
   return (
     <div className="container-app pb-16 sm:pb-32 sm:pt-8 px-3 sm:px-6 -mt-8 sm:mt-0">
       <header className="hidden sm:block mb-8 text-center">
@@ -13,7 +15,7 @@ const AboutUs = () => {
           animate={{ opacity: 1, scale: 1 }}
           className="inline-block px-4 py-1.5 rounded-full bg-[#35104C]/10 text-[#35104C] text-[16px] font-semibold mb-6"
         >
-          Về chúng tôi
+          {t('about_page.badge')}
         </motion.div>
       </header>
 
@@ -24,14 +26,9 @@ const AboutUs = () => {
           className="space-y-8"
         >
           <div className="bg-white p-5 sm:p-10 rounded-[20px] sm:rounded-[24px] shadow-xl shadow-gray-200/50 border border-gray-50 h-full flex flex-col justify-center">
-            <h2 className="text-xl sm:text-3xl font-bold text-[#35104C] mb-4 sm:mb-8">Tầm nhìn & Sứ mệnh</h2>
+            <h2 className="text-xl sm:text-3xl font-bold text-[#35104C] mb-4 sm:mb-8">{t('about_page.vision_title')}</h2>
             <div className="space-y-3 sm:space-y-6">
-              {[
-                "Cung cấp không gian sáng tạo chuyên nghiệp nhất.",
-                "Trang thiết bị hiện đại, đạt tiêu chuẩn quốc tế.",
-                "Đội ngũ kỹ thuật viên tận tâm, giàu kinh nghiệm.",
-                "Hỗ trợ nghệ sĩ trẻ phát triển tài năng âm nhạc."
-              ].map((item, i) => (
+              {t('about_page.visions', { returnObjects: true }).map((item, i) => (
                 <div key={i} className="flex items-start gap-4">
                   <FiCheckCircle className="mt-0.5 sm:mt-1 text-[#6CD1FD] shrink-0 text-lg sm:text-2xl" />
                   <p className="font-semibold text-gray-700 text-sm sm:text-lg leading-relaxed">{item}</p>

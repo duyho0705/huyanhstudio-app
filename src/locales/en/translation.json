@@ -412,6 +412,52 @@
           "wrong_current": "Incorrect current password."
         }
       }
+    },
+    "about_page": {
+      "badge": "About Us",
+      "vision_title": "Vision & Mission",
+      "visions": [
+        "Providing the most professional creative space.",
+        "Modern equipment, meeting international standards.",
+        "Dedicated and experienced team of technicians.",
+        "Supporting young artists in developing their musical talents."
+      ]
+    },
+    "booking_page": {
+      "side_note": "hastudio always listens to our customers and is always ready to support all your requests! We wish you wonderful experiences at hastudio!",
+      "side_tips_title": "Notes when booking:",
+      "side_tips": [
+        "Please fill in all information",
+        "Please choose a suitable date and time",
+        "Please choose a suitable service"
+      ],
+      "form": {
+        "name_label": "Full Name",
+        "name_placeholder": "Enter your name",
+        "phone_label": "Phone Number",
+        "phone_placeholder": "Enter phone number",
+        "email_label": "Email",
+        "email_placeholder": "Enter email address",
+        "service_label": "Service",
+        "service_placeholder": "Select a service",
+        "studio_label": "Recording Studio",
+        "studio_placeholder": "Select a room",
+        "date_label": "Recording Date",
+        "date_placeholder": "Select date",
+        "note_label": "Note",
+        "note_placeholder": "Enter your note",
+        "consult_label": "Request phone consultation",
+        "submit_btn": "Confirm Booking",
+        "submitting": "Processing...",
+        "success_badge": "Successfully Recorded",
+        "success_title": "Great! Your schedule is ready.",
+        "success_desc": "Hello {{name}}, we have received your request. Our consultant will contact you as soon as possible to finalize the schedule.",
+        "success_service": "Service",
+        "success_date": "Date",
+        "success_rebook": "BOOK ANOTHER",
+        "success_home": "Back to Home",
+        "error_msg": "An error occurred while sending the request. Please contact the hotline!"
+      }
     }
   }
 }

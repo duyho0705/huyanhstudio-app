@@ -1,5 +1,6 @@
 import useAuthStore from "../../../stores/useAuthStore";
 import useAppStore from "../../../stores/useAppStore";
+import { useTranslation } from "react-i18next";
 import { useState, useEffect, useContext } from "react";
 import { motion } from "framer-motion";
 import { FiCalendar, FiUser, FiPhone, FiCheckCircle, FiLoader, FiMusic, FiMapPin, FiMail, FiLayout } from "react-icons/fi";
@@ -12,6 +13,7 @@ import bookingImg from "../../../assets/booking.jpg";
 
 
 const Booking = () => {
+    const { t } = useTranslation();
     const user = useAuthStore(state => state.user);
     const [services, setServices] = useState([]);
     const [studios, setStudios] = useState([]);
@@ -124,7 +126,7 @@ const Booking = () => {
             await bookingApi.create(payload);
             setSuccess(true);
         } catch (err) {
-            alert("Có lỗi xảy ra khi gửi yêu cầu. Vui lòng liên hệ hotline!");
+            alert(t('booking_page.form.error_msg'));
         } finally {
             setSubmitting(false);
         }
@@ -134,7 +136,7 @@ const Booking = () => {
         return (
             <div className="flex flex-col items-center justify-center py-40 min-h-[60vh]">
                 <FiLoader className="text-4xl text-[#35104C] animate-spin mb-4" />
-                <p className="text-[#35104C]/50 text-sm tracking-normal">Đang tải...</p>
+                <p className="text-[#35104C]/50 text-sm tracking-normal">{t('common.loading')}</p>
             </div>
         );
     }
@@ -177,27 +179,27 @@ const Booking = () => {
                             transition={{ delay: 0.2 }}
                         >
                             <span className="inline-block px-4 py-1.5 bg-[#6CD1FD]/10 text-[#6CD1FD] text-[11px] font-black rounded-full mb-6 uppercase tracking-widest border border-[#6CD1FD]/20">
-                                Ghi nhận thành công
+                                {t('booking_page.form.success_badge')}
                             </span>
                             <h2 className="text-3xl sm:text-4xl font-black text-[#35104C] leading-[1.1] mb-6">
-                                Tuyệt vời! <br /> <span className="text-[#6CD1FD]">Lịch của bạn</span> <br /> đã sẵn sàng.
+                                {t('booking_page.form.success_title')}
                             </h2>
                         </motion.div>
 
                         <div className="space-y-6 mb-10">
                             <p className="text-gray-500 font-medium leading-relaxed text-[15px]">
-                                Chào <span className="text-[#35104C] font-bold">{formData.customerName}</span>, chúng tôi đã nhận được yêu cầu của bạn. Nhân viên tư vấn sẽ liên hệ sớm nhất để chốt lịch.
+                                {t('booking_page.form.success_desc', { name: formData.customerName })}
                             </p>
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="p-4 bg-[#F8FAFC] rounded-[24px] border border-gray-100 group hover:border-[#6CD1FD]/30 transition-colors">
-                                    <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Dịch vụ</div>
+                                    <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">{t('booking_page.form.success_service')}</div>
                                     <div className="text-sm font-bold text-[#35104C] truncate">
-                                        {services.find(s => s.id === formData.serviceId)?.name || "Dịch vụ đã chọn"}
+                                        {services.find(s => s.id === formData.serviceId)?.name || t('booking_page.form.service_placeholder')}
                                     </div>
                                 </div>
                                 <div className="p-4 bg-[#F8FAFC] rounded-[24px] border border-gray-100 group hover:border-[#6CD1FD]/30 transition-colors">
-                                    <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Ngày hẹn</div>
+                                    <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">{t('booking_page.form.success_date')}</div>
                                     <div className="text-sm font-bold text-[#35104C]">
                                         {formData.bookingDate?.format("DD/MM/YYYY")}
                                     </div>
@@ -221,14 +223,14 @@ const Booking = () => {
                                 }}
                                 className="w-full h-14 bg-[#35104C] text-white rounded-[20px] font-bold shadow-xl shadow-[#35104C]/20 hover:bg-[#6CD1FD] transition-all flex items-center justify-center gap-3 group"
                             >
-                                ĐẶT LỊCH KHÁC
+                                {t('booking_page.form.success_rebook')}
                                 <FiCalendar className="text-lg group-hover:rotate-12 transition-transform" />
                             </motion.button>
                             <button
                                 onClick={() => window.location.href = '/'}
                                 className="w-full py-3 text-gray-400 hover:text-[#35104C] font-bold transition-colors text-sm uppercase tracking-widest"
                             >
-                                Quay lại trang chủ
+                                {t('booking_page.form.success_home')}
                             </button>
                         </div>
                     </div>
@@ -251,14 +253,14 @@ const Booking = () => {
 
                         <div className="relative z-10">
                             <div className="text-white text-[13px] sm:text-[15px] font-medium leading-relaxed mb-4 sm:mb-10 lg:mb-14 max-w-none lg:max-w-[240px]">
-                                hastudio luôn lắng nghe quý khách hàng, luôn sẵn sàng hỗ trợ mọi yêu cầu của quý khách hàng! <br />Kính chúc quý khách hàng sẽ có những trải nghiệm tuyệt vời tại hastudio!
+                                {t('booking_page.side_note')}
                                 <br />
                                 <br />
-                                Những lưu ý khi đặt lịch:
+                                {t('booking_page.side_tips_title')}
                                 <ul className="mt-2 space-y-1 list-disc pl-5">
-                                    <li>Quý khách vui lòng điền đầy đủ thông tin</li>
-                                    <li>Quý khách vui lòng chọn ngày và giờ phù hợp</li>
-                                    <li>Quý khách vui lòng chọn dịch vụ phù hợp</li>
+                                    {t('booking_page.side_tips', { returnObjects: true }).map((tip, index) => (
+                                        <li key={index}>{tip}</li>
+                                    ))}
                                 </ul>
                             </div>
                         </div>
@@ -278,7 +280,7 @@ const Booking = () => {
                     <div className="lg:col-span-8 p-4 sm:p-8 lg:p-10 bg-white rounded-[24px] lg:rounded-none shadow-xl lg:shadow-none">
                         <form onSubmit={handleSubmit} className="space-y-2.5 sm:space-y-4">
                             <div className="space-y-1">
-                                <label className="text-sm sm:text-[15px] font-semibold text-slate-600 px-1">Họ và tên <span className="text-red-400">*</span></label>
+                                <label className="text-sm sm:text-[15px] font-semibold text-slate-600 px-1">{t('booking_page.form.name_label')} <span className="text-red-400">*</span></label>
                                 <div className="relative group">
                                     <div className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#6CD1FD] transition-colors">
                                         <FiUser size={14} className="sm:hidden" />
@@ -287,7 +289,7 @@ const Booking = () => {
                                     <input
                                         required
                                         type="text"
-                                        placeholder="Nhập tên"
+                                        placeholder={t('booking_page.form.name_placeholder')}
                                         className={`w-full h-[36px] sm:h-[48px] pl-10 sm:pl-13 pr-4 bg-white border ${errors.customerName ? "border-red-500" : "border-[#E2E8F0]"} rounded-full focus:bg-white focus:border-[#6CD1FD] focus:shadow-[0_0_0_4px_rgba(108,209,253,0.1)] outline-none font-medium text-slate-600 placeholder:text-gray-400/50 placeholder:font-medium placeholder:text-[12px] sm:placeholder:text-[15px] transition-all text-sm`}
                                         value={formData.customerName}
                                         onChange={(e) => {
@@ -300,7 +302,7 @@ const Booking = () => {
 
                             <div className="grid grid-cols-2 gap-2.5 sm:gap-x-6 sm:gap-y-4">
                                 <div className="space-y-1">
-                                    <label className="text-sm sm:text-[15px] font-semibold text-slate-600 px-1">Số điện thoại <span className="text-red-400">*</span></label>
+                                    <label className="text-sm sm:text-[15px] font-semibold text-slate-600 px-1">{t('booking_page.form.phone_label')} <span className="text-red-400">*</span></label>
                                     <div className="relative group">
                                         <div className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#6CD1FD] transition-colors">
                                             <FiPhone size={14} className="sm:hidden" />
@@ -309,7 +311,7 @@ const Booking = () => {
                                         <input
                                             required
                                             type="tel"
-                                            placeholder="Nhập số điện thoại"
+                                            placeholder={t('booking_page.form.phone_placeholder')}
                                             className={`w-full h-[36px] sm:h-[48px] pl-10 sm:pl-13 pr-4 bg-white border ${errors.phoneNumber ? "border-red-500" : "border-[#E2E8F0]"} rounded-full focus:bg-white focus:border-[#6CD1FD] focus:shadow-[0_0_0_4px_rgba(108,209,253,0.1)] outline-none font-medium text-slate-600 placeholder:text-gray-400/50 placeholder:font-medium placeholder:text-[12px] sm:placeholder:text-[15px] transition-all text-sm`}
                                             value={formData.phoneNumber}
                                             onChange={(e) => {
@@ -321,7 +323,7 @@ const Booking = () => {
                                 </div>
 
                                 <div className="space-y-1">
-                                    <label className="text-sm sm:text-[15px] font-semibold text-slate-600 px-1">Email <span className="text-red-400">*</span></label>
+                                    <label className="text-sm sm:text-[15px] font-semibold text-slate-600 px-1">{t('booking_page.form.email_label')} <span className="text-red-400">*</span></label>
                                     <div className="relative group">
                                         <div className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#6CD1FD] transition-colors">
                                             <FiMail size={14} className="sm:hidden" />
@@ -330,7 +332,7 @@ const Booking = () => {
                                         <input
                                             required
                                             type="email"
-                                            placeholder="Nhập email"
+                                            placeholder={t('booking_page.form.email_placeholder')}
                                             className={`w-full h-[36px] sm:h-[48px] pl-10 sm:pl-13 pr-4 bg-white border ${errors.email ? "border-red-500" : "border-[#E2E8F0]"} rounded-full focus:bg-white focus:border-[#6CD1FD] focus:shadow-[0_0_0_4px_rgba(108,209,253,0.1)] outline-none font-medium text-slate-600 placeholder:text-gray-400/50 placeholder:font-medium placeholder:text-[12px] sm:placeholder:text-[15px] transition-all text-sm`}
                                             value={formData.email}
                                             onChange={(e) => {
@@ -370,7 +372,7 @@ const Booking = () => {
                             >
                                 <div className="grid grid-cols-2 gap-2.5 sm:gap-x-6 sm:gap-y-4">
                                     <div className="space-y-1">
-                                        <label className="text-sm sm:text-[15px] font-semibold text-slate-600 px-1">Dịch vụ <span className="text-red-400">*</span></label>
+                                        <label className="text-sm sm:text-[15px] font-semibold text-slate-600 px-1">{t('booking_page.form.service_label')} <span className="text-red-400">*</span></label>
                                         <div className="relative group">
                                             <div className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#6CD1FD] transition-colors pointer-events-none z-10">
                                                 <FiMusic size={14} className="sm:hidden" />
@@ -379,7 +381,7 @@ const Booking = () => {
                                             <Select
                                                 size="large"
                                                 status={errors.serviceId ? "error" : ""}
-                                                placeholder="Chọn dịch vụ"
+                                                placeholder={t('booking_page.form.service_placeholder')}
                                                 className="w-full custom-antd-select-with-icon font-medium text-[12px] sm:text-sm h-[36px] sm:h-[48px]"
                                                 value={formData.serviceId}
                                                 onChange={(val) => {
@@ -392,7 +394,7 @@ const Booking = () => {
                                     </div>
 
                                     <div className="space-y-1">
-                                        <label className="text-sm sm:text-[15px] font-semibold text-slate-600 px-1">Phòng thu <span className="text-red-400">*</span></label>
+                                        <label className="text-sm sm:text-[15px] font-semibold text-slate-600 px-1">{t('booking_page.form.studio_label')} <span className="text-red-400">*</span></label>
                                         <div className="relative group">
                                             <div className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#6CD1FD] transition-colors pointer-events-none z-10">
                                                 <FiLayout size={14} className="sm:hidden" />
@@ -401,7 +403,7 @@ const Booking = () => {
                                             <Select
                                                 size="large"
                                                 status={errors.studioRoomId ? "error" : ""}
-                                                placeholder="Chọn phòng"
+                                                placeholder={t('booking_page.form.studio_placeholder')}
                                                 className="w-full custom-antd-select-with-icon font-medium text-[12px] sm:text-sm h-[36px] sm:h-[48px]"
                                                 value={formData.studioRoomId}
                                                 disabled={studios?.length <= 1}
@@ -416,7 +418,7 @@ const Booking = () => {
                                 </div>
 
                                 <div className="space-y-1 mt-3 sm:mt-4">
-                                    <label className="text-sm sm:text-[15px] font-semibold text-slate-600 px-1">Ngày thu <span className="text-red-400">*</span></label>
+                                    <label className="text-sm sm:text-[15px] font-semibold text-slate-600 px-1">{t('booking_page.form.date_label')} <span className="text-red-400">*</span></label>
                                     <div className="relative group">
                                         <div className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#6CD1FD] transition-colors pointer-events-none z-10">
                                             <FiCalendar size={14} className="sm:hidden" />
@@ -426,7 +428,7 @@ const Booking = () => {
                                             format="DD/MM/YYYY"
                                             size="large"
                                             status={errors.bookingDate ? "error" : ""}
-                                            placeholder="Chọn ngày thu"
+                                            placeholder={t('booking_page.form.date_placeholder')}
                                             suffixIcon={null}
                                             className="w-full custom-antd-datepicker-with-icon font-medium text-[12px] sm:text-sm h-[36px] sm:h-[48px]"
                                             value={formData.bookingDate}
@@ -441,10 +443,10 @@ const Booking = () => {
                             </ConfigProvider>
 
                             <div className="space-y-1">
-                                <label className="text-sm sm:text-[15px] font-semibold text-slate-600 px-1">Ghi chú</label>
+                                <label className="text-sm sm:text-[15px] font-semibold text-slate-600 px-1">{t('booking_page.form.note_label')}</label>
                                 <textarea
                                     rows="3"
-                                    placeholder="Nhập ghi chú"
+                                    placeholder={t('booking_page.form.note_placeholder')}
                                     className="w-full px-4 sm:px-6 py-2.5 sm:py-3.5 bg-white border border-[#E2E8F0] rounded-[20px] sm:rounded-[24px] focus:bg-white focus:border-[#6CD1FD] focus:shadow-[0_0_0_4px_rgba(108,209,253,0.1)] outline-none font-medium text-slate-600 transition-all resize-none text-sm placeholder:text-gray-400/50 placeholder:font-medium placeholder:text-[13px] sm:placeholder:text-[15px]"
                                     value={formData.note}
                                     onChange={(e) => setFormData({ ...formData, note: e.target.value })}
@@ -470,7 +472,7 @@ const Booking = () => {
                                         </div>
                                     </div>
                                     <span className="text-sm sm:text-[15px] font-semibold text-slate-600 transition-colors group-hover:text-slate-900">
-                                        Yêu cầu tư vấn qua điện thoại
+                                        {t('booking_page.form.consult_label')}
                                     </span>
                                 </label>
                             </div>
@@ -482,7 +484,7 @@ const Booking = () => {
                                 className="w-full py-2 sm:py-3 bg-[#6CD1FD] text-white rounded-full font-bold text-[15px] sm:text-lg shadow-[0_15px_35px_-5px_rgba(108,209,253,0.5)] transition-all flex items-center justify-center gap-3 disabled:opacity-50 relative mt-2"
                             >
                                 <span className="relative z-10">
-                                    {submitting ? "Đang xử lý..." : "Xác nhận đặt lịch"}
+                                    {submitting ? t('booking_page.form.submitting') : t('booking_page.form.submit_btn')}
                                 </span>
                                 {submitting && <FiLoader className="animate-spin text-2xl relative z-10" />}
                             </motion.button>
