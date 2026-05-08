@@ -2,6 +2,10 @@ import useAuthStore from "../../../../stores/useAuthStore";
 import useAppStore from "../../../../stores/useAppStore";
 import { NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
+import { collection, onSnapshot, query } from "firebase/firestore";
+import { db } from "../../../../api/firebase";
+import statsApi from "../../../../api/statsApi";
 import {
   LayoutDashboard,
   CalendarDays,
@@ -20,6 +24,42 @@ const AdminSidebar = ({ isOpen, onClose }) => {
   const logout = useAuthStore(state => state.logout);
   const location = useLocation();
 
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [pendingBookings, setPendingBookings] = useState(0);
+
+  useEffect(() => {
+    // 1. Listen for unread chats in real-time
+    const q = query(collection(db, "chat_list"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const count = snapshot.docs.filter(doc => doc.data().unread === true).length;
+      setUnreadCount(count);
+    });
+
+    // 2. Fetch initial pending bookings count from DB
+    const fetchPendingCount = async () => {
+      try {
+        const response = await statsApi.getSummary();
+        const data = response.data?.data || response.data;
+        setPendingBookings(data.pendingBookings || 0);
+      } catch (error) {
+        console.error("Error fetching summary stats:", error);
+      }
+    };
+    fetchPendingCount();
+
+    // 3. Listen for new bookings realtime events to increment count
+    const handleNewBooking = () => {
+      setPendingBookings(prev => prev + 1);
+    };
+
+    window.addEventListener("new-booking", handleNewBooking);
+
+    return () => {
+      unsubscribe();
+      window.removeEventListener("new-booking", handleNewBooking);
+    };
+  }, []);
+
   const menuItems = [
     {
       path: "/admin",
@@ -31,11 +71,15 @@ const AdminSidebar = ({ isOpen, onClose }) => {
       path: "/admin/chat",
       icon: <MessageCircle size={22} />,
       label: t('admin.sidebar.chat'),
+      badge: unreadCount > 0 ? unreadCount : null,
+      badgeColor: "bg-red-500 shadow-red-500/30",
     },
     {
       path: "/admin/bookings",
       icon: <CalendarDays size={22} />,
       label: t('admin.sidebar.bookings'),
+      badge: pendingBookings > 0 ? pendingBookings : null,
+      badgeColor: "bg-amber-500 shadow-amber-500/30",
     },
     {
       path: "/admin/products",
@@ -92,7 +136,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
         {/* Sliding Active Indicator */}
         {activeIndex !== -1 && (
           <div 
-            className="absolute left-3 right-3 bg-[#35104C] rounded-xl transition-all duration-300 ease-out z-0 h-[48px] shadow-lg shadow-[#35104C]/20"
+            className="absolute left-3 right-3 bg-slate-900 rounded-xl transition-all duration-300 ease-out z-0 h-[48px] shadow-md shadow-slate-900/20"
             style={{ 
               top: `${8 + activeIndex * (48 + 4)}px`, // 8px padding + index * (height + gap)
             }}
@@ -107,19 +151,26 @@ const AdminSidebar = ({ isOpen, onClose }) => {
               end={item.end}
               onClick={onClose}
               className={({ isActive }) =>
-                `flex items-center justify-between px-4 h-[48px] rounded-xl transition-colors duration-300 leading-none ${isActive
-                  ? "text-white"
-                  : "text-slate-600 active:bg-slate-50"
+                `flex items-center justify-between px-4 h-[48px] rounded-xl transition-all duration-300 leading-none group ${isActive
+                  ? "text-white font-bold"
+                  : "text-slate-600 hover:bg-slate-50 hover:text-[#35104C] active:bg-slate-100"
                 }`
               }
             >
               {({ isActive }) => (
                 <>
-                  <div className="flex items-center gap-3.5">
-                    <span className={``}>
+                  <div className="flex items-center gap-3.5 min-w-0">
+                    <span className={`transition-colors duration-300 ${isActive ? "text-white" : "text-slate-400 group-hover:text-[#35104C]"}`}>
                       {item.icon}
                     </span>
-                    <span className="text-[15px] font-semibold tracking-tight">{item.label}</span>
+                    <span className={`text-[15px] tracking-tight transition-colors duration-300 truncate ${isActive ? "text-white font-bold" : "text-slate-600 font-semibold"}`}>{item.label}</span>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    {item.badge && (
+                      <span className={`h-5 min-w-[20px] px-1.5 flex items-center justify-center rounded-full text-[10px] font-extrabold text-white shadow-sm ring-1 ring-white/10 ${item.badgeColor}`}>
+                        {item.badge}
+                      </span>
+                    )}
                   </div>
                 </>
               )}

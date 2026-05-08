@@ -51,6 +51,24 @@
         "chat": "Tin nhắn",
         "returns": "Trở về Website"
       },
+      "chat": {
+        "title": "Tin nhắn",
+        "search_placeholder": "Tìm kiếm người dùng...",
+        "no_users": "Không tìm thấy ai",
+        "no_messages": "Chưa có tin nhắn",
+        "active": "Đang hoạt động",
+        "placeholder": "Để lại lời nhắn...",
+        "sending": "Đang tải tệp...",
+        "read": "Đã xem",
+        "sent": "Đã gửi",
+        "just_now": "Vừa xong",
+        "mins_ago": "phút trước",
+        "hours_ago": "giờ trước",
+        "yesterday": "Hôm qua",
+        "select_convo": "Chọn hội thoại",
+        "today": "hôm nay",
+        "month": "tháng"
+      },
       "header": {
         "account": "Hồ sơ cá nhân",
         "notifications": "Thông báo đặt lịch",

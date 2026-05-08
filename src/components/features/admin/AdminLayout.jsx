@@ -42,6 +42,19 @@ const AdminLayout = () => {
           // Dispatch global event for realtime updates in components
           window.dispatchEvent(new CustomEvent("new-booking", { detail: booking }));
 
+          // Dynamic flashing browser tab title alert
+          const originalTitle = document.title;
+          let isAlert = false;
+          const flashInterval = setInterval(() => {
+            document.title = isAlert ? "🔔 LỊCH HẸN MỚI!" : originalTitle;
+            isAlert = !isAlert;
+          }, 1000);
+
+          setTimeout(() => {
+            clearInterval(flashInterval);
+            document.title = document.title.includes("LỊCH HẸN MỚI") ? originalTitle : document.title;
+          }, 10000);
+
           notification.success({
             message: `🎉 ${t('admin.header.notifications').toUpperCase()}!`,
             description: (
@@ -91,6 +104,14 @@ const AdminLayout = () => {
   useEffect(() => {
     const q = query(collection(db, "chat_list"));
     const unsubscribe = onSnapshot(q, (snapshot) => {
+      // Recalculate total unread chats to show on browser tab title
+      const unreadCount = snapshot.docs.filter(doc => doc.data().unread === true).length;
+      if (unreadCount > 0) {
+        document.title = `(${unreadCount}) Huy Anh Studio`;
+      } else {
+        document.title = "Huy Anh Studio";
+      }
+
       if (isInitialChatLoad.current) {
         isInitialChatLoad.current = false;
         return; // Don't notify on initial load
@@ -104,46 +125,8 @@ const AdminLayout = () => {
             const isChatOpen = pathRef.current.includes('/admin/chat') && document.visibilityState === 'visible';
             
             if (!isChatOpen) {
-              // Play double-tone "Ba-Ding" (Messenger-like sound)
-              try {
-                const audio = new Audio("/messenger.mp3");
-                audio.play().catch(() => {
-                  // Fallback: Nếu không có file messenger.mp3 trong thư mục public, dùng âm thanh giả lập
-                  const AudioContext = window.AudioContext || window.webkitAudioContext;
-                  if (AudioContext) {
-                      const ctx = new AudioContext();
-                      
-                      // Tone 1 (Ba - 698Hz)
-                      const osc1 = ctx.createOscillator();
-                      const gain1 = ctx.createGain();
-                      osc1.connect(gain1);
-                      gain1.connect(ctx.destination);
-                      osc1.type = 'sine';
-                      osc1.frequency.setValueAtTime(698.46, ctx.currentTime);
-                      gain1.gain.setValueAtTime(0, ctx.currentTime);
-                      gain1.gain.linearRampToValueAtTime(0.4, ctx.currentTime + 0.02);
-                      gain1.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
-                      osc1.start(ctx.currentTime);
-                      osc1.stop(ctx.currentTime + 0.15);
-
-                      // Tone 2 (Ding - 880Hz)
-                      const osc2 = ctx.createOscillator();
-                      const gain2 = ctx.createGain();
-                      osc2.connect(gain2);
-                      gain2.connect(ctx.destination);
-                      osc2.type = 'sine';
-                      osc2.frequency.setValueAtTime(880.00, ctx.currentTime + 0.1);
-                      gain2.gain.setValueAtTime(0, ctx.currentTime + 0.1);
-                      gain2.gain.linearRampToValueAtTime(0.4, ctx.currentTime + 0.12);
-                      gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
-                      osc2.start(ctx.currentTime + 0.1);
-                      osc2.stop(ctx.currentTime + 0.4);
-                  }
-                });
-              } catch (e) {
-                // Audio skipped
-              }
-
+              // Sound notification disabled by user request
+              
               // Show popup notification
               notification.info({
                 message: `${t('admin.sidebar.chat')} : ` + (data.userName || t('admin.bookings.col_customer')),
@@ -161,7 +144,10 @@ const AdminLayout = () => {
       });
     });
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+      document.title = "Huy Anh Studio"; // Reset on unmount
+    };
   }, []); // Run once, using pathRef for location
 
   return (
@@ -193,7 +179,7 @@ const AdminLayout = () => {
               exit="exit"
               variants={pageVariants}
               transition={pageTransition}
-              className="w-full h-full"
+              className="w-full min-h-full"
             >
               <Outlet />
             </motion.div>

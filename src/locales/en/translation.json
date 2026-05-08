@@ -51,6 +51,24 @@
         "chat": "Live Chat",
         "returns": "Return to Website"
       },
+      "chat": {
+        "title": "Messages",
+        "search_placeholder": "Search users...",
+        "no_users": "No users found",
+        "no_messages": "No messages yet",
+        "active": "Active",
+        "placeholder": "Type a message...",
+        "sending": "Uploading file...",
+        "read": "Read",
+        "sent": "Sent",
+        "just_now": "Just now",
+        "mins_ago": "mins ago",
+        "hours_ago": "hours ago",
+        "yesterday": "Yesterday",
+        "select_convo": "Select a conversation",
+        "today": "today",
+        "month": "month"
+      },
       "header": {
         "account": "Personal Profile",
         "notifications": "Booking Notifications",

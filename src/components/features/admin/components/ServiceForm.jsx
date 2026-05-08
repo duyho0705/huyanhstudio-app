@@ -169,7 +169,7 @@ const ServiceForm = ({
                   className="!mb-0"
                 >
                   <div className="h-10 px-4 bg-blue-50/50 border border-blue-100 rounded-xl flex items-center justify-between">
-                    <span className="text-[12px] sm:text-[13px] font-bold text-blue-600 uppercase tracking-wider">{t('admin.dashboard.popular_title')}</span>
+                    <span className="text-[12px] sm:text-[13px] font-bold text-blue-600 uppercase tracking-wider">Highlight</span>
                     <Form.Item name="featured" valuePropName="checked" noStyle>
                       <Switch size="small" />
                     </Form.Item>
@@ -193,10 +193,10 @@ const ServiceForm = ({
             <div className="grid grid-cols-1">
               <Form.Item
                 name="active"
-                label={<span className="text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2 text-slate-400">{t('admin.services.form_status')}</span>}
+                label={<span className="text-[12px] sm:text-[13px] font-semibold text-slate-700 ml-1 flex items-center gap-2"><Activity size={14} className="text-blue-500" /> {t('admin.services.form_status')}</span>}
                 initialValue={true}
               >
-                <Select className="h-10 select-custom-xl rounded-xl" variant="filled">
+                <Select className="h-10 custom-select-premium w-full" variant="outlined">
                   <Option value={true}><span className="text-[14px] font-medium">{t('admin.services.status_active')}</span></Option>
                   <Option value={false}><span className="text-[14px] font-medium">{t('admin.services.status_paused')}</span></Option>
                 </Select>

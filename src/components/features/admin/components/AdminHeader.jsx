@@ -17,6 +17,7 @@ import {
   CheckCircle2,
   AlertCircle,
   Zap,
+  X,
 } from "lucide-react";
 
 import { removeVietnameseTones } from "../../../../utils/removeVietnameseTones";
@@ -118,19 +119,19 @@ const AdminHeader = ({ toggleSidebar }) => {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          
+
           {/* Language Switcher */}
           <Dropdown
-            menu={{ 
+            menu={{
               items: [
                 {
                   key: 'vi',
                   label: (
                     <div className="flex items-center gap-3 py-1">
-                      <img 
-                        src="https://flagcdn.com/w40/vn.png" 
-                        alt="Vietnamese" 
-                        className="w-7 h-auto rounded-[3px] shadow-sm border border-slate-100" 
+                      <img
+                        src="https://flagcdn.com/w40/vn.png"
+                        alt="Vietnamese"
+                        className="w-7 h-auto rounded-[3px] shadow-sm border border-slate-100"
                       />
                       <span className="font-medium text-slate-700 text-[14px]">Tiếng Việt</span>
                     </div>
@@ -141,17 +142,17 @@ const AdminHeader = ({ toggleSidebar }) => {
                   key: 'en',
                   label: (
                     <div className="flex items-center gap-3 py-1">
-                      <img 
-                        src="https://flagcdn.com/w40/us.png" 
-                        alt="English" 
-                        className="w-7 h-auto rounded-[3px] shadow-sm border border-slate-100" 
+                      <img
+                        src="https://flagcdn.com/w40/us.png"
+                        alt="English"
+                        className="w-7 h-auto rounded-[3px] shadow-sm border border-slate-100"
                       />
                       <span className="font-medium text-slate-700 text-[14px]">English</span>
                     </div>
                   ),
                   onClick: () => i18n.changeLanguage('en'),
                 },
-              ] 
+              ]
             }}
             trigger={['click']}
             placement="bottomRight"
@@ -160,14 +161,14 @@ const AdminHeader = ({ toggleSidebar }) => {
             <button
               className="flex items-center justify-center h-10 w-10 bg-transparent border-none rounded-xl hover:bg-slate-50 transition-all group p-0"
             >
-              <img 
-                src={i18n.language === 'vi' ? "https://flagcdn.com/w40/vn.png" : "https://flagcdn.com/w40/us.png"} 
-                alt="Selected Flag" 
-                className="w-8 h-auto rounded-[3px] shadow-sm" 
+              <img
+                src={i18n.language === 'vi' ? "https://flagcdn.com/w40/vn.png" : "https://flagcdn.com/w40/us.png"}
+                alt="Selected Flag"
+                className="w-8 h-auto rounded-[3px] shadow-sm"
               />
             </button>
           </Dropdown>
-          
+
           <button className="w-9 h-9 sm:w-11 sm:h-11 flex items-center justify-center text-slate-400 rounded-none relative group">
             <Bell size={17} strokeWidth={2.5} />
             <span className="absolute top-2 right-2 sm:top-3 sm:right-3 w-2 h-2 bg-red-500 rounded-full border-2 border-white shadow-sm ring-2 ring-red-500/20"></span>
@@ -209,8 +210,8 @@ const AdminHeader = ({ toggleSidebar }) => {
           </div>
           <div className="min-w-0">
             <h5 className="font-semibold text-slate-900 tracking-tight text-[11px] sm:text-xs mb-0.5 truncate">
-              {notification.type === "success" 
-                ? (i18n.language === 'en' ? "OPERATION COMPLETED" : "HOÀN TẤT THAO TÁC") 
+              {notification.type === "success"
+                ? (i18n.language === 'en' ? "OPERATION COMPLETED" : "HOÀN TẤT THAO TÁC")
                 : (i18n.language === 'en' ? "SYSTEM WARNING" : "CẢNH BÁO HỆ THỐNG")}
             </h5>
             <p className="text-[11px] sm:text-xs text-slate-500 font-semibold truncate">{notification.message}</p>
@@ -229,11 +230,16 @@ const AdminHeader = ({ toggleSidebar }) => {
         closable={false}
       >
         <div className="p-4 sm:p-8">
-          <div className="flex items-center gap-3 sm:gap-4 mb-5 sm:mb-8">
-            <div className="w-1.5 h-6 sm:h-8 bg-blue-600 rounded-full"></div>
-            <div>
-              <h3 className="text-lg sm:text-xl font-semibold text-slate-900">{t('admin.header.update_profile')}</h3>
+          <div className="flex items-center justify-between mb-5 sm:mb-8">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="w-1.5 h-6 sm:h-8 bg-blue-600 rounded-full"></div>
+              <div>
+                <h3 className="text-lg sm:text-xl font-semibold text-slate-900">{t('admin.header.update_profile')}</h3>
+              </div>
             </div>
+            <button onClick={() => setAccountModal(false)} className="w-9 h-9 sm:w-10 sm:h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 hover:bg-slate-100 transition-colors">
+              <X size={16} className="sm:w-[18px] sm:h-[18px]" />
+            </button>
           </div>
           <AdminAccount onClose={handleAccountClose} isOpen={accountModal} />
         </div>
@@ -257,8 +263,8 @@ const AdminHeader = ({ toggleSidebar }) => {
                 <h3 className="text-lg sm:text-xl font-semibold text-slate-900">{t('admin.header.system_history')}</h3>
               </div>
             </div>
-            <button onClick={() => setBookingsModal(false)} className="w-9 h-9 sm:w-10 sm:h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400">
-              <Home size={16} className="sm:w-[18px] sm:h-[18px]" />
+            <button onClick={() => setBookingsModal(false)} className="w-9 h-9 sm:w-10 sm:h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 hover:bg-slate-100 transition-colors">
+              <X size={16} className="sm:w-[18px] sm:h-[18px]" />
             </button>
           </div>
           <AdminBookings />
@@ -276,11 +282,16 @@ const AdminHeader = ({ toggleSidebar }) => {
         closable={false}
       >
         <div className="p-4 sm:p-8">
-          <div className="flex items-center gap-3 sm:gap-4 mb-5 sm:mb-8">
-            <div className="w-1.5 h-6 sm:h-8 bg-red-500 rounded-full"></div>
-            <div>
-              <h3 className="text-lg sm:text-xl font-semibold text-slate-900">{t('admin.header.security')}</h3>
+          <div className="flex items-center justify-between mb-5 sm:mb-8">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="w-1.5 h-6 sm:h-8 bg-red-500 rounded-full"></div>
+              <div>
+                <h3 className="text-lg sm:text-xl font-semibold text-slate-900">{t('admin.header.security')}</h3>
+              </div>
             </div>
+            <button onClick={() => setPasswordModal(false)} className="w-9 h-9 sm:w-10 sm:h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 hover:bg-slate-100 transition-colors">
+              <X size={16} className="sm:w-[18px] sm:h-[18px]" />
+            </button>
           </div>
           <AdminChangePassword onClose={() => setPasswordModal(false)} />
         </div>

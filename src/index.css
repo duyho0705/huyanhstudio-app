@@ -130,12 +130,24 @@ input:-webkit-autofill:active {
   background: inherit !important;
 }
 
-/* Force static border for framework-managed inputs and selects on hover */
+/* Force dynamic responsive borders for inputs, selects, and textareas in Admin area */
 .admin-area .ant-input:hover,
 .admin-area .ant-input-affix-wrapper:hover,
 .admin-area .ant-select-selector:hover,
-.admin-area .ant-input-number:hover {
-  border-color: #e2e8f0 !important;
+.admin-area .ant-input-number:hover,
+.admin-area .ant-picker:hover {
+  border-color: #94a3b8 !important; /* slate-400 hover feedback */
+}
+
+.admin-area .ant-input:focus,
+.admin-area .ant-input-focused,
+.admin-area .ant-input-affix-wrapper-focused,
+.admin-area .ant-select-focused .ant-select-selector,
+.admin-area .ant-input-number-focused,
+.admin-area .ant-picker-focused {
+  border-color: #3b82f6 !important; /* blue-500 active feedback */
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+  outline: none !important;
 }
 
 /* Prevent dynamic changes on radio buttons if any remain */
@@ -404,4 +416,24 @@ body.ant-scrolling-effect {
   .ant-modal .max-h-\[220px\] {
     max-height: 150px !important;
   }
+}
+
+/* Sleek custom vertical scrollbar like Messenger */
+.messenger-scrollbar::-webkit-scrollbar {
+  width: 6px !important;
+  height: 6px !important;
+}
+
+.messenger-scrollbar::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.messenger-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3) !important; /* light slate-400 */
+  border-radius: 99px !important;
+  transition: all 0.3s ease !important;
+}
+
+.messenger-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.6) !important;
 }

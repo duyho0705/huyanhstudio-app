@@ -1,8 +1,7 @@
 import useAuthStore from "../../../stores/useAuthStore";
-import useAppStore from "../../../stores/useAppStore";
-import { useState, useEffect, useRef, useContext } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiMessageCircle, FiX, FiSend, FiUser, FiClock, FiPlus, FiSmile, FiPaperclip } from 'react-icons/fi';
+import { FiMessageCircle, FiX, FiSend, FiPlus, FiSmile, FiPaperclip } from 'react-icons/fi';
 
 import { db } from '../../../api/firebase';
 import axiosClient from '../../../api/axiosClient';
@@ -14,7 +13,8 @@ import {
   onSnapshot,
   serverTimestamp,
   setDoc,
-  doc
+  doc,
+  writeBatch
 } from 'firebase/firestore';
 
 import boss from '../../../assets/boss.png';
@@ -68,10 +68,37 @@ const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
   }, [currentUserId]);
 
   useEffect(() => {
+    if (isOpen && currentUserId && messages.length > 0) {
+      const unreadAdminMsgs = messages.filter(m => m.senderId === 'admin' && !m.isRead);
+      if (unreadAdminMsgs.length > 0) {
+        const batch = writeBatch(db);
+        unreadAdminMsgs.forEach(m => {
+          const msgRef = doc(db, 'chat_rooms', currentUserId, 'messages', m.id);
+          batch.update(msgRef, { isRead: true });
+        });
+        batch.commit().catch(() => {});
+      }
+    }
+  }, [isOpen, messages, currentUserId]);
+
+  useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages, isOpen]);
+
+  useEffect(() => {
+    if (!currentUserId) return;
+    const userRef = doc(db, 'chat_list', currentUserId);
+    if (isOpen) {
+      setDoc(userRef, { isOnline: true, lastActive: serverTimestamp() }, { merge: true }).catch(() => {});
+    } else {
+      setDoc(userRef, { isOnline: false, lastActive: serverTimestamp() }, { merge: true }).catch(() => {});
+    }
+    return () => {
+      setDoc(userRef, { isOnline: false, lastActive: serverTimestamp() }, { merge: true }).catch(() => {});
+    };
+  }, [currentUserId, isOpen]);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -113,15 +140,31 @@ const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
     if (!file || !currentUserId || uploading) return;
 
     setUploading(true);
+
     const formData = new FormData();
     formData.append('file', file);
 
     try {
-      const response = await axiosClient.post('/api/media/upload', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+      const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/';
+      const uploadUrl = baseUrl.endsWith('/') ? `${baseUrl}media/upload` : `${baseUrl}/media/upload`;
+
+      const response = await fetch(uploadUrl, {
+        method: 'POST',
+        body: formData
       });
 
-      const fileUrl = response.data;
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(`Upload failed with status ${response.status}: ${errData.message || 'Unknown error'}`);
+      }
+
+      const result = await response.json();
+      const fileUrl = result.data;
+
+      if (!fileUrl) {
+        throw new Error('Upload failed: No URL returned');
+      }
+
       const isVideo = file.type.startsWith('video/');
       const isImage = file.type.startsWith('image/');
 
@@ -153,6 +196,13 @@ const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
       setUploading(false);
       e.target.value = null;
     }
+  };
+
+  // Helper to check if a URL is an image (by extension or Cloudinary pattern)
+  const isImageUrl = (url) => {
+    if (!url) return false;
+    const lower = url.toLowerCase();
+    return lower.match(/\.(jpg|jpeg|png|gif|webp|heic|bmp|svg)(\?.*)?$/) || lower.includes('/image/upload/');
   };
 
   if (!user) return null;
@@ -208,68 +258,79 @@ const ChatBox = ({ isOpen, onToggle, onlyWindow = false }) => {
                   <p className="text-xs font-bold text-slate-600">Để lại lời nhắn, tư vấn viên sẽ phản hồi bạn ngay!</p>
                 </div>
               )}
-              {messages.map((msg, idx) => {
-                const prevMsg = messages[idx - 1];
-                const showTimeSeparator = !prevMsg ||
-                  (new Date(msg.timestamp).getTime() - new Date(prevMsg.timestamp).getTime() > 20 * 60 * 1000);
+              {(() => {
+                const lastUserMessageIdx = messages.slice().reverse().findIndex(m => m.senderId === currentUserId);
+                const actualLastUserMessageIdx = lastUserMessageIdx !== -1 ? messages.length - 1 - lastUserMessageIdx : -1;
 
-                return (
-                  <div key={idx} className="space-y-4">
-                    {showTimeSeparator && (
-                      <div className="flex justify-center mb-6 mt-2">
-                        <span className="text-[12px] font-medium text-slate-500">
-                          {formatMessageTime(msg.timestamp)}
-                        </span>
-                      </div>
-                    )}
-                    <div className={`flex ${msg.senderId === currentUserId ? 'justify-end' : 'justify-start'}`}>
-                      <div className={`flex flex-col ${msg.senderId === currentUserId ? 'items-end' : 'items-start'} max-w-[85%]`}>
-                        {/* Standalone Media Message */}
-                        {msg.imageUrl && (
-                          <div className={`mb-1 overflow-hidden rounded-[22px] cursor-pointer hover:opacity-95 transition-all shadow-md ${msg.senderId === currentUserId ? 'rounded-tr-none' : 'rounded-tl-none'}`}>
-                            <a href={msg.imageUrl} target="_blank" rel="noopener noreferrer">
-                              {msg.imageUrl.toLowerCase().match(/\.(printable|jpg|jpeg|png|gif|webp|heic)$/) ? (
-                                <img src={msg.imageUrl} alt="attachment" className="max-w-full h-auto object-cover" />
-                              ) : (
-                                <div className={`p-4 flex items-center gap-3 min-w-[240px] ${msg.senderId === currentUserId ? 'bg-[#E9DCD6] text-slate-800' : 'bg-[#F0F0F0] text-slate-700'}`}>
-                                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${msg.senderId === currentUserId ? 'bg-white/40' : 'bg-blue-50'}`}>
-                                    <FiPaperclip size={20} className={msg.senderId === currentUserId ? 'text-slate-700' : 'text-blue-500'} />
-                                  </div>
-                                  <div className="flex-1 overflow-hidden">
-                                    <p className="text-[13px] font-bold truncate">
-                                      {msg.content.includes("Đã gửi một tệp") ? "Tài liệu / Tệp tin" : msg.content.replace("Đã gửi tệp: ", "").replace(" 📄", "")}
-                                    </p>
-                                    <p className="text-[11px] opacity-60">Nhấn để tải về</p>
-                                  </div>
-                                </div>
-                              )}
-                            </a>
-                          </div>
-                        )}
+                return messages.map((msg, idx) => {
+                  const prevMsg = messages[idx - 1];
+                  const showTimeSeparator = !prevMsg ||
+                    (new Date(msg.timestamp).getTime() - new Date(prevMsg.timestamp).getTime() > 20 * 60 * 1000);
 
-                        {/* Text Content (only if not a system media message) */}
-                        {(!msg.imageUrl || (
-                          !msg.content.includes("Đã gửi một hình ảnh") &&
-                          !msg.content.includes("Đã gửi một video") &&
-                          !msg.content.includes("Đã gửi một tệp") &&
-                          !msg.content.includes("Đã gửi tệp:")
-                        )) && (
-                            <div
-                              className={`px-3 py-2 sm:px-4 sm:py-2.5 rounded-[20px] sm:rounded-[22px] text-[14px] sm:text-[15px] leading-relaxed shadow-sm ${msg.senderId === currentUserId
-                                ? 'bg-[#E9DCD6] text-slate-800 rounded-tr-none'
-                                : 'bg-[#F0F0F0] text-slate-700 rounded-tl-none'
-                                }`}
-                            >
-                              <div className="break-words">
-                                {msg.content}
-                              </div>
+                  return (
+                    <div key={msg.id || idx} className="space-y-4">
+                      {showTimeSeparator && (
+                        <div className="flex justify-center mb-6 mt-2">
+                          <span className="text-[12px] font-medium text-slate-500">
+                            {formatMessageTime(msg.timestamp)}
+                          </span>
+                        </div>
+                      )}
+                      <div className={`flex ${msg.senderId === currentUserId ? 'justify-end' : 'justify-start'}`}>
+                        <div className={`flex flex-col ${msg.senderId === currentUserId ? 'items-end' : 'items-start'} max-w-[85%]`}>
+                          {/* Media attachment */}
+                          {msg.imageUrl && (
+                            <div className={`mb-1 overflow-hidden rounded-[22px] cursor-pointer hover:opacity-95 transition-all shadow-md ${msg.senderId === currentUserId ? 'rounded-tr-none' : 'rounded-tl-none'}`}>
+                              <a href={msg.imageUrl} target="_blank" rel="noopener noreferrer">
+                                {isImageUrl(msg.imageUrl) ? (
+                                  <img src={msg.imageUrl} alt="attachment" className="max-w-full h-auto object-cover" />
+                                ) : (
+                                  <div className={`p-4 flex items-center gap-3 min-w-[240px] ${msg.senderId === currentUserId ? 'bg-[#E9DCD6] text-slate-800' : 'bg-[#F0F0F0] text-slate-700'}`}>
+                                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${msg.senderId === currentUserId ? 'bg-white/40' : 'bg-blue-50'}`}>
+                                      <FiPaperclip size={20} className={msg.senderId === currentUserId ? 'text-slate-700' : 'text-blue-500'} />
+                                    </div>
+                                    <div className="flex-1 overflow-hidden">
+                                      <p className="text-[13px] font-bold truncate">Tài liệu / Tệp tin</p>
+                                      <p className="text-[11px] opacity-60">Nhấn để tải về</p>
+                                    </div>
+                                  </div>
+                                )}
+                              </a>
                             </div>
                           )}
+
+                          {/* Text Content (only if not a system media message) */}
+                          {(!msg.imageUrl || (
+                            !msg.content.includes("Đã gửi một hình ảnh") &&
+                            !msg.content.includes("Đã gửi một video") &&
+                            !msg.content.includes("Đã gửi một tệp") &&
+                            !msg.content.includes("Sent an image") &&
+                            !msg.content.includes("Sent a video") &&
+                            !msg.content.includes("Sent a file")
+                          )) && (
+                              <div
+                                className={`px-3 py-2 sm:px-4 sm:py-2.5 rounded-[20px] sm:rounded-[22px] text-[14px] sm:text-[15px] leading-relaxed shadow-sm ${msg.senderId === currentUserId
+                                  ? 'bg-[#E9DCD6] text-slate-800 rounded-tr-none'
+                                  : 'bg-[#F0F0F0] text-slate-700 rounded-tl-none'
+                                  }`}
+                              >
+                                <div className="break-words">
+                                  {msg.content}
+                                </div>
+                              </div>
+                            )}
+
+                          {idx === actualLastUserMessageIdx && (
+                            <span className="text-[11px] font-semibold text-slate-400 mt-1 mr-1">
+                              {msg.isRead ? "Đã xem" : "Đã gửi"}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                });
+              })()}
             </div>
 
             {/* Input Form */}

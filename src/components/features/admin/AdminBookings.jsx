@@ -33,7 +33,21 @@ const AdminBookings = () => {
   const fetchData = async (pageNum) => {
     setIsFetching(true);
     try {
-      const res = await bookingApi.getBookingCustomer(pageNum, 5);
+      const roles = Array.isArray(user?.roles) ? user.roles : [user?.role];
+      const isAdmin = roles.includes("ROLE_ADMIN");
+
+      let res;
+      if (isAdmin) {
+        // Admin sees all system bookings
+        res = await bookingApi.admin.getAll({ 
+          pageNumber: pageNum, 
+          pageSize: 5 
+        });
+      } else {
+        // Regular user sees their own
+        res = await bookingApi.getBookingCustomer(pageNum, 5);
+      }
+
       const responseData = res.data?.data || res.data || res;
       const bookingsList = responseData.list || responseData.content || [];
       const pages = responseData.totalPages || 1;
@@ -65,11 +79,15 @@ const AdminBookings = () => {
     if (!user) {
       setBookings([]);
       setTotalPages(1);
+      setIsFetching(false);
       return;
     }
 
     const token = TokenService.get();
-    if (!token) return;
+    if (!token) {
+      setIsFetching(false);
+      return;
+    }
 
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
