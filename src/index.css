@@ -136,7 +136,8 @@ input:-webkit-autofill:active {
 .admin-area .ant-select-selector:hover,
 .admin-area .ant-input-number:hover,
 .admin-area .ant-picker:hover {
-  border-color: #94a3b8 !important; /* slate-400 hover feedback */
+  border-color: #94a3b8 !important;
+  /* slate-400 hover feedback */
 }
 
 .admin-area .ant-input:focus,
@@ -145,7 +146,8 @@ input:-webkit-autofill:active {
 .admin-area .ant-select-focused .ant-select-selector,
 .admin-area .ant-input-number-focused,
 .admin-area .ant-picker-focused {
-  border-color: #3b82f6 !important; /* blue-500 active feedback */
+  border-color: #3b82f6 !important;
+  /* blue-500 active feedback */
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
   outline: none !important;
 }
@@ -317,6 +319,7 @@ body.ant-scrolling-effect {
 
 /* ========== ADMIN FORM MODAL RESPONSIVE ========== */
 @media (max-width: 640px) {
+
   /* All admin modals - compact on mobile */
   .ant-modal {
     top: 8px !important;
@@ -365,7 +368,7 @@ body.ant-scrolling-effect {
     padding-bottom: 2px !important;
   }
 
-  .ant-modal .ant-form-item-label > label {
+  .ant-modal .ant-form-item-label>label {
     font-size: 12px !important;
     height: auto !important;
   }
@@ -429,7 +432,8 @@ body.ant-scrolling-effect {
 }
 
 .messenger-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.3) !important; /* light slate-400 */
+  background: rgba(148, 163, 184, 0.3) !important;
+  /* light slate-400 */
   border-radius: 99px !important;
   transition: all 0.3s ease !important;
 }
